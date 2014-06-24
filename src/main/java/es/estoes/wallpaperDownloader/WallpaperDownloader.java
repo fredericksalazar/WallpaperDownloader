@@ -24,6 +24,7 @@ public class WallpaperDownloader {
 				try {
 					WallpaperDownloader window = new WallpaperDownloader();
 					window.frame.setVisible(true);
+					window.frame.setTitle("Wallpaper Downloader");
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
