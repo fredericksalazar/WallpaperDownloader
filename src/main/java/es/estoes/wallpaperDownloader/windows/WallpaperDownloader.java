@@ -1,4 +1,4 @@
-package es.estoes.wallpaperDownloader;
+package es.estoes.wallpaperDownloader.windows;
 
 import java.awt.EventQueue;
 
