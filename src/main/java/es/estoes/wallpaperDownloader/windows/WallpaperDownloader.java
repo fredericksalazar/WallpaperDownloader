@@ -3,12 +3,16 @@ package es.estoes.wallpaperDownloader.windows;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+
 import java.awt.GridLayout;
 import java.awt.CardLayout;
+
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+
+import es.estoes.wallpaperDownloader.utils.PropertiesManager;
 
 public class WallpaperDownloader {
 
@@ -22,9 +26,10 @@ public class WallpaperDownloader {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					PropertiesManager pm = new PropertiesManager("");
 					WallpaperDownloader window = new WallpaperDownloader();
 					window.frame.setVisible(true);
-					window.frame.setTitle("Wallpaper Downloader");
+					window.frame.setTitle(pm.getProperty("app_name"));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

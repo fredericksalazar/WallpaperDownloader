@@ -15,25 +15,9 @@ public class PropertiesManager {
 	private static final String propertiesFileName = "application.properties";
 	
 	// Attributes
-	private Properties properties;
-	private InputStream input;
 	private String fileName;
 	
 	// Getters & Setters	
-	// properties
-	private void setProperties(Properties properties) {
-		this.properties = properties;
-	}
-
-	// input
-	private InputStream getInput() {
-		return input;
-	}
-
-	private void setInput(InputStream input) {
-		this.input = input;
-	}
-
 	// fileName
 	public String getFileName() {
 		return fileName;
@@ -47,34 +31,45 @@ public class PropertiesManager {
 	// Methods
 	/**
 	 * Constructor
+	 * @param fileName
+	 * @throws FileNotFoundException
+	 * @throws IOException
 	 */
-	public PropertiesManager () {
-		
-	}
-
-	/**
-	 * Constructor
-	 * @param propertiesFileName
-	 * @throws FileNotFoundException 
-	 */
-	public PropertiesManager (String fileName) throws FileNotFoundException, IOException {
-		Properties prop = new Properties();
+	public PropertiesManager (String fileName) {
 		if (fileName.isEmpty()) {
 			this.setFileName(PropertiesManager.propertiesFileName);
 		} else {
 			this.setFileName(fileName);			
 		}
+	}
+	
+	/**
+	 * 
+	 * @param property
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public String getProperty(String property) throws FileNotFoundException, IOException {
+		InputStream input = null;
+		Properties prop = new Properties();
+		String value = null;
 		try {
-			this.setInput(new FileInputStream(this.getFileName()));
-			prop.load(this.getInput());
-			this.setProperties(prop);
+//			input = new FileInputStream(this.getFileName());
+			input = getClass().getResourceAsStream(this.getFileName());
+			prop.load(input);
+			value = prop.getProperty(property);
 		} catch (FileNotFoundException e) {
 			LOG.error(this.getFileName() + " properties file wasn't found. Error: " + e.getMessage());
 			throw e;
 		} catch (IOException e) {
 			LOG.error("Error while loading InputStream for reading properties file. Error: " + e.getMessage());
 			throw e;
+		} finally {
+			if (input != null) {
+				input.close();	
+			}		
 		}
+		return value;
 	}
-
 }
