@@ -1,13 +1,7 @@
 package es.estoes.wallpaperDownloader.windows;
 
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
-
-import java.awt.GridLayout;
-import java.awt.CardLayout;
-
-import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -29,7 +23,7 @@ public class WallpaperDownloader {
 					PropertiesManager pm = new PropertiesManager("");
 					WallpaperDownloader window = new WallpaperDownloader();
 					window.frame.setVisible(true);
-					window.frame.setTitle(pm.getProperty("app_name"));
+					window.frame.setTitle(pm.getProperty("app.name") + " V" + pm.getProperty("app.version"));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

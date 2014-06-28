@@ -1,6 +1,5 @@
 package es.estoes.wallpaperDownloader.utils;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,7 +43,7 @@ public class PropertiesManager {
 	}
 	
 	/**
-	 * 
+	 * This method gets any property from properties file 
 	 * @param property
 	 * @return
 	 * @throws FileNotFoundException
@@ -55,8 +54,7 @@ public class PropertiesManager {
 		Properties prop = new Properties();
 		String value = null;
 		try {
-//			input = new FileInputStream(this.getFileName());
-			input = getClass().getResourceAsStream(this.getFileName());
+			input = this.getClass().getClassLoader().getResourceAsStream(this.getFileName());
 			prop.load(input);
 			value = prop.getProperty(property);
 		} catch (FileNotFoundException e) {
