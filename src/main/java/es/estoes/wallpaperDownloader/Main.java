@@ -12,8 +12,6 @@ public class Main
 {
     public static void main( String[] args )
     {
-    	//Logger LOG = Logger.getLogger(App.class);
-    	//LOG.info("Hola!!!!");
-        WallpaperDownloader.main(null);
+    	WallpaperDownloader.main(null);
     }
 }
