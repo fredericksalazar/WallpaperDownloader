@@ -1,12 +1,14 @@
 package es.estoes.wallpaperDownloader.windows;
 
 import java.awt.EventQueue;
+
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 
 import es.estoes.wallpaperDownloader.utils.PropertiesManager;
+import es.estoes.wallpaperDownloader.utils.WDConfigManager;
 
 public class WallpaperDownloader {
 
@@ -20,7 +22,9 @@ public class WallpaperDownloader {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					PropertiesManager pm = new PropertiesManager("");
+			        // First, it is necessary run a configuration process to set up the application
+			    	WDConfigManager.checkConfig();
+					PropertiesManager pm = PropertiesManager.getInstance();
 					WallpaperDownloader window = new WallpaperDownloader();
 					window.frame.setVisible(true);
 					window.frame.setTitle(pm.getProperty("app.name") + " V" + pm.getProperty("app.version"));
