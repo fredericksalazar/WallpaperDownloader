@@ -1,6 +1,8 @@
 package es.estoes.wallpaperDownloader.windows;
 
 import java.awt.EventQueue;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.JTextField;
@@ -21,15 +23,23 @@ public class WallpaperDownloader {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				try {
-			        // First, it is necessary run a configuration process to set up the application
-			    	WDConfigManager.checkConfig();
-					PropertiesManager pm = PropertiesManager.getInstance();
-					WallpaperDownloader window = new WallpaperDownloader();
-					window.frame.setVisible(true);
-					window.frame.setTitle(pm.getProperty("app.name") + " V" + pm.getProperty("app.version"));
-				} catch (Exception e) {
-					e.printStackTrace();
+				// 1.- Log configuration
+				if (WDConfigManager.configureLog()) {
+					// 2.- Application configuration process
+			    	if (WDConfigManager.checkConfig()) {
+						PropertiesManager pm = PropertiesManager.getInstance();
+						WallpaperDownloader window = new WallpaperDownloader();
+						window.frame.setVisible(true);
+						try {
+							window.frame.setTitle(pm.getProperty("app.name") + " V" + pm.getProperty("app.version"));
+						} catch (FileNotFoundException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}			    		
+			    	} 
 				}
 			}
 		});

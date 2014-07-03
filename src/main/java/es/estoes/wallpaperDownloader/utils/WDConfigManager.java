@@ -1,8 +1,15 @@
 package es.estoes.wallpaperDownloader.utils;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileSystemView;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 /**
@@ -16,7 +23,7 @@ import org.apache.log4j.Logger;
 public class WDConfigManager {
 	
 	// Constants
-	protected final Logger LOG = Logger.getLogger(WDConfigManager.class);
+	protected static final Logger LOG = Logger.getLogger(WDConfigManager.class);
 
 	// Attributes
 	
@@ -40,18 +47,56 @@ public class WDConfigManager {
 		
 		/**
 		 * TODO:
-		 * - Check OS
-		 * - Check application's folder. If it doesn't exit, create it
 		 * - Check internal structure. If it doesn't exit, create it
 		 * - Store paths in application.properties
 		 * - Store default sets in apllication.properties
 		 */
-	     JFileChooser fr = new JFileChooser();
-	     FileSystemView fw = fr.getFileSystemView();
-	     System.out.println(fw.getDefaultDirectory());
-		//System.out.println(System.getProperty("user.home"));
-		
-		return true;
+	     LOG.info("Checking configuration...");
+	     LOG.info("Checking application's folder");
+	     boolean value = true;
+	     if (!WDUtilities.getAppPath().isEmpty()) {
+	    	 
+	     } else {
+	    	 value = false;
+	     }
+		return value;
+	}
+	
+	/**
+	 * This class configures the application's log
+	 */
+	public static boolean configureLog() {
+
+		// Check application's folder. If it doesn't exit, create it
+	    PropertiesManager pm = PropertiesManager.getInstance();
+	    Path appPath = null;
+	    String absoluteAppPath = null;
+	    JFileChooser fr = new JFileChooser();
+	    FileSystemView fw = fr.getFileSystemView();
+	    appPath = Paths.get(fw.getDefaultDirectory().toURI());
+	    try {
+	     
+	    	// Application's path
+	    	absoluteAppPath = appPath.resolve(pm.getProperty("app.path")).toString();
+	    	File appDirectory = new File(absoluteAppPath);
+	    	 
+	    	// If the directory doesn't exist, then create it
+	    	if (!appDirectory.exists()) {
+	    		FileUtils.forceMkdir(appDirectory);
+	    	}
+	    	
+	    	// Setting the application's path 
+	    	WDUtilities.setAppPath(absoluteAppPath);
+	    	// Setting the application's log name
+	    	pm.setLog4jProperty("log4j.appender.logfile.File", absoluteAppPath + File.separator + pm.getProperty("log.name")); 
+		} catch (FileNotFoundException e) {
+			LOG.error("The log4j properties file was not found. Error: " + e.getMessage());
+			return false;
+		} catch (IOException e) {
+			LOG.error("There was some error while setting log4j configuration. Error: " + e.getMessage());
+			return false;
+		}
+	    return true;
 	}
 	
 }

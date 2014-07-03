@@ -4,7 +4,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 
 /**
  * This class uses the Singleton principle and design pattern. It can only be instantiated 
@@ -82,5 +84,35 @@ public class PropertiesManager {
 			}		
 		}
 		return value;
+	}
+	
+	/**
+	 * This class sets a property
+	 * @param property
+	 * @param value
+	 */
+	public void setProperty(String property, String value) {
+	}
+	
+	/**
+	 * This class sets a log4j property
+	 * @param property
+	 * @param value
+	 */
+	public void setLog4jProperty(String property, String value) {
+		InputStream input = null;
+		Properties log4jProperties = new Properties();
+		try {
+			input = this.getClass().getClassLoader().getResourceAsStream("log4j.properties");
+			log4jProperties.load(input);
+			input.close();	
+		} catch (FileNotFoundException e) {
+			LOG.error(this.getFileName() + " properties file wasn't found. Error: " + e.getMessage());
+		} catch (IOException e) {
+			LOG.error("Error while loading InputStream for reading properties file. Error: " + e.getMessage());
+		}
+		
+		log4jProperties.setProperty(property, value);
+		PropertyConfigurator.configure(log4jProperties);
 	}
 }
