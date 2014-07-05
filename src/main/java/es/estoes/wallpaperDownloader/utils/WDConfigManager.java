@@ -45,16 +45,35 @@ public class WDConfigManager {
 	 */
 	public static boolean checkConfig() {
 		
-		/**
-		 * TODO:
-		 * - Check internal structure. If it doesn't exit, create it
-		 * - Store paths in application.properties
-		 * - Store default sets in apllication.properties
-		 */
 	     LOG.info("Checking configuration...");
 	     LOG.info("Checking application's folder");
+	     PropertiesManager pm = PropertiesManager.getInstance();
 	     boolean value = true;
-	     if (!WDUtilities.getAppPath().isEmpty()) {
+	     String appPath = WDUtilities.getAppPath();
+	     Path absoluteDownloadsPath = null;
+	     if (!appPath.isEmpty()) {
+	    	 LOG.info("Checking downloads folder...");
+	    	 absoluteDownloadsPath = Paths.get(appPath);
+	    	 try {
+	    		 absoluteDownloadsPath = absoluteDownloadsPath.resolve(pm.getProperty("app.downloads.path"));
+	    		 File downloadsDirectory = new File(absoluteDownloadsPath.toString());
+		    	 
+	    		 // If the directory doesn't exist, then create it
+	    		 if (!downloadsDirectory.exists()) {
+	    			 LOG.info("Downloads folder doesn't exist. Creating...");
+	    			 FileUtils.forceMkdir(downloadsDirectory);
+	    		 }
+		    	
+	    		 // Setting the application's path 
+	    		 WDUtilities.setDownloadsPath(absoluteDownloadsPath.toString());
+
+	    	 } catch (FileNotFoundException e) {
+				LOG.error("Error while setting up the downloads folder. Error: " + e.getMessage());
+				value = false;
+			} catch (IOException e) {
+				LOG.error("Error while setting up the downloads folder. Error: " + e.getMessage());
+				value = false;
+			}
 	    	 
 	     } else {
 	    	 value = false;
