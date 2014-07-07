@@ -49,13 +49,10 @@ public class WallpaperDownloader {
 						WallpaperDownloader window = new WallpaperDownloader();
 						window.frame.setVisible(true);
 						try {
-							window.frame.setTitle(pm.getProperty("app.name") + " V" + pm.getProperty("app.version"));
-						} catch (FileNotFoundException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+							window.frame.setTitle(pm.getAppProperty("app.name") + " V" + pm.getAppProperty("app.version"));
+						} catch (Exception e) {
+							LOG.error("Error reading properties... Error: " + e.getMessage());
+							System.exit(0);
 						}			    		
 			    	} 
 				}
@@ -105,7 +102,7 @@ public class WallpaperDownloader {
 		// Checking providers
 		try {
 			// Wallbase.cc
-			String wallbaseEnable = pm.getProperty("provider.wallbase");
+			String wallbaseEnable = pm.getAppProperty("provider.wallbase");
 			if (wallbaseEnable.equals(WDUtilities.APP_YES)) {
 				wallbaseCheckbox.setSelected(true);
 			}
@@ -163,7 +160,7 @@ public class WallpaperDownloader {
 				// Providers //////////////////////////////////////
 				// Wallbase.cc
 				try {
-					LOG.info("provider.wallbase is set to " + pm.getProperty("provider.wallbase"));
+					LOG.info("provider.wallbase is set to " + pm.getAppProperty("provider.wallbase"));
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -173,13 +170,13 @@ public class WallpaperDownloader {
 				}
 				///////////////////////////////////////
 				if (wallbaseCheckbox.isSelected()) {
-					pm.setProperty("provider.wallbase", WDUtilities.APP_YES);
+					pm.setUserProperty("provider.wallbase", WDUtilities.APP_YES);
 				} else {
-					pm.setProperty("provider.wallbase", WDUtilities.APP_NO);					
+					pm.setUserProperty("provider.wallbase", WDUtilities.APP_NO);					
 				}
 				///////////////////////////////////////
 				try {
-					LOG.info("Now, provider.wallbase is set to " + pm.getProperty("provider.wallbase"));
+					LOG.info("Now, provider.wallbase is set to " + pm.getAppProperty("provider.wallbase"));
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

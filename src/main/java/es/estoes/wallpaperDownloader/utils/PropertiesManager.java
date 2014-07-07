@@ -23,28 +23,17 @@ public class PropertiesManager {
 	// Constants
 	private static volatile PropertiesManager instance;
 	private static final Logger LOG = Logger.getLogger(PropertiesManager.class);
-	private static final String propertiesFileName = "application.properties";
-	
-	// Attributes
-	private String fileName;
+	private static final String appPropertiesFileName = "application.properties";
+	private static final String userPropertiesFileName = "config.txt";
+	private static final String log4jPropertiesFileName = "log4j.properties";
 	
 	// Getters & Setters	
-	// fileName
-	public String getFileName() {
-		return fileName;
-	}
-
-	private void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
-
 
 	// Methods
 	/**
 	 * Constructor
 	 */
 	private PropertiesManager () {
-		this.setFileName(PropertiesManager.propertiesFileName);
 	}
 	
 	public static PropertiesManager getInstance() {
@@ -60,22 +49,22 @@ public class PropertiesManager {
 	}
 	
 	/**
-	 * This method gets any property from properties file 
+	 * This method gets any property from application properties file 
 	 * @param property
 	 * @return
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public String getProperty(String property) throws FileNotFoundException, IOException {
+	public String getAppProperty(String property) throws FileNotFoundException, IOException {
 		InputStream input = null;
 		Properties prop = new Properties();
 		String value = null;
 		try {
-			input = this.getClass().getClassLoader().getResourceAsStream(this.getFileName());
+			input = this.getClass().getClassLoader().getResourceAsStream(appPropertiesFileName);
 			prop.load(input);
 			value = prop.getProperty(property);
 		} catch (FileNotFoundException e) {
-			LOG.error(this.getFileName() + " properties file wasn't found. Error: " + e.getMessage());
+			LOG.error(appPropertiesFileName + " properties file wasn't found. Error: " + e.getMessage());
 			throw e;
 		} catch (IOException e) {
 			LOG.error("Error while loading InputStream for reading properties file. Error: " + e.getMessage());
@@ -89,22 +78,22 @@ public class PropertiesManager {
 	}
 	
 	/**
-	 * This class sets a property
+	 * This class sets a user property
 	 * @param property
 	 * @param value
 	 */
-	public void setProperty(String property, String value) {
+	public void setUserProperty(String property, String value) {
 		Properties prop = new Properties();
 		OutputStream output = null;
 		
 		try {
-			output = new FileOutputStream(this.getFileName());
+			output = new FileOutputStream(userPropertiesFileName);
 			
 			// Set the property value
 			prop.setProperty(property, value);
 			prop.store(output, null);
 		} catch (IOException e) {
-			LOG.error("Error while setting property " + property + " with value " + value + " within properties file " + this.getFileName());
+			LOG.error("Error while setting property " + property + " with value " + value + " within properties file " + appPropertiesFileName);
 		} finally {
 			if (output != null) {
 				try {
@@ -125,11 +114,11 @@ public class PropertiesManager {
 		InputStream input = null;
 		Properties log4jProperties = new Properties();
 		try {
-			input = this.getClass().getClassLoader().getResourceAsStream("log4j.properties");
+			input = this.getClass().getClassLoader().getResourceAsStream(log4jPropertiesFileName);
 			log4jProperties.load(input);
 			input.close();	
 		} catch (FileNotFoundException e) {
-			LOG.error(this.getFileName() + " properties file wasn't found. Error: " + e.getMessage());
+			LOG.error("log4j properties file wasn't found. Error: " + e.getMessage());
 		} catch (IOException e) {
 			LOG.error("Error while loading InputStream for reading properties file. Error: " + e.getMessage());
 		}
