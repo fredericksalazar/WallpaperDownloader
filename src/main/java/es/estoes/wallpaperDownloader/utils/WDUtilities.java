@@ -13,6 +13,8 @@ public class WDUtilities {
 
 	// Constants
 	protected static final Logger LOG = Logger.getLogger(WDUtilities.class);
+	public static final String APP_YES = "yes";
+	public static final String APP_NO = "no";
 
 	// Attributes
 	private static String appPath;

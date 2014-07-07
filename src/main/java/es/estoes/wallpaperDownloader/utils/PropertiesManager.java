@@ -1,8 +1,10 @@
 package es.estoes.wallpaperDownloader.utils;
 
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
@@ -92,6 +94,26 @@ public class PropertiesManager {
 	 * @param value
 	 */
 	public void setProperty(String property, String value) {
+		Properties prop = new Properties();
+		OutputStream output = null;
+		
+		try {
+			output = new FileOutputStream(this.getFileName());
+			
+			// Set the property value
+			prop.setProperty(property, value);
+			prop.store(output, null);
+		} catch (IOException e) {
+			LOG.error("Error while setting property " + property + " with value " + value + " within properties file " + this.getFileName());
+		} finally {
+			if (output != null) {
+				try {
+					output.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 	
 	/**
