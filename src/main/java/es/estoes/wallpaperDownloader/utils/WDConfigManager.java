@@ -116,7 +116,7 @@ public class WDConfigManager {
 	    try {
 	     
 	    	// Application's path
-	    	absoluteAppPath = appPath.resolve(pm.getProperty("app.path")).toString();
+	    	absoluteAppPath = appPath.resolve(pm.getProperty("app.path", PropertiesManager.APP_PROP_TYPE)).toString();
 	    	File appDirectory = new File(absoluteAppPath);
 	    	 
 	    	// If the directory doesn't exist, then create it
@@ -127,7 +127,7 @@ public class WDConfigManager {
 	    	// Setting the application's path 
 	    	WDUtilities.setAppPath(absoluteAppPath);
 	    	// Setting the application's log name
-	    	pm.setLog4jProperty("log4j.appender.logfile.File", absoluteAppPath + File.separator + pm.getProperty("log.name")); 
+	    	pm.setLog4jProperty("log4j.appender.logfile.File", absoluteAppPath + File.separator + pm.getProperty("log.name", PropertiesManager.APP_PROP_TYPE)); 
 		} catch (FileNotFoundException e) {
 			LOG.error("The log4j properties file was not found. Error: " + e.getMessage());
 			return false;
