@@ -23,9 +23,13 @@ public class PropertiesManager {
 	// Constants
 	private static volatile PropertiesManager instance;
 	private static final Logger LOG = Logger.getLogger(PropertiesManager.class);
-	private static final String appPropertiesFileName = "application.properties";
-	private static final String userPropertiesFileName = "config.txt";
-	private static final String log4jPropertiesFileName = "log4j.properties";
+	private static final String APP_PROPERTIES_FILE_NAME = "application.properties";
+	private static final String LOG4J_PROPERTIES_FILE_NAME = "log4j.properties";
+	public static final String APP_PROP_TYPE = "app";
+	public static final String USER_PROP_TYPE = "user";
+	
+	// Atributes
+	private String userConfigurationFilePath;
 	
 	// Getters & Setters	
 
@@ -34,6 +38,7 @@ public class PropertiesManager {
 	 * Constructor
 	 */
 	private PropertiesManager () {
+		userConfigurationFilePath = WDUtilities.getUserConfigurationFilePath();
 	}
 	
 	public static PropertiesManager getInstance() {
@@ -49,29 +54,35 @@ public class PropertiesManager {
 	}
 	
 	/**
-	 * This method gets any property from application properties file 
+	 * This method gets any property from properties file 
 	 * @param property
 	 * @return
-	 * @throws FileNotFoundException
-	 * @throws IOException
 	 */
-	public String getAppProperty(String property) throws FileNotFoundException, IOException {
+	public String getProperty(String property, String type) {
 		InputStream input = null;
 		Properties prop = new Properties();
 		String value = null;
+		String resource = null;
 		try {
-			input = this.getClass().getClassLoader().getResourceAsStream(appPropertiesFileName);
+			if (type.equals(APP_PROP_TYPE)) {
+				resource = APP_PROPERTIES_FILE_NAME;
+			} else if (type.equals(USER_PROP_TYPE)) {
+				resource = userConfigurationFilePath;
+			}
+			input = this.getClass().getClassLoader().getResourceAsStream(resource);
 			prop.load(input);
 			value = prop.getProperty(property);
 		} catch (FileNotFoundException e) {
-			LOG.error(appPropertiesFileName + " properties file wasn't found. Error: " + e.getMessage());
-			throw e;
+			LOG.error(resource + " properties file wasn't found. Error: " + e.getMessage());
 		} catch (IOException e) {
-			LOG.error("Error while loading InputStream for reading properties file. Error: " + e.getMessage());
-			throw e;
+			LOG.error("Error loading InputStream for reading properties file. Error: " + e.getMessage());
 		} finally {
 			if (input != null) {
-				input.close();	
+				try {
+					input.close();
+				} catch (IOException e) {
+					LOG.error("Error closing InputStream. Error: " + e.getMessage());
+				}	
 			}		
 		}
 		return value;
@@ -87,19 +98,19 @@ public class PropertiesManager {
 		OutputStream output = null;
 		
 		try {
-			output = new FileOutputStream(userPropertiesFileName);
+			output = new FileOutputStream(userConfigurationFilePath);
 			
 			// Set the property value
 			prop.setProperty(property, value);
 			prop.store(output, null);
 		} catch (IOException e) {
-			LOG.error("Error while setting property " + property + " with value " + value + " within properties file " + appPropertiesFileName);
+			LOG.error("Error while setting property " + property + " with value " + value + " within properties file " + userConfigurationFilePath);
 		} finally {
 			if (output != null) {
 				try {
 					output.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					LOG.error("Error closing outputFile. Error: " + e.getMessage());
 				}
 			}
 		}
@@ -114,7 +125,7 @@ public class PropertiesManager {
 		InputStream input = null;
 		Properties log4jProperties = new Properties();
 		try {
-			input = this.getClass().getClassLoader().getResourceAsStream(log4jPropertiesFileName);
+			input = this.getClass().getClassLoader().getResourceAsStream(LOG4J_PROPERTIES_FILE_NAME);
 			log4jProperties.load(input);
 			input.close();	
 		} catch (FileNotFoundException e) {

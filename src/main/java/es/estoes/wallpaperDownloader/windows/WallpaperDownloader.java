@@ -49,7 +49,7 @@ public class WallpaperDownloader {
 						WallpaperDownloader window = new WallpaperDownloader();
 						window.frame.setVisible(true);
 						try {
-							window.frame.setTitle(pm.getAppProperty("app.name") + " V" + pm.getAppProperty("app.version"));
+							window.frame.setTitle(pm.getProperty("app.name") + " V" + pm.getProperty("app.version"));
 						} catch (Exception e) {
 							LOG.error("Error reading properties... Error: " + e.getMessage());
 							System.exit(0);
@@ -99,10 +99,10 @@ public class WallpaperDownloader {
 		final JCheckBox wallbaseCheckbox = new JCheckBox("Wallbase.cc");
 		wallbaseCheckbox.setBounds(8, 8, 129, 23);
 		providersPanel.add(wallbaseCheckbox);
-		// Checking providers
+		// Checking provider
 		try {
 			// Wallbase.cc
-			String wallbaseEnable = pm.getAppProperty("provider.wallbase");
+			String wallbaseEnable = pm.getUserProperty("provider.wallbase");
 			if (wallbaseEnable.equals(WDUtilities.APP_YES)) {
 				wallbaseCheckbox.setSelected(true);
 			}
@@ -160,7 +160,7 @@ public class WallpaperDownloader {
 				// Providers //////////////////////////////////////
 				// Wallbase.cc
 				try {
-					LOG.info("provider.wallbase is set to " + pm.getAppProperty("provider.wallbase"));
+					LOG.info("provider.wallbase is set to " + pm.getProperty("provider.wallbase"));
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -176,7 +176,7 @@ public class WallpaperDownloader {
 				}
 				///////////////////////////////////////
 				try {
-					LOG.info("Now, provider.wallbase is set to " + pm.getAppProperty("provider.wallbase"));
+					LOG.info("Now, provider.wallbase is set to " + pm.getProperty("provider.wallbase"));
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

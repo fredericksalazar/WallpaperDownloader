@@ -60,7 +60,7 @@ public class WDConfigManager {
 	    		 /**
 	    		  *  Downloads directory
 	    		  */
-	    		 absoluteDownloadsPath = absoluteDownloadsPath.resolve(pm.getAppProperty("app.downloads.path"));
+	    		 absoluteDownloadsPath = absoluteDownloadsPath.resolve(pm.getProperty("app.downloads.path", PropertiesManager.APP_PROP_TYPE));
 	    		 File downloadsDirectory = new File(absoluteDownloadsPath.toString());
 		    	 
 	    		 if (!downloadsDirectory.exists()) {
@@ -72,17 +72,20 @@ public class WDConfigManager {
 	    		 WDUtilities.setDownloadsPath(absoluteDownloadsPath.toString());
 	    		 
 	    		 /**
-	    		  * User's configuration
+	    		  * User's configuration file
 	    		  */
 	    		 LOG.info("Checking user configuration file...");
 	    		 userConfigPath = Paths.get(appPath.toString());
-	    		 userConfigPath = userConfigPath.resolve(pm.getAppProperty("app.user.conf.path"));
+	    		 userConfigPath = userConfigPath.resolve(pm.getProperty("app.user.conf.path", PropertiesManager.USER_PROP_TYPE));
 	    		 File userConfigFile = new File(userConfigPath.toString());
 	    		 
 	    		 if (!userConfigFile.exists()) {
 	    			 LOG.info("User configuration file doesn't exist. Creating...");
 	    			 FileUtils.touch(userConfigFile);
 	    		 }
+	    		 
+	    		 // Setting the user's configuration file path 
+	    		 WDUtilities.setUserConfigurationFilePath(userConfigPath.toString());
 
 	    	 } catch (FileNotFoundException e) {
 				LOG.error("Error while setting up the downloads folder. Error: " + e.getMessage());
@@ -113,7 +116,7 @@ public class WDConfigManager {
 	    try {
 	     
 	    	// Application's path
-	    	absoluteAppPath = appPath.resolve(pm.getAppProperty("app.path")).toString();
+	    	absoluteAppPath = appPath.resolve(pm.getProperty("app.path")).toString();
 	    	File appDirectory = new File(absoluteAppPath);
 	    	 
 	    	// If the directory doesn't exist, then create it
@@ -124,7 +127,7 @@ public class WDConfigManager {
 	    	// Setting the application's path 
 	    	WDUtilities.setAppPath(absoluteAppPath);
 	    	// Setting the application's log name
-	    	pm.setLog4jProperty("log4j.appender.logfile.File", absoluteAppPath + File.separator + pm.getAppProperty("log.name")); 
+	    	pm.setLog4jProperty("log4j.appender.logfile.File", absoluteAppPath + File.separator + pm.getProperty("log.name")); 
 		} catch (FileNotFoundException e) {
 			LOG.error("The log4j properties file was not found. Error: " + e.getMessage());
 			return false;

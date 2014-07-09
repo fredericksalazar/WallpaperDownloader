@@ -19,6 +19,7 @@ public class WDUtilities {
 	// Attributes
 	private static String appPath;
 	private static String downloadsPath;
+	private static String userConfigurationFilePath;
 	
 	// Getters & Setters
 	public static String getAppPath() {
@@ -36,6 +37,16 @@ public class WDUtilities {
 	public static void setDownloadsPath(String downloadsPath) {
 		WDUtilities.downloadsPath = downloadsPath;
 	}
+
+	public static String getUserConfigurationFilePath() {
+		return userConfigurationFilePath;
+	}
+
+	public static void setUserConfigurationFilePath(
+			String userConfigurationFilePath) {
+		WDUtilities.userConfigurationFilePath = userConfigurationFilePath;
+	}
+	
 	// Methods (All the methods are static)
 
 	/**
