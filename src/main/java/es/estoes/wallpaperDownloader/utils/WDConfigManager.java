@@ -84,12 +84,12 @@ public class WDConfigManager {
     			 FileUtils.touch(userConfigFile);
     			 
     			 // Initializing user configuration file
+    			 // TODO
+    			 
     		 }
     		 
     		 // Setting the user's configuration file path 
     		 WDUtilities.setUserConfigurationFilePath(userConfigPath.toString());
-    		 
-    		 //
 
     	 } catch (Exception e) {
     		 throw new WDConfigurationException("Error setting up the downloads folder. Error: " + e.getMessage());
