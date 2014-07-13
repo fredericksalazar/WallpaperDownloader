@@ -1,32 +1,22 @@
 package es.estoes.wallpaperDownloader.windows;
 
 import java.awt.EventQueue;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 import javax.swing.JFrame;
 import javax.swing.JTextField;
-
 import es.estoes.wallpaperDownloader.utils.PropertiesManager;
 import es.estoes.wallpaperDownloader.utils.WDConfigManager;
 import es.estoes.wallpaperDownloader.utils.WDUtilities;
-
 import javax.swing.JTabbedPane;
 import javax.swing.JButton;
-
 import java.awt.Color;
-
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
-
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JLabel;
-
 import org.apache.log4j.Logger;
 
 public class WallpaperDownloader {
@@ -42,20 +32,14 @@ public class WallpaperDownloader {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				// 1.- Log configuration
-				if (WDConfigManager.configureLog()) {
-					// 2.- Application configuration process
-			    	if (WDConfigManager.checkConfig()) {
-						PropertiesManager pm = PropertiesManager.getInstance();
-						WallpaperDownloader window = new WallpaperDownloader();
-						window.frame.setVisible(true);
-						try {
-							window.frame.setTitle(pm.getProperty("app.name") + " V" + pm.getProperty("app.version"));
-						} catch (Exception e) {
-							LOG.error("Error reading properties... Error: " + e.getMessage());
-							System.exit(0);
-						}			    		
-			    	} 
-				}
+				WDConfigManager.configureLog();
+
+				// 2.- Application configuration
+				WDConfigManager.checkConfig();
+				PropertiesManager pm = PropertiesManager.getInstance();
+				WallpaperDownloader window = new WallpaperDownloader();
+				window.frame.setVisible(true);
+				window.frame.setTitle(pm.getProperty("app.name", PropertiesManager.APP_PROP_TYPE) + " V" + pm.getProperty("app.version", PropertiesManager.APP_PROP_TYPE));
 			}
 		});
 	}
@@ -100,16 +84,12 @@ public class WallpaperDownloader {
 		wallbaseCheckbox.setBounds(8, 8, 129, 23);
 		providersPanel.add(wallbaseCheckbox);
 		// Checking provider
-		try {
-			// Wallbase.cc
-			String wallbaseEnable = pm.getUserProperty("provider.wallbase");
-			if (wallbaseEnable.equals(WDUtilities.APP_YES)) {
-				wallbaseCheckbox.setSelected(true);
-			}
-		} catch (Exception e) {
-			LOG.error("Error while loading property provider.wallbase. Error: " + e.getMessage());
+		// Wallbase.cc
+		String wallbaseEnable = pm.getProperty("provider.wallbase", PropertiesManager.USER_PROP_TYPE);
+		if (wallbaseEnable.equals(WDUtilities.APP_YES)) {
+			wallbaseCheckbox.setSelected(true);
 		}
-		
+
 		JLabel lblKeywords = new JLabel("Keywords");
 		lblKeywords.setBounds(12, 39, 70, 15);
 		providersPanel.add(lblKeywords);
@@ -159,15 +139,7 @@ public class WallpaperDownloader {
 				// Storing all the application settings
 				// Providers //////////////////////////////////////
 				// Wallbase.cc
-				try {
-					LOG.info("provider.wallbase is set to " + pm.getProperty("provider.wallbase"));
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				LOG.info("provider.wallbase is set to " + pm.getProperty("provider.wallbase", PropertiesManager.USER_PROP_TYPE));
 				///////////////////////////////////////
 				if (wallbaseCheckbox.isSelected()) {
 					pm.setUserProperty("provider.wallbase", WDUtilities.APP_YES);
@@ -175,16 +147,7 @@ public class WallpaperDownloader {
 					pm.setUserProperty("provider.wallbase", WDUtilities.APP_NO);					
 				}
 				///////////////////////////////////////
-				try {
-					LOG.info("Now, provider.wallbase is set to " + pm.getProperty("provider.wallbase"));
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
+				LOG.info("Now, provider.wallbase is set to " + pm.getProperty("provider.wallbase", PropertiesManager.USER_PROP_TYPE));
 			}
 		});
 

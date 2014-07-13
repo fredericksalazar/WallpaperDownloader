@@ -10,6 +10,8 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
+import es.estoes.wallpaperDownloader.exceptions.WDPropertyException;
+
 /**
  * This class uses the Singleton principle and design pattern. It can only be instantiated 
  * one time during the execution of the application and it gathers all the methods related
@@ -73,15 +75,15 @@ public class PropertiesManager {
 			prop.load(input);
 			value = prop.getProperty(property);
 		} catch (FileNotFoundException e) {
-			LOG.error(resource + " properties file wasn't found. Error: " + e.getMessage());
+			throw new WDPropertyException(resource + " properties file wasn't found. Error: " + e.getMessage());
 		} catch (IOException e) {
-			LOG.error("Error loading InputStream for reading properties file. Error: " + e.getMessage());
+			throw new WDPropertyException("Error loading InputStream for reading properties file. Error: " + e.getMessage());
 		} finally {
 			if (input != null) {
 				try {
 					input.close();
 				} catch (IOException e) {
-					LOG.error("Error closing InputStream. Error: " + e.getMessage());
+					throw new WDPropertyException("Error closing InputStream. Error: " + e.getMessage());
 				}	
 			}		
 		}
@@ -104,13 +106,13 @@ public class PropertiesManager {
 			prop.setProperty(property, value);
 			prop.store(output, null);
 		} catch (IOException e) {
-			LOG.error("Error while setting property " + property + " with value " + value + " within properties file " + userConfigurationFilePath);
+			throw new WDPropertyException("Error while setting property " + property + " with value " + value + " within properties file " + userConfigurationFilePath);
 		} finally {
 			if (output != null) {
 				try {
 					output.close();
 				} catch (IOException e) {
-					LOG.error("Error closing outputFile. Error: " + e.getMessage());
+					throw new WDPropertyException("Error closing outputFile. Error: " + e.getMessage());
 				}
 			}
 		}
