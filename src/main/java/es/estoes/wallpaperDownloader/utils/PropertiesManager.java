@@ -31,7 +31,6 @@ public class PropertiesManager {
 	public static final String USER_PROP_TYPE = "user";
 	
 	// Atributes
-	private String userConfigurationFilePath;
 	
 	// Getters & Setters	
 
@@ -40,7 +39,6 @@ public class PropertiesManager {
 	 * Constructor
 	 */
 	private PropertiesManager () {
-		userConfigurationFilePath = WDUtilities.getUserConfigurationFilePath();
 	}
 	
 	public static PropertiesManager getInstance() {
@@ -69,7 +67,7 @@ public class PropertiesManager {
 			if (type.equals(APP_PROP_TYPE)) {
 				resource = APP_PROPERTIES_FILE_NAME;
 			} else if (type.equals(USER_PROP_TYPE)) {
-				resource = userConfigurationFilePath;
+				resource = WDUtilities.getUserConfigurationFilePath();
 			}
 			input = this.getClass().getClassLoader().getResourceAsStream(resource);
 			prop.load(input);
@@ -100,13 +98,13 @@ public class PropertiesManager {
 		OutputStream output = null;
 		
 		try {
-			output = new FileOutputStream(userConfigurationFilePath);
+			output = new FileOutputStream(WDUtilities.getUserConfigurationFilePath());
 			
 			// Set the property value
 			prop.setProperty(property, value);
 			prop.store(output, null);
 		} catch (IOException e) {
-			throw new WDPropertyException("Error while setting property " + property + " with value " + value + " within properties file " + userConfigurationFilePath);
+			throw new WDPropertyException("Error while setting property " + property + " with value " + value + " within properties file " + WDUtilities.getUserConfigurationFilePath());
 		} finally {
 			if (output != null) {
 				try {

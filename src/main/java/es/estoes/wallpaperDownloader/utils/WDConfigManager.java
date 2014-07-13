@@ -50,7 +50,6 @@ public class WDConfigManager {
 	     LOG.info("Checking configuration...");
 	     LOG.info("Checking application's folder");
 	     PropertiesManager pm = PropertiesManager.getInstance();
-	     //String appPath = WDUtilities.getAppPath();
 	     Path appPath = Paths.get(WDUtilities.getAppPath());
 	     Path absoluteDownloadsPath = null;
 	     Path userConfigPath = null;
@@ -82,14 +81,20 @@ public class WDConfigManager {
     		 if (!userConfigFile.exists()) {
     			 LOG.info("User configuration file doesn't exist. Creating...");
     			 FileUtils.touch(userConfigFile);
+
+        		 // Setting the user's configuration file path 
+        		 WDUtilities.setUserConfigurationFilePath(userConfigPath.toString());
+
+        		 // Initializing user configuration file
+    			 // Providers
+    			 pm.setUserProperty("provider.wallbase", WDUtilities.APP_YES);
     			 
-    			 // Initializing user configuration file
-    			 // TODO
-    			 
+    		 } else {
+        		 // Setting the user's configuration file path 
+        		 WDUtilities.setUserConfigurationFilePath(userConfigPath.toString());
     		 }
     		 
-    		 // Setting the user's configuration file path 
-    		 WDUtilities.setUserConfigurationFilePath(userConfigPath.toString());
+
 
     	 } catch (Exception e) {
     		 throw new WDConfigurationException("Error setting up the downloads folder. Error: " + e.getMessage());
