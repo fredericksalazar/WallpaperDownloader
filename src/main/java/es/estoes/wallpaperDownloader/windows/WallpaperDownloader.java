@@ -1,22 +1,31 @@
 package es.estoes.wallpaperDownloader.windows;
 
 import java.awt.EventQueue;
+
 import javax.swing.JFrame;
 import javax.swing.JTextField;
+
+import es.estoes.wallpaperDownloader.utils.PreferencesManager;
 import es.estoes.wallpaperDownloader.utils.PropertiesManager;
 import es.estoes.wallpaperDownloader.utils.WDConfigManager;
 import es.estoes.wallpaperDownloader.utils.WDUtilities;
+
 import javax.swing.JTabbedPane;
 import javax.swing.JButton;
+
 import java.awt.Color;
+
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
+
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.JLabel;
+
 import org.apache.log4j.Logger;
 
 public class WallpaperDownloader {
@@ -39,7 +48,7 @@ public class WallpaperDownloader {
 				PropertiesManager pm = PropertiesManager.getInstance();
 				WallpaperDownloader window = new WallpaperDownloader();
 				window.frame.setVisible(true);
-				window.frame.setTitle(pm.getProperty("app.name", PropertiesManager.APP_PROP_TYPE) + " V" + pm.getProperty("app.version", PropertiesManager.APP_PROP_TYPE));
+				window.frame.setTitle(pm.getProperty("app.name") + " V" + pm.getProperty("app.version"));
 			}
 		});
 	}
@@ -55,7 +64,7 @@ public class WallpaperDownloader {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		final PropertiesManager pm = PropertiesManager.getInstance();
+		final PreferencesManager prefm = PreferencesManager.getInstance();
 		frame = new JFrame();
 		frame.setBounds(100, 100, 690, 440);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -85,7 +94,7 @@ public class WallpaperDownloader {
 		providersPanel.add(wallbaseCheckbox);
 		// Checking provider
 		// Wallbase.cc
-		String wallbaseEnable = pm.getProperty("provider.wallbase", PropertiesManager.USER_PROP_TYPE);
+		String wallbaseEnable = prefm.getPreference("provider.wallbase");
 		if (wallbaseEnable.equals(WDUtilities.APP_YES)) {
 			wallbaseCheckbox.setSelected(true);
 		}
@@ -139,15 +148,15 @@ public class WallpaperDownloader {
 				// Storing all the application settings
 				// Providers //////////////////////////////////////
 				// Wallbase.cc
-				LOG.info("provider.wallbase is set to " + pm.getProperty("provider.wallbase", PropertiesManager.USER_PROP_TYPE));
+				LOG.info("provider.wallbase is set to " + prefm.getPreference("provider.wallbase"));
 				///////////////////////////////////////
 				if (wallbaseCheckbox.isSelected()) {
-					pm.setUserProperty("provider.wallbase", WDUtilities.APP_YES);
+					prefm.setPreference("provider.wallbase", WDUtilities.APP_YES);
 				} else {
-					pm.setUserProperty("provider.wallbase", WDUtilities.APP_NO);					
+					prefm.setPreference("provider.wallbase", WDUtilities.APP_NO);					
 				}
 				///////////////////////////////////////
-				LOG.info("Now, provider.wallbase is set to " + pm.getProperty("provider.wallbase", PropertiesManager.USER_PROP_TYPE));
+				LOG.info("Now, provider.wallbase is set to " + prefm.getPreference("provider.wallbase"));
 			}
 		});
 

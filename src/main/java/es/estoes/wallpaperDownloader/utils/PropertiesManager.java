@@ -1,15 +1,11 @@
 package es.estoes.wallpaperDownloader.utils;
 
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Properties;
-
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-
 import es.estoes.wallpaperDownloader.exceptions.WDPropertyException;
 
 /**
@@ -27,8 +23,6 @@ public class PropertiesManager {
 	private static final Logger LOG = Logger.getLogger(PropertiesManager.class);
 	private static final String APP_PROPERTIES_FILE_NAME = "application.properties";
 	private static final String LOG4J_PROPERTIES_FILE_NAME = "log4j.properties";
-	public static final String APP_PROP_TYPE = "app";
-	public static final String USER_PROP_TYPE = "user";
 	
 	// Atributes
 	
@@ -58,18 +52,13 @@ public class PropertiesManager {
 	 * @param property
 	 * @return
 	 */
-	public String getProperty(String property, String type) {
+	public String getProperty(String property) {
 		InputStream input = null;
 		Properties prop = new Properties();
 		String value = null;
 		String resource = null;
 		try {
-			if (type.equals(APP_PROP_TYPE)) {
-				resource = APP_PROPERTIES_FILE_NAME;
-			} else if (type.equals(USER_PROP_TYPE)) {
-				resource = WDUtilities.getUserConfigurationFilePath();
-			}
-			input = this.getClass().getClassLoader().getResourceAsStream(resource);
+			input = this.getClass().getClassLoader().getResourceAsStream(APP_PROPERTIES_FILE_NAME);
 			prop.load(input);
 			value = prop.getProperty(property);
 		} catch (FileNotFoundException e) {
@@ -86,34 +75,6 @@ public class PropertiesManager {
 			}		
 		}
 		return value;
-	}
-	
-	/**
-	 * This class sets a user property
-	 * @param property
-	 * @param value
-	 */
-	public void setUserProperty(String property, String value) {
-		Properties prop = new Properties();
-		OutputStream output = null;
-		
-		try {
-			output = new FileOutputStream(WDUtilities.getUserConfigurationFilePath());
-			
-			// Set the property value
-			prop.setProperty(property, value);
-			prop.store(output, null);
-		} catch (IOException e) {
-			throw new WDPropertyException("Error while setting property " + property + " with value " + value + " within properties file " + WDUtilities.getUserConfigurationFilePath());
-		} finally {
-			if (output != null) {
-				try {
-					output.close();
-				} catch (IOException e) {
-					throw new WDPropertyException("Error closing outputFile. Error: " + e.getMessage());
-				}
-			}
-		}
 	}
 	
 	/**
