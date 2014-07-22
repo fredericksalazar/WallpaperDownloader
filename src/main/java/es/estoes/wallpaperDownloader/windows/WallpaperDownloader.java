@@ -137,16 +137,16 @@ public class WallpaperDownloader {
 		frame.getContentPane().add(btnMinimize, gbc_btnMinimize);
 		
 		// Setting up configuration
-		configureGUI();
+		initializeGUI();
 		
 		// Setting up listeners
-		configureListeners();
+		initializeListeners();
 	}
 
 	/**
 	 * This method configures all the listeners
 	 */
-	private void configureListeners() {
+	private void initializeListeners() {
 		
 		final PreferencesManager prefm = PreferencesManager.getInstance();
 		
@@ -202,7 +202,7 @@ public class WallpaperDownloader {
 	/**
 	 * This methods configures GUI according to user configuration file preferences
 	 */
-	private void configureGUI() {
+	private void initializeGUI() {
 
 		final PreferencesManager prefm = PreferencesManager.getInstance();
 
