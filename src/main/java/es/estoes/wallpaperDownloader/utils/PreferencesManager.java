@@ -2,9 +2,7 @@ package es.estoes.wallpaperDownloader.utils;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
-
 import org.apache.log4j.Logger;
 
 /**
