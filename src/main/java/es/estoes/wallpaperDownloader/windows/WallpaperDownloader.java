@@ -30,9 +30,16 @@ import org.apache.log4j.Logger;
 
 public class WallpaperDownloader {
 
+	// Constants
 	protected static final Logger LOG = Logger.getLogger(WallpaperDownloader.class);
+	
+	// Attributes
 	private JFrame frame;
 	private JTextField wallbaseKeywords;
+	private JCheckBox wallbaseCheckbox;
+	private JButton btnApply;
+	private JButton btnCloseExit;
+	private JButton btnMinimize;
 
 	/**
 	 * Launch the application.
@@ -64,7 +71,6 @@ public class WallpaperDownloader {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		final PreferencesManager prefm = PreferencesManager.getInstance();
 		frame = new JFrame();
 		frame.setBounds(100, 100, 690, 440);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -88,16 +94,10 @@ public class WallpaperDownloader {
 		JPanel providersPanel = new JPanel();
 		tabbedPane.addTab("Providers", null, providersPanel, null);
 		providersPanel.setLayout(null);
-		
-		final JCheckBox wallbaseCheckbox = new JCheckBox("Wallbase.cc");
+
+		wallbaseCheckbox = new JCheckBox("Wallbase.cc");
 		wallbaseCheckbox.setBounds(8, 8, 129, 23);
 		providersPanel.add(wallbaseCheckbox);
-		// Checking provider
-		// Wallbase.cc
-		String wallbaseEnable = prefm.getPreference("provider-wallbase");
-		if (wallbaseEnable.equals(WDUtilities.APP_YES)) {
-			wallbaseCheckbox.setSelected(true);
-		}
 
 		JLabel lblKeywords = new JLabel("Keywords");
 		lblKeywords.setBounds(12, 39, 70, 15);
@@ -111,16 +111,61 @@ public class WallpaperDownloader {
 		JPanel appSettingsPanel = new JPanel();
 		tabbedPane.addTab("Application Settings", null, appSettingsPanel, null);
 		
-		JButton btnCloseExit = new JButton("Close & Exit");
+		btnCloseExit = new JButton("Close & Exit");
 		GridBagConstraints gbc_btnCloseExit = new GridBagConstraints();
 		gbc_btnCloseExit.anchor = GridBagConstraints.WEST;
 		gbc_btnCloseExit.insets = new Insets(0, 0, 5, 5);
 		gbc_btnCloseExit.gridx = 0;
 		gbc_btnCloseExit.gridy = 2;
-		frame.getContentPane().add(btnCloseExit, gbc_btnCloseExit);
+		frame.getContentPane().add(btnCloseExit, gbc_btnCloseExit);		
 		
+		btnApply = new JButton("Apply");
+		GridBagConstraints gbc_btnApply = new GridBagConstraints();
+		gbc_btnApply.anchor = GridBagConstraints.NORTHWEST;
+		gbc_btnApply.insets = new Insets(0, 0, 5, 5);
+		gbc_btnApply.gridx = 2;
+		gbc_btnApply.gridy = 2;
+		frame.getContentPane().add(btnApply, gbc_btnApply);
+		
+		btnMinimize = new JButton("Minimize");
+		btnMinimize.setBackground(Color.WHITE);
+		GridBagConstraints gbc_btnMinimize = new GridBagConstraints();
+		gbc_btnMinimize.insets = new Insets(0, 0, 5, 0);
+		gbc_btnMinimize.anchor = GridBagConstraints.NORTHWEST;
+		gbc_btnMinimize.gridx = 3;
+		gbc_btnMinimize.gridy = 2;
+		frame.getContentPane().add(btnMinimize, gbc_btnMinimize);
+		
+		// Setting up configuration
+		configureGUI();
+		
+		// Setting up listeners
+		configureListeners();
+	}
+
+	/**
+	 * This method configures all the listeners
+	 */
+	private void configureListeners() {
+		
+		final PreferencesManager prefm = PreferencesManager.getInstance();
+		
+		// Listeners
 		/**
-		 * btnCloseExit Action Listeteners
+		 * wallbaseCheckbox Action Listeners
+		 */
+		// Clicking event
+		wallbaseCheckbox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				if (wallbaseCheckbox.isSelected()) {
+					wallbaseKeywords.setEnabled(true);
+				} else {
+					wallbaseKeywords.setEnabled(false);					
+				}
+			}
+		});
+		/**
+		 * btnCloseExit Action Listeners
 		 */
 		// Clicking event
 		btnCloseExit.addActionListener(new ActionListener() {
@@ -129,45 +174,52 @@ public class WallpaperDownloader {
 				System.exit(0);
 			}
 		});
-		
-		
-		JButton btnApply = new JButton("Apply");
-		GridBagConstraints gbc_btnApply = new GridBagConstraints();
-		gbc_btnApply.anchor = GridBagConstraints.NORTHWEST;
-		gbc_btnApply.insets = new Insets(0, 0, 5, 5);
-		gbc_btnApply.gridx = 2;
-		gbc_btnApply.gridy = 2;
-		frame.getContentPane().add(btnApply, gbc_btnApply);
 
 		/**
-		 * btnApply Action Listeteners
+		 * btnApply Action Listeners
 		 */
 		// Clicking event
 		btnApply.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				// Storing all the application settings
-				// Providers //////////////////////////////////////
+				// Storing user settings
+				// ---------------------------------------------------------------------------
+				// Providers
+				// ---------------------------------------------------------------------------
 				// Wallbase.cc
-				LOG.info("provider-wallbase is set to " + prefm.getPreference("provider-wallbase"));
-				///////////////////////////////////////
 				if (wallbaseCheckbox.isSelected()) {
 					prefm.setPreference("provider-wallbase", WDUtilities.APP_YES);
 				} else {
-					prefm.setPreference("provider-wallbase", WDUtilities.APP_NO);					
+					prefm.setPreference("provider-wallbase", WDUtilities.APP_NO);
 				}
-				///////////////////////////////////////
-				LOG.info("Now, provider-wallbase is set to " + prefm.getPreference("provider-wallbase"));
+				if (!wallbaseKeywords.getText().isEmpty()) {
+					prefm.setPreference("provider-wallbase-keywords", wallbaseKeywords.getText());					
+				}
 			}
 		});
-
 		
-		JButton btnMinimize = new JButton("Minimize");
-		btnMinimize.setBackground(Color.WHITE);
-		GridBagConstraints gbc_btnMinimize = new GridBagConstraints();
-		gbc_btnMinimize.insets = new Insets(0, 0, 5, 0);
-		gbc_btnMinimize.anchor = GridBagConstraints.NORTHWEST;
-		gbc_btnMinimize.gridx = 3;
-		gbc_btnMinimize.gridy = 2;
-		frame.getContentPane().add(btnMinimize, gbc_btnMinimize);
+	}
+
+	/**
+	 * This methods configures GUI according to user configuration file preferences
+	 */
+	private void configureGUI() {
+
+		final PreferencesManager prefm = PreferencesManager.getInstance();
+
+		// ---------------------------------------------------------------------
+		// Checking providers
+		// ---------------------------------------------------------------------
+		// Wallbase.cc
+		String wallbaseEnable = prefm.getPreference("provider-wallbase");
+		if (wallbaseEnable.equals(WDUtilities.APP_YES)) {
+			wallbaseCheckbox.setSelected(true);
+			wallbaseKeywords.setEnabled(true);
+		} else {
+			wallbaseKeywords.setEnabled(false);
+		}
+		if (!prefm.getPreference("provider-wallbase-keywords").equals(PreferencesManager.DEFAULT_VALUE)) {
+			wallbaseKeywords.setText(prefm.getPreference("provider-wallbase-keywords"));			
+		}
+
 	}
 }

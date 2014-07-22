@@ -18,7 +18,7 @@ public class PreferencesManager {
 	// Constants
 	private static volatile PreferencesManager instance;
 	private static final Logger LOG = Logger.getLogger(PreferencesManager.class);
-	private static final String DEFAULT_VALUE = "NONE";
+	public static final String DEFAULT_VALUE = "NONE";
 	
 	// Atributes
 	private Preferences pref;
