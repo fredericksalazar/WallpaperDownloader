@@ -2,7 +2,9 @@ package es.estoes.wallpaperDownloader.utils;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -34,7 +36,7 @@ public class PreferencesManager {
 		setUserConfigurationPath();
 	    System.setProperty("java.util.prefs.PreferencesFactory", FilePreferencesFactory.class.getName());
 	    System.setProperty(FilePreferencesFactory.SYSTEM_PROPERTY_FILE, WDUtilities.getUserConfigurationFilePath());
-	    pref = Preferences.userNodeForPackage(PreferencesManager.class);
+	    pref = Preferences.userNodeForPackage(es.estoes.wallpaperDownloader.windows.WallpaperDownloader.class);
 	}
 	
 	/**

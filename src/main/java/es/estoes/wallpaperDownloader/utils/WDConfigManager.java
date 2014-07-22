@@ -82,7 +82,7 @@ public class WDConfigManager {
 
         		 // Initializing user configuration file
     			 // Providers
-        		 prefm.setPreference("provider.wallbase", WDUtilities.APP_YES);
+        		 prefm.setPreference("provider-wallbase", WDUtilities.APP_YES);
     			 
     		 }
 

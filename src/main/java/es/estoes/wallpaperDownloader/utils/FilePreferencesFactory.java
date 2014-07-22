@@ -21,7 +21,7 @@ public class FilePreferencesFactory implements PreferencesFactory
   private static final Logger log = Logger.getLogger(FilePreferencesFactory.class.getName());
  
   Preferences rootPreferences;
-  public static final String SYSTEM_PROPERTY_FILE = "net.infotrek.util.prefs.FilePreferencesFactory.file";
+  public static final String SYSTEM_PROPERTY_FILE = "es.estoes.wallpaperdownloader.utils.FilePreferencesFactory.file";
  
   public Preferences systemRoot()
   {

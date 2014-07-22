@@ -94,7 +94,7 @@ public class WallpaperDownloader {
 		providersPanel.add(wallbaseCheckbox);
 		// Checking provider
 		// Wallbase.cc
-		String wallbaseEnable = prefm.getPreference("provider.wallbase");
+		String wallbaseEnable = prefm.getPreference("provider-wallbase");
 		if (wallbaseEnable.equals(WDUtilities.APP_YES)) {
 			wallbaseCheckbox.setSelected(true);
 		}
@@ -148,15 +148,15 @@ public class WallpaperDownloader {
 				// Storing all the application settings
 				// Providers //////////////////////////////////////
 				// Wallbase.cc
-				LOG.info("provider.wallbase is set to " + prefm.getPreference("provider.wallbase"));
+				LOG.info("provider-wallbase is set to " + prefm.getPreference("provider-wallbase"));
 				///////////////////////////////////////
 				if (wallbaseCheckbox.isSelected()) {
-					prefm.setPreference("provider.wallbase", WDUtilities.APP_YES);
+					prefm.setPreference("provider-wallbase", WDUtilities.APP_YES);
 				} else {
-					prefm.setPreference("provider.wallbase", WDUtilities.APP_NO);					
+					prefm.setPreference("provider-wallbase", WDUtilities.APP_NO);					
 				}
 				///////////////////////////////////////
-				LOG.info("Now, provider.wallbase is set to " + prefm.getPreference("provider.wallbase"));
+				LOG.info("Now, provider-wallbase is set to " + prefm.getPreference("provider-wallbase"));
 			}
 		});
 
