@@ -15,6 +15,7 @@ public class WDUtilities {
 	protected static final Logger LOG = Logger.getLogger(WDUtilities.class);
 	public static final String APP_YES = "yes";
 	public static final String APP_NO = "no";
+	public static final String PROVIDER_SEPARATOR = ";";
 
 	// Attributes
 	private static String appPath;
