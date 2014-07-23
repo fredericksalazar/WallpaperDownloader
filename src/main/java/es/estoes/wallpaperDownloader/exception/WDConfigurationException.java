@@ -1,4 +1,4 @@
-package es.estoes.wallpaperDownloader.exceptions;
+package es.estoes.wallpaperDownloader.exception;
 
 import org.apache.log4j.Logger;
 

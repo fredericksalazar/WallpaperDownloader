@@ -1,6 +1,6 @@
 package es.estoes.wallpaperDownloader;
 
-import es.estoes.wallpaperDownloader.windows.WallpaperDownloader;
+import es.estoes.wallpaperDownloader.window.WallpaperDownloader;
 
 public class Main 
 {

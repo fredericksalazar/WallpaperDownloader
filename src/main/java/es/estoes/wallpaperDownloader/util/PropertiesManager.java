@@ -1,12 +1,14 @@
-package es.estoes.wallpaperDownloader.utils;
+package es.estoes.wallpaperDownloader.util;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import es.estoes.wallpaperDownloader.exceptions.WDPropertyException;
+
+import es.estoes.wallpaperDownloader.exception.WDPropertyException;
 
 /**
  * This class uses the Singleton principle and design pattern. It can only be instantiated 

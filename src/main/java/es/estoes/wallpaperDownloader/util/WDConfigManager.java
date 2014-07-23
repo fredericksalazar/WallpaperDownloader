@@ -1,4 +1,4 @@
-package es.estoes.wallpaperDownloader.utils;
+package es.estoes.wallpaperDownloader.util;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,7 +12,7 @@ import javax.swing.filechooser.FileSystemView;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
-import es.estoes.wallpaperDownloader.exceptions.WDConfigurationException;
+import es.estoes.wallpaperDownloader.exception.WDConfigurationException;
 
 /**
  * This class checks for the right configuration of the application and tries to initialize

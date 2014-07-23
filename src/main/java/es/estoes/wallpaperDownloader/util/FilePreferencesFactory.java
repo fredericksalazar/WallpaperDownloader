@@ -1,4 +1,4 @@
-package es.estoes.wallpaperDownloader.utils;
+package es.estoes.wallpaperDownloader.util;
 
 import java.io.File;
 import java.util.logging.Logger;

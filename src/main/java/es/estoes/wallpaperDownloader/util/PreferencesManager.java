@@ -1,4 +1,4 @@
-package es.estoes.wallpaperDownloader.utils;
+package es.estoes.wallpaperDownloader.util;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -34,7 +34,7 @@ public class PreferencesManager {
 		setUserConfigurationPath();
 	    System.setProperty("java.util.prefs.PreferencesFactory", FilePreferencesFactory.class.getName());
 	    System.setProperty(FilePreferencesFactory.SYSTEM_PROPERTY_FILE, WDUtilities.getUserConfigurationFilePath());
-	    pref = Preferences.userNodeForPackage(es.estoes.wallpaperDownloader.windows.WallpaperDownloader.class);
+	    pref = Preferences.userNodeForPackage(es.estoes.wallpaperDownloader.window.WallpaperDownloader.class);
 	}
 	
 	/**

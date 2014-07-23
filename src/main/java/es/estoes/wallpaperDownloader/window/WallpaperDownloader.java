@@ -1,14 +1,14 @@
-package es.estoes.wallpaperDownloader.windows;
+package es.estoes.wallpaperDownloader.window;
 
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 
-import es.estoes.wallpaperDownloader.utils.PreferencesManager;
-import es.estoes.wallpaperDownloader.utils.PropertiesManager;
-import es.estoes.wallpaperDownloader.utils.WDConfigManager;
-import es.estoes.wallpaperDownloader.utils.WDUtilities;
+import es.estoes.wallpaperDownloader.util.PreferencesManager;
+import es.estoes.wallpaperDownloader.util.PropertiesManager;
+import es.estoes.wallpaperDownloader.util.WDConfigManager;
+import es.estoes.wallpaperDownloader.util.WDUtilities;
 
 import javax.swing.JTabbedPane;
 import javax.swing.JButton;
