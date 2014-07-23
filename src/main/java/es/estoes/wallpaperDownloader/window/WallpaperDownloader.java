@@ -133,6 +133,9 @@ public class WallpaperDownloader {
 		
 		// Setting up listeners
 		initializeListeners();
+		
+		// Starting the application
+		initializeHarvesting();
 	}
 
 	/**
@@ -186,6 +189,8 @@ public class WallpaperDownloader {
 				if (!wallbaseKeywords.getText().isEmpty()) {
 					prefm.setPreference("provider-wallbase-keywords", wallbaseKeywords.getText());					
 				}
+				
+				// TODO: Stops harvester and starts it again with the new configuration
 			}
 		});
 		
@@ -214,4 +219,12 @@ public class WallpaperDownloader {
 		}
 
 	}
+	
+	/**
+	 * This method starts the harvesting process
+	 */
+	private void initializeHarvesting() {
+		
+	}
+
 }
