@@ -1,23 +1,32 @@
 package es.estoes.wallpaperDownloader.window;
 
 import java.awt.EventQueue;
+
 import javax.swing.JFrame;
 import javax.swing.JTextField;
+
+import es.estoes.wallpaperDownloader.harvest.Harvester;
 import es.estoes.wallpaperDownloader.util.PreferencesManager;
 import es.estoes.wallpaperDownloader.util.PropertiesManager;
 import es.estoes.wallpaperDownloader.util.WDConfigManager;
 import es.estoes.wallpaperDownloader.util.WDUtilities;
+
 import javax.swing.JTabbedPane;
 import javax.swing.JButton;
+
 import java.awt.Color;
+
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
+
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.JLabel;
+
 import org.apache.log4j.Logger;
 
 public class WallpaperDownloader {
@@ -26,6 +35,7 @@ public class WallpaperDownloader {
 	protected static final Logger LOG = Logger.getLogger(WallpaperDownloader.class);
 	
 	// Attributes
+	private Harvester harvester;
 	private JFrame frame;
 	private JTextField wallbaseKeywords;
 	private JCheckBox wallbaseCheckbox;
@@ -190,7 +200,8 @@ public class WallpaperDownloader {
 					prefm.setPreference("provider-wallbase-keywords", wallbaseKeywords.getText());					
 				}
 				
-				// TODO: Stops harvester and starts it again with the new configuration
+				harvester.stop();
+				harvester.start();
 			}
 		});
 		
@@ -224,7 +235,8 @@ public class WallpaperDownloader {
 	 * This method starts the harvesting process
 	 */
 	private void initializeHarvesting() {
-		
+		harvester = Harvester.getInstance();
+		harvester.start();
 	}
 
 }
