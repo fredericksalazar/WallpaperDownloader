@@ -1,8 +1,9 @@
 package es.estoes.wallpaperDownloader.harvest;
 
-import java.util.Iterator;
 import java.util.LinkedList;
-import javax.swing.SwingWorker;
+
+import org.apache.log4j.Logger;
+
 import es.estoes.wallpaperDownloader.provider.Provider;
 import es.estoes.wallpaperDownloader.provider.WallbaseProvider;
 import es.estoes.wallpaperDownloader.util.PreferencesManager;
@@ -21,6 +22,7 @@ import es.estoes.wallpaperDownloader.util.WDUtilities;
 public class Harvester {
 	
 	// Constants
+	private static final Logger LOG = Logger.getLogger(Harvester.class);
 	private static volatile Harvester instance;
 	
 	// Attributes
@@ -29,15 +31,26 @@ public class Harvester {
 	private boolean isProviderWorking;
 	private boolean isHaltRequired;
 	
+	// Getters & Setters
+	public void setIsProviderWorking (boolean isProviderWorking) {
+		this.isProviderWorking = isProviderWorking;
+	}
+	
+	public boolean getIsHaltRequired() {
+		return this.isHaltRequired;
+	}
+	
 	// Methods
 	/**
 	 * Constructor
 	 */
 	private Harvester () {
+		isProviderWorking = false;
 		initializeProviders();
 	}
 	
 	private void initializeProviders() {
+		LOG.info("Initializing providers...");
 		isHaltRequired = false;
 		PreferencesManager prefm = PreferencesManager.getInstance();
 		providers = new LinkedList<Provider>();
@@ -67,28 +80,39 @@ public class Harvester {
 	 * This method stops the harvesting process
 	 */
 	public void stop () {
+		LOG.info("Stoping harvesting process...");
 		isHaltRequired = true;
-		while (isProviderWorking) {
-			// Do nothing. It is necessary to wait until providers have finished the last job
-		}
-		// TODO: Stops stuff
 		providers = null;
+		if (backgroundHarvestingProcess != null) {
+			while (!backgroundHarvestingProcess.isCancelled()) {
+				
+			}
+			backgroundHarvestingProcess = null;
+		}
 	}
 	
 	/**
 	 * This method starts the harvesting process
 	 */
 	public void start () {		
-		if (providers.equals(null)) {
+		LOG.info("Starting harvesting process...");
+		while (isProviderWorking) {
+			// Do nothing. It is necessary to wait until providers have finished the last job 
+		}
+		
+		if (providers == null) {
 			initializeProviders();
 		}
 		
-		while (!isHaltRequired) {
+		if (providers.size() > 0) {
+			LOG.info("Providers found. Starting to download...");
+			isProviderWorking = true;
 			backgroundHarvestingProcess = new BackgroundHarvestingProcess();
 			backgroundHarvestingProcess.setProviders(providers);
-			backgroundHarvestingProcess.execute();
-			
-			//isHaltRequired = true;
-		}	
+			backgroundHarvestingProcess.execute();								
+		} else {
+			LOG.info("Providers were not found. Nothing to do.");
+			isProviderWorking = false;
+		}
 	}
 }

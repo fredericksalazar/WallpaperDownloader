@@ -1,10 +1,7 @@
 package es.estoes.wallpaperDownloader.harvest;
 
-import java.util.Iterator;
 import java.util.LinkedList;
-
 import javax.swing.SwingWorker;
-
 import es.estoes.wallpaperDownloader.provider.Provider;
 
 /**
@@ -32,22 +29,44 @@ public class BackgroundHarvestingProcess extends SwingWorker<Void, Void> {
 	 */
 	@Override
 	protected Void doInBackground() throws Exception {
-		Provider provider = null;
-		Iterator<Provider> iterator = providers.iterator();
 		// For every Provider
 		// 1.- Getting 1 wallpaper per defined keyword
 		// 2.- When all the keywords have been used, take provider and put it at the end of 
 		// the list
 		// 3.- Starting again with the next provider
-		while (iterator.hasNext()) {
-			provider = iterator.next();
-			provider.obtainKeywords();
-			while (!provider.getAreKeywordsDone()) {
-				provider.getWallpaper();
-				provider.storeWallpaper();
-			}
-			providers.addLast(providers.removeFirst());
+		while (providers.size()>0) {
+			if (!Harvester.getInstance().getIsHaltRequired()) {
+				Provider provider = providers.removeFirst(); 
+				provider.obtainKeywords();
+				while (!provider.getAreKeywordsDone()) {
+					provider.getWallpaper();
+					provider.storeWallpaper();
+				}
+				providers.addLast(provider);					
+			} else {
+				Harvester.getInstance().setIsProviderWorking(false);
+				this.cancel(true);
+				break;
+			}			
 		}
+		
+/*
+		if (providers != null && providers.size()>0) {
+			for (final Provider provider: providers) {
+				if (!Harvester.getInstance().getIsHaltRequired()) {
+					provider.obtainKeywords();
+					while (!provider.getAreKeywordsDone()) {
+						provider.getWallpaper();
+						provider.storeWallpaper();
+					}
+					Provider prov = providers.removeFirst(); 
+					providers.addLast(prov);					
+				} else {
+					break;
+				}
+			}			
+		}
+*/
 		return null;
 	}
 

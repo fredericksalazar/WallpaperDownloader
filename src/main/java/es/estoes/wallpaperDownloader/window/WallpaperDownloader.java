@@ -200,9 +200,8 @@ public class WallpaperDownloader {
 					prefm.setPreference("provider-wallbase-keywords", wallbaseKeywords.getText());					
 				}
 				
-				//harvester.stop();
-				//harvester.cancel(true);
-				initializeHarvesting();
+				harvester.stop();
+				harvester.start();
 			}
 		});
 		
