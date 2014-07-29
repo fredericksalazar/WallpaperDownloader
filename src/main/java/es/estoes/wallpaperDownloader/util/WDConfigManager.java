@@ -83,6 +83,10 @@ public class WDConfigManager {
         		 // Initializing user configuration file
     			 // Providers
         		 prefm.setPreference("provider-wallbase", WDUtilities.APP_NO);
+        		 
+        		 // Initializing timer (miliseconds)
+        		 // By default, the application will download a new wallpaper every 5 minutes
+        		 prefm.setPreference("application-timer", "300000");
     			 
     		 }
 

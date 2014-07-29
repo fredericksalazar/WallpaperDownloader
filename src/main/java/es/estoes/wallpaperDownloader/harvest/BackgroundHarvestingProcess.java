@@ -1,8 +1,11 @@
 package es.estoes.wallpaperDownloader.harvest;
 
 import java.util.LinkedList;
+
 import javax.swing.SwingWorker;
+
 import es.estoes.wallpaperDownloader.provider.Provider;
+import es.estoes.wallpaperDownloader.util.PreferencesManager;
 
 /**
 * This class implements SwingWorker abstract class. It is used to execute a independent 
@@ -15,7 +18,7 @@ import es.estoes.wallpaperDownloader.provider.Provider;
 public class BackgroundHarvestingProcess extends SwingWorker<Void, Void> {
 
 	// Attributes
-	private LinkedList<Provider> providers = null;	
+	private LinkedList<Provider> providers = null;
 
 	// Getters & Setters
 	public void setProviders(LinkedList<Provider> providers) {
@@ -29,6 +32,7 @@ public class BackgroundHarvestingProcess extends SwingWorker<Void, Void> {
 	 */
 	@Override
 	protected Void doInBackground() throws Exception {
+		PreferencesManager prefm = PreferencesManager.getInstance();
 		// For every Provider
 		// 1.- Getting 1 wallpaper per defined keyword
 		// 2.- When all the keywords have been used, take provider and put it at the end of 
@@ -38,9 +42,10 @@ public class BackgroundHarvestingProcess extends SwingWorker<Void, Void> {
 			if (!Harvester.getInstance().getIsHaltRequired()) {
 				Provider provider = providers.removeFirst(); 
 				provider.obtainKeywords();
-				while (!provider.getAreKeywordsDone()) {
+				while (!provider.getAreKeywordsDone() && !Harvester.getInstance().getIsHaltRequired()) {
 					provider.getWallpaper();
 					provider.storeWallpaper();
+					Thread.sleep(Long.valueOf(prefm.getPreference("application-timer")));
 				}
 				providers.addLast(provider);					
 			} else {
@@ -50,23 +55,6 @@ public class BackgroundHarvestingProcess extends SwingWorker<Void, Void> {
 			}			
 		}
 		
-/*
-		if (providers != null && providers.size()>0) {
-			for (final Provider provider: providers) {
-				if (!Harvester.getInstance().getIsHaltRequired()) {
-					provider.obtainKeywords();
-					while (!provider.getAreKeywordsDone()) {
-						provider.getWallpaper();
-						provider.storeWallpaper();
-					}
-					Provider prov = providers.removeFirst(); 
-					providers.addLast(prov);					
-				} else {
-					break;
-				}
-			}			
-		}
-*/
 		return null;
 	}
 
