@@ -16,6 +16,10 @@ public class WDUtilities {
 	public static final String APP_YES = "yes";
 	public static final String APP_NO = "no";
 	public static final String PROVIDER_SEPARATOR = ";";
+	public static final String QM = "?";
+	public static final String EQUAL = "=";
+	public static final String AND = "&";
+	public static final String URL_SLASH = "/";
 
 	// Attributes
 	private static String appPath;

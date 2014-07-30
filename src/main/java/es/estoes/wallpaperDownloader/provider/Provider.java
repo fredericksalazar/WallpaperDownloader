@@ -16,7 +16,7 @@ public abstract class Provider {
 	// Attributes
 	private List<String> keywords;
 	private boolean areKeywordsDone;
-	private String activeKeyword;
+	protected String activeKeyword;
 	private int activeIndex;
 	protected String baseURL;
 	protected String keywordsProperty;
@@ -54,7 +54,7 @@ public abstract class Provider {
 		}
 	}
 
-	private void obtainActiveKeyword() {
+	protected void obtainActiveKeyword() {
 		activeKeyword = keywords.get(activeIndex);
 		if (keywords.size() == activeIndex + 1) {
 			// The end of the keywords list has been reached. Starts again
@@ -66,12 +66,9 @@ public abstract class Provider {
 	}
 	
 	public void getWallpaper() {
-		obtainActiveKeyword();
-		LOG.info("Downloading wallpaper with keyword -> " + activeKeyword);
 	}
 	
 	public void storeWallpaper() {
-		LOG.info("Storing wallpaper...");		
 	}
 
 }

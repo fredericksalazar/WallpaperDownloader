@@ -43,7 +43,6 @@ public class BackgroundHarvestingProcess extends SwingWorker<Void, Void> {
 			provider.obtainKeywords();
 			while (!provider.getAreKeywordsDone()) {
 				provider.getWallpaper();
-				provider.storeWallpaper();
 				Thread.sleep(Long.valueOf(prefm.getPreference("application-timer")));
 			}
 			providers.addLast(provider);					
