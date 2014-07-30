@@ -87,7 +87,11 @@ public class WDConfigManager {
         		 // Initializing timer (miliseconds)
         		 // By default, the application will download a new wallpaper every 5 minutes
         		 prefm.setPreference("application-timer", "300000");
-    			 
+
+        		 // Initializing resolution
+        		 // By default, the application will download 1280x1024 resolution wallpapers
+        		 prefm.setPreference("wallpaper-resolution", "1280x1024");
+
     		 }
 
     	 } catch (Exception e) {

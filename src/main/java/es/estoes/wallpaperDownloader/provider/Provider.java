@@ -15,10 +15,12 @@ public abstract class Provider {
 	
 	// Attributes
 	private List<String> keywords;
-	public String keywordsProperty;
 	private boolean areKeywordsDone;
 	private String activeKeyword;
 	private int activeIndex;
+	protected String baseURL;
+	protected String keywordsProperty;
+	protected String resolution;
 	
 	// Getters & Setters
 	public boolean getAreKeywordsDone() {
@@ -30,8 +32,13 @@ public abstract class Provider {
 	 * Constructor
 	 */
 	public Provider () {
+		PreferencesManager prefm = PreferencesManager.getInstance();
 		activeIndex = 0;
+		
+		// Obtaining resolution
+		resolution = prefm.getPreference("wallpaper-resolution");		
 	}
+	
 	/**
 	 * This method gets the keywords defined by the user for a specific provider
 	 * and split them using delimiter 'zero or more whitespace, ; , zero or more whitespace'
@@ -46,7 +53,7 @@ public abstract class Provider {
 			areKeywordsDone = false;
 		}
 	}
-	
+
 	private void obtainActiveKeyword() {
 		activeKeyword = keywords.get(activeIndex);
 		if (keywords.size() == activeIndex + 1) {
@@ -57,6 +64,7 @@ public abstract class Provider {
 			activeIndex++;
 		}
 	}
+	
 	public void getWallpaper() {
 		obtainActiveKeyword();
 		LOG.info("Downloading wallpaper with keyword -> " + activeKeyword);
