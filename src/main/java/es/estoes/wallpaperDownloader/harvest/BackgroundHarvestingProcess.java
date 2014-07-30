@@ -39,20 +39,14 @@ public class BackgroundHarvestingProcess extends SwingWorker<Void, Void> {
 		// the list
 		// 3.- Starting again with the next provider
 		while (providers.size()>0) {
-			if (!Harvester.getInstance().getIsHaltRequired()) {
-				Provider provider = providers.removeFirst(); 
-				provider.obtainKeywords();
-				while (!provider.getAreKeywordsDone() && !Harvester.getInstance().getIsHaltRequired()) {
-					provider.getWallpaper();
-					provider.storeWallpaper();
-					Thread.sleep(Long.valueOf(prefm.getPreference("application-timer")));
-				}
-				providers.addLast(provider);					
-			} else {
-				Harvester.getInstance().setIsProviderWorking(false);
-				this.cancel(true);
-				break;
-			}			
+			Provider provider = providers.removeFirst(); 
+			provider.obtainKeywords();
+			while (!provider.getAreKeywordsDone()) {
+				provider.getWallpaper();
+				provider.storeWallpaper();
+				Thread.sleep(Long.valueOf(prefm.getPreference("application-timer")));
+			}
+			providers.addLast(provider);					
 		}
 		
 		return null;

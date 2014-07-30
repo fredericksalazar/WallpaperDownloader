@@ -28,30 +28,17 @@ public class Harvester {
 	// Attributes
 	private BackgroundHarvestingProcess backgroundHarvestingProcess = null;
 	private LinkedList<Provider> providers = null;
-	private boolean isProviderWorking;
-	private boolean isHaltRequired;
-	
-	// Getters & Setters
-	public void setIsProviderWorking (boolean isProviderWorking) {
-		this.isProviderWorking = isProviderWorking;
-	}
-	
-	public boolean getIsHaltRequired() {
-		return this.isHaltRequired;
-	}
 	
 	// Methods
 	/**
 	 * Constructor
 	 */
 	private Harvester () {
-		isProviderWorking = false;
 		initializeProviders();
 	}
 	
 	private void initializeProviders() {
 		LOG.info("Initializing providers...");
-		isHaltRequired = false;
 		PreferencesManager prefm = PreferencesManager.getInstance();
 		providers = new LinkedList<Provider>();
 		// Reading user preferences
@@ -81,12 +68,9 @@ public class Harvester {
 	 */
 	public void stop () {
 		LOG.info("Stoping harvesting process...");
-		isHaltRequired = true;
 		providers = null;
 		if (backgroundHarvestingProcess != null) {
-			while (!backgroundHarvestingProcess.isCancelled()) {
-				
-			}
+			backgroundHarvestingProcess.cancel(true);			
 			backgroundHarvestingProcess = null;
 		}
 	}
@@ -96,9 +80,6 @@ public class Harvester {
 	 */
 	public void start () {		
 		LOG.info("Starting harvesting process...");
-		while (isProviderWorking) {
-			// Do nothing. It is necessary to wait until providers have finished the last job 
-		}
 		
 		if (providers == null) {
 			initializeProviders();
@@ -106,13 +87,11 @@ public class Harvester {
 		
 		if (providers.size() > 0) {
 			LOG.info("Providers found. Starting to download...");
-			isProviderWorking = true;
 			backgroundHarvestingProcess = new BackgroundHarvestingProcess();
 			backgroundHarvestingProcess.setProviders(providers);
 			backgroundHarvestingProcess.execute();								
 		} else {
 			LOG.info("Providers were not found. Nothing to do.");
-			isProviderWorking = false;
 		}
 	}
 }
