@@ -34,10 +34,11 @@ public class WallbaseProvider extends Provider {
 	}
 	
 	public void getWallpaper() throws ProviderException {
-		obtainActiveKeyword();
-		LOG.info("Downloading wallpaper with keyword -> " + activeKeyword);
 		String completeURL = composeCompleteURL();
 		try {
+			checkAndPrepareDownloadDirectory();			
+			obtainActiveKeyword();
+			LOG.info("Downloading wallpaper with keyword -> " + activeKeyword);
 			// 1.- Getting HTML document
 			Document doc = Jsoup.connect(completeURL).get();
 			// 2.- Getting all thumbnails. They are distinguished because they are 'lazy' classed img elements
@@ -86,6 +87,8 @@ public class WallbaseProvider extends Provider {
 			}
 		} catch (IOException e) {
 			throw new ProviderException("There was a problem downloading a wallpaper. Complete URL -> " + completeURL + ". Message: " + e.getMessage());
+		} catch (ProviderException pe) {
+			throw pe;
 		}
 	}
 		

@@ -1,10 +1,16 @@
 package es.estoes.wallpaperDownloader.provider;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.log4j.Logger;
 
+import es.estoes.wallpaperDownloader.exception.ProviderException;
 import es.estoes.wallpaperDownloader.util.PreferencesManager;
 import es.estoes.wallpaperDownloader.util.WDUtilities;
 
@@ -71,4 +77,36 @@ public abstract class Provider {
 	public void getWallpaper() {
 	}
 	
+	/**
+	 * This method checks the disk space within download directory. If it is full, it will remove one or several wallpapers
+	 * in order to prepare it to a new download
+	 */
+	protected void checkAndPrepareDownloadDirectory () {
+		LOG.info("Checking download directory. Removing some wallpapers if it is necessary...");
+		PreferencesManager prefm = PreferencesManager.getInstance();
+		Long maxSize = Long.parseLong(prefm.getPreference("application-max-download-folder-size"));
+		File downloadFolder = new File(WDUtilities.getDownloadsPath());
+		Long downloadFolderSize = FileUtils.sizeOfDirectory(downloadFolder);
+		downloadFolderSize = ((downloadFolderSize / 1024) / 1024); // MBytes
+		while (downloadFolderSize > maxSize) {
+			File fileToRemove = pickRandomFile();
+			try {
+				FileUtils.forceDelete(fileToRemove);
+				LOG.info(fileToRemove.getPath() + " deleted");
+			} catch (IOException e) {
+				throw new ProviderException("Error deleting file " + fileToRemove.getPath() + ". Error: " + e.getMessage());
+			}
+			downloadFolderSize = FileUtils.sizeOfDirectory(downloadFolder);
+			downloadFolderSize = ((downloadFolderSize / 1024) / 1024); // MBytes
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private File pickRandomFile() {
+		File downloadDirectory = new File(WDUtilities.getDownloadsPath());
+		List<File> files = (List<File>) FileUtils.listFiles(downloadDirectory, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
+		Random generator = new Random();
+		int index = generator.nextInt(files.size());
+		return files.get(index);
+	}
 }
