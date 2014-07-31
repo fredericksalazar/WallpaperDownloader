@@ -54,6 +54,9 @@ public abstract class Provider {
 		}
 	}
 
+	/**
+	 * This method gets the active keyword which will be used for the search
+	 */
 	protected void obtainActiveKeyword() {
 		activeKeyword = keywords.get(activeIndex);
 		if (keywords.size() == activeIndex + 1) {
@@ -68,7 +71,4 @@ public abstract class Provider {
 	public void getWallpaper() {
 	}
 	
-	public void storeWallpaper() {
-	}
-
 }
