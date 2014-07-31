@@ -1,14 +1,18 @@
 package es.estoes.wallpaperDownloader.provider;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.jsoup.nodes.Element;
-
 import es.estoes.wallpaperDownloader.exception.ProviderException;
 import es.estoes.wallpaperDownloader.util.PropertiesManager;
 import es.estoes.wallpaperDownloader.util.WDUtilities;
@@ -48,15 +52,37 @@ public class WallbaseProvider extends Provider {
 				String wallpaperName = wallpaperURL.substring(index + 1);
 				File wallpaper = new File(WDUtilities.getDownloadsPath() + File.separator + wallpaperName);
 				if (!wallpaper.exists()) {
-					// TODO: !!!!
-					LOG.info("");
+					// Storing the image. It is necessary to download the remote file
+					URL url = new URL(wallpaperURL);
+					URLConnection uc = url.openConnection();
+					int contentLength = uc.getContentLength();
+					InputStream input = uc.getInputStream();
+					BufferedInputStream bufIn = new BufferedInputStream(input);
+					OutputStream out = new FileOutputStream(wallpaper);
+					byte[] data = new byte[contentLength];
+					int bytesRead = 0;
+					int offset = 0;
+					while (offset < contentLength) {
+					      bytesRead = bufIn.read(data, offset, data.length - offset);
+					      if (bytesRead == -1)
+					        break;
+					      offset += bytesRead;		
+					}
+					bufIn.close();
+				    if (offset != contentLength) {
+					    out.flush();
+					    out.close();
+				    	throw new ProviderException("Only read " + offset + " bytes; Expected " + contentLength + " bytes");
+				    }
+				    out.write(data);
+				    out.flush();
+				    out.close();				      
+					LOG.info("Wallpaper " + wallpaperName + " successfully stored");
+					// Exit the process because one wallpaper was downloaded successfully
 					break;
+				} else {
+					LOG.info("This wallpaper is already stored. Skipping...");
 				}
-				/*
-				http://wallpapers.wallbase.cc/manga-anime/wallpaper-44633.jpg
-				http://thumbs.wallbase.cc//manga-anime/thumb-44633.jpg
-				*/
-				
 			}
 		} catch (IOException e) {
 			throw new ProviderException("There was a problem downloading a wallpaper. Complete URL -> " + completeURL + ". Message: " + e.getMessage());
@@ -65,7 +91,8 @@ public class WallbaseProvider extends Provider {
 		
 	private String composeCompleteURL() {
 		return baseURL + "search" + WDUtilities.QM + "q" + WDUtilities.EQUAL + 
-			   activeKeyword + WDUtilities.AND + "res" + WDUtilities.EQUAL + resolution;
+			   activeKeyword + WDUtilities.AND + "res" + WDUtilities.EQUAL + resolution + WDUtilities.AND + "thpp" + WDUtilities.EQUAL + "60" + 
+			   WDUtilities.AND + "order_mode" + WDUtilities.EQUAL + "desc" + WDUtilities.AND + "order" + WDUtilities.EQUAL + "random";
 	}
 
 }
