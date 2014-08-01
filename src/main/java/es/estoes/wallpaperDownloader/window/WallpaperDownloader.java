@@ -28,6 +28,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JLabel;
 
 import org.apache.log4j.Logger;
+import javax.swing.JComboBox;
 
 public class WallpaperDownloader {
 
@@ -42,6 +43,10 @@ public class WallpaperDownloader {
 	private JButton btnApply;
 	private JButton btnCloseExit;
 	private JButton btnMinimize;
+	private JComboBox searchTypeComboBox;
+	private JTextField wallbaseWidthResolution;
+	private JLabel lblX;
+	private JTextField wallbaseHeigthResolution;
 
 	/**
 	 * Launch the application.
@@ -109,6 +114,32 @@ public class WallpaperDownloader {
 		wallbaseKeywords.setBounds(100, 37, 522, 19);
 		providersPanel.add(wallbaseKeywords);
 		wallbaseKeywords.setColumns(10);
+		
+		JLabel lblResolution = new JLabel("Resolution");
+		lblResolution.setBounds(12, 70, 94, 15);
+		providersPanel.add(lblResolution);
+		
+		wallbaseWidthResolution = new JTextField();
+		wallbaseWidthResolution.setColumns(4);
+		wallbaseWidthResolution.setBounds(100, 68, 49, 19);
+		providersPanel.add(wallbaseWidthResolution);
+		
+		searchTypeComboBox = new JComboBox();
+		searchTypeComboBox.setBounds(338, 68, 94, 19);
+		providersPanel.add(searchTypeComboBox);
+		
+		JLabel lblSearchType = new JLabel("Search Type");
+		lblSearchType.setBounds(241, 71, 94, 15);
+		providersPanel.add(lblSearchType);
+		
+		lblX = new JLabel("x");
+		lblX.setBounds(151, 72, 12, 15);
+		providersPanel.add(lblX);
+		
+		wallbaseHeigthResolution = new JTextField();
+		wallbaseHeigthResolution.setColumns(4);
+		wallbaseHeigthResolution.setBounds(161, 68, 49, 19);
+		providersPanel.add(wallbaseHeigthResolution);
 		
 		JPanel appSettingsPanel = new JPanel();
 		tabbedPane.addTab("Application Settings", null, appSettingsPanel, null);
@@ -199,6 +230,7 @@ public class WallpaperDownloader {
 				if (!wallbaseKeywords.getText().isEmpty()) {
 					prefm.setPreference("provider-wallbase-keywords", wallbaseKeywords.getText());					
 				}
+				prefm.setPreference("wallpaper-resolution", wallbaseWidthResolution.getText());
 				
 				harvester.stop();
 				harvester.start();
@@ -228,7 +260,12 @@ public class WallpaperDownloader {
 		if (!prefm.getPreference("provider-wallbase-keywords").equals(PreferencesManager.DEFAULT_VALUE)) {
 			wallbaseKeywords.setText(prefm.getPreference("provider-wallbase-keywords"));			
 		}
-
+		String[] resolution = prefm.getPreference("wallpaper-resolution").split("x");
+		if (!prefm.getPreference("wallpaper-resolution").equals(PreferencesManager.DEFAULT_VALUE)) {
+			wallbaseWidthResolution.setText(resolution[0]);
+			wallbaseHeigthResolution.setText(resolution[1]);
+		}
+	
 	}
 	
 	/**
@@ -238,5 +275,4 @@ public class WallpaperDownloader {
 		harvester = Harvester.getInstance();
 		harvester.start();
 	}
-
 }
