@@ -1,5 +1,8 @@
 package es.estoes.wallpaperDownloader.util;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -59,6 +62,13 @@ public class WDUtilities {
 	 */
 	private WDUtilities() {
 		
+	}
+	
+	public static String getResolution() {
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		Double width = screenSize.getWidth();
+		Double height = screenSize.getHeight();
+		return width.intValue() + "x" + height.intValue();
 	}
 
 }
