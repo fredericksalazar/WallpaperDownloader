@@ -2,9 +2,11 @@ package es.estoes.wallpaperDownloader.window;
 
 import java.awt.EventQueue;
 
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 
+import es.estoes.wallpaperDownloader.exception.WDPropertyException;
 import es.estoes.wallpaperDownloader.harvest.Harvester;
 import es.estoes.wallpaperDownloader.util.PreferencesManager;
 import es.estoes.wallpaperDownloader.util.PropertiesManager;
@@ -24,10 +26,12 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.NumberFormat;
 
 import javax.swing.JLabel;
 
 import org.apache.log4j.Logger;
+
 import javax.swing.JComboBox;
 
 public class WallpaperDownloader {
@@ -44,9 +48,11 @@ public class WallpaperDownloader {
 	private JButton btnCloseExit;
 	private JButton btnMinimize;
 	private JComboBox searchTypeComboBox;
-	private JTextField wallbaseWidthResolution;
+	private JFormattedTextField wallbaseWidthResolution;
+	private NumberFormat integerFormat;
 	private JLabel lblX;
-	private JTextField wallbaseHeigthResolution;
+	private JFormattedTextField wallbaseHeigthResolution;
+	private JCheckBox allResolutionsCheckBox;
 
 	/**
 	 * Launch the application.
@@ -119,27 +125,36 @@ public class WallpaperDownloader {
 		lblResolution.setBounds(12, 70, 94, 15);
 		providersPanel.add(lblResolution);
 		
-		wallbaseWidthResolution = new JTextField();
+		// Only integers will be allowed
+		integerFormat = NumberFormat.getNumberInstance();
+		integerFormat.setParseIntegerOnly(true);
+		wallbaseWidthResolution = new JFormattedTextField(integerFormat);
 		wallbaseWidthResolution.setColumns(4);
 		wallbaseWidthResolution.setBounds(100, 68, 49, 19);
 		providersPanel.add(wallbaseWidthResolution);
 		
 		searchTypeComboBox = new JComboBox();
-		searchTypeComboBox.setBounds(338, 68, 94, 19);
+		searchTypeComboBox.setBounds(528, 68, 94, 19);
 		providersPanel.add(searchTypeComboBox);
 		
 		JLabel lblSearchType = new JLabel("Search Type");
-		lblSearchType.setBounds(241, 71, 94, 15);
+		lblSearchType.setBounds(431, 71, 94, 15);
 		providersPanel.add(lblSearchType);
 		
 		lblX = new JLabel("x");
 		lblX.setBounds(151, 72, 12, 15);
 		providersPanel.add(lblX);
 		
-		wallbaseHeigthResolution = new JTextField();
+		integerFormat = NumberFormat.getNumberInstance();
+		integerFormat.setParseIntegerOnly(true);
+		wallbaseHeigthResolution = new JFormattedTextField(integerFormat);
 		wallbaseHeigthResolution.setColumns(4);
 		wallbaseHeigthResolution.setBounds(161, 68, 49, 19);
 		providersPanel.add(wallbaseHeigthResolution);
+		
+		allResolutionsCheckBox = new JCheckBox("All Resolutions");
+		allResolutionsCheckBox.setBounds(224, 66, 151, 23);
+		providersPanel.add(allResolutionsCheckBox);
 		
 		JPanel appSettingsPanel = new JPanel();
 		tabbedPane.addTab("Application Settings", null, appSettingsPanel, null);
@@ -195,8 +210,21 @@ public class WallpaperDownloader {
 			public void actionPerformed(ActionEvent evt) {
 				if (wallbaseCheckbox.isSelected()) {
 					wallbaseKeywords.setEnabled(true);
+					wallbaseWidthResolution.setEnabled(true);
+					wallbaseHeigthResolution.setEnabled(true);
+					searchTypeComboBox.setEnabled(true);
+					allResolutionsCheckBox.setEnabled(true);
+					allResolutionsCheckBox.setSelected(false);
+					String screenResolution = WDUtilities.getResolution();
+					String[] resolution = screenResolution.split("x");
+			        wallbaseWidthResolution.setValue(new Integer(resolution[0]));
+					wallbaseHeigthResolution.setValue(new Integer(resolution[1]));
 				} else {
-					wallbaseKeywords.setEnabled(false);					
+					wallbaseKeywords.setEnabled(false);
+					wallbaseWidthResolution.setEnabled(false);
+					wallbaseHeigthResolution.setEnabled(false);
+					searchTypeComboBox.setEnabled(false);
+					allResolutionsCheckBox.setEnabled(false);
 				}
 			}
 		});
@@ -224,14 +252,19 @@ public class WallpaperDownloader {
 				// Wallbase.cc
 				if (wallbaseCheckbox.isSelected()) {
 					prefm.setPreference("provider-wallbase", WDUtilities.APP_YES);
+					if (!wallbaseKeywords.getText().isEmpty()) {
+						prefm.setPreference("provider-wallbase-keywords", wallbaseKeywords.getText());					
+					}
+					if (allResolutionsCheckBox.isSelected()) {
+						prefm.setPreference("wallpaper-resolution", PreferencesManager.DEFAULT_VALUE);						
+					} else {
+						prefm.setPreference("wallpaper-resolution", wallbaseWidthResolution.getValue().toString() + "x" + wallbaseHeigthResolution.getValue().toString());						
+					}
 				} else {
 					prefm.setPreference("provider-wallbase", WDUtilities.APP_NO);
+					prefm.setPreference("provider-wallbase-keywords", PreferencesManager.DEFAULT_VALUE);
+					prefm.setPreference("wallpaper-resolution", PreferencesManager.DEFAULT_VALUE);
 				}
-				if (!wallbaseKeywords.getText().isEmpty()) {
-					prefm.setPreference("provider-wallbase-keywords", wallbaseKeywords.getText());					
-				}
-				prefm.setPreference("wallpaper-resolution", wallbaseWidthResolution.getText());
-				
 				harvester.stop();
 				harvester.start();
 			}
@@ -256,16 +289,27 @@ public class WallpaperDownloader {
 			wallbaseKeywords.setEnabled(true);
 		} else {
 			wallbaseKeywords.setEnabled(false);
+			wallbaseWidthResolution.setEnabled(false);
+			wallbaseHeigthResolution.setEnabled(false);
+			searchTypeComboBox.setEnabled(false);
 		}
+		
 		if (!prefm.getPreference("provider-wallbase-keywords").equals(PreferencesManager.DEFAULT_VALUE)) {
 			wallbaseKeywords.setText(prefm.getPreference("provider-wallbase-keywords"));			
 		}
+		
 		String[] resolution = prefm.getPreference("wallpaper-resolution").split("x");
 		if (!prefm.getPreference("wallpaper-resolution").equals(PreferencesManager.DEFAULT_VALUE)) {
-			wallbaseWidthResolution.setText(resolution[0]);
-			wallbaseHeigthResolution.setText(resolution[1]);
+	        wallbaseWidthResolution.setValue(new Integer(resolution[0]));
+			wallbaseHeigthResolution.setValue(new Integer(resolution[1]));
+		} else {
+			wallbaseWidthResolution.setValue(new Integer(0));
+			wallbaseWidthResolution.setEnabled(false);
+			wallbaseHeigthResolution.setValue(new Integer(0));
+			wallbaseHeigthResolution.setEnabled(false);
+			allResolutionsCheckBox.setEnabled(false);
+			allResolutionsCheckBox.setSelected(true);
 		}
-	
 	}
 	
 	/**

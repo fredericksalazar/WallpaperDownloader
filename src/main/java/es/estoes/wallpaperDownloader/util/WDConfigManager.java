@@ -93,8 +93,8 @@ public class WDConfigManager {
         		 prefm.setPreference("application-max-download-folder-size", "40");
 
         		 // Initializing resolution
-        		 // By default, the application will download screen resolution wallpapers
-        		 prefm.setPreference("wallpaper-resolution", WDUtilities.getResolution());
+        		 // By default, the application will download all kind of resolutions
+        		 prefm.setPreference("wallpaper-resolution", PreferencesManager.DEFAULT_VALUE);
 
     		 }
 
