@@ -6,8 +6,8 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 
-import es.estoes.wallpaperDownloader.exception.WDPropertyException;
 import es.estoes.wallpaperDownloader.harvest.Harvester;
+import es.estoes.wallpaperDownloader.item.ComboItem;
 import es.estoes.wallpaperDownloader.util.PreferencesManager;
 import es.estoes.wallpaperDownloader.util.PropertiesManager;
 import es.estoes.wallpaperDownloader.util.WDConfigManager;
@@ -47,7 +47,7 @@ public class WallpaperDownloader {
 	private JButton btnApply;
 	private JButton btnCloseExit;
 	private JButton btnMinimize;
-	private JComboBox searchTypeComboBox;
+	private JComboBox<ComboItem> searchTypeComboBox;
 	private JFormattedTextField wallbaseWidthResolution;
 	private NumberFormat integerFormat;
 	private JLabel lblX;
@@ -133,7 +133,7 @@ public class WallpaperDownloader {
 		wallbaseWidthResolution.setBounds(100, 68, 49, 19);
 		providersPanel.add(wallbaseWidthResolution);
 		
-		searchTypeComboBox = new JComboBox();
+		searchTypeComboBox = new JComboBox<ComboItem>();
 		searchTypeComboBox.setBounds(528, 68, 94, 19);
 		providersPanel.add(searchTypeComboBox);
 		
@@ -283,10 +283,13 @@ public class WallpaperDownloader {
 					} else {
 						prefm.setPreference("wallpaper-resolution", wallbaseWidthResolution.getValue().toString() + "x" + wallbaseHeigthResolution.getValue().toString());						
 					}
+					prefm.setPreference("wallpaper-search-type", new Integer(searchTypeComboBox.getSelectedIndex()).toString());
+
 				} else {
 					prefm.setPreference("provider-wallbase", WDUtilities.APP_NO);
 					prefm.setPreference("provider-wallbase-keywords", PreferencesManager.DEFAULT_VALUE);
 					prefm.setPreference("wallpaper-resolution", PreferencesManager.DEFAULT_VALUE);
+					prefm.setPreference("wallpaper-search-type", "3");
 				}
 				harvester.stop();
 				harvester.start();
@@ -337,6 +340,12 @@ public class WallpaperDownloader {
 			allResolutionsCheckbox.setSelected(true);
 			searchTypeComboBox.setEnabled(false);
 		}
+		searchTypeComboBox.addItem(new ComboItem("Relevance", "0")); 
+		searchTypeComboBox.addItem(new ComboItem("Date Added", "1")); 
+		searchTypeComboBox.addItem(new ComboItem("Views", "2")); 
+		searchTypeComboBox.addItem(new ComboItem("Favorites", "3")); 
+		searchTypeComboBox.addItem(new ComboItem("Random", "4"));
+		searchTypeComboBox.setSelectedIndex(new Integer(prefm.getPreference("wallpaper-search-type")));
 	}
 	
 	/**

@@ -96,6 +96,9 @@ public class WDConfigManager {
         		 // By default, the application will download all kind of resolutions
         		 prefm.setPreference("wallpaper-resolution", PreferencesManager.DEFAULT_VALUE);
 
+        		 // Initializing search type
+        		 // By default, the application will download Favorites wallpapers
+        		 prefm.setPreference("wallpaper-search-type", "3");
     		 }
 
     	 } catch (Exception e) {

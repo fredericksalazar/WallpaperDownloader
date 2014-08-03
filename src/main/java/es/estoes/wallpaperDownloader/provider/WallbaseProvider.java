@@ -8,12 +8,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.jsoup.nodes.Element;
+
 import es.estoes.wallpaperDownloader.exception.ProviderException;
+import es.estoes.wallpaperDownloader.util.PreferencesManager;
 import es.estoes.wallpaperDownloader.util.PropertiesManager;
 import es.estoes.wallpaperDownloader.util.WDUtilities;
 
@@ -21,7 +24,9 @@ public class WallbaseProvider extends Provider {
 	
 	// Constants
 	private static final Logger LOG = Logger.getLogger(WallbaseProvider.class);
-	
+
+	// Attributes
+	private String order;
 	// Methods
 	/**
 	 * Constructor
@@ -29,8 +34,22 @@ public class WallbaseProvider extends Provider {
 	public WallbaseProvider () {
 		super();
 		PropertiesManager pm = PropertiesManager.getInstance();
+		PreferencesManager prefm = PreferencesManager.getInstance();
 		keywordsProperty = "provider-wallbase-keywords";
 		baseURL = pm.getProperty("provider.wallbase.baseurl");
+		switch (new Integer(prefm.getPreference("wallpaper-search-type"))) {
+			case 0: this.order = "relevance";
+					break;
+			case 1: this.order = "date";
+					break;
+			case 2: this.order = "views";
+					break;
+			case 3: this.order = "favs";
+					break;
+			case 4: this.order = "random";
+					break;
+			
+		}
 	}
 	
 	public void getWallpaper() throws ProviderException {
@@ -93,9 +112,12 @@ public class WallbaseProvider extends Provider {
 	}
 		
 	private String composeCompleteURL() {
+		LOG.info(baseURL + "search" + WDUtilities.QM + "q" + WDUtilities.EQUAL + 
+				   activeKeyword + WDUtilities.AND + "res" + WDUtilities.EQUAL + resolution + WDUtilities.AND + "thpp" + WDUtilities.EQUAL + "60" + 
+				   WDUtilities.AND + "order_mode" + WDUtilities.EQUAL + "desc" + WDUtilities.AND + "order" + WDUtilities.EQUAL + order);
 		return baseURL + "search" + WDUtilities.QM + "q" + WDUtilities.EQUAL + 
 			   activeKeyword + WDUtilities.AND + "res" + WDUtilities.EQUAL + resolution + WDUtilities.AND + "thpp" + WDUtilities.EQUAL + "60" + 
-			   WDUtilities.AND + "order_mode" + WDUtilities.EQUAL + "desc" + WDUtilities.AND + "order" + WDUtilities.EQUAL + "random";
+			   WDUtilities.AND + "order_mode" + WDUtilities.EQUAL + "desc" + WDUtilities.AND + "order" + WDUtilities.EQUAL + order;
 	}
 
 }
