@@ -53,6 +53,7 @@ public class WallpaperDownloader {
 	private JLabel lblX;
 	private JFormattedTextField wallbaseHeigthResolution;
 	private JCheckBox allResolutionsCheckbox;
+	private JComboBox<ComboItem> timerComboBox;
 
 	/**
 	 * Launch the application.
@@ -158,6 +159,15 @@ public class WallpaperDownloader {
 		
 		JPanel appSettingsPanel = new JPanel();
 		tabbedPane.addTab("Application Settings", null, appSettingsPanel, null);
+		appSettingsPanel.setLayout(null);
+		
+		JLabel lblTimer = new JLabel("Wallpaper Downloader will download a new wallpaper every");
+		lblTimer.setBounds(12, 12, 439, 19);
+		appSettingsPanel.add(lblTimer);
+		
+		timerComboBox = new JComboBox<ComboItem>();
+		timerComboBox.setBounds(455, 12, 94, 19);
+		appSettingsPanel.add(timerComboBox);
 		
 		btnCloseExit = new JButton("Close & Exit");
 		GridBagConstraints gbc_btnCloseExit = new GridBagConstraints();
@@ -291,6 +301,11 @@ public class WallpaperDownloader {
 					prefm.setPreference("wallpaper-resolution", PreferencesManager.DEFAULT_VALUE);
 					prefm.setPreference("wallpaper-search-type", "3");
 				}
+				// ---------------------------------------------------------------------------
+				// User settings
+				// ---------------------------------------------------------------------------
+				prefm.setPreference("application-timer", new Integer(timerComboBox.getSelectedIndex()).toString());
+				// Stopping and starting process
 				harvester.stop();
 				harvester.start();
 			}
@@ -346,6 +361,14 @@ public class WallpaperDownloader {
 		searchTypeComboBox.addItem(new ComboItem("Favorites", "3")); 
 		searchTypeComboBox.addItem(new ComboItem("Random", "4"));
 		searchTypeComboBox.setSelectedIndex(new Integer(prefm.getPreference("wallpaper-search-type")));
+		// ---------------------------------------------------------------------
+		// Checking user settings
+		// ---------------------------------------------------------------------
+		timerComboBox.addItem(new ComboItem("5 min", "0"));
+		timerComboBox.addItem(new ComboItem("10 min", "1"));
+		timerComboBox.addItem(new ComboItem("20 min", "2"));
+		timerComboBox.addItem(new ComboItem("30 min", "3"));
+		timerComboBox.setSelectedIndex(new Integer(prefm.getPreference("application-timer")));
 	}
 	
 	/**

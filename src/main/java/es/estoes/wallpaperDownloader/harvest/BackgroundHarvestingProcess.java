@@ -4,6 +4,8 @@ import java.util.LinkedList;
 
 import javax.swing.SwingWorker;
 
+import org.apache.log4j.Logger;
+
 import es.estoes.wallpaperDownloader.provider.Provider;
 import es.estoes.wallpaperDownloader.util.PreferencesManager;
 
@@ -17,8 +19,12 @@ import es.estoes.wallpaperDownloader.util.PreferencesManager;
  */
 public class BackgroundHarvestingProcess extends SwingWorker<Void, Void> {
 
+	// Constants
+	private static final Logger LOG = Logger.getLogger(BackgroundHarvestingProcess.class);
+	
 	// Attributes
 	private LinkedList<Provider> providers = null;
+	private Long timer;
 
 	// Getters & Setters
 	public void setProviders(LinkedList<Provider> providers) {
@@ -33,6 +39,18 @@ public class BackgroundHarvestingProcess extends SwingWorker<Void, Void> {
 	@Override
 	protected Void doInBackground() throws Exception {
 		PreferencesManager prefm = PreferencesManager.getInstance();
+		// Getting timer
+		switch (new Integer(prefm.getPreference("application-timer"))) {
+		case 0: this.timer = Long.valueOf(300000);
+				break;
+		case 1: this.timer = Long.valueOf(600000);
+				break;
+		case 2: this.timer = Long.valueOf(1200000);
+				break;
+		case 3: this.timer = Long.valueOf(1800000);
+				break;
+		}
+		LOG.info("Timer set every " + ((this.timer/1000)/60) + " min");
 		// For every Provider
 		// 1.- Getting 1 wallpaper per defined keyword
 		// 2.- When all the keywords have been used, take provider and put it at the end of 
