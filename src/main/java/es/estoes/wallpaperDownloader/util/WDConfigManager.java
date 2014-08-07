@@ -92,7 +92,7 @@ public class WDConfigManager {
         		 // 3 -> 30 min
         		 prefm.setPreference("application-timer", "0");
 
-        		 // Initializing maximum download folder size
+        		 // Initializing maximum download directory size
         		 // By default, it will be 40 MBytes
         		 prefm.setPreference("application-max-download-folder-size", "40");
 

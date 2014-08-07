@@ -33,6 +33,7 @@ import javax.swing.JLabel;
 import org.apache.log4j.Logger;
 
 import javax.swing.JComboBox;
+import java.text.Format;
 
 public class WallpaperDownloader {
 
@@ -54,6 +55,7 @@ public class WallpaperDownloader {
 	private JFormattedTextField wallbaseHeigthResolution;
 	private JCheckBox allResolutionsCheckbox;
 	private JComboBox<ComboItem> timerComboBox;
+	private JFormattedTextField downloadDirectorySize;
 
 	/**
 	 * Launch the application.
@@ -168,6 +170,15 @@ public class WallpaperDownloader {
 		timerComboBox = new JComboBox<ComboItem>();
 		timerComboBox.setBounds(455, 12, 94, 19);
 		appSettingsPanel.add(timerComboBox);
+		
+		JLabel lblDownloadDirectorySize = new JLabel("Maximun size for download directory (MB)");
+		lblDownloadDirectorySize.setBounds(12, 36, 304, 19);
+		appSettingsPanel.add(lblDownloadDirectorySize);
+		
+		downloadDirectorySize = new JFormattedTextField(integerFormat);
+		downloadDirectorySize.setColumns(4);
+		downloadDirectorySize.setBounds(317, 37, 49, 19);
+		appSettingsPanel.add(downloadDirectorySize);
 		
 		btnCloseExit = new JButton("Close & Exit");
 		GridBagConstraints gbc_btnCloseExit = new GridBagConstraints();
@@ -305,12 +316,12 @@ public class WallpaperDownloader {
 				// User settings
 				// ---------------------------------------------------------------------------
 				prefm.setPreference("application-timer", new Integer(timerComboBox.getSelectedIndex()).toString());
+				prefm.setPreference("application-max-download-folder-size", downloadDirectorySize.getValue().toString());
 				// Stopping and starting process
 				harvester.stop();
 				harvester.start();
 			}
-		});
-		
+		});		
 	}
 
 	/**
@@ -369,6 +380,7 @@ public class WallpaperDownloader {
 		timerComboBox.addItem(new ComboItem("20 min", "2"));
 		timerComboBox.addItem(new ComboItem("30 min", "3"));
 		timerComboBox.setSelectedIndex(new Integer(prefm.getPreference("application-timer")));
+		downloadDirectorySize.setValue(new Integer(prefm.getPreference("application-max-download-folder-size")));
 	}
 	
 	/**
