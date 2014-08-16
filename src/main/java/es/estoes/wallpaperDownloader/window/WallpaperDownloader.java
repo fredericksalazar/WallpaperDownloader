@@ -1,34 +1,56 @@
 package es.estoes.wallpaperDownloader.window;
 
 import java.awt.EventQueue;
+
+import javax.swing.ImageIcon;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
+
 import es.estoes.wallpaperDownloader.harvest.Harvester;
 import es.estoes.wallpaperDownloader.item.ComboItem;
 import es.estoes.wallpaperDownloader.util.PreferencesManager;
 import es.estoes.wallpaperDownloader.util.PropertiesManager;
 import es.estoes.wallpaperDownloader.util.WDConfigManager;
 import es.estoes.wallpaperDownloader.util.WDUtilities;
+
 import javax.swing.JTabbedPane;
 import javax.swing.JButton;
+
 import java.awt.Color;
+
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
+
+import java.awt.AWTException;
+import java.awt.CheckboxMenuItem;
+import java.awt.Frame;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.Menu;
+import java.awt.MenuItem;
+import java.awt.PopupMenu;
+import java.awt.SystemTray;
+import java.awt.TrayIcon;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.NumberFormat;
+
 import javax.swing.JLabel;
+
 import org.apache.log4j.Logger;
+
 import javax.swing.JComboBox;
 
 public class WallpaperDownloader {
 
 	// Constants
 	protected static final Logger LOG = Logger.getLogger(WallpaperDownloader.class);
+	private static WallpaperDownloader window;
 	
 	// Attributes
 	private Harvester harvester;
@@ -59,7 +81,7 @@ public class WallpaperDownloader {
 				// 2.- Application configuration
 				WDConfigManager.checkConfig();
 				PropertiesManager pm = PropertiesManager.getInstance();
-				WallpaperDownloader window = new WallpaperDownloader();
+				window = new WallpaperDownloader();
 				window.frame.setVisible(true);
 				window.frame.setTitle(pm.getProperty("app.name") + " V" + pm.getProperty("app.version"));
 			}
@@ -273,6 +295,79 @@ public class WallpaperDownloader {
 			}
 		});
 
+		/**
+		 * btnMinimize Action Listeners
+		 */
+		// Clicking event
+		btnMinimize.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				// The application is minimized within System Tray
+		        //Check the SystemTray is supported
+		        if (!SystemTray.isSupported()) {
+		            LOG.error("SystemTray is not supported");
+		            return;
+		        } else {
+		            final PopupMenu popup = new PopupMenu();
+		            final TrayIcon trayIcon = new TrayIcon(new ImageIcon("src/main/resources/images/icons/bulb.gif", "Wallpaper Downloader").getImage(), "Wallpaper Downloader");
+		                    
+		            final SystemTray tray = SystemTray.getSystemTray();
+		           
+		            // Create a pop-up menu components
+		            MenuItem aboutItem = new MenuItem("About");
+		            CheckboxMenuItem cb1 = new CheckboxMenuItem("Set auto size");
+		            CheckboxMenuItem cb2 = new CheckboxMenuItem("Set tooltip");
+		            Menu displayMenu = new Menu("Display");
+		            MenuItem errorItem = new MenuItem("Error");
+		            MenuItem warningItem = new MenuItem("Warning");
+		            MenuItem infoItem = new MenuItem("Info");
+		            MenuItem noneItem = new MenuItem("None");
+		            MenuItem exitItem = new MenuItem("Exit");
+		           
+		            //Add components to pop-up menu
+		            popup.add(aboutItem);
+		            popup.addSeparator();
+		            popup.add(cb1);
+		            popup.add(cb2);
+		            popup.addSeparator();
+		            popup.add(displayMenu);
+		            displayMenu.add(errorItem);
+		            displayMenu.add(warningItem);
+		            displayMenu.add(infoItem);
+		            displayMenu.add(noneItem);
+		            popup.add(exitItem);
+		           
+		            trayIcon.setPopupMenu(popup);
+		            
+		            // Adding a new event. When the user clicks the left button the application window is restored again in the same
+		            // state
+		            MouseAdapter mouseAdapter = new MouseAdapter() {
+
+		                @Override
+		                public void mouseClicked(MouseEvent e) {
+		                	int state = window.frame.getExtendedState();  
+		                	state = state & ~Frame.ICONIFIED;  
+		                	window.frame.setExtendedState(state);  
+		                	window.frame.setVisible(true);
+		                	
+		                	// Removing system tray icon
+		                	tray.remove(trayIcon);
+		                }
+		            };
+		            trayIcon.addMouseListener(mouseAdapter);
+		            trayIcon.setImageAutoSize(true);
+		           
+		            try {
+		                tray.add(trayIcon);
+		            } catch (AWTException e) {
+		                LOG.error("TrayIcon could not be added.");
+		            }
+		            
+		            // Hiding window
+		            window.frame.setVisible(false);
+		        }
+			}
+		});
+		
 		/**
 		 * btnApply Action Listeners
 		 */
