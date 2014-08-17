@@ -41,14 +41,16 @@ public class BackgroundHarvestingProcess extends SwingWorker<Void, Void> {
 		PreferencesManager prefm = PreferencesManager.getInstance();
 		// Getting timer
 		switch (new Integer(prefm.getPreference("application-timer"))) {
-		case 0: this.timer = Long.valueOf(300000);
+		case 0: this.timer = Long.valueOf(60000);
 				break;
-		case 1: this.timer = Long.valueOf(600000);
+		case 1: this.timer = Long.valueOf(300000);
 				break;
-		case 2: this.timer = Long.valueOf(1200000);
+		case 2: this.timer = Long.valueOf(600000);
 				break;
-		case 3: this.timer = Long.valueOf(1800000);
+		case 3: this.timer = Long.valueOf(1200000);
 				break;
+		case 4: this.timer = Long.valueOf(1800000);
+		break;
 		}
 		LOG.info("Timer set every " + ((this.timer/1000)/60) + " min");
 		// For every Provider

@@ -460,10 +460,11 @@ public class WallpaperDownloader {
 		// ---------------------------------------------------------------------
 		// Checking user settings
 		// ---------------------------------------------------------------------
-		timerComboBox.addItem(new ComboItem("5 min", "0"));
-		timerComboBox.addItem(new ComboItem("10 min", "1"));
-		timerComboBox.addItem(new ComboItem("20 min", "2"));
-		timerComboBox.addItem(new ComboItem("30 min", "3"));
+		timerComboBox.addItem(new ComboItem("1 min", "0"));
+		timerComboBox.addItem(new ComboItem("5 min", "1"));
+		timerComboBox.addItem(new ComboItem("10 min", "2"));
+		timerComboBox.addItem(new ComboItem("20 min", "3"));
+		timerComboBox.addItem(new ComboItem("30 min", "4"));
 		timerComboBox.setSelectedIndex(new Integer(prefm.getPreference("application-timer")));
 		downloadDirectorySize.setValue(new Integer(prefm.getPreference("application-max-download-folder-size")));
 	}
