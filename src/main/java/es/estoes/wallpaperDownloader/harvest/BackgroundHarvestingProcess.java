@@ -6,6 +6,7 @@ import javax.swing.SwingWorker;
 
 import org.apache.log4j.Logger;
 
+import es.estoes.wallpaperDownloader.exception.ProviderException;
 import es.estoes.wallpaperDownloader.provider.Provider;
 import es.estoes.wallpaperDownloader.util.PreferencesManager;
 
@@ -61,9 +62,13 @@ public class BackgroundHarvestingProcess extends SwingWorker<Void, Void> {
 		while (providers.size()>0) {
 			Provider provider = providers.removeFirst(); 
 			provider.obtainKeywords();
-			while (!provider.getAreKeywordsDone()) {
-				provider.getWallpaper();
-				Thread.sleep(timer);
+			try {
+				while (!provider.getAreKeywordsDone()) {
+					provider.getWallpaper();
+					Thread.sleep(timer);
+				}				
+			} catch (ProviderException pe) {
+				// Do nothing
 			}
 			providers.addLast(provider);					
 		}

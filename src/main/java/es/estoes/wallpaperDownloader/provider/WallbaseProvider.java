@@ -53,10 +53,10 @@ public class WallbaseProvider extends Provider {
 	}
 	
 	public void getWallpaper() throws ProviderException {
+		obtainActiveKeyword();
 		String completeURL = composeCompleteURL();
 		try {
 			checkAndPrepareDownloadDirectory();			
-			obtainActiveKeyword();
 			LOG.info("Downloading wallpaper with keyword -> " + activeKeyword);
 			// 1.- Getting HTML document
 			Document doc = Jsoup.connect(completeURL).get();
