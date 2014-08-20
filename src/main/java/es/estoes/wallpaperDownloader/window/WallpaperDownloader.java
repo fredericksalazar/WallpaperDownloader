@@ -313,27 +313,32 @@ public class WallpaperDownloader {
 		            final SystemTray tray = SystemTray.getSystemTray();
 		           
 		            // Create a pop-up menu components
-		            MenuItem aboutItem = new MenuItem("About");
-		            CheckboxMenuItem cb1 = new CheckboxMenuItem("Set auto size");
-		            CheckboxMenuItem cb2 = new CheckboxMenuItem("Set tooltip");
-		            Menu displayMenu = new Menu("Display");
-		            MenuItem errorItem = new MenuItem("Error");
-		            MenuItem warningItem = new MenuItem("Warning");
-		            MenuItem infoItem = new MenuItem("Info");
-		            MenuItem noneItem = new MenuItem("None");
+		            MenuItem maximizeItem = new MenuItem("Maximize");
+		            maximizeItem.addActionListener(new ActionListener() {
+		            	public void actionPerformed(ActionEvent evt) {
+		                	int state = window.frame.getExtendedState();  
+		                	state = state & ~Frame.ICONIFIED;  
+		                	window.frame.setExtendedState(state);  
+		                	window.frame.setVisible(true);
+		                	
+		                	// Removing system tray icon
+		                	tray.remove(trayIcon);
+		            	}
+		            });
 		            MenuItem exitItem = new MenuItem("Exit");
+		            exitItem.addActionListener(new ActionListener() {
+		            	public void actionPerformed(ActionEvent evt) {
+		                	// Removing system tray icon
+		                	tray.remove(trayIcon);
+
+		    				// The application is closed
+		    				System.exit(0);		                	
+		            	}
+		            });
 		           
 		            //Add components to pop-up menu
-		            popup.add(aboutItem);
+		            popup.add(maximizeItem);
 		            popup.addSeparator();
-		            popup.add(cb1);
-		            popup.add(cb2);
-		            popup.addSeparator();
-		            popup.add(displayMenu);
-		            displayMenu.add(errorItem);
-		            displayMenu.add(warningItem);
-		            displayMenu.add(infoItem);
-		            displayMenu.add(noneItem);
 		            popup.add(exitItem);
 		           
 		            trayIcon.setPopupMenu(popup);
