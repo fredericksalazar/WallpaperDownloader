@@ -308,7 +308,7 @@ public class WallpaperDownloader {
 		            return;
 		        } else {
 		            final PopupMenu popup = new PopupMenu();
-		            URL systemTrayIcon = WallpaperDownloader.class.getResource("/images/icons/bulb.gif");
+		            URL systemTrayIcon = WallpaperDownloader.class.getResource("/images/icons/wd_systemtray_icon.png");
 		            final TrayIcon trayIcon = new TrayIcon(new ImageIcon(systemTrayIcon, "Wallpaper Downloader").getImage(), "Wallpaper Downloader");
 		            final SystemTray tray = SystemTray.getSystemTray();
 		           
