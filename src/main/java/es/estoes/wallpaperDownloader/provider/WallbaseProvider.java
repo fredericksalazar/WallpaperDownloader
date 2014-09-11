@@ -10,6 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -61,13 +62,15 @@ public class WallbaseProvider extends Provider {
 			LOG.info("Downloading wallpaper with keyword -> " + activeKeyword);
 			// 1.- Getting HTML document
 			Document doc = Jsoup.connect(completeURL).get();
-			// 2.- Getting all thumbnails. They are identified because they have 'lazy' classed img elements
-			Elements thumbnails = doc.select("img.lazy");
+			// 2.- Getting all thumbnails. They are identified because they have 'lazyload' classed img elements
+			Elements thumbnails = doc.select("img.lazyload");
 			// 3.- Getting a wallpaper which is not already stored in the filesystem
 			for (Element thumbnail : thumbnails) {
-				String thumbnailURL = thumbnail.attr("data-original");
-				// Replacing word 'thumb' by word 'wallpaper'
-				String wallpaperURL = thumbnailURL.replace("thumb", "wallpaper");
+				String thumbnailURL = thumbnail.attr("data-src");
+				// Replacing word 'thumb/small' by word 'full'
+				String wallpaperURL = thumbnailURL.replace("thumb/small", "full");
+				// Replacing word 'th-' by word 'wallhaven-'
+				wallpaperURL = wallpaperURL.replace("th-", "wallhaven-");
 				int index = wallpaperURL.lastIndexOf(WDUtilities.URL_SLASH);
 				// Obtaining wallpaper's name (string after the last slash)
 				String wallpaperName = wallpaperURL.substring(index + 1);
@@ -112,6 +115,7 @@ public class WallbaseProvider extends Provider {
 		
 	private boolean storeRemoteFile(File wallpaper, String wallpaperURL) {
 		URL url;
+		boolean success = false;
 		BufferedInputStream bufIn = null;
 		OutputStream out = null;
 		try {
@@ -142,6 +146,7 @@ public class WallbaseProvider extends Provider {
 		    	return false;
 		    }
 		    out.write(data);
+		    success = true;
 		    return true;
 		} catch (IOException e) {
 	    	LOG.error("IOException. Error: " + e.getMessage());
@@ -150,7 +155,13 @@ public class WallbaseProvider extends Provider {
 			if (out!=null) {
 			    try {
 					out.flush();
-				    out.close();				
+				    out.close();
+				    if (!success) {
+				    	if (wallpaper.exists()) {
+				    		FileUtils.forceDelete(wallpaper);
+				    	}
+				    	return false;
+				    }
 				} catch (IOException e) {
 			    	LOG.error("IOException. Error: " + e.getMessage());
 			    	return false;
@@ -161,11 +172,11 @@ public class WallbaseProvider extends Provider {
 
 	private String composeCompleteURL() {
 		LOG.info(baseURL + "search" + WDUtilities.QM + "q" + WDUtilities.EQUAL + 
-				   activeKeyword + WDUtilities.AND + "res" + WDUtilities.EQUAL + resolution + WDUtilities.AND + "thpp" + WDUtilities.EQUAL + "60" + 
-				   WDUtilities.AND + "order_mode" + WDUtilities.EQUAL + "desc" + WDUtilities.AND + "order" + WDUtilities.EQUAL + order);
+				   activeKeyword + WDUtilities.AND + "categories" + WDUtilities.EQUAL + "111" +WDUtilities.AND + "purity" + WDUtilities.EQUAL + "110" + "res" + WDUtilities.EQUAL + resolution + WDUtilities.AND + "thpp" + WDUtilities.EQUAL + "60" + 
+				   WDUtilities.AND + "order_mode" + WDUtilities.EQUAL + "desc" + WDUtilities.AND + "sorting" + WDUtilities.EQUAL + order);
 		return baseURL + "search" + WDUtilities.QM + "q" + WDUtilities.EQUAL + 
-			   activeKeyword + WDUtilities.AND + "res" + WDUtilities.EQUAL + resolution + WDUtilities.AND + "thpp" + WDUtilities.EQUAL + "60" + 
-			   WDUtilities.AND + "order_mode" + WDUtilities.EQUAL + "desc" + WDUtilities.AND + "order" + WDUtilities.EQUAL + order;
+				   activeKeyword + WDUtilities.AND + "categories" + WDUtilities.EQUAL + "111" +WDUtilities.AND + "purity" + WDUtilities.EQUAL + "110" + "res" + WDUtilities.EQUAL + resolution + WDUtilities.AND + "thpp" + WDUtilities.EQUAL + "60" + 
+				   WDUtilities.AND + "order_mode" + WDUtilities.EQUAL + "desc" + WDUtilities.AND + "sorting" + WDUtilities.EQUAL + order;
 	}
 
 }
