@@ -22,10 +22,10 @@ import es.estoes.wallpaperDownloader.util.PreferencesManager;
 import es.estoes.wallpaperDownloader.util.PropertiesManager;
 import es.estoes.wallpaperDownloader.util.WDUtilities;
 
-public class WallbaseProvider extends Provider {
+public class WallhavenProvider extends Provider {
 	
 	// Constants
-	private static final Logger LOG = Logger.getLogger(WallbaseProvider.class);
+	private static final Logger LOG = Logger.getLogger(WallhavenProvider.class);
 
 	// Attributes
 	private String order;
@@ -33,12 +33,12 @@ public class WallbaseProvider extends Provider {
 	/**
 	 * Constructor
 	 */
-	public WallbaseProvider () {
+	public WallhavenProvider () {
 		super();
 		PropertiesManager pm = PropertiesManager.getInstance();
 		PreferencesManager prefm = PreferencesManager.getInstance();
-		keywordsProperty = "provider-wallbase-keywords";
-		baseURL = pm.getProperty("provider.wallbase.baseurl");
+		keywordsProperty = "provider-wallhaven-keywords";
+		baseURL = pm.getProperty("provider.wallhaven.baseurl");
 		switch (new Integer(prefm.getPreference("wallpaper-search-type"))) {
 			case 0: this.order = "relevance";
 					break;

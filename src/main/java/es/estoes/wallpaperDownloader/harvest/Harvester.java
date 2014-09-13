@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import org.apache.log4j.Logger;
 
 import es.estoes.wallpaperDownloader.provider.Provider;
-import es.estoes.wallpaperDownloader.provider.WallbaseProvider;
+import es.estoes.wallpaperDownloader.provider.WallhavenProvider;
 import es.estoes.wallpaperDownloader.util.PreferencesManager;
 import es.estoes.wallpaperDownloader.util.WDUtilities;
 
@@ -43,11 +43,11 @@ public class Harvester {
 		providers = new LinkedList<Provider>();
 		// Reading user preferences
 		// -----------------------------------------------
-		// Wallbase.cc
+		// Wallhaven.cc
 		// -----------------------------------------------
-		String wallbaseEnable = prefm.getPreference("provider-wallbase");
-		if (wallbaseEnable.equals(WDUtilities.APP_YES)) {
-			providers.add(new WallbaseProvider());	// Factory method
+		String wallhavenEnable = prefm.getPreference("provider-wallhaven");
+		if (wallhavenEnable.equals(WDUtilities.APP_YES)) {
+			providers.add(new WallhavenProvider());	// Factory method
 		}				
 	}
 	
