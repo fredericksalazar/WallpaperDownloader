@@ -171,11 +171,18 @@ public class WallhavenProvider extends Provider {
 	}
 
 	private String composeCompleteURL() {
-		LOG.info(baseURL + "search" + WDUtilities.QM + "q" + WDUtilities.EQUAL + 
-				   activeKeyword + WDUtilities.AND + "categories" + WDUtilities.EQUAL + "111" +WDUtilities.AND + "purity" + WDUtilities.EQUAL + "110" + "res" + WDUtilities.EQUAL + resolution + WDUtilities.AND + "thpp" + WDUtilities.EQUAL + "60" + 
+		// If activeKeyword is empty, the search operation will be done within the whole repository 
+		String keywordString = "";
+		if (!activeKeyword.equals(PreferencesManager.DEFAULT_VALUE)) {
+			keywordString = "q" + WDUtilities.EQUAL + activeKeyword + WDUtilities.AND;
+		}
+		String resolutionString = "";
+		if (!resolution.equals(PreferencesManager.DEFAULT_VALUE)) {
+			resolutionString = "res" + WDUtilities.EQUAL + resolution + WDUtilities.AND;
+		}
+		LOG.info(baseURL + "search" + WDUtilities.QM + keywordString + "categories" + WDUtilities.EQUAL + "111" + WDUtilities.AND + "purity" + WDUtilities.EQUAL + "110" + WDUtilities.AND + resolutionString + "thpp" + WDUtilities.EQUAL + "60" + 
 				   WDUtilities.AND + "order_mode" + WDUtilities.EQUAL + "desc" + WDUtilities.AND + "sorting" + WDUtilities.EQUAL + order);
-		return baseURL + "search" + WDUtilities.QM + "q" + WDUtilities.EQUAL + 
-				   activeKeyword + WDUtilities.AND + "categories" + WDUtilities.EQUAL + "111" +WDUtilities.AND + "purity" + WDUtilities.EQUAL + "110" + "res" + WDUtilities.EQUAL + resolution + WDUtilities.AND + "thpp" + WDUtilities.EQUAL + "60" + 
+		return baseURL + "search" + WDUtilities.QM + keywordString + "categories" + WDUtilities.EQUAL + "111" +WDUtilities.AND + "purity" + WDUtilities.EQUAL + "110" + WDUtilities.AND + resolutionString + "thpp" + WDUtilities.EQUAL + "60" + 
 				   WDUtilities.AND + "order_mode" + WDUtilities.EQUAL + "desc" + WDUtilities.AND + "sorting" + WDUtilities.EQUAL + order;
 	}
 
