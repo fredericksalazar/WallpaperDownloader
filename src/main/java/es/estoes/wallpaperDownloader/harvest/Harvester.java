@@ -47,6 +47,7 @@ public class Harvester {
 		// -----------------------------------------------
 		String wallhavenEnable = prefm.getPreference("provider-wallhaven");
 		if (wallhavenEnable.equals(WDUtilities.APP_YES)) {
+			LOG.info("Wallhaven provider added");
 			providers.add(new WallhavenProvider());	// Factory method
 		}				
 	}
