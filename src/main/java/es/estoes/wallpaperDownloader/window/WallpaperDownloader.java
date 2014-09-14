@@ -121,7 +121,7 @@ public class WallpaperDownloader {
 		providersPanel.add(lblKeywords);
 		
 		wallhavenKeywords = new JTextField();
-		wallhavenKeywords.setBounds(100, 37, 522, 19);
+		wallhavenKeywords.setBounds(100, 37, 255, 19);
 		providersPanel.add(wallhavenKeywords);
 		wallhavenKeywords.setColumns(10);
 		
@@ -138,7 +138,7 @@ public class WallpaperDownloader {
 		providersPanel.add(wallhavenWidthResolution);
 		
 		searchTypeComboBox = new JComboBox<ComboItem>();
-		searchTypeComboBox.setBounds(528, 68, 94, 19);
+		searchTypeComboBox.setBounds(528, 68, 129, 19);
 		providersPanel.add(searchTypeComboBox);
 		
 		JLabel lblSearchType = new JLabel("Search Type");
@@ -159,6 +159,10 @@ public class WallpaperDownloader {
 		allResolutionsCheckbox = new JCheckBox("All Resolutions");
 		allResolutionsCheckbox.setBounds(224, 66, 151, 23);
 		providersPanel.add(allResolutionsCheckbox);
+		
+		JLabel lblKeywordsHelp = new JLabel("(separated by ;) (Empty->All wallpapers)");
+		lblKeywordsHelp.setBounds(366, 39, 291, 15);
+		providersPanel.add(lblKeywordsHelp);
 		
 		JPanel appSettingsPanel = new JPanel();
 		tabbedPane.addTab("Application Settings", null, appSettingsPanel, null);
@@ -377,6 +381,8 @@ public class WallpaperDownloader {
 					prefm.setPreference("provider-wallhaven", WDUtilities.APP_YES);
 					if (!wallhavenKeywords.getText().isEmpty()) {
 						prefm.setPreference("provider-wallhaven-keywords", wallhavenKeywords.getText());					
+					} else {
+						prefm.setPreference("provider-wallhaven-keywords", PreferencesManager.DEFAULT_VALUE);
 					}
 					if (allResolutionsCheckbox.isSelected()) {
 						prefm.setPreference("wallpaper-resolution", PreferencesManager.DEFAULT_VALUE);						
@@ -420,6 +426,8 @@ public class WallpaperDownloader {
 			wallhavenKeywords.setEnabled(true);
 			if (!prefm.getPreference("provider-wallhaven-keywords").equals(PreferencesManager.DEFAULT_VALUE)) {
 				wallhavenKeywords.setText(prefm.getPreference("provider-wallhaven-keywords"));			
+			} else {
+				wallhavenKeywords.setText("");
 			}
 			String[] resolution = prefm.getPreference("wallpaper-resolution").split("x");
 			if (!prefm.getPreference("wallpaper-resolution").equals(PreferencesManager.DEFAULT_VALUE)) {
