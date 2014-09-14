@@ -103,6 +103,12 @@ public class WDConfigManager {
         		 // Initializing search type
         		 // By default, the application will download Favorites wallpapers
         		 prefm.setPreference("wallpaper-search-type", "3");
+        		 
+        		 /**
+        		  * WallpaperDownloader icon
+        		  */
+        		 //app.icon.path
+        		 // TODO: Copy application icon to folder
     		 }
 
     	 } catch (Exception e) {
