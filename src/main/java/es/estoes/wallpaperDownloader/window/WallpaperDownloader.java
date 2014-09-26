@@ -46,6 +46,7 @@ import javax.swing.JLabel;
 import org.apache.log4j.Logger;
 
 import javax.swing.JComboBox;
+import java.text.Format;
 
 public class WallpaperDownloader {
 
@@ -61,6 +62,7 @@ public class WallpaperDownloader {
 	private JButton btnApply;
 	private JButton btnCloseExit;
 	private JButton btnMinimize;
+	private JButton btnOpenDownloadsDirectory;
 	private JComboBox<ComboItem> searchTypeComboBox;
 	private JFormattedTextField wallhavenWidthResolution;
 	private NumberFormat integerFormat;
@@ -69,6 +71,8 @@ public class WallpaperDownloader {
 	private JCheckBox allResolutionsCheckbox;
 	private JComboBox<ComboItem> timerComboBox;
 	private JFormattedTextField downloadDirectorySize;
+	private JPanel miscPanel;
+	private JFormattedTextField downloadsDirectory;
 
 	/**
 	 * Launch the application.
@@ -196,6 +200,24 @@ public class WallpaperDownloader {
 		downloadDirectorySize.setColumns(4);
 		downloadDirectorySize.setBounds(317, 37, 49, 19);
 		appSettingsPanel.add(downloadDirectorySize);
+		
+		miscPanel = new JPanel();
+		tabbedPane.addTab("Miscelanea", null, miscPanel, null);
+		miscPanel.setLayout(null);
+		
+		JLabel lblDownloadsDirectory = new JLabel("Downloads Directory:");
+		lblDownloadsDirectory.setBounds(12, 12, 160, 19);
+		miscPanel.add(lblDownloadsDirectory);
+		
+		downloadsDirectory = new JFormattedTextField((Format) null);
+		downloadsDirectory.setEditable(false);
+		downloadsDirectory.setColumns(4);
+		downloadsDirectory.setBounds(174, 14, 405, 19);
+		miscPanel.add(downloadsDirectory);
+		
+		btnOpenDownloadsDirectory = new JButton("Open");
+		btnOpenDownloadsDirectory.setBounds(589, 11, 72, 25);
+		miscPanel.add(btnOpenDownloadsDirectory);
 		
 		btnCloseExit = new JButton("Close & Exit");
 		GridBagConstraints gbc_btnCloseExit = new GridBagConstraints();
@@ -390,7 +412,7 @@ public class WallpaperDownloader {
 		            // Hiding window
 		            window.frame.setVisible(false);
 		        }
-			}
+			}		
 		});
 		
 		/**
@@ -433,7 +455,26 @@ public class WallpaperDownloader {
 				harvester.stop();
 				harvester.start();
 			}
-		});		
+		});	
+		
+		/**
+		 * btnOpenDownloadsDirectory Action Listeners
+		 */
+		// Clicking event
+		btnOpenDownloadsDirectory.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				// It Opens the downloads directory using the default file manager
+        		File downloadsDirectory = new File(WDUtilities.getDownloadsPath());
+        		Desktop desktop = Desktop.getDesktop();
+        		try {
+					desktop.open(downloadsDirectory);
+				} catch (IOException e) {
+					// There was some error trying to open the downloads Directory
+					LOG.error("Error trying to open the Downloads directory. Error: " + e.getMessage());
+				}
+			}
+		});
+
 	}
 
 	/**
@@ -496,6 +537,10 @@ public class WallpaperDownloader {
 		timerComboBox.addItem(new ComboItem("30 min", "4"));
 		timerComboBox.setSelectedIndex(new Integer(prefm.getPreference("application-timer")));
 		downloadDirectorySize.setValue(new Integer(prefm.getPreference("application-max-download-folder-size")));
+		// ---------------------------------------------------------------------
+		// Checking Miscelanea
+		// ---------------------------------------------------------------------
+		downloadsDirectory.setValue(WDUtilities.getDownloadsPath());
 	}
 	
 	/**
