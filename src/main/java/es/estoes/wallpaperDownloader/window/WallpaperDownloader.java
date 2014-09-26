@@ -1,22 +1,29 @@
 package es.estoes.wallpaperDownloader.window;
 
 import java.awt.EventQueue;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
+
 import es.estoes.wallpaperDownloader.harvest.Harvester;
 import es.estoes.wallpaperDownloader.item.ComboItem;
 import es.estoes.wallpaperDownloader.util.PreferencesManager;
 import es.estoes.wallpaperDownloader.util.PropertiesManager;
 import es.estoes.wallpaperDownloader.util.WDConfigManager;
 import es.estoes.wallpaperDownloader.util.WDUtilities;
+
 import javax.swing.JTabbedPane;
 import javax.swing.JButton;
+
 import java.awt.Color;
+
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
+
 import java.awt.AWTException;
+import java.awt.Desktop;
 import java.awt.Frame;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -29,10 +36,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.text.NumberFormat;
+
 import javax.swing.JLabel;
+
 import org.apache.log4j.Logger;
+
 import javax.swing.JComboBox;
 
 public class WallpaperDownloader {
@@ -305,7 +317,7 @@ public class WallpaperDownloader {
 		            final TrayIcon trayIcon = new TrayIcon(new ImageIcon(systemTrayIcon, "Wallpaper Downloader").getImage(), "Wallpaper Downloader");
 		            final SystemTray tray = SystemTray.getSystemTray();
 		           
-		            // Create a pop-up menu components
+		            // Create a pop-up menu components -- BEGIN
 		            MenuItem maximizeItem = new MenuItem("Maximize");
 		            maximizeItem.addActionListener(new ActionListener() {
 		            	public void actionPerformed(ActionEvent evt) {
@@ -318,6 +330,19 @@ public class WallpaperDownloader {
 		                	tray.remove(trayIcon);
 		            	}
 		            });
+		            MenuItem browseItem = new MenuItem("Open downloaded wallpapers");
+		            browseItem.addActionListener(new ActionListener() {
+		            	public void actionPerformed(ActionEvent evt) {
+		            		File downloadsDirectory = new File(WDUtilities.getDownloadsPath());
+		            		Desktop desktop = Desktop.getDesktop();
+		            		try {
+								desktop.open(downloadsDirectory);
+							} catch (IOException e) {
+								// There was some error trying to open the downloads Directory
+								LOG.error("Error trying to open the Downloads directory. Error: " + e.getMessage());
+							}
+		            	}
+		            });
 		            MenuItem exitItem = new MenuItem("Exit");
 		            exitItem.addActionListener(new ActionListener() {
 		            	public void actionPerformed(ActionEvent evt) {
@@ -328,9 +353,11 @@ public class WallpaperDownloader {
 		    				System.exit(0);		                	
 		            	}
 		            });
+		            // Create a pop-up menu components -- END
 		           
 		            //Add components to pop-up menu
 		            popup.add(maximizeItem);
+		            popup.add(browseItem);
 		            popup.addSeparator();
 		            popup.add(exitItem);
 		           
