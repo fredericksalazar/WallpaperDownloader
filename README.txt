@@ -10,4 +10,4 @@ This is a JAVA open source software project developed for downloading wallpapers
 1.0
 
 ## Wiki ##
-Please, visit the [Wiki]() related to the project for more information. Thank you!
+Please, visit the Wiki related to the project for more information. Thank you!
