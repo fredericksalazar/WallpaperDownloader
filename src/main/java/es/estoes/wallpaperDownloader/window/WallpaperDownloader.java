@@ -7,6 +7,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
+import javax.swing.ToolTipManager;
 
 import es.estoes.wallpaperDownloader.harvest.Harvester;
 import es.estoes.wallpaperDownloader.item.ComboItem;
@@ -107,6 +108,10 @@ public class WallpaperDownloader {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		// Configuring tooltips
+		ToolTipManager.sharedInstance().setInitialDelay(100);
+		
+		// Configuring frames
 		frame = new JFrame();
 		frame.setBounds(100, 100, 690, 440);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -222,6 +227,7 @@ public class WallpaperDownloader {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/open_folder_24px_icon.png"));
 			btnOpenDownloadsDirectory.setIcon(new ImageIcon(img));
+			btnOpenDownloadsDirectory.setToolTipText("Open downloads directory");
 			btnOpenDownloadsDirectory.setBounds(588, 8, 34, 33);
 		} catch (IOException ex) {
 			btnOpenDownloadsDirectory.setText("Open");
