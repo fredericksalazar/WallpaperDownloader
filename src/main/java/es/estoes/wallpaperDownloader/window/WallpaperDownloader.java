@@ -2,6 +2,7 @@ package es.estoes.wallpaperDownloader.window;
 
 import java.awt.EventQueue;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
@@ -27,6 +28,7 @@ import java.awt.Desktop;
 import java.awt.Frame;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
@@ -46,6 +48,7 @@ import javax.swing.JLabel;
 import org.apache.log4j.Logger;
 
 import javax.swing.JComboBox;
+
 import java.text.Format;
 
 public class WallpaperDownloader {
@@ -215,8 +218,15 @@ public class WallpaperDownloader {
 		downloadsDirectory.setBounds(174, 14, 405, 19);
 		miscPanel.add(downloadsDirectory);
 		
-		btnOpenDownloadsDirectory = new JButton("Open");
-		btnOpenDownloadsDirectory.setBounds(589, 11, 72, 25);
+		btnOpenDownloadsDirectory = new JButton();
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/open_folder_24px_icon.png"));
+			btnOpenDownloadsDirectory.setIcon(new ImageIcon(img));
+			btnOpenDownloadsDirectory.setBounds(588, 8, 34, 33);
+		} catch (IOException ex) {
+			btnOpenDownloadsDirectory.setText("Open");
+			btnOpenDownloadsDirectory.setBounds(589, 11, 72, 25);
+		}		
 		miscPanel.add(btnOpenDownloadsDirectory);
 		
 		btnCloseExit = new JButton("Close & Exit");
