@@ -34,7 +34,10 @@ import java.awt.Insets;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
+import java.awt.Toolkit;
 import java.awt.TrayIcon;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -67,6 +70,7 @@ public class WallpaperDownloader {
 	private JButton btnCloseExit;
 	private JButton btnMinimize;
 	private JButton btnOpenDownloadsDirectory;
+	private JButton btnClipboard;
 	private JComboBox<ComboItem> searchTypeComboBox;
 	private JFormattedTextField wallhavenWidthResolution;
 	private NumberFormat integerFormat;
@@ -184,9 +188,19 @@ public class WallpaperDownloader {
 		allResolutionsCheckbox.setBounds(224, 66, 151, 23);
 		providersPanel.add(allResolutionsCheckbox);
 		
-		JLabel lblKeywordsHelp = new JLabel("(separated by ;) (Empty->All wallpapers)");
-		lblKeywordsHelp.setBounds(366, 39, 291, 15);
-		providersPanel.add(lblKeywordsHelp);
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/help_24px_icon.png"));
+			ImageIcon icon = new ImageIcon(img);
+			JLabel lblKeywordsHelp = new JLabel(icon);
+			lblKeywordsHelp.setToolTipText("Each keyword must be separated by ';'. If it is empty then it will search any wallpaper");
+			lblKeywordsHelp.setBounds(358, 35, 30, 23);
+			providersPanel.add(lblKeywordsHelp);
+		} catch (IOException ex) {
+			JLabel lblKeywordsHelp = new JLabel("(separated by ;) (Empty->All wallpapers)");
+			lblKeywordsHelp.setBounds(362, 39, 70, 15);
+			providersPanel.add(lblKeywordsHelp);
+		}
+		
 		
 		JPanel appSettingsPanel = new JPanel();
 		tabbedPane.addTab("Application Settings", null, appSettingsPanel, null);
@@ -234,6 +248,18 @@ public class WallpaperDownloader {
 			btnOpenDownloadsDirectory.setBounds(589, 11, 72, 25);
 		}		
 		miscPanel.add(btnOpenDownloadsDirectory);
+		
+		btnClipboard = new JButton();
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/clipboard_24px_icon.png"));
+			btnClipboard.setIcon(new ImageIcon(img));
+			btnClipboard.setToolTipText("Copy downloads directory path into the Clipboard");
+			btnClipboard.setBounds(630, 8, 34, 33);
+		} catch (IOException ex) {
+			btnClipboard.setText("Clipboard");
+			btnClipboard.setBounds(630, 8, 34, 33);
+		}
+		miscPanel.add(btnClipboard);
 		
 		btnCloseExit = new JButton("Close & Exit");
 		GridBagConstraints gbc_btnCloseExit = new GridBagConstraints();
@@ -467,9 +493,14 @@ public class WallpaperDownloader {
 				// ---------------------------------------------------------------------------
 				prefm.setPreference("application-timer", new Integer(timerComboBox.getSelectedIndex()).toString());
 				prefm.setPreference("application-max-download-folder-size", downloadDirectorySize.getValue().toString());
-				// Stopping and starting process
+				
+				// Stopping and starting harvesting process
 				harvester.stop();
 				harvester.start();
+				
+				// Information
+				DialogManager info = new DialogManager("Changes applied. Downloading process started.", 2000);
+				info.openDialog();
 			}
 		});	
 		
@@ -488,6 +519,21 @@ public class WallpaperDownloader {
 					// There was some error trying to open the downloads Directory
 					LOG.error("Error trying to open the Downloads directory. Error: " + e.getMessage());
 				}
+			}
+		});
+
+		/**
+		 * btnClipboard Action Listeners
+		 */
+		// Clicking event
+		btnClipboard.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				// Copy downloads directory path into the clipboard
+				Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+				StringSelection data = new StringSelection(downloadsDirectory.getText());
+				clipboard.setContents(data, data);
+				DialogManager info = new DialogManager("The downloads directory path was copied to the clipboard", 2000);
+				info.openDialog();
 			}
 		});
 
