@@ -23,6 +23,7 @@ public class WDUtilities {
 	public static final String EQUAL = "=";
 	public static final String AND = "&";
 	public static final String URL_SLASH = "/";
+	public static final String WD_PREFIX = "wd-";
 
 	// Attributes
 	private static String appPath;
