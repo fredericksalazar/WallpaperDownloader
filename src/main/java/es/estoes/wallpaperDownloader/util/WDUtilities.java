@@ -65,11 +65,26 @@ public class WDUtilities {
 		
 	}
 	
+	/**
+	 * Get screen resolution
+	 * @return
+	 */
 	public static String getResolution() {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		Double width = screenSize.getWidth();
 		Double height = screenSize.getHeight();
 		return width.intValue() + "x" + height.intValue();
+	}
+	
+	/**
+	 * Move all the wallpapers to a new location
+	 * @param newPath
+	 */
+	public static void moveDownloadedWallpapers(String newPath) {
+		if (!WDUtilities.getDownloadsPath().equals(newPath)) {
+			// Get all the wallpapers from the current location
+			
+		}
 	}
 
 }

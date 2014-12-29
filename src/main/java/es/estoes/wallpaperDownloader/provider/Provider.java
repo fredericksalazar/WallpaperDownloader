@@ -5,11 +5,9 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.log4j.Logger;
-
 import es.estoes.wallpaperDownloader.exception.ProviderException;
 import es.estoes.wallpaperDownloader.util.PreferencesManager;
 import es.estoes.wallpaperDownloader.util.WDUtilities;
@@ -91,8 +89,10 @@ public abstract class Provider {
 		while (downloadFolderSize > maxSize) {
 			File fileToRemove = pickRandomFile();
 			try {
-				FileUtils.forceDelete(fileToRemove);
-				LOG.info(fileToRemove.getPath() + " deleted");
+				if (fileToRemove != null) {
+					FileUtils.forceDelete(fileToRemove);
+					LOG.info(fileToRemove.getPath() + " deleted");
+				}
 			} catch (IOException e) {
 				throw new ProviderException("Error deleting file " + fileToRemove.getPath() + ". Error: " + e.getMessage());
 			}
@@ -104,9 +104,14 @@ public abstract class Provider {
 	@SuppressWarnings("unchecked")
 	private File pickRandomFile() {
 		File downloadDirectory = new File(WDUtilities.getDownloadsPath());
-		List<File> files = (List<File>) FileUtils.listFiles(downloadDirectory, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
-		Random generator = new Random();
-		int index = generator.nextInt(files.size());
-		return files.get(index);
+		List<File> files = (List<File>) FileUtils.listFiles(downloadDirectory, FileFilterUtils.prefixFileFilter(WDUtilities.WD_PREFIX), null);
+		if (!files.isEmpty()) {
+			Random generator = new Random();
+			int index = generator.nextInt(files.size());
+			return files.get(index);			
+		} else {
+			return null;
+		}
+		
 	}
 }
