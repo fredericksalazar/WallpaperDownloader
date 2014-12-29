@@ -81,6 +81,7 @@ public class WallpaperDownloader {
 	private JFormattedTextField downloadDirectorySize;
 	private JPanel miscPanel;
 	private JFormattedTextField downloadsDirectory;
+	private JButton btnChangeDownloadsDirectory;
 
 	/**
 	 * Launch the application.
@@ -260,6 +261,10 @@ public class WallpaperDownloader {
 			btnClipboard.setBounds(630, 8, 34, 33);
 		}
 		miscPanel.add(btnClipboard);
+		
+		btnChangeDownloadsDirectory = new JButton("Change Downloads Directory");
+		btnChangeDownloadsDirectory.setBounds(12, 61, 259, 25);
+		miscPanel.add(btnChangeDownloadsDirectory);
 		
 		btnCloseExit = new JButton("Close & Exit");
 		GridBagConstraints gbc_btnCloseExit = new GridBagConstraints();
@@ -534,6 +539,16 @@ public class WallpaperDownloader {
 				clipboard.setContents(data, data);
 				DialogManager info = new DialogManager("The downloads directory path was copied to the clipboard", 2000);
 				info.openDialog();
+			}
+		});
+		
+		/**
+		 * btnChangeDownloadsDirectory Action Listeners
+		 */
+		btnChangeDownloadsDirectory.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				DownloadsPathChangerWindow downloadsPathChangerWindow = new DownloadsPathChangerWindow();
+				downloadsPathChangerWindow.setVisible(true);
 			}
 		});
 
