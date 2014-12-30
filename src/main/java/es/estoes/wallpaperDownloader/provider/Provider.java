@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.log4j.Logger;
 import es.estoes.wallpaperDownloader.exception.ProviderException;
 import es.estoes.wallpaperDownloader.util.PreferencesManager;
@@ -101,10 +100,8 @@ public abstract class Provider {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private File pickRandomFile() {
-		File downloadDirectory = new File(WDUtilities.getDownloadsPath());
-		List<File> files = (List<File>) FileUtils.listFiles(downloadDirectory, FileFilterUtils.prefixFileFilter(WDUtilities.WD_PREFIX), null);
+		List<File> files = WDUtilities.getAllWallpapers();
 		if (!files.isEmpty()) {
 			Random generator = new Random();
 			int index = generator.nextInt(files.size());

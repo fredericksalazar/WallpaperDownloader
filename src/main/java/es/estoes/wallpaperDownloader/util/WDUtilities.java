@@ -2,7 +2,11 @@ package es.estoes.wallpaperDownloader.util;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.File;
+import java.util.List;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.log4j.Logger;
 
 /**
@@ -74,6 +78,14 @@ public class WDUtilities {
 		Double width = screenSize.getWidth();
 		Double height = screenSize.getHeight();
 		return width.intValue() + "x" + height.intValue();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static List<File> getAllWallpapers() {
+		LOG.info("Getting all the wallpapers...");
+		File downloadDirectory = new File(WDUtilities.getDownloadsPath());
+		List<File> wallpapers = (List<File>) FileUtils.listFiles(downloadDirectory, FileFilterUtils.prefixFileFilter(WDUtilities.WD_PREFIX), null);		
+		return wallpapers;
 	}
 	
 	/**
