@@ -26,6 +26,7 @@ import javax.swing.JPanel;
 
 import java.awt.AWTException;
 import java.awt.Desktop;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -126,6 +127,13 @@ public class WallpaperDownloader {
 		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		frame.getContentPane().setLayout(gridBagLayout);
+		
+		// Centering window
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		Dimension screenSize = toolkit.getScreenSize();
+		int x = (screenSize.width - frame.getWidth()) / 2;
+		int y = (screenSize.height - frame.getHeight()) / 2;
+		frame.setLocation(x, y);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		GridBagConstraints gbc_tabbedPane = new GridBagConstraints();
