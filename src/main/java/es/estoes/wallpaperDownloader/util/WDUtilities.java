@@ -3,11 +3,15 @@ package es.estoes.wallpaperDownloader.util;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
+import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.log4j.Logger;
+
+import es.estoes.wallpaperDownloader.window.DialogManager;
 
 /**
  * This class gathers all the utilities needed for the correct behavior of the application. 
@@ -28,6 +32,7 @@ public class WDUtilities {
 	public static final String AND = "&";
 	public static final String URL_SLASH = "/";
 	public static final String WD_PREFIX = "wd-";
+	public static final String DEFAULT_DOWNLOADS_DIRECTORY = "downloads";
 
 	// Attributes
 	private static String appPath;
@@ -98,8 +103,45 @@ public class WDUtilities {
 	 */
 	public static void moveDownloadedWallpapers(String newPath) {
 		if (!WDUtilities.getDownloadsPath().equals(newPath)) {
+			File destDir = new File(newPath);
+			File srcDir = new File(WDUtilities.getDownloadsPath());
 			// Get all the wallpapers from the current location
+			List<File> wallpapers = getAllWallpapers();
 			
+			// Copy every file to the new location
+			Iterator<File> wallpaper = wallpapers.iterator();
+			while (wallpaper.hasNext()) {
+				try {
+					FileUtils.copyFileToDirectory((File) wallpaper.next(), destDir, true);
+				} catch (IOException e) {
+					// Something went wrong
+					LOG.error("Error copying file " + wallpaper.toString());
+					// Information
+					DialogManager info = new DialogManager("Something went wrong. Downloads directory couldn't be changed. Check log for more information.", 2000);
+					info.openDialog();
+				}
+			}
+			
+			// Remove old directory
+			try {
+				FileUtils.deleteDirectory(srcDir);
+			} catch (IOException e) {
+				// Something went wrong
+				LOG.error("The original downloads directory " + WDUtilities.getDownloadsPath() + " couldn't be removed. Please, check also directory " + destDir.getAbsolutePath() + " because all the wallpapers were copyied there");
+				// Information
+				DialogManager info = new DialogManager("Something went wrong. Downloads directory couldn't be changed. Check log for more information.", 2000);
+				info.openDialog();
+			}
+			
+			// Change Downloads path within application properties and WDUtilities
+			PreferencesManager prefm = PreferencesManager.getInstance();
+			prefm.setPreference("application-downloads-folder", destDir.getAbsolutePath());
+			WDUtilities.setDownloadsPath(destDir.getAbsolutePath());
+			
+			// Information
+			DialogManager info = new DialogManager("Dowloads directory has been succesfully changed to " + destDir.getAbsolutePath(), 2000);
+			info.openDialog();
+
 		}
 	}
 

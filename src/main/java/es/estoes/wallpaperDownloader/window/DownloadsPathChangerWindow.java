@@ -1,6 +1,8 @@
 package es.estoes.wallpaperDownloader.window;
 
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Toolkit;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -47,6 +49,13 @@ public class DownloadsPathChangerWindow extends JFrame {
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(null);
 		
+		// Centering window
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		Dimension screenSize = toolkit.getScreenSize();
+		int x = (screenSize.width - getWidth()) / 2;
+		int y = (screenSize.height - getHeight()) / 2;
+		setLocation(x, y);
+		
 		newDownloadsPath = new JTextField();
 		newDownloadsPath.setBounds(12, 36, 298, 19);
 		getContentPane().add(newDownloadsPath);
@@ -80,7 +89,11 @@ public class DownloadsPathChangerWindow extends JFrame {
 		btnApplyPathChange.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				// All the downloaded wallpapers are moved to the new location
-				
+				// TODO: stop harvesting process
+				WDUtilities.moveDownloadedWallpapers(newDownloadsPath.getText());
+				// TODO: start harvesting process
+				// TODO: refresh path in main window
+				dispose();
 			}
 		});
 		btnApplyPathChange.setBounds(361, 236, 73, 25);
