@@ -80,6 +80,10 @@ public class WDUtilities {
 		return width.intValue() + "x" + height.intValue();
 	}
 	
+	/**
+	 * Get all the wallpapers from the download directory
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public static List<File> getAllWallpapers() {
 		LOG.info("Getting all the wallpapers...");
