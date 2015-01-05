@@ -83,6 +83,31 @@ public class WallpaperDownloader {
 	private JPanel miscPanel;
 	private JFormattedTextField downloadsDirectory;
 	private JButton btnChangeDownloadsDirectory;
+	
+	// Getters & Setters
+	public JFrame getFrame() {
+		return frame;
+	}
+
+	public void setFrame(JFrame frame) {
+		this.frame = frame;
+	}
+	
+	public Harvester getHarvester() {
+		return harvester;
+	}
+
+	public void setHarvester(Harvester harvester) {
+		this.harvester = harvester;
+	}
+	
+	public JFormattedTextField getDownloadsDirectory() {
+		return downloadsDirectory;
+	}
+
+	public void setDownloadsDirectory(JFormattedTextField downloadsDirectory) {
+		this.downloadsDirectory = downloadsDirectory;
+	}
 
 	/**
 	 * Launch the application.
@@ -555,7 +580,7 @@ public class WallpaperDownloader {
 		 */
 		btnChangeDownloadsDirectory.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				DownloadsPathChangerWindow downloadsPathChangerWindow = new DownloadsPathChangerWindow();
+				DownloadsPathChangerWindow downloadsPathChangerWindow = new DownloadsPathChangerWindow(window);
 				downloadsPathChangerWindow.setVisible(true);
 			}
 		});

@@ -1,17 +1,13 @@
 package es.estoes.wallpaperDownloader.window;
 
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Toolkit;
-
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-
 import es.estoes.wallpaperDownloader.util.WDUtilities;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -24,25 +20,10 @@ public class DownloadsPathChangerWindow extends JFrame {
 	private JTextField newDownloadsPath;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					DownloadsPathChangerWindow frame = new DownloadsPathChangerWindow();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the frame.
+	 * @param mainWindow 
 	 */
-	public DownloadsPathChangerWindow() {
+	public DownloadsPathChangerWindow(final WallpaperDownloader mainWindow) {
 		// DISPOSE_ON_CLOSE for closing only this frame instead of the entire application
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setTitle("Change Downloads Directory Path");
@@ -65,7 +46,7 @@ public class DownloadsPathChangerWindow extends JFrame {
 		JLabel lblSelectDownloadsPath = new JLabel("Please, select the new downloads directory");
 		lblSelectDownloadsPath.setBounds(12, 12, 312, 15);
 		getContentPane().add(lblSelectDownloadsPath);
-		
+				
 		JButton btnSelectPath = new JButton("Select");
 		btnSelectPath.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -87,12 +68,17 @@ public class DownloadsPathChangerWindow extends JFrame {
 		
 		JButton btnApplyPathChange = new JButton("Apply");
 		btnApplyPathChange.addActionListener(new ActionListener() {
+			
 			public void actionPerformed(ActionEvent arg0) {
 				// All the downloaded wallpapers are moved to the new location
-				// TODO: stop harvesting process
+				// Stop harvesting process
+				mainWindow.getHarvester().stop();
 				WDUtilities.moveDownloadedWallpapers(newDownloadsPath.getText());
-				// TODO: start harvesting process
-				// TODO: refresh path in main window
+				// Start harvesting process
+				mainWindow.getHarvester().start();
+				// Refresh new path in main window
+				mainWindow.getDownloadsDirectory().setText(newDownloadsPath.getText());
+				// Close frame
 				dispose();
 			}
 		});
