@@ -46,7 +46,7 @@ public class WallhavenProvider extends Provider {
 					break;
 			case 2: this.order = "views";
 					break;
-			case 3: this.order = "favs";
+			case 3: this.order = "favorites";
 					break;
 			case 4: this.order = "random";
 					break;
