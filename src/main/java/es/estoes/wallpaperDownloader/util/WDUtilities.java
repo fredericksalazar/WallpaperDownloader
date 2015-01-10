@@ -145,4 +145,25 @@ public class WDUtilities {
 		}
 	}
 
+	/**
+	 * Calculates the percentage of the space occupied within the directory
+	 * @param directoryPath
+	 * @return int
+	 */
+	public static int getPercentageSpaceOccupied(String directoryPath) {
+		PreferencesManager prefm = PreferencesManager.getInstance();
+		int downloadsDirectorySize = new Integer(prefm.getPreference("application-max-download-folder-size"));
+		File directory = new File(directoryPath);
+		long spaceLong = FileUtils.sizeOfDirectory(directory);
+		// Turning bytes into Megabytes
+		spaceLong = (spaceLong / 1024) / 1024;
+		// Obtaining percentage
+		int percentage = (int) ((spaceLong * 100) / downloadsDirectorySize);
+		if (percentage > 100) {
+			percentage = 100;
+		}
+		LOG.info("Downloads directory space occupied: " + percentage + " %");
+		return percentage;
+	}
+
 }

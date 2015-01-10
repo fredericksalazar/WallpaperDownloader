@@ -21,6 +21,7 @@ import es.estoes.wallpaperDownloader.exception.ProviderException;
 import es.estoes.wallpaperDownloader.util.PreferencesManager;
 import es.estoes.wallpaperDownloader.util.PropertiesManager;
 import es.estoes.wallpaperDownloader.util.WDUtilities;
+import es.estoes.wallpaperDownloader.window.WallpaperDownloader;
 
 public class WallhavenProvider extends Provider {
 	
@@ -91,6 +92,8 @@ public class WallhavenProvider extends Provider {
 								LOG.info("Error trying to store wallpaper " + wallpaperURL + ". Skipping...");							
 							} else {
 								LOG.info("Wallpaper " + wallpaper.getName() + " successfully stored");
+								LOG.info("Refreshing space occupied progress bar...");
+								WallpaperDownloader.refreshProgressBar();
 								// Exit the process because one wallpaper was downloaded successfully
 								break;
 							}							
@@ -99,6 +102,8 @@ public class WallhavenProvider extends Provider {
 						}
 					} else {
 						LOG.info("Wallpaper " + wallpaper.getName() + " successfully stored");
+						LOG.info("Refreshing space occupied progress bar...");
+						WallpaperDownloader.refreshProgressBar();
 						// Exit the process because one wallpaper was downloaded successfully
 						break;
 					}

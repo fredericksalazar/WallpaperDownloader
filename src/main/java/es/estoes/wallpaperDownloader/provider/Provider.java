@@ -5,11 +5,14 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+
 import es.estoes.wallpaperDownloader.exception.ProviderException;
 import es.estoes.wallpaperDownloader.util.PreferencesManager;
 import es.estoes.wallpaperDownloader.util.WDUtilities;
+import es.estoes.wallpaperDownloader.window.WallpaperDownloader;
 
 public abstract class Provider {
 	
@@ -91,6 +94,8 @@ public abstract class Provider {
 				if (fileToRemove != null) {
 					FileUtils.forceDelete(fileToRemove);
 					LOG.info(fileToRemove.getPath() + " deleted");
+					LOG.info("Refreshing space occupied progress bar...");
+					WallpaperDownloader.refreshProgressBar();
 				}
 			} catch (IOException e) {
 				throw new ProviderException("Error deleting file " + fileToRemove.getPath() + ". Error: " + e.getMessage());

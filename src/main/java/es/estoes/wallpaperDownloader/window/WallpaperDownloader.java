@@ -55,6 +55,7 @@ import org.apache.log4j.Logger;
 import javax.swing.JComboBox;
 
 import java.text.Format;
+import javax.swing.JProgressBar;
 
 public class WallpaperDownloader {
 
@@ -63,6 +64,11 @@ public class WallpaperDownloader {
 	private static WallpaperDownloader window;
 	
 	// Attributes
+	
+	// diskSpacePB will be an attribute representing disk space occupied within the downloads directory
+	// It is static because it will be able to be accessed from any point within the application's code
+	public static JProgressBar diskSpacePB = new JProgressBar();
+	
 	private Harvester harvester;
 	private JFrame frame;
 	private JTextField wallhavenKeywords;
@@ -296,8 +302,16 @@ public class WallpaperDownloader {
 		miscPanel.add(btnClipboard);
 		
 		btnChangeDownloadsDirectory = new JButton("Change Downloads Directory");
-		btnChangeDownloadsDirectory.setBounds(12, 61, 259, 25);
+		btnChangeDownloadsDirectory.setBounds(12, 78, 259, 25);
 		miscPanel.add(btnChangeDownloadsDirectory);
+		
+		//JProgressBar diskSpacePB = new JProgressBar();
+		diskSpacePB.setBounds(174, 44, 405, 18);
+		miscPanel.add(diskSpacePB);
+		
+		JLabel lblDiskSpace = new JLabel("Downloads dir space:");
+		lblDiskSpace.setBounds(12, 43, 160, 19);
+		miscPanel.add(lblDiskSpace);
 		
 		btnCloseExit = new JButton("Close & Exit");
 		GridBagConstraints gbc_btnCloseExit = new GridBagConstraints();
@@ -588,7 +602,7 @@ public class WallpaperDownloader {
 	}
 
 	/**
-	 * This methods configures GUI according to user configuration file preferences
+	 * This method configures GUI according to user configuration file preferences
 	 */
 	private void initializeGUI() {
 
@@ -651,6 +665,10 @@ public class WallpaperDownloader {
 		// Checking Miscelanea
 		// ---------------------------------------------------------------------
 		downloadsDirectory.setValue(WDUtilities.getDownloadsPath());
+		// ---------------------------------------------------------------------
+		// Checking Disk Space Progress Bar
+		// ---------------------------------------------------------------------
+		refreshProgressBar();
 	}
 	
 	/**
@@ -659,5 +677,13 @@ public class WallpaperDownloader {
 	private void initializeHarvesting() {
 		harvester = Harvester.getInstance();
 		harvester.start();
+	}
+	
+	/**
+	 * This method refresh the progress bar representing the space occupied within the downloads directory
+	 */
+	public static void refreshProgressBar() {
+		int percentage = WDUtilities.getPercentageSpaceOccupied(WDUtilities.getDownloadsPath());
+		diskSpacePB.setValue(percentage);
 	}
 }
