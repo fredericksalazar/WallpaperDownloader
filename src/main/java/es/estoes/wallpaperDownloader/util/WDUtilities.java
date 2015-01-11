@@ -33,6 +33,7 @@ public class WDUtilities {
 	public static final String URL_SLASH = "/";
 	public static final String WD_PREFIX = "wd-";
 	public static final String DEFAULT_DOWNLOADS_DIRECTORY = "downloads";
+	public static final String UNIT_MB = "MB";
 
 	// Attributes
 	private static String appPath;
@@ -153,10 +154,7 @@ public class WDUtilities {
 	public static int getPercentageSpaceOccupied(String directoryPath) {
 		PreferencesManager prefm = PreferencesManager.getInstance();
 		int downloadsDirectorySize = new Integer(prefm.getPreference("application-max-download-folder-size"));
-		File directory = new File(directoryPath);
-		long spaceLong = FileUtils.sizeOfDirectory(directory);
-		// Turning bytes into Megabytes
-		spaceLong = (spaceLong / 1024) / 1024;
+		long spaceLong = WDUtilities.getDirectorySpaceOccupied(directoryPath, WDUtilities.UNIT_MB);
 		// Obtaining percentage
 		int percentage = (int) ((spaceLong * 100) / downloadsDirectorySize);
 		if (percentage > 100) {
@@ -166,4 +164,21 @@ public class WDUtilities {
 		return percentage;
 	}
 
+	/**
+	 * Calculate the space occupied within the directory
+	 * @param directoryPath
+	 * @param unit
+	 * @return
+	 */
+	public static long getDirectorySpaceOccupied(String directoryPath, String unit) {
+		long space = 0;
+		File directory = new File(directoryPath);
+		if (unit.equals(WDUtilities.UNIT_MB)) {
+			// Calculates the space in MBytes
+			space = FileUtils.sizeOfDirectory(directory);
+			// Turning bytes into Megabytes
+			space = (space / 1024) / 1024;
+		}
+		return space;
+	}
 }

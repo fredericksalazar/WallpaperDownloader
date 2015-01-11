@@ -85,9 +85,7 @@ public abstract class Provider {
 		LOG.info("Checking download directory. Removing some wallpapers if it is necessary...");
 		PreferencesManager prefm = PreferencesManager.getInstance();
 		Long maxSize = Long.parseLong(prefm.getPreference("application-max-download-folder-size"));
-		File downloadFolder = new File(WDUtilities.getDownloadsPath());
-		Long downloadFolderSize = FileUtils.sizeOfDirectory(downloadFolder);
-		downloadFolderSize = ((downloadFolderSize / 1024) / 1024); // MBytes
+		long downloadFolderSize = WDUtilities.getDirectorySpaceOccupied(WDUtilities.getDownloadsPath(), WDUtilities.UNIT_MB);
 		while (downloadFolderSize > maxSize) {
 			File fileToRemove = pickRandomFile();
 			try {
@@ -100,8 +98,7 @@ public abstract class Provider {
 			} catch (IOException e) {
 				throw new ProviderException("Error deleting file " + fileToRemove.getPath() + ". Error: " + e.getMessage());
 			}
-			downloadFolderSize = FileUtils.sizeOfDirectory(downloadFolder);
-			downloadFolderSize = ((downloadFolderSize / 1024) / 1024); // MBytes
+			downloadFolderSize = WDUtilities.getDirectorySpaceOccupied(WDUtilities.getDownloadsPath(), WDUtilities.UNIT_MB);
 		}
 	}
 
