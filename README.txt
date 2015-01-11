@@ -9,7 +9,7 @@ This is a JAVA open source software project developed for downloading wallpapers
 It is a crossed-platform standalone application.
 
 ## Current Version ##
-1.1
+1.5
 
 ## Wiki ##
 Please, visit the Wiki related to the project for more information. Thank you!
