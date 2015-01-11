@@ -1,29 +1,23 @@
 package es.estoes.wallpaperDownloader.window;
 
 import java.awt.EventQueue;
-
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.ToolTipManager;
-
 import es.estoes.wallpaperDownloader.harvest.Harvester;
 import es.estoes.wallpaperDownloader.item.ComboItem;
 import es.estoes.wallpaperDownloader.util.PreferencesManager;
 import es.estoes.wallpaperDownloader.util.PropertiesManager;
 import es.estoes.wallpaperDownloader.util.WDConfigManager;
 import es.estoes.wallpaperDownloader.util.WDUtilities;
-
 import javax.swing.JTabbedPane;
 import javax.swing.JButton;
-
 import java.awt.Color;
-
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
-
 import java.awt.AWTException;
 import java.awt.Desktop;
 import java.awt.Dimension;
@@ -47,13 +41,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.NumberFormat;
-
 import javax.swing.JLabel;
-
 import org.apache.log4j.Logger;
-
 import javax.swing.JComboBox;
-
 import java.text.Format;
 import javax.swing.JProgressBar;
 
@@ -68,6 +58,7 @@ public class WallpaperDownloader {
 	// diskSpacePB will be an attribute representing disk space occupied within the downloads directory
 	// It is static because it will be able to be accessed from any point within the application's code
 	public static JProgressBar diskSpacePB = new JProgressBar();
+	public static JLabel lblSpaceWarning;
 	
 	private Harvester harvester;
 	private JFrame frame;
@@ -268,13 +259,13 @@ public class WallpaperDownloader {
 		miscPanel.setLayout(null);
 		
 		JLabel lblDownloadsDirectory = new JLabel("Downloads Directory:");
-		lblDownloadsDirectory.setBounds(12, 12, 160, 19);
+		lblDownloadsDirectory.setBounds(12, 16, 160, 19);
 		miscPanel.add(lblDownloadsDirectory);
 		
 		downloadsDirectory = new JFormattedTextField((Format) null);
 		downloadsDirectory.setEditable(false);
 		downloadsDirectory.setColumns(4);
-		downloadsDirectory.setBounds(174, 14, 405, 19);
+		downloadsDirectory.setBounds(174, 18, 405, 19);
 		miscPanel.add(downloadsDirectory);
 		
 		btnOpenDownloadsDirectory = new JButton();
@@ -302,16 +293,33 @@ public class WallpaperDownloader {
 		miscPanel.add(btnClipboard);
 		
 		btnChangeDownloadsDirectory = new JButton("Change Downloads Directory");
-		btnChangeDownloadsDirectory.setBounds(12, 78, 259, 25);
+		btnChangeDownloadsDirectory.setBounds(12, 90, 259, 25);
 		miscPanel.add(btnChangeDownloadsDirectory);
 		
 		//JProgressBar diskSpacePB = new JProgressBar();
-		diskSpacePB.setBounds(174, 44, 405, 18);
+		diskSpacePB.setBounds(174, 56, 405, 18);
 		miscPanel.add(diskSpacePB);
 		
 		JLabel lblDiskSpace = new JLabel("Downloads dir space:");
-		lblDiskSpace.setBounds(12, 43, 160, 19);
+		lblDiskSpace.setBounds(12, 55, 160, 19);
 		miscPanel.add(lblDiskSpace);
+		
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/warning_24px_icon.png"));
+			ImageIcon icon = new ImageIcon(img);
+			lblSpaceWarning = new JLabel(icon);
+			lblSpaceWarning.setToolTipText("Directory full. Wallpapers will be removed randomly in order to download more");
+			lblSpaceWarning.setBounds(588, 53, 30, 23);
+			miscPanel.add(lblSpaceWarning);
+			// At first, the label won't be visible
+			lblSpaceWarning.setVisible(false);
+		} catch (IOException ex) {
+			lblSpaceWarning = new JLabel("Directory full. Wallpapers will be removed randomly");
+			lblSpaceWarning.setBounds(588, 53, 30, 23);
+			miscPanel.add(lblSpaceWarning);
+			// At first, the label won't be visible
+			lblSpaceWarning.setVisible(false);
+		}
 		
 		btnCloseExit = new JButton("Close & Exit");
 		GridBagConstraints gbc_btnCloseExit = new GridBagConstraints();
@@ -684,6 +692,12 @@ public class WallpaperDownloader {
 	 */
 	public static void refreshProgressBar() {
 		int percentage = WDUtilities.getPercentageSpaceOccupied(WDUtilities.getDownloadsPath());
+		// If percentage is 90% or higher, the warning label and icon will be shown
+		if (percentage >= 90) {
+			lblSpaceWarning.setVisible(true);
+		} else {
+			lblSpaceWarning.setVisible(false);
+		}
 		diskSpacePB.setValue(percentage);
 	}
 }
