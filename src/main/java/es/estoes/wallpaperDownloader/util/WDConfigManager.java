@@ -41,46 +41,46 @@ public class WDConfigManager {
 	}
 	
 	/**
-	 * This method checks the configuration. If it is OK, then returns true value.
-	 * If something is wrong, it returns a false value.
-	 * @return boolean
+	 * This method checks the configuration.
+	 * If something is wrong, it throws an exception.
 	 */
 	public static void checkConfig() throws WDConfigurationException {
 		
 	     LOG.info("Checking configuration...");
 	     LOG.info("Checking application's folder");
-	     PropertiesManager pm = PropertiesManager.getInstance();
 	     PreferencesManager prefm = PreferencesManager.getInstance();
 	     Path appPath = Paths.get(WDUtilities.getAppPath());
 	     Path absoluteDownloadsPath = null;
     	 LOG.info("Checking downloads folder...");
     	 absoluteDownloadsPath = Paths.get(appPath.toString());
     	 try {
-    		 /**
-    		  *  Downloads directory
-    		  */
-    		 absoluteDownloadsPath = absoluteDownloadsPath.resolve(pm.getProperty("app.downloads.path"));
-    		 File downloadsDirectory = new File(absoluteDownloadsPath.toString());
-	    	 
-    		 if (!downloadsDirectory.exists()) {
-    			 LOG.info("Downloads folder doesn't exist. Creating...");
-    			 FileUtils.forceMkdir(downloadsDirectory);
-    		 }
-	    	
-    		 // Setting the downloads path 
-    		 WDUtilities.setDownloadsPath(absoluteDownloadsPath.toString());
-    		 
-    		 /**
-    		  * User's configuration file
-    		  */
-    		 LOG.info("Checking user configuration file...");
     		 File userConfigFile = new File(WDUtilities.getUserConfigurationFilePath());
-    		 
+
     		 if (!userConfigFile.exists()) {
+        		 /**
+        		  *  Downloads directory
+        		  */
+        		 absoluteDownloadsPath = absoluteDownloadsPath.resolve(WDUtilities.DEFAULT_DOWNLOADS_DIRECTORY);
+        		 File downloadsDirectory = new File(absoluteDownloadsPath.toString());
+
+        		 if (!downloadsDirectory.exists()) {
+        			 LOG.info("Downloads folder doesn't exist. Creating...");
+        			 FileUtils.forceMkdir(downloadsDirectory);
+        		 }  		 
+        		 // Setting the downloads path 
+        		 WDUtilities.setDownloadsPath(absoluteDownloadsPath.toString());
+        		 LOG.info("Downloads directory -> " + absoluteDownloadsPath.toString());
+ 
+           		 /**
+        		  * User's configuration file
+        		  */
     			 LOG.info("User configuration file doesn't exist. Creating...");
     			 FileUtils.touch(userConfigFile);
 
         		 // Initializing user configuration file
+    			 // Downloads directory
+        		 prefm.setPreference("application-downloads-folder", absoluteDownloadsPath.toString());
+        		 
     			 // Providers
         		 prefm.setPreference("provider-wallhaven", WDUtilities.APP_NO);
         		 
@@ -108,7 +108,13 @@ public class WDConfigManager {
         		  * WallpaperDownloader icon
         		  */
         		 //app.icon.path
-        		 // TODO: Copy application icon to folder
+        		 // TODO: Copy application icon to folder      		 
+        		 
+    		 } else {	
+    			 // Configuration file exists
+    			 // Setting the downloads path
+    			 WDUtilities.setDownloadsPath(prefm.getPreference("application-downloads-folder"));
+    			 LOG.info("Downloads directory -> " + prefm.getPreference("application-downloads-folder"));
     		 }
 
     	 } catch (Exception e) {

@@ -7,12 +7,12 @@ import java.util.List;
 import java.util.Random;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.log4j.Logger;
 
 import es.estoes.wallpaperDownloader.exception.ProviderException;
 import es.estoes.wallpaperDownloader.util.PreferencesManager;
 import es.estoes.wallpaperDownloader.util.WDUtilities;
+import es.estoes.wallpaperDownloader.window.WallpaperDownloader;
 
 public abstract class Provider {
 	
@@ -85,28 +85,32 @@ public abstract class Provider {
 		LOG.info("Checking download directory. Removing some wallpapers if it is necessary...");
 		PreferencesManager prefm = PreferencesManager.getInstance();
 		Long maxSize = Long.parseLong(prefm.getPreference("application-max-download-folder-size"));
-		File downloadFolder = new File(WDUtilities.getDownloadsPath());
-		Long downloadFolderSize = FileUtils.sizeOfDirectory(downloadFolder);
-		downloadFolderSize = ((downloadFolderSize / 1024) / 1024); // MBytes
+		long downloadFolderSize = WDUtilities.getDirectorySpaceOccupied(WDUtilities.getDownloadsPath(), WDUtilities.UNIT_MB);
 		while (downloadFolderSize > maxSize) {
 			File fileToRemove = pickRandomFile();
 			try {
-				FileUtils.forceDelete(fileToRemove);
-				LOG.info(fileToRemove.getPath() + " deleted");
+				if (fileToRemove != null) {
+					FileUtils.forceDelete(fileToRemove);
+					LOG.info(fileToRemove.getPath() + " deleted");
+					LOG.info("Refreshing space occupied progress bar...");
+					WallpaperDownloader.refreshProgressBar();
+				}
 			} catch (IOException e) {
 				throw new ProviderException("Error deleting file " + fileToRemove.getPath() + ". Error: " + e.getMessage());
 			}
-			downloadFolderSize = FileUtils.sizeOfDirectory(downloadFolder);
-			downloadFolderSize = ((downloadFolderSize / 1024) / 1024); // MBytes
+			downloadFolderSize = WDUtilities.getDirectorySpaceOccupied(WDUtilities.getDownloadsPath(), WDUtilities.UNIT_MB);
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private File pickRandomFile() {
-		File downloadDirectory = new File(WDUtilities.getDownloadsPath());
-		List<File> files = (List<File>) FileUtils.listFiles(downloadDirectory, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
-		Random generator = new Random();
-		int index = generator.nextInt(files.size());
-		return files.get(index);
+		List<File> files = WDUtilities.getAllWallpapers();
+		if (!files.isEmpty()) {
+			Random generator = new Random();
+			int index = generator.nextInt(files.size());
+			return files.get(index);			
+		} else {
+			return null;
+		}
+		
 	}
 }

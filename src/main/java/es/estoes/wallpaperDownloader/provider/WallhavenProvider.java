@@ -21,6 +21,7 @@ import es.estoes.wallpaperDownloader.exception.ProviderException;
 import es.estoes.wallpaperDownloader.util.PreferencesManager;
 import es.estoes.wallpaperDownloader.util.PropertiesManager;
 import es.estoes.wallpaperDownloader.util.WDUtilities;
+import es.estoes.wallpaperDownloader.window.WallpaperDownloader;
 
 public class WallhavenProvider extends Provider {
 	
@@ -46,7 +47,7 @@ public class WallhavenProvider extends Provider {
 					break;
 			case 2: this.order = "views";
 					break;
-			case 3: this.order = "favs";
+			case 3: this.order = "favorites";
 					break;
 			case 4: this.order = "random";
 					break;
@@ -73,7 +74,7 @@ public class WallhavenProvider extends Provider {
 				wallpaperURL = wallpaperURL.replace("th-", "wallhaven-");
 				int index = wallpaperURL.lastIndexOf(WDUtilities.URL_SLASH);
 				// Obtaining wallpaper's name (string after the last slash)
-				String wallpaperName = wallpaperURL.substring(index + 1);
+				String wallpaperName = WDUtilities.WD_PREFIX + wallpaperURL.substring(index + 1);
 				File wallpaper = new File(WDUtilities.getDownloadsPath() + File.separator + wallpaperName);
 				if (!wallpaper.exists()) {
 					// Storing the image. It is necessary to download the remote file
@@ -91,19 +92,23 @@ public class WallhavenProvider extends Provider {
 								LOG.info("Error trying to store wallpaper " + wallpaperURL + ". Skipping...");							
 							} else {
 								LOG.info("Wallpaper " + wallpaper.getName() + " successfully stored");
+								LOG.info("Refreshing space occupied progress bar...");
+								WallpaperDownloader.refreshProgressBar();
 								// Exit the process because one wallpaper was downloaded successfully
 								break;
 							}							
 						} else {
-							LOG.info("This wallpaper is already stored. Skipping...");
+							LOG.info("Wallpaper " + wallpaper.getName() + " is already stored. Skipping...");
 						}
 					} else {
 						LOG.info("Wallpaper " + wallpaper.getName() + " successfully stored");
+						LOG.info("Refreshing space occupied progress bar...");
+						WallpaperDownloader.refreshProgressBar();
 						// Exit the process because one wallpaper was downloaded successfully
 						break;
 					}
 				} else {
-					LOG.info("This wallpaper is already stored. Skipping...");
+					LOG.info("Wallpaper " + wallpaper.getName() + " is already stored. Skipping...");
 				}
 			}
 		} catch (IOException e) {

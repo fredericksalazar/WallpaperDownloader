@@ -1,31 +1,26 @@
 package es.estoes.wallpaperDownloader.window;
 
 import java.awt.EventQueue;
-
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.ToolTipManager;
-
 import es.estoes.wallpaperDownloader.harvest.Harvester;
 import es.estoes.wallpaperDownloader.item.ComboItem;
 import es.estoes.wallpaperDownloader.util.PreferencesManager;
 import es.estoes.wallpaperDownloader.util.PropertiesManager;
 import es.estoes.wallpaperDownloader.util.WDConfigManager;
 import es.estoes.wallpaperDownloader.util.WDUtilities;
-
 import javax.swing.JTabbedPane;
 import javax.swing.JButton;
-
 import java.awt.Color;
-
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
-
 import java.awt.AWTException;
 import java.awt.Desktop;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -46,14 +41,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.NumberFormat;
-
 import javax.swing.JLabel;
-
 import org.apache.log4j.Logger;
-
 import javax.swing.JComboBox;
-
 import java.text.Format;
+import javax.swing.JProgressBar;
 
 public class WallpaperDownloader {
 
@@ -62,6 +54,12 @@ public class WallpaperDownloader {
 	private static WallpaperDownloader window;
 	
 	// Attributes
+	
+	// diskSpacePB will be an attribute representing disk space occupied within the downloads directory
+	// It is static because it will be able to be accessed from any point within the application's code
+	public static JProgressBar diskSpacePB = new JProgressBar();
+	public static JLabel lblSpaceWarning;
+	
 	private Harvester harvester;
 	private JFrame frame;
 	private JTextField wallhavenKeywords;
@@ -81,6 +79,32 @@ public class WallpaperDownloader {
 	private JFormattedTextField downloadDirectorySize;
 	private JPanel miscPanel;
 	private JFormattedTextField downloadsDirectory;
+	private JButton btnChangeDownloadsDirectory;
+	
+	// Getters & Setters
+	public JFrame getFrame() {
+		return frame;
+	}
+
+	public void setFrame(JFrame frame) {
+		this.frame = frame;
+	}
+	
+	public Harvester getHarvester() {
+		return harvester;
+	}
+
+	public void setHarvester(Harvester harvester) {
+		this.harvester = harvester;
+	}
+	
+	public JFormattedTextField getDownloadsDirectory() {
+		return downloadsDirectory;
+	}
+
+	public void setDownloadsDirectory(JFormattedTextField downloadsDirectory) {
+		this.downloadsDirectory = downloadsDirectory;
+	}
 
 	/**
 	 * Launch the application.
@@ -125,6 +149,13 @@ public class WallpaperDownloader {
 		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		frame.getContentPane().setLayout(gridBagLayout);
+		
+		// Centering window
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		Dimension screenSize = toolkit.getScreenSize();
+		int x = (screenSize.width - frame.getWidth()) / 2;
+		int y = (screenSize.height - frame.getHeight()) / 2;
+		frame.setLocation(x, y);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		GridBagConstraints gbc_tabbedPane = new GridBagConstraints();
@@ -228,13 +259,13 @@ public class WallpaperDownloader {
 		miscPanel.setLayout(null);
 		
 		JLabel lblDownloadsDirectory = new JLabel("Downloads Directory:");
-		lblDownloadsDirectory.setBounds(12, 12, 160, 19);
+		lblDownloadsDirectory.setBounds(12, 16, 160, 19);
 		miscPanel.add(lblDownloadsDirectory);
 		
 		downloadsDirectory = new JFormattedTextField((Format) null);
 		downloadsDirectory.setEditable(false);
 		downloadsDirectory.setColumns(4);
-		downloadsDirectory.setBounds(174, 14, 405, 19);
+		downloadsDirectory.setBounds(174, 18, 405, 19);
 		miscPanel.add(downloadsDirectory);
 		
 		btnOpenDownloadsDirectory = new JButton();
@@ -260,6 +291,35 @@ public class WallpaperDownloader {
 			btnClipboard.setBounds(630, 8, 34, 33);
 		}
 		miscPanel.add(btnClipboard);
+		
+		btnChangeDownloadsDirectory = new JButton("Change Downloads Directory");
+		btnChangeDownloadsDirectory.setBounds(12, 90, 259, 25);
+		miscPanel.add(btnChangeDownloadsDirectory);
+		
+		//JProgressBar diskSpacePB = new JProgressBar();
+		diskSpacePB.setBounds(174, 56, 405, 18);
+		miscPanel.add(diskSpacePB);
+		
+		JLabel lblDiskSpace = new JLabel("Downloads dir space:");
+		lblDiskSpace.setBounds(12, 55, 160, 19);
+		miscPanel.add(lblDiskSpace);
+		
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/warning_24px_icon.png"));
+			ImageIcon icon = new ImageIcon(img);
+			lblSpaceWarning = new JLabel(icon);
+			lblSpaceWarning.setToolTipText("Directory full. Wallpapers will be removed randomly in order to download more");
+			lblSpaceWarning.setBounds(588, 53, 30, 23);
+			miscPanel.add(lblSpaceWarning);
+			// At first, the label won't be visible
+			lblSpaceWarning.setVisible(false);
+		} catch (IOException ex) {
+			lblSpaceWarning = new JLabel("Directory full. Wallpapers will be removed randomly");
+			lblSpaceWarning.setBounds(588, 53, 30, 23);
+			miscPanel.add(lblSpaceWarning);
+			// At first, the label won't be visible
+			lblSpaceWarning.setVisible(false);
+		}
 		
 		btnCloseExit = new JButton("Close & Exit");
 		GridBagConstraints gbc_btnCloseExit = new GridBagConstraints();
@@ -536,11 +596,21 @@ public class WallpaperDownloader {
 				info.openDialog();
 			}
 		});
+		
+		/**
+		 * btnChangeDownloadsDirectory Action Listeners
+		 */
+		btnChangeDownloadsDirectory.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				DownloadsPathChangerWindow downloadsPathChangerWindow = new DownloadsPathChangerWindow(window);
+				downloadsPathChangerWindow.setVisible(true);
+			}
+		});
 
 	}
 
 	/**
-	 * This methods configures GUI according to user configuration file preferences
+	 * This method configures GUI according to user configuration file preferences
 	 */
 	private void initializeGUI() {
 
@@ -603,6 +673,10 @@ public class WallpaperDownloader {
 		// Checking Miscelanea
 		// ---------------------------------------------------------------------
 		downloadsDirectory.setValue(WDUtilities.getDownloadsPath());
+		// ---------------------------------------------------------------------
+		// Checking Disk Space Progress Bar
+		// ---------------------------------------------------------------------
+		refreshProgressBar();
 	}
 	
 	/**
@@ -611,5 +685,19 @@ public class WallpaperDownloader {
 	private void initializeHarvesting() {
 		harvester = Harvester.getInstance();
 		harvester.start();
+	}
+	
+	/**
+	 * This method refresh the progress bar representing the space occupied within the downloads directory
+	 */
+	public static void refreshProgressBar() {
+		int percentage = WDUtilities.getPercentageSpaceOccupied(WDUtilities.getDownloadsPath());
+		// If percentage is 90% or higher, the warning label and icon will be shown
+		if (percentage >= 90) {
+			lblSpaceWarning.setVisible(true);
+		} else {
+			lblSpaceWarning.setVisible(false);
+		}
+		diskSpacePB.setValue(percentage);
 	}
 }
