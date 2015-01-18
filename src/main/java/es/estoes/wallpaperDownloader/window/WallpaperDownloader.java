@@ -78,6 +78,7 @@ public class WallpaperDownloader {
 	private JComboBox<ComboItem> timerComboBox;
 	private JFormattedTextField downloadDirectorySize;
 	private JPanel miscPanel;
+	private JPanel miscPanel_1;
 	private JFormattedTextField downloadsDirectory;
 	private JButton btnChangeDownloadsDirectory;
 	
@@ -324,9 +325,19 @@ public class WallpaperDownloader {
 		}
 		
 		// Wallpapers (tab)
-		miscPanel = new JPanel();
-		tabbedPane.addTab("Wallpapers", null, miscPanel, null);
-		miscPanel.setLayout(null);
+		miscPanel_1 = new JPanel();
+		tabbedPane.addTab("Wallpapers", null, miscPanel_1, null);
+		miscPanel_1.setLayout(null);
+		
+		JButton btnManageAllWallpapers = new JButton("Manage no favorite Wallpapers");
+		btnManageAllWallpapers.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new ImagePreviewJFileChooser();
+			}
+		});
+		btnManageAllWallpapers.setBackground(Color.WHITE);
+		btnManageAllWallpapers.setBounds(12, 209, 268, 25);
+		miscPanel_1.add(btnManageAllWallpapers);
 		
 		
 		// Global buttons
