@@ -167,6 +167,7 @@ public class WallpaperDownloader {
 		gbc_tabbedPane.gridy = 0;
 		frame.getContentPane().add(tabbedPane, gbc_tabbedPane);
 		
+		// Providers (tab)
 		JPanel providersPanel = new JPanel();
 		tabbedPane.addTab("Providers", null, providersPanel, null);
 		providersPanel.setLayout(null);
@@ -232,7 +233,7 @@ public class WallpaperDownloader {
 			providersPanel.add(lblKeywordsHelp);
 		}
 		
-		
+		// Application Settings (tab)
 		JPanel appSettingsPanel = new JPanel();
 		tabbedPane.addTab("Application Settings", null, appSettingsPanel, null);
 		appSettingsPanel.setLayout(null);
@@ -254,8 +255,9 @@ public class WallpaperDownloader {
 		downloadDirectorySize.setBounds(317, 37, 49, 19);
 		appSettingsPanel.add(downloadDirectorySize);
 		
+		// Downloads Directory (tab)
 		miscPanel = new JPanel();
-		tabbedPane.addTab("Miscelanea", null, miscPanel, null);
+		tabbedPane.addTab("Downloads Directory", null, miscPanel, null);
 		miscPanel.setLayout(null);
 		
 		JLabel lblDownloadsDirectory = new JLabel("Downloads Directory:");
@@ -321,6 +323,13 @@ public class WallpaperDownloader {
 			lblSpaceWarning.setVisible(false);
 		}
 		
+		// Wallpapers (tab)
+		miscPanel = new JPanel();
+		tabbedPane.addTab("Wallpapers", null, miscPanel, null);
+		miscPanel.setLayout(null);
+		
+		
+		// Global buttons
 		btnCloseExit = new JButton("Close & Exit");
 		GridBagConstraints gbc_btnCloseExit = new GridBagConstraints();
 		gbc_btnCloseExit.anchor = GridBagConstraints.WEST;
