@@ -1,18 +1,8 @@
 package es.estoes.wallpaperDownloader.provider;
 
-import java.awt.Image;
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-
-import javax.imageio.ImageIO;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
@@ -20,7 +10,6 @@ import org.jsoup.helper.HttpConnection.Response;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.jsoup.nodes.Element;
-
 import es.estoes.wallpaperDownloader.exception.ProviderException;
 import es.estoes.wallpaperDownloader.util.PreferencesManager;
 import es.estoes.wallpaperDownloader.util.PropertiesManager;
@@ -139,7 +128,14 @@ public class WallhavenProvider extends Provider {
 		try {
 			// Open a URL stream (an image) using JSoup. There was a problem with the old method (commented) and the server, because
 			// the request didn't have userAgent and an 403 error was produced.
-	        Response resultImageResponse = (Response) Jsoup.connect(wallpaperURL).userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:35.0) Gecko/20100101 Firefox/35.0").ignoreContentType(true).execute();
+	        Response resultImageResponse = (Response) Jsoup.connect(wallpaperURL)
+	        								.userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:35.0) Gecko/20100101 Firefox/35.0")
+	        								.referrer("http://www.google.com")
+	        								.ignoreHttpErrors(true)
+	        								.followRedirects(true)
+	        								.timeout(0)
+	        								.ignoreContentType(true)
+	        								.execute();
 	
 	        // Output (it will be a file)
 	        out = (new FileOutputStream(wallpaper));
