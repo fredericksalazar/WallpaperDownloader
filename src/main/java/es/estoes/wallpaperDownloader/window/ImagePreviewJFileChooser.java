@@ -6,16 +6,15 @@ import java.beans.*;
 import javax.swing.filechooser.*;
 import java.awt.image.*;
 import javax.imageio.*;
+import es.estoes.wallpaperDownloader.util.WDUtilities;
 import java.io.*;
 import java.util.concurrent.*;
-import java.awt.event.*;
 
-public class ImagePreviewJFileChooser extends JFrame {
+public class ImagePreviewJFileChooser extends JFileChooser {
 	
 	private static final long serialVersionUID = -793293475662593357L;
 	JLabel img;
 	JButton open;
-	JFileChooser jf=new JFileChooser();
 	
     public ImagePreviewJFileChooser()
     {
@@ -24,10 +23,15 @@ public class ImagePreviewJFileChooser extends JFrame {
     
     private void createAndShowGUI()
     {
-        setTitle("Image Preview for JFileChooser");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLayout(new FlowLayout());
-        
+    	// Set Downloads Directory
+    	this.setCurrentDirectory(new File(WDUtilities.getDownloadsPath()));
+    	
+    	// Set title
+    	this.setDialogTitle("Choose a wallpaper to set as favourite");
+    	
+    	// Set approve button text
+    	this.setApproveButtonText("Set favourite");
+    	
         // Create label
         img=new JLabel();
         
@@ -35,26 +39,28 @@ public class ImagePreviewJFileChooser extends JFrame {
         img.setPreferredSize(new Dimension(175,175));
         
         // Set label as accessory
-        jf.setAccessory(img);
+        this.setAccessory(img);
+        
+        //this.setAccessory(btnPrueba);
         
         // Accept only image files
-        jf.setAcceptAllFileFilterUsed(false);
+        this.setAcceptAllFileFilterUsed(false);
         
         // Create filter for image files
         FileNameExtensionFilter filter=new FileNameExtensionFilter("Image Files","jpg","jpeg","png","gif");
         
         // Set it as current filter
-        jf.setFileFilter(filter);
+        this.setFileFilter(filter);
 
         // Add property change listener
-        jf.addPropertyChangeListener(new PropertyChangeListener(){
+        this.addPropertyChangeListener(new PropertyChangeListener(){
         
             // When any JFileChooser property changes, this handler
             // is executed
             public void propertyChange(final PropertyChangeEvent pe)
             {
                 // Create SwingWorker for smooth experience
-                SwingWorker<Image,Void> worker=new SwingWorker<Image,Void>(){
+                SwingWorker<Image,Void> worker = new SwingWorker<Image,Void>(){
                 
                     // The image processing method
                     protected Image doInBackground()
@@ -63,7 +69,7 @@ public class ImagePreviewJFileChooser extends JFrame {
                         if(pe.getPropertyName().equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY))
                         {
                         // Get selected file
-                        File f=jf.getSelectedFile();
+                        	File f = new File(pe.getNewValue().toString());
                         
                             try
                             {
@@ -82,6 +88,7 @@ public class ImagePreviewJFileChooser extends JFrame {
                                 // to read
                                 img.setText(" Not valid image/Unable to read");
                             }
+                            
                         }
                     
                     return null;
@@ -110,19 +117,5 @@ public class ImagePreviewJFileChooser extends JFrame {
                 worker.execute();
             }
         });
-        
-        // Create JButton
-        open=new JButton("Open File Chooser");
-        add(open);
-        open.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent ae)
-            {
-                // Show open dialog
-                jf.showOpenDialog(null);
-            }
-        });
-        
-        setSize(400,400);
-        setVisible(true);
     }
 }

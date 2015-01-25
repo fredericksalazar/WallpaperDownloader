@@ -34,12 +34,13 @@ public class WDUtilities {
 	public static final String WD_PREFIX = "wd-";
 	public static final String DEFAULT_DOWNLOADS_DIRECTORY = "downloads";
 	public static final String UNIT_MB = "MB";
+	public static final String WD_FAVOURITE_PREFIX = "fwd-";
 
 	// Attributes
 	private static String appPath;
 	private static String downloadsPath;
 	private static String userConfigurationFilePath;
-	
+
 	// Getters & Setters
 	public static String getAppPath() {
 		return appPath;
@@ -65,16 +66,16 @@ public class WDUtilities {
 			String userConfigurationFilePath) {
 		WDUtilities.userConfigurationFilePath = userConfigurationFilePath;
 	}
-	
+
 	// Methods (All the methods are static)
 
 	/**
 	 * Constructor
 	 */
 	private WDUtilities() {
-		
+
 	}
-	
+
 	/**
 	 * Get screen resolution
 	 * @return
@@ -85,7 +86,7 @@ public class WDUtilities {
 		Double height = screenSize.getHeight();
 		return width.intValue() + "x" + height.intValue();
 	}
-	
+
 	/**
 	 * Get all the wallpapers from the download directory
 	 * @return
@@ -97,7 +98,7 @@ public class WDUtilities {
 		List<File> wallpapers = (List<File>) FileUtils.listFiles(downloadDirectory, FileFilterUtils.prefixFileFilter(WDUtilities.WD_PREFIX), null);		
 		return wallpapers;
 	}
-	
+
 	/**
 	 * Move all the wallpapers to a new location
 	 * @param newPath
@@ -108,7 +109,7 @@ public class WDUtilities {
 			File srcDir = new File(WDUtilities.getDownloadsPath());
 			// Get all the wallpapers from the current location
 			List<File> wallpapers = getAllWallpapers();
-			
+
 			// Copy every file to the new location
 			Iterator<File> wallpaper = wallpapers.iterator();
 			while (wallpaper.hasNext()) {
@@ -122,7 +123,7 @@ public class WDUtilities {
 					info.openDialog();
 				}
 			}
-			
+
 			// Remove old directory
 			try {
 				FileUtils.deleteDirectory(srcDir);
@@ -133,12 +134,12 @@ public class WDUtilities {
 				DialogManager info = new DialogManager("Something went wrong. Downloads directory couldn't be changed. Check log for more information.", 2000);
 				info.openDialog();
 			}
-			
+
 			// Change Downloads path within application properties and WDUtilities
 			PreferencesManager prefm = PreferencesManager.getInstance();
 			prefm.setPreference("application-downloads-folder", destDir.getAbsolutePath());
 			WDUtilities.setDownloadsPath(destDir.getAbsolutePath());
-			
+
 			// Information
 			DialogManager info = new DialogManager("Dowloads directory has been succesfully changed to " + destDir.getAbsolutePath(), 2000);
 			info.openDialog();
@@ -180,5 +181,22 @@ public class WDUtilities {
 			space = (space / 1024) / 1024;
 		}
 		return space;
+	}
+
+	/**
+	 * Set a wallpaper as favourite
+	 * @param originalAbsolutePath
+	 */
+	public static void setFavourite(String originalAbsolutePath) {
+		File originalWallpaper = new File(originalAbsolutePath);
+		String wallpaperOriginalName = originalWallpaper.getName();
+		int index = wallpaperOriginalName.indexOf("-");
+		String wallpaperFavouriteName = WD_FAVOURITE_PREFIX + wallpaperOriginalName.substring(index + 1);
+		File favouriteWallpaper = new File(WDUtilities.getDownloadsPath() + File.separatorChar + wallpaperFavouriteName);
+		originalWallpaper.renameTo(favouriteWallpaper);
+		// Information
+		DialogManager info = new DialogManager(wallpaperOriginalName + " wallpaper set as favourite.", 2000);
+		info.openDialog();
+		LOG.info(originalAbsolutePath + " wallpaper has been set as favourite");
 	}
 }
