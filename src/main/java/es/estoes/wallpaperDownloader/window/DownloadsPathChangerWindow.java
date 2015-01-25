@@ -2,14 +2,19 @@ package es.estoes.wallpaperDownloader.window;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+
 import es.estoes.wallpaperDownloader.util.WDUtilities;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.Locale;
 
 public class DownloadsPathChangerWindow extends JFrame {
 
@@ -50,6 +55,8 @@ public class DownloadsPathChangerWindow extends JFrame {
 		JButton btnSelectPath = new JButton("Select");
 		btnSelectPath.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				// Set Locale to English
+				JComponent.setDefaultLocale(Locale.ENGLISH);
 				final JFileChooser fileChooser = new JFileChooser();
 			    fileChooser.setDialogTitle("Choose a directory");
 			    fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
