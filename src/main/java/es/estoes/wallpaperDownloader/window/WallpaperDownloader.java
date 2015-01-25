@@ -9,6 +9,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.ToolTipManager;
+import javax.swing.UIManager;
 
 import es.estoes.wallpaperDownloader.harvest.Harvester;
 import es.estoes.wallpaperDownloader.item.ComboItem;
@@ -643,10 +644,14 @@ public class WallpaperDownloader {
 			public void actionPerformed(ActionEvent arg0) {
 				// Set Locale to English
 				JComponent.setDefaultLocale(Locale.ENGLISH);
+				// New folder button disabled
+				UIManager.put("FileChooser.readOnly", Boolean.TRUE);
 				ImagePreviewJFileChooser ipjc = new ImagePreviewJFileChooser();
 			    if (ipjc.showOpenDialog(null) == ImagePreviewJFileChooser.APPROVE_OPTION) {
 			    	WDUtilities.setFavourite(ipjc.getSelectedFile().getAbsolutePath());
 			    }
+			    // New folder button enabled
+			    UIManager.put("FileChooser.readOnly", Boolean.FALSE);
 			}
 		});
 
