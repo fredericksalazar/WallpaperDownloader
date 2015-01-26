@@ -1,7 +1,6 @@
 package es.estoes.wallpaperDownloader.window;
 
 import java.awt.EventQueue;
-
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -10,22 +9,18 @@ import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
-
 import es.estoes.wallpaperDownloader.harvest.Harvester;
 import es.estoes.wallpaperDownloader.item.ComboItem;
+import es.estoes.wallpaperDownloader.util.NoFavouriteFileFilter;
 import es.estoes.wallpaperDownloader.util.PreferencesManager;
 import es.estoes.wallpaperDownloader.util.PropertiesManager;
 import es.estoes.wallpaperDownloader.util.WDConfigManager;
 import es.estoes.wallpaperDownloader.util.WDUtilities;
-
 import javax.swing.JTabbedPane;
 import javax.swing.JButton;
-
 import java.awt.Color;
-
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
-
 import java.awt.AWTException;
 import java.awt.Desktop;
 import java.awt.Dimension;
@@ -49,16 +44,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.NumberFormat;
-
 import javax.swing.JLabel;
-
 import org.apache.log4j.Logger;
-
 import javax.swing.JComboBox;
-
 import java.text.Format;
 import java.util.Locale;
-
 import javax.swing.JProgressBar;
 
 public class WallpaperDownloader {
@@ -647,6 +637,8 @@ public class WallpaperDownloader {
 				// New folder button disabled
 				UIManager.put("FileChooser.readOnly", Boolean.TRUE);
 				ImagePreviewJFileChooser ipjc = new ImagePreviewJFileChooser();
+				// Setting filter for displaying only no favourite wallpapers
+				ipjc.setFileFilter(new NoFavouriteFileFilter());
 			    if (ipjc.showOpenDialog(null) == ImagePreviewJFileChooser.APPROVE_OPTION) {
 			    	WDUtilities.setFavourite(ipjc.getSelectedFile().getAbsolutePath());
 			    }
