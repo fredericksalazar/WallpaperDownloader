@@ -3,7 +3,7 @@ package es.estoes.wallpaperDownloader.window;
 import javax.swing.*;
 import java.awt.*;
 import java.beans.*;
-import javax.swing.filechooser.*;
+//import javax.swing.filechooser.*;
 import java.awt.image.*;
 import javax.imageio.*;
 import es.estoes.wallpaperDownloader.util.WDUtilities;
@@ -47,10 +47,10 @@ public class ImagePreviewJFileChooser extends JFileChooser {
         this.setAcceptAllFileFilterUsed(false);
         
         // Create filter for image files
-        FileNameExtensionFilter filter=new FileNameExtensionFilter("Image Files","jpg","jpeg","png","gif");
+        //FileNameExtensionFilter filter=new FileNameExtensionFilter("Image Files","jpg","jpeg","png","gif");
         
         // Set it as current filter
-        this.setFileFilter(filter);
+        //this.setFileFilter(filter);
 
         // Add property change listener
         this.addPropertyChangeListener(new PropertyChangeListener(){
