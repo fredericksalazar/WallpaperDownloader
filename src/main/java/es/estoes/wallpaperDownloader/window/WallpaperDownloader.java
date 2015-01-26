@@ -320,7 +320,7 @@ public class WallpaperDownloader {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/warning_24px_icon.png"));
 			ImageIcon icon = new ImageIcon(img);
 			lblSpaceWarning = new JLabel(icon);
-			lblSpaceWarning.setToolTipText("Directory full. Wallpapers will be removed randomly in order to download more");
+			lblSpaceWarning.setToolTipText("Directory full. Wallpapers (execpt favourite ones) will be removed randomly in order to download more.");
 			lblSpaceWarning.setBounds(588, 53, 30, 23);
 			miscPanel.add(lblSpaceWarning);
 			// At first, the label won't be visible
