@@ -639,6 +639,12 @@ public class WallpaperDownloader {
 				ImagePreviewJFileChooser ipjc = new ImagePreviewJFileChooser();
 				// Setting filter for displaying only no favourite wallpapers
 				ipjc.setFileFilter(new NoFavouriteFileFilter());
+		    	// Set title
+				ipjc.setDialogTitle("Choose a wallpaper to set as favourite");
+		    	// Set approve button text and tooltip
+		    	ipjc.setApproveButtonText("Set favourite");
+		    	ipjc.setApproveButtonToolTipText("Set the selected wallpaper as favourite");
+		    	
 			    if (ipjc.showOpenDialog(null) == ImagePreviewJFileChooser.APPROVE_OPTION) {
 			    	WDUtilities.setFavourite(ipjc.getSelectedFile().getAbsolutePath());
 			    }
