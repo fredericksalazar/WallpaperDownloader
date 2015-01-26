@@ -25,13 +25,7 @@ public class ImagePreviewJFileChooser extends JFileChooser {
     {
     	// Set Downloads Directory
     	this.setCurrentDirectory(new File(WDUtilities.getDownloadsPath()));
-    	
-    	// Set title
-    	this.setDialogTitle("Choose a wallpaper to set as favourite");
-    	
-    	// Set approve button text
-    	this.setApproveButtonText("Set favourite");
-    	
+    	    	
         // Create label
         img=new JLabel();
         
