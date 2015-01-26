@@ -48,7 +48,11 @@ import javax.swing.JLabel;
 import org.apache.log4j.Logger;
 import javax.swing.JComboBox;
 import java.text.Format;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
+
 import javax.swing.JProgressBar;
 
 public class WallpaperDownloader {
@@ -639,14 +643,21 @@ public class WallpaperDownloader {
 				ImagePreviewJFileChooser ipjc = new ImagePreviewJFileChooser();
 				// Setting filter for displaying only no favourite wallpapers
 				ipjc.setFileFilter(new NoFavouriteFileFilter());
-		    	// Set title
+		    	// Setting title
 				ipjc.setDialogTitle("Choose a wallpaper to set as favourite");
-		    	// Set approve button text and tooltip
+		    	// Setting approve button text and tooltip
 		    	ipjc.setApproveButtonText("Set favourite");
 		    	ipjc.setApproveButtonToolTipText("Set the selected wallpaper as favourite");
+		    	// Enabling multi-selection
+		    	ipjc.setMultiSelectionEnabled(true);
 		    	
 			    if (ipjc.showOpenDialog(null) == ImagePreviewJFileChooser.APPROVE_OPTION) {
-			    	WDUtilities.setFavourite(ipjc.getSelectedFile().getAbsolutePath());
+			    	List<File> filesSelected = Arrays.asList(ipjc.getSelectedFiles());
+			    	Iterator<File> file = filesSelected.iterator();
+			    	
+			    	while (file.hasNext()) {
+			    		WDUtilities.setFavourite(file.next().getAbsolutePath());
+					}			    	
 			    }
 			    // New folder button enabled
 			    UIManager.put("FileChooser.readOnly", Boolean.FALSE);
