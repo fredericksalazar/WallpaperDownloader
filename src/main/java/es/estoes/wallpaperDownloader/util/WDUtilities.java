@@ -216,4 +216,21 @@ public class WDUtilities {
 		info.openDialog();
 		LOG.info(originalAbsolutePath + " wallpaper has been set as no favourite");
 	}
+
+	/**
+	 * Remove a wallpaper
+	 * @param originalAbsolutePath
+	 */
+	public static void removeWallpaper(String originalAbsolutePath) {
+		File originalWallpaper = new File(originalAbsolutePath);
+		try {
+			FileUtils.forceDelete(originalWallpaper);
+			// Information
+			DialogManager info = new DialogManager(originalAbsolutePath + " wallpaper removed.", 2000);
+			info.openDialog();
+			LOG.info(originalAbsolutePath + " wallpaper has been removed");
+		} catch (IOException e) {
+			LOG.error("The wallpaper " + originalAbsolutePath + " couldn't be removed. Error: " + e.getMessage());
+		}
+	}
 }

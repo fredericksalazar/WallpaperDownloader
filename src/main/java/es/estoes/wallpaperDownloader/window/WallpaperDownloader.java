@@ -65,6 +65,7 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.swing.JProgressBar;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class WallpaperDownloader {
 
@@ -102,6 +103,7 @@ public class WallpaperDownloader {
 	private JButton btnChangeDownloadsDirectory;
 	private JButton btnManageNoFavouriteWallpapers;
 	private JButton btnManageFavouriteWallpapers;
+	private JButton btnRemoveWallpapers;
 	
 	// Getters & Setters
 	public JFrame getFrame() {
@@ -359,6 +361,11 @@ public class WallpaperDownloader {
 		btnManageFavouriteWallpapers.setBackground(Color.WHITE);
 		btnManageFavouriteWallpapers.setBounds(12, 246, 268, 25);
 		miscPanel_1.add(btnManageFavouriteWallpapers);
+		
+		btnRemoveWallpapers = new JButton("Remove wallpapers");
+		btnRemoveWallpapers.setBackground(Color.WHITE);
+		btnRemoveWallpapers.setBounds(12, 283, 268, 25);
+		miscPanel_1.add(btnRemoveWallpapers);
 		
 		
 		// Global buttons
@@ -707,6 +714,41 @@ public class WallpaperDownloader {
 			    	
 			    	while (file.hasNext()) {
 			    		WDUtilities.setNoFavourite(file.next().getAbsolutePath());
+					}			    	
+			    }
+			    // New folder button enabled
+			    UIManager.put("FileChooser.readOnly", Boolean.FALSE);
+			}
+		});
+		
+		/**
+		 * btnRemoveWallpapers Action Listeners
+		 */
+		btnRemoveWallpapers.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				// Set Locale to English
+				JComponent.setDefaultLocale(Locale.ENGLISH);
+				// New folder button disabled
+				UIManager.put("FileChooser.readOnly", Boolean.TRUE);
+				ImagePreviewJFileChooser ipjc = new ImagePreviewJFileChooser();
+				// Setting filter for displaying only images
+		        FileNameExtensionFilter filter=new FileNameExtensionFilter("Image Files","jpg","jpeg","png","gif");
+		        // Set it as current filter
+		        ipjc.setFileFilter(filter);
+		    	// Setting title
+				ipjc.setDialogTitle("Choose a wallpaper to remove");
+		    	// Setting approve button text and tooltip
+		    	ipjc.setApproveButtonText("Remove");
+		    	ipjc.setApproveButtonToolTipText("Remove the wallpapers selected");
+		    	// Enabling multi-selection
+		    	ipjc.setMultiSelectionEnabled(true);
+		    	
+			    if (ipjc.showOpenDialog(null) == ImagePreviewJFileChooser.APPROVE_OPTION) {
+			    	List<File> filesSelected = Arrays.asList(ipjc.getSelectedFiles());
+			    	Iterator<File> file = filesSelected.iterator();
+			    	
+			    	while (file.hasNext()) {
+			    		WDUtilities.removeWallpaper(file.next().getAbsolutePath());
 					}			    	
 			    }
 			    // New folder button enabled
