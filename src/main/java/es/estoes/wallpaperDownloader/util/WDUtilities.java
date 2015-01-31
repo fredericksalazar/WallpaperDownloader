@@ -199,4 +199,21 @@ public class WDUtilities {
 		info.openDialog();
 		LOG.info(originalAbsolutePath + " wallpaper has been set as favourite");
 	}
+
+	/**
+	 * Set a wallpaper as no favourite
+	 * @param originalAbsolutePath
+	 */
+	public static void setNoFavourite(String originalAbsolutePath) {
+		File originalWallpaper = new File(originalAbsolutePath);
+		String wallpaperOriginalName = originalWallpaper.getName();
+		int index = wallpaperOriginalName.indexOf("-");
+		String wallpaperNoFavouriteName = WD_PREFIX + wallpaperOriginalName.substring(index + 1);
+		File favouriteWallpaper = new File(WDUtilities.getDownloadsPath() + File.separatorChar + wallpaperNoFavouriteName);
+		originalWallpaper.renameTo(favouriteWallpaper);
+		// Information
+		DialogManager info = new DialogManager(wallpaperOriginalName + " wallpaper set as no favourite.", 2000);
+		info.openDialog();
+		LOG.info(originalAbsolutePath + " wallpaper has been set as no favourite");
+	}
 }

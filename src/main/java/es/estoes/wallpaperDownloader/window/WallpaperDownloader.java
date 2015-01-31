@@ -1,6 +1,7 @@
 package es.estoes.wallpaperDownloader.window;
 
 import java.awt.EventQueue;
+
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -9,18 +10,24 @@ import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
+
 import es.estoes.wallpaperDownloader.harvest.Harvester;
 import es.estoes.wallpaperDownloader.item.ComboItem;
+import es.estoes.wallpaperDownloader.util.FavouriteFileFilter;
 import es.estoes.wallpaperDownloader.util.NoFavouriteFileFilter;
 import es.estoes.wallpaperDownloader.util.PreferencesManager;
 import es.estoes.wallpaperDownloader.util.PropertiesManager;
 import es.estoes.wallpaperDownloader.util.WDConfigManager;
 import es.estoes.wallpaperDownloader.util.WDUtilities;
+
 import javax.swing.JTabbedPane;
 import javax.swing.JButton;
+
 import java.awt.Color;
+
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
+
 import java.awt.AWTException;
 import java.awt.Desktop;
 import java.awt.Dimension;
@@ -44,9 +51,13 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.NumberFormat;
+
 import javax.swing.JLabel;
+
 import org.apache.log4j.Logger;
+
 import javax.swing.JComboBox;
+
 import java.text.Format;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -90,6 +101,7 @@ public class WallpaperDownloader {
 	private JFormattedTextField downloadsDirectory;
 	private JButton btnChangeDownloadsDirectory;
 	private JButton btnManageNoFavouriteWallpapers;
+	private JButton btnManageFavouriteWallpapers;
 	
 	// Getters & Setters
 	public JFrame getFrame() {
@@ -342,6 +354,11 @@ public class WallpaperDownloader {
 		btnManageNoFavouriteWallpapers.setBackground(Color.WHITE);
 		btnManageNoFavouriteWallpapers.setBounds(12, 209, 268, 25);
 		miscPanel_1.add(btnManageNoFavouriteWallpapers);
+		
+		btnManageFavouriteWallpapers = new JButton("Set no favourite wallpapers");
+		btnManageFavouriteWallpapers.setBackground(Color.WHITE);
+		btnManageFavouriteWallpapers.setBounds(12, 246, 268, 25);
+		miscPanel_1.add(btnManageFavouriteWallpapers);
 		
 		
 		// Global buttons
@@ -647,7 +664,7 @@ public class WallpaperDownloader {
 				ipjc.setDialogTitle("Choose a wallpaper to set as favourite");
 		    	// Setting approve button text and tooltip
 		    	ipjc.setApproveButtonText("Set favourite");
-		    	ipjc.setApproveButtonToolTipText("Set the selected wallpaper as favourite");
+		    	ipjc.setApproveButtonToolTipText("Set the selected wallpapers as favourite");
 		    	// Enabling multi-selection
 		    	ipjc.setMultiSelectionEnabled(true);
 		    	
@@ -657,6 +674,39 @@ public class WallpaperDownloader {
 			    	
 			    	while (file.hasNext()) {
 			    		WDUtilities.setFavourite(file.next().getAbsolutePath());
+					}			    	
+			    }
+			    // New folder button enabled
+			    UIManager.put("FileChooser.readOnly", Boolean.FALSE);
+			}
+		});
+		
+		/**
+		 * btnManageFavouriteWallpapers Action Listeners
+		 */
+		btnManageFavouriteWallpapers.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				// Set Locale to English
+				JComponent.setDefaultLocale(Locale.ENGLISH);
+				// New folder button disabled
+				UIManager.put("FileChooser.readOnly", Boolean.TRUE);
+				ImagePreviewJFileChooser ipjc = new ImagePreviewJFileChooser();
+				// Setting filter for displaying only no favourite wallpapers
+				ipjc.setFileFilter(new FavouriteFileFilter());
+		    	// Setting title
+				ipjc.setDialogTitle("Choose a wallpaper to set as no favourite");
+		    	// Setting approve button text and tooltip
+		    	ipjc.setApproveButtonText("Set no favourite");
+		    	ipjc.setApproveButtonToolTipText("Set the selected wallpapers as no favourite");
+		    	// Enabling multi-selection
+		    	ipjc.setMultiSelectionEnabled(true);
+		    	
+			    if (ipjc.showOpenDialog(null) == ImagePreviewJFileChooser.APPROVE_OPTION) {
+			    	List<File> filesSelected = Arrays.asList(ipjc.getSelectedFiles());
+			    	Iterator<File> file = filesSelected.iterator();
+			    	
+			    	while (file.hasNext()) {
+			    		WDUtilities.setNoFavourite(file.next().getAbsolutePath());
 					}			    	
 			    }
 			    // New folder button enabled
