@@ -94,6 +94,7 @@ public abstract class Provider {
 					LOG.info(fileToRemove.getPath() + " deleted");
 					LOG.info("Refreshing space occupied progress bar...");
 					WallpaperDownloader.refreshProgressBar();
+					WallpaperDownloader.refreshJScrollPane();
 				}
 			} catch (IOException e) {
 				throw new ProviderException("Error deleting file " + fileToRemove.getPath() + ". Error: " + e.getMessage());

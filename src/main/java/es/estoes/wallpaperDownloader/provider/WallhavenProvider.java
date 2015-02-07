@@ -96,6 +96,7 @@ public class WallhavenProvider extends Provider {
 								LOG.info("Wallpaper " + wallpaper.getName() + " successfully stored");
 								LOG.info("Refreshing space occupied progress bar...");
 								WallpaperDownloader.refreshProgressBar();
+								WallpaperDownloader.refreshJScrollPane();
 								// Exit the process because one wallpaper was downloaded successfully
 								break;
 							}							
@@ -106,6 +107,7 @@ public class WallhavenProvider extends Provider {
 						LOG.info("Wallpaper " + wallpaper.getName() + " successfully stored");
 						LOG.info("Refreshing space occupied progress bar...");
 						WallpaperDownloader.refreshProgressBar();
+						WallpaperDownloader.refreshJScrollPane();
 						// Exit the process because one wallpaper was downloaded successfully
 						break;
 					}

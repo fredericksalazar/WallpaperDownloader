@@ -1,17 +1,19 @@
 package es.estoes.wallpaperDownloader.util;
 
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-
+import javax.swing.ImageIcon;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.log4j.Logger;
-
 import es.estoes.wallpaperDownloader.window.DialogManager;
+import org.apache.commons.io.comparator.*;
 
 /**
  * This class gathers all the utilities needed for the correct behavior of the application. 
@@ -91,7 +93,6 @@ public class WDUtilities {
 	 * Get all the wallpapers from the download directory
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public static List<File> getAllWallpapers() {
 		LOG.info("Getting all the wallpapers...");
 		File downloadDirectory = new File(WDUtilities.getDownloadsPath());
@@ -232,5 +233,36 @@ public class WDUtilities {
 		} catch (IOException e) {
 			LOG.error("The wallpaper " + originalAbsolutePath + " couldn't be removed. Error: " + e.getMessage());
 		}
+	}
+
+	/**
+	 * Get all wallpapers downloaded sorted by date
+	 * @return
+	 */
+	public static File[] getAllWallpapersSortedByDate() {
+		List<File> wallpaperList = getAllWallpapers();
+		File[] wallpapers = new File[wallpaperList.size()];
+		wallpapers = wallpaperList.toArray(wallpapers);
+		Arrays.sort(wallpapers, LastModifiedFileComparator.LASTMODIFIED_COMPARATOR);
+		return wallpapers;
+	}
+	
+	/**
+	 * Get the image icon fo the last numWallpapers wallpapers downloaded
+	 */
+	public static ImageIcon[] getLastImageIconWallpapers(int numWallpapers) {
+		File[] wallpapers = getAllWallpapersSortedByDate();
+		if (numWallpapers > wallpapers.length) {
+			numWallpapers = wallpapers.length;
+		}
+		ImageIcon[] wallpaperIcons = new ImageIcon[numWallpapers];
+		for (int i = 0; i < numWallpapers; i++) {
+			ImageIcon originalIcon = new ImageIcon(wallpapers[i].getAbsolutePath());
+			Image img = originalIcon.getImage();
+			Image newimg = img.getScaledInstance(127, 100,  java.awt.Image.SCALE_SMOOTH);
+			ImageIcon resizedIcon = new ImageIcon(newimg);
+			wallpaperIcons[i] = resizedIcon;
+		}
+		return wallpaperIcons;
 	}
 }
