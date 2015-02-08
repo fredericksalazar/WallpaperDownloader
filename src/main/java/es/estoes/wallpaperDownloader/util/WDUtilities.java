@@ -8,11 +8,16 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.swing.ImageIcon;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.log4j.Logger;
+
 import es.estoes.wallpaperDownloader.window.DialogManager;
+import es.estoes.wallpaperDownloader.window.WallpaperDownloader;
+
 import org.apache.commons.io.comparator.*;
 
 /**
@@ -198,6 +203,7 @@ public class WDUtilities {
 		// Information
 		DialogManager info = new DialogManager(wallpaperOriginalName + " wallpaper set as favourite.", 2000);
 		info.openDialog();
+		WallpaperDownloader.refreshJScrollPane();
 		LOG.info(originalAbsolutePath + " wallpaper has been set as favourite");
 	}
 
@@ -215,6 +221,7 @@ public class WDUtilities {
 		// Information
 		DialogManager info = new DialogManager(wallpaperOriginalName + " wallpaper set as no favourite.", 2000);
 		info.openDialog();
+		WallpaperDownloader.refreshJScrollPane();
 		LOG.info(originalAbsolutePath + " wallpaper has been set as no favourite");
 	}
 
@@ -229,6 +236,7 @@ public class WDUtilities {
 			// Information
 			DialogManager info = new DialogManager(originalAbsolutePath + " wallpaper removed.", 2000);
 			info.openDialog();
+			WallpaperDownloader.refreshJScrollPane();
 			LOG.info(originalAbsolutePath + " wallpaper has been removed");
 		} catch (IOException e) {
 			LOG.error("The wallpaper " + originalAbsolutePath + " couldn't be removed. Error: " + e.getMessage());
@@ -252,15 +260,18 @@ public class WDUtilities {
 	 */
 	public static ImageIcon[] getLastImageIconWallpapers(int numWallpapers) {
 		File[] wallpapers = getAllWallpapersSortedByDate();
-		if (numWallpapers > wallpapers.length) {
-			numWallpapers = wallpapers.length;
+		int wallpapersLength = wallpapers.length;
+		if (numWallpapers > wallpapersLength) {
+			numWallpapers = wallpapersLength;
 		}
 		ImageIcon[] wallpaperIcons = new ImageIcon[numWallpapers];
 		for (int i = 0; i < numWallpapers; i++) {
-			ImageIcon originalIcon = new ImageIcon(wallpapers[i].getAbsolutePath());
+			ImageIcon originalIcon = new ImageIcon(wallpapers[wallpapersLength - (i + 1)].getAbsolutePath());
 			Image img = originalIcon.getImage();
 			Image newimg = img.getScaledInstance(127, 100,  java.awt.Image.SCALE_SMOOTH);
 			ImageIcon resizedIcon = new ImageIcon(newimg);
+			// Setting a description (absolute path). Doing this. it will be possible to know this path later
+			resizedIcon.setDescription(wallpapers[wallpapersLength - (i + 1)].getAbsolutePath());
 			wallpaperIcons[i] = resizedIcon;
 		}
 		return wallpaperIcons;

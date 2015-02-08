@@ -1,6 +1,7 @@
 package es.estoes.wallpaperDownloader.window;
 
 import java.awt.EventQueue;
+
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -8,8 +9,10 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
+
 import es.estoes.wallpaperDownloader.harvest.Harvester;
 import es.estoes.wallpaperDownloader.item.ComboItem;
 import es.estoes.wallpaperDownloader.util.FavouriteFileFilter;
@@ -19,11 +22,15 @@ import es.estoes.wallpaperDownloader.util.PropertiesManager;
 import es.estoes.wallpaperDownloader.util.WDConfigManager;
 import es.estoes.wallpaperDownloader.util.WDUtilities;
 import es.estoes.wallpaperDownloader.util.WallpaperListRenderer;
+
 import javax.swing.JTabbedPane;
 import javax.swing.JButton;
+
 import java.awt.Color;
+
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
+
 import java.awt.AWTException;
 import java.awt.Desktop;
 import java.awt.Dimension;
@@ -47,15 +54,22 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.NumberFormat;
+
 import javax.swing.JLabel;
+
 import org.apache.log4j.Logger;
+
 import javax.swing.JComboBox;
+
 import java.text.Format;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+
 import javax.swing.JProgressBar;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JScrollPane;
 
@@ -72,6 +86,7 @@ public class WallpaperDownloader {
 	public static JProgressBar diskSpacePB = new JProgressBar();
 	public static JLabel lblSpaceWarning;
 	public static JScrollPane scroll;
+	public static JList<ImageIcon> lastWallpapersList;
 	
 	private Harvester harvester;
 	private JFrame frame;
@@ -757,6 +772,42 @@ public class WallpaperDownloader {
 			    UIManager.put("FileChooser.readOnly", Boolean.FALSE);
 			}
 		});
+		
+		/**
+		 * lastWallpapersList Action Listeners
+		 */
+	    ListSelectionListener listSelectionListener = new ListSelectionListener() {
+	        @SuppressWarnings("rawtypes")
+			public void valueChanged(ListSelectionEvent listSelectionEvent) {
+	          /*
+	          System.out.println("First index: " + listSelectionEvent.getFirstIndex());
+	          System.out.println(", Last index: " + listSelectionEvent.getLastIndex());
+	          boolean adjust = listSelectionEvent.getValueIsAdjusting();
+	          System.out.println(", Adjusting? " + adjust);
+	          if (!adjust) {
+	            JList list = (JList) listSelectionEvent.getSource();
+	            int selections[] = list.getSelectedIndices();
+	            List selectionValues = list.getSelectedValuesList();
+	            for (int i = 0, n = selections.length; i < n; i++) {
+	              if (i == 0) {
+	                System.out.println(" Selections: ");
+	              }
+	              System.out.println(selections[i] + "/" + selectionValues.get(i) + " ");
+	            }
+	          }
+	          */
+	          JList list = (JList) listSelectionEvent.getSource();
+	          int selections[] = list.getSelectedIndices();
+	          List selectionValues = list.getSelectedValuesList();
+	          for (int i = 0, n = selections.length; i < n; i++) {
+	        	  ImageIcon icon = (ImageIcon)selectionValues.get(i);
+	        	  DialogManager dm = new DialogManager(icon.getDescription(), 2000);
+	        	  dm.openDialog();
+		      }
+	          
+	        }
+	      };
+	      lastWallpapersList.addListSelectionListener(listSelectionListener);
 
 	}
 
@@ -862,10 +913,15 @@ public class WallpaperDownloader {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static void refreshJScrollPane() {
 		ImageIcon[] wallpapers = WDUtilities.getLastImageIconWallpapers(5);
-		JList list = new JList(wallpapers);
-		scroll.setViewportView(list);
-		list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-		list.setVisibleRowCount(1);
-		list.setCellRenderer(new WallpaperListRenderer());
+		lastWallpapersList = new JList(wallpapers);
+		scroll.setViewportView(lastWallpapersList);
+		// JList single selection
+		lastWallpapersList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		// JList horizontal orientation
+		lastWallpapersList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+		// Only 1 row to display
+		lastWallpapersList.setVisibleRowCount(1);
+		// Using a custom render to render every element within JList
+		lastWallpapersList.setCellRenderer(new WallpaperListRenderer());
 	}
 }
