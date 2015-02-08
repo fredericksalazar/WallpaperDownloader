@@ -32,6 +32,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
 import java.awt.AWTException;
+import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -41,6 +42,7 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
+import java.awt.Rectangle;
 import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
@@ -50,6 +52,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -112,6 +115,8 @@ public class WallpaperDownloader {
 	private JButton btnManageNoFavouriteWallpapers;
 	private JButton btnManageFavouriteWallpapers;
 	private JButton btnRemoveWallpapers;
+	private JButton btnRemoveWallpaper;
+	private JButton btnSetFavouriteWallpaper;
 	
 	
 	// Getters & Setters
@@ -361,6 +366,9 @@ public class WallpaperDownloader {
 		tabbedPane.addTab("Wallpapers", null, miscPanel_1, null);
 		miscPanel_1.setLayout(null);
 
+		ImageIcon[] wallpapers = {};
+		lastWallpapersList = new JList<ImageIcon>(wallpapers);
+		
 		JLabel lblLastWallpapers = new JLabel("Last 5 wallpapers downloaded");
 		lblLastWallpapers.setBounds(12, 12, 238, 15);
 		miscPanel_1.add(lblLastWallpapers);
@@ -372,18 +380,48 @@ public class WallpaperDownloader {
 		
 		btnManageNoFavouriteWallpapers = new JButton("Set favourite wallpapers");
 		btnManageNoFavouriteWallpapers.setBackground(Color.WHITE);
-		btnManageNoFavouriteWallpapers.setBounds(12, 209, 268, 25);
+		btnManageNoFavouriteWallpapers.setBounds(12, 244, 268, 25);
 		miscPanel_1.add(btnManageNoFavouriteWallpapers);
 		
 		btnManageFavouriteWallpapers = new JButton("Set no favourite wallpapers");
 		btnManageFavouriteWallpapers.setBackground(Color.WHITE);
-		btnManageFavouriteWallpapers.setBounds(12, 246, 268, 25);
+		btnManageFavouriteWallpapers.setBounds(12, 274, 268, 25);
 		miscPanel_1.add(btnManageFavouriteWallpapers);
 		
 		btnRemoveWallpapers = new JButton("Remove wallpapers");
 		btnRemoveWallpapers.setBackground(Color.WHITE);
-		btnRemoveWallpapers.setBounds(12, 283, 268, 25);
+		btnRemoveWallpapers.setBounds(12, 303, 268, 25);
 		miscPanel_1.add(btnRemoveWallpapers);
+		
+		btnRemoveWallpaper = new JButton();
+		
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/delete_24px_icon.png"));
+			btnRemoveWallpaper.setIcon(new ImageIcon(img));
+			btnRemoveWallpaper.setToolTipText("Delete selected wallpaper");
+			btnRemoveWallpaper.setBounds(12, 149, 34, 33);
+		} catch (IOException ex) {
+			btnRemoveWallpaper.setText("Delete");
+			btnRemoveWallpaper.setBounds(12, 149, 34, 33);
+		}
+		miscPanel_1.add(btnRemoveWallpaper);
+		
+		btnSetFavouriteWallpaper = new JButton();
+		
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/favourite_24px_icon.png"));
+			btnSetFavouriteWallpaper.setIcon(new ImageIcon(img));
+			btnSetFavouriteWallpaper.setToolTipText("Set selected wallpaper as favourite");
+			btnSetFavouriteWallpaper.setBounds(58, 149, 34, 33);
+		} catch (IOException ex) {
+			btnSetFavouriteWallpaper.setText("Set as favaourite");
+			btnSetFavouriteWallpaper.setBounds(58, 149, 34, 33);
+		}
+		miscPanel_1.add(btnSetFavouriteWallpaper);
+		
+		JLabel lblBatchTasks = new JLabel("Wallpaper batch tasks");
+		lblBatchTasks.setBounds(12, 221, 238, 15);
+		miscPanel_1.add(lblBatchTasks);
 		
 		// Global buttons
 		btnCloseExit = new JButton("Close & Exit");
@@ -795,7 +833,8 @@ public class WallpaperDownloader {
 	              System.out.println(selections[i] + "/" + selectionValues.get(i) + " ");
 	            }
 	          }
-	          */
+	          // Good code bellow
+	          
 	          JList list = (JList) listSelectionEvent.getSource();
 	          int selections[] = list.getSelectedIndices();
 	          List selectionValues = list.getSelectedValuesList();
@@ -804,11 +843,54 @@ public class WallpaperDownloader {
 	        	  DialogManager dm = new DialogManager(icon.getDescription(), 2000);
 	        	  dm.openDialog();
 		      }
-	          
+	          */
 	        }
+	        
 	      };
 	      lastWallpapersList.addListSelectionListener(listSelectionListener);
+	      
+		  /**
+		  * lastWallpapersList Mouse Motion Listeners
+		  */	      
+	      lastWallpapersList.addMouseMotionListener(new MouseMotionListener() {
+    	    public void mouseMoved(MouseEvent e) {
+    	        final int x = e.getX();
+    	        final int y = e.getY();
+    	        // only display a hand if the cursor is over the items
+    	        final Rectangle cellBounds = lastWallpapersList.getCellBounds(0, lastWallpapersList.getModel().getSize() - 1);
+    	        if (cellBounds != null && cellBounds.contains(x, y)) {
+    	        	lastWallpapersList.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    	        } else {
+    	        	lastWallpapersList.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+    	        }
+    	    }
 
+    	    @Override
+    	    public void mouseDragged(MouseEvent e) {
+    	    }
+	      });	      
+	      
+		 /**
+		  * btnRemoveWallpaper Action Listeners
+		  */
+	      btnRemoveWallpaper.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				// Get the selected wallpaper
+				ImageIcon wallpaperSelectedIcon = lastWallpapersList.getSelectedValue();
+				WDUtilities.removeWallpaper(wallpaperSelectedIcon.getDescription());
+			}
+	      });
+	      
+		 /**
+		  * btnSetFavouriteWallpaper Action Listeners
+		  */
+	      btnSetFavouriteWallpaper.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				// Get the selected wallpaper
+				ImageIcon wallpaperSelectedIcon = lastWallpapersList.getSelectedValue();
+				WDUtilities.setFavourite(wallpaperSelectedIcon.getDescription());
+			}
+		  });	      
 	}
 
 	/**
@@ -913,7 +995,8 @@ public class WallpaperDownloader {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static void refreshJScrollPane() {
 		ImageIcon[] wallpapers = WDUtilities.getLastImageIconWallpapers(5);
-		lastWallpapersList = new JList(wallpapers);
+		//lastWallpapersList = new JList(wallpapers);
+		lastWallpapersList.setListData(wallpapers);
 		scroll.setViewportView(lastWallpapersList);
 		// JList single selection
 		lastWallpapersList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
