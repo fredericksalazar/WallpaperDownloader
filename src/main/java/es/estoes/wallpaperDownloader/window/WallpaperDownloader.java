@@ -353,9 +353,6 @@ public class WallpaperDownloader {
 		tabbedPane.addTab("Wallpapers", null, miscPanel_1, null);
 		miscPanel_1.setLayout(null);
 
-		ImageIcon[] wallpapers = {};
-		lastWallpapersList = new JList<ImageIcon>(wallpapers);
-		
 		JLabel lblLastWallpapers = new JLabel("Last 5 wallpapers downloaded");
 		lblLastWallpapers.setBounds(12, 12, 238, 15);
 		miscPanel_1.add(lblLastWallpapers);
@@ -399,7 +396,7 @@ public class WallpaperDownloader {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/favourite_24px_icon.png"));
 			btnSetFavouriteWallpaper.setIcon(new ImageIcon(img));
 			btnSetFavouriteWallpaper.setToolTipText("Set selected wallpaper as favourite");
-			btnSetFavouriteWallpaper.setBounds(58, 149, 34, 33);
+			btnSetFavouriteWallpaper.setBounds(53, 149, 34, 33);
 		} catch (IOException ex) {
 			btnSetFavouriteWallpaper.setText("Set as favaourite");
 			btnSetFavouriteWallpaper.setBounds(58, 149, 34, 33);
@@ -839,23 +836,8 @@ public class WallpaperDownloader {
 		
 		  /**
 		  * lastWallpapersList Mouse Motion Listeners
-		  */	      
-	      lastWallpapersList.addMouseMotionListener(new MouseMotionListener() {
-    	    public void mouseMoved(MouseEvent e) {
-    	        final int x = e.getX();
-    	        final int y = e.getY();
-    	        // only display a hand if the cursor is over the items
-    	        final Rectangle cellBounds = lastWallpapersList.getCellBounds(0, lastWallpapersList.getModel().getSize() - 1);
-    	        if (cellBounds != null && cellBounds.contains(x, y)) {
-    	        	lastWallpapersList.setCursor(new Cursor(Cursor.HAND_CURSOR));
-    	        } else {
-    	        	lastWallpapersList.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-    	        }
-    	    }
-
-    	    public void mouseDragged(MouseEvent e) {
-    	    }
-	      });	      
+		  */
+		  changePointerJList();
 	      
 		 /**
 		  * btnRemoveWallpaper Action Listeners
@@ -977,13 +959,13 @@ public class WallpaperDownloader {
 	}
 	
 	/**
-	 * This method refreshes the JScrollPane with the las 5 wallpapers downloaded
+	 * This method refreshes the JScrollPane with the last 5 wallpapers downloaded
 	 */
-	@SuppressWarnings({ })
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	public static void refreshJScrollPane() {
 		ImageIcon[] wallpapers = WDUtilities.getLastImageIconWallpapers(5);
-		//lastWallpapersList = new JList(wallpapers);
-		lastWallpapersList.setListData(wallpapers);
+		lastWallpapersList = new JList(wallpapers);
+		changePointerJList();
 		scroll.setViewportView(lastWallpapersList);
 		// JList single selection
 		lastWallpapersList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -993,5 +975,27 @@ public class WallpaperDownloader {
 		lastWallpapersList.setVisibleRowCount(1);
 		// Using a custom render to render every element within JList
 		lastWallpapersList.setCellRenderer(new WallpaperListRenderer());
+	}
+	
+	/**
+	 * This method changes the pointer when the user moves the mouse over the JList
+	 */
+	private static void changePointerJList() {
+	  lastWallpapersList.addMouseMotionListener(new MouseMotionListener() {
+    	    public void mouseMoved(MouseEvent e) {
+    	        final int x = e.getX();
+    	        final int y = e.getY();
+    	        // only display a hand if the cursor is over the items
+    	        final Rectangle cellBounds = lastWallpapersList.getCellBounds(0, lastWallpapersList.getModel().getSize() - 1);
+    	        if (cellBounds != null && cellBounds.contains(x, y)) {
+    	        	lastWallpapersList.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    	        } else {
+    	        	lastWallpapersList.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+    	        }
+    	    }
+
+    	    public void mouseDragged(MouseEvent e) {
+    	    }
+	  });		
 	}
 }
