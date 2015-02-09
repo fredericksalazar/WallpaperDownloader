@@ -1,7 +1,6 @@
 package es.estoes.wallpaperDownloader.window;
 
 import java.awt.EventQueue;
-
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -12,7 +11,6 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
-
 import es.estoes.wallpaperDownloader.harvest.Harvester;
 import es.estoes.wallpaperDownloader.item.ComboItem;
 import es.estoes.wallpaperDownloader.util.FavouriteFileFilter;
@@ -22,15 +20,11 @@ import es.estoes.wallpaperDownloader.util.PropertiesManager;
 import es.estoes.wallpaperDownloader.util.WDConfigManager;
 import es.estoes.wallpaperDownloader.util.WDUtilities;
 import es.estoes.wallpaperDownloader.util.WallpaperListRenderer;
-
 import javax.swing.JTabbedPane;
 import javax.swing.JButton;
-
 import java.awt.Color;
-
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
-
 import java.awt.AWTException;
 import java.awt.Cursor;
 import java.awt.Desktop;
@@ -57,22 +51,15 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.NumberFormat;
-
 import javax.swing.JLabel;
-
 import org.apache.log4j.Logger;
-
 import javax.swing.JComboBox;
-
 import java.text.Format;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-
 import javax.swing.JProgressBar;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JScrollPane;
 
@@ -814,10 +801,10 @@ public class WallpaperDownloader {
 		/**
 		 * lastWallpapersList Action Listeners
 		 */
+		/*
 	    ListSelectionListener listSelectionListener = new ListSelectionListener() {
 	        @SuppressWarnings("rawtypes")
 			public void valueChanged(ListSelectionEvent listSelectionEvent) {
-	          /*
 	          System.out.println("First index: " + listSelectionEvent.getFirstIndex());
 	          System.out.println(", Last index: " + listSelectionEvent.getLastIndex());
 	          boolean adjust = listSelectionEvent.getValueIsAdjusting();
@@ -843,12 +830,13 @@ public class WallpaperDownloader {
 	        	  DialogManager dm = new DialogManager(icon.getDescription(), 2000);
 	        	  dm.openDialog();
 		      }
-	          */
+	          
 	        }
 	        
 	      };
 	      lastWallpapersList.addListSelectionListener(listSelectionListener);
-	      
+	      */
+		
 		  /**
 		  * lastWallpapersList Mouse Motion Listeners
 		  */	      
@@ -865,7 +853,6 @@ public class WallpaperDownloader {
     	        }
     	    }
 
-    	    @Override
     	    public void mouseDragged(MouseEvent e) {
     	    }
 	      });	      
@@ -992,7 +979,7 @@ public class WallpaperDownloader {
 	/**
 	 * This method refreshes the JScrollPane with the las 5 wallpapers downloaded
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ })
 	public static void refreshJScrollPane() {
 		ImageIcon[] wallpapers = WDUtilities.getLastImageIconWallpapers(5);
 		//lastWallpapersList = new JList(wallpapers);
