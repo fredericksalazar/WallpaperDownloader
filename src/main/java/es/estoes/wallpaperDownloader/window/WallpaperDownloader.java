@@ -3,18 +3,14 @@ package es.estoes.wallpaperDownloader.window;
 import java.awt.EventQueue;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.ToolTipManager;
-import javax.swing.UIManager;
 import es.estoes.wallpaperDownloader.harvest.Harvester;
 import es.estoes.wallpaperDownloader.item.ComboItem;
-import es.estoes.wallpaperDownloader.util.FavouriteFileFilter;
-import es.estoes.wallpaperDownloader.util.NoFavouriteFileFilter;
 import es.estoes.wallpaperDownloader.util.PreferencesManager;
 import es.estoes.wallpaperDownloader.util.PropertiesManager;
 import es.estoes.wallpaperDownloader.util.WDConfigManager;
@@ -55,12 +51,7 @@ import javax.swing.JLabel;
 import org.apache.log4j.Logger;
 import javax.swing.JComboBox;
 import java.text.Format;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
 import javax.swing.JProgressBar;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JScrollPane;
 
 public class WallpaperDownloader {
@@ -99,11 +90,9 @@ public class WallpaperDownloader {
 	private JPanel miscPanel_1;
 	private JFormattedTextField downloadsDirectory;
 	private JButton btnChangeDownloadsDirectory;
-	private JButton btnManageNoFavouriteWallpapers;
-	private JButton btnManageFavouriteWallpapers;
-	private JButton btnRemoveWallpapers;
+	private JButton btnManageWallpapers;
 	private JButton btnRemoveWallpaper;
-	private JButton btnSetFavouriteWallpaper;
+	private JButton btnSetFavoriteWallpaper;
 	
 	
 	// Getters & Setters
@@ -362,20 +351,10 @@ public class WallpaperDownloader {
 		scroll.setBounds(12, 36, 652, 105);
 		miscPanel_1.add(scroll);
 		
-		btnManageNoFavouriteWallpapers = new JButton("Set favourite wallpapers");
-		btnManageNoFavouriteWallpapers.setBackground(Color.WHITE);
-		btnManageNoFavouriteWallpapers.setBounds(12, 244, 268, 25);
-		miscPanel_1.add(btnManageNoFavouriteWallpapers);
-		
-		btnManageFavouriteWallpapers = new JButton("Set no favourite wallpapers");
-		btnManageFavouriteWallpapers.setBackground(Color.WHITE);
-		btnManageFavouriteWallpapers.setBounds(12, 274, 268, 25);
-		miscPanel_1.add(btnManageFavouriteWallpapers);
-		
-		btnRemoveWallpapers = new JButton("Remove wallpapers");
-		btnRemoveWallpapers.setBackground(Color.WHITE);
-		btnRemoveWallpapers.setBounds(12, 303, 268, 25);
-		miscPanel_1.add(btnRemoveWallpapers);
+		btnManageWallpapers = new JButton("Manage All Wallpapers");
+		btnManageWallpapers.setBackground(Color.WHITE);
+		btnManageWallpapers.setBounds(12, 277, 197, 25);
+		miscPanel_1.add(btnManageWallpapers);
 		
 		btnRemoveWallpaper = new JButton();
 		
@@ -390,22 +369,18 @@ public class WallpaperDownloader {
 		}
 		miscPanel_1.add(btnRemoveWallpaper);
 		
-		btnSetFavouriteWallpaper = new JButton();
+		btnSetFavoriteWallpaper = new JButton();
 		
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/favourite_24px_icon.png"));
-			btnSetFavouriteWallpaper.setIcon(new ImageIcon(img));
-			btnSetFavouriteWallpaper.setToolTipText("Set selected wallpaper as favourite");
-			btnSetFavouriteWallpaper.setBounds(53, 149, 34, 33);
+			btnSetFavoriteWallpaper.setIcon(new ImageIcon(img));
+			btnSetFavoriteWallpaper.setToolTipText("Set selected wallpaper as favourite");
+			btnSetFavoriteWallpaper.setBounds(53, 149, 34, 33);
 		} catch (IOException ex) {
-			btnSetFavouriteWallpaper.setText("Set as favaourite");
-			btnSetFavouriteWallpaper.setBounds(58, 149, 34, 33);
+			btnSetFavoriteWallpaper.setText("Set as favaourite");
+			btnSetFavoriteWallpaper.setBounds(58, 149, 34, 33);
 		}
-		miscPanel_1.add(btnSetFavouriteWallpaper);
-		
-		JLabel lblBatchTasks = new JLabel("Wallpaper batch tasks");
-		lblBatchTasks.setBounds(12, 221, 238, 15);
-		miscPanel_1.add(lblBatchTasks);
+		miscPanel_1.add(btnSetFavoriteWallpaper);
 		
 		// Global buttons
 		btnCloseExit = new JButton("Close & Exit");
@@ -695,103 +670,12 @@ public class WallpaperDownloader {
 		});
 		
 		/**
-		 * btnManageNoFavouriteWallpapers Action Listeners
+		 * btnManageWallpapers Action Listeners
 		 */
-		btnManageNoFavouriteWallpapers.addActionListener(new ActionListener() {
+		btnManageWallpapers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				// Set Locale to English
-				JComponent.setDefaultLocale(Locale.ENGLISH);
-				// New folder button disabled
-				UIManager.put("FileChooser.readOnly", Boolean.TRUE);
-				ImagePreviewJFileChooser ipjc = new ImagePreviewJFileChooser();
-				// Setting filter for displaying only no favourite wallpapers
-				ipjc.setFileFilter(new NoFavouriteFileFilter());
-		    	// Setting title
-				ipjc.setDialogTitle("Choose a wallpaper to set as favourite");
-		    	// Setting approve button text and tooltip
-		    	ipjc.setApproveButtonText("Set favourite");
-		    	ipjc.setApproveButtonToolTipText("Set the selected wallpapers as favourite");
-		    	// Enabling multi-selection
-		    	ipjc.setMultiSelectionEnabled(true);
-		    	
-			    if (ipjc.showOpenDialog(null) == ImagePreviewJFileChooser.APPROVE_OPTION) {
-			    	List<File> filesSelected = Arrays.asList(ipjc.getSelectedFiles());
-			    	Iterator<File> file = filesSelected.iterator();
-			    	
-			    	while (file.hasNext()) {
-			    		WDUtilities.setFavourite(file.next().getAbsolutePath());
-					}			    	
-			    }
-			    // New folder button enabled
-			    UIManager.put("FileChooser.readOnly", Boolean.FALSE);
-			}
-		});
-		
-		/**
-		 * btnManageFavouriteWallpapers Action Listeners
-		 */
-		btnManageFavouriteWallpapers.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				// Set Locale to English
-				JComponent.setDefaultLocale(Locale.ENGLISH);
-				// New folder button disabled
-				UIManager.put("FileChooser.readOnly", Boolean.TRUE);
-				ImagePreviewJFileChooser ipjc = new ImagePreviewJFileChooser();
-				// Setting filter for displaying only no favourite wallpapers
-				ipjc.setFileFilter(new FavouriteFileFilter());
-		    	// Setting title
-				ipjc.setDialogTitle("Choose a wallpaper to set as no favourite");
-		    	// Setting approve button text and tooltip
-		    	ipjc.setApproveButtonText("Set no favourite");
-		    	ipjc.setApproveButtonToolTipText("Set the selected wallpapers as no favourite");
-		    	// Enabling multi-selection
-		    	ipjc.setMultiSelectionEnabled(true);
-		    	
-			    if (ipjc.showOpenDialog(null) == ImagePreviewJFileChooser.APPROVE_OPTION) {
-			    	List<File> filesSelected = Arrays.asList(ipjc.getSelectedFiles());
-			    	Iterator<File> file = filesSelected.iterator();
-			    	
-			    	while (file.hasNext()) {
-			    		WDUtilities.setNoFavourite(file.next().getAbsolutePath());
-					}			    	
-			    }
-			    // New folder button enabled
-			    UIManager.put("FileChooser.readOnly", Boolean.FALSE);
-			}
-		});
-		
-		/**
-		 * btnRemoveWallpapers Action Listeners
-		 */
-		btnRemoveWallpapers.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				// Set Locale to English
-				JComponent.setDefaultLocale(Locale.ENGLISH);
-				// New folder button disabled
-				UIManager.put("FileChooser.readOnly", Boolean.TRUE);
-				ImagePreviewJFileChooser ipjc = new ImagePreviewJFileChooser();
-				// Setting filter for displaying only images
-		        FileNameExtensionFilter filter=new FileNameExtensionFilter("Image Files","jpg","jpeg","png","gif");
-		        // Set it as current filter
-		        ipjc.setFileFilter(filter);
-		    	// Setting title
-				ipjc.setDialogTitle("Choose a wallpaper to remove");
-		    	// Setting approve button text and tooltip
-		    	ipjc.setApproveButtonText("Remove");
-		    	ipjc.setApproveButtonToolTipText("Remove the wallpapers selected");
-		    	// Enabling multi-selection
-		    	ipjc.setMultiSelectionEnabled(true);
-		    	
-			    if (ipjc.showOpenDialog(null) == ImagePreviewJFileChooser.APPROVE_OPTION) {
-			    	List<File> filesSelected = Arrays.asList(ipjc.getSelectedFiles());
-			    	Iterator<File> file = filesSelected.iterator();
-			    	
-			    	while (file.hasNext()) {
-			    		WDUtilities.removeWallpaper(file.next().getAbsolutePath());
-					}			    	
-			    }
-			    // New folder button enabled
-			    UIManager.put("FileChooser.readOnly", Boolean.FALSE);
+				WallpaperManagerWindow wmw = new WallpaperManagerWindow();
+				wmw.setVisible(true);
 			}
 		});
 		
@@ -853,7 +737,7 @@ public class WallpaperDownloader {
 		 /**
 		  * btnSetFavouriteWallpaper Action Listeners
 		  */
-	      btnSetFavouriteWallpaper.addActionListener(new ActionListener() {
+	      btnSetFavoriteWallpaper.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				// Get the selected wallpaper
 				ImageIcon wallpaperSelectedIcon = lastWallpapersList.getSelectedValue();
