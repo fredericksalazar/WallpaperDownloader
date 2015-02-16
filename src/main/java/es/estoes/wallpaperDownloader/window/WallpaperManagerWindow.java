@@ -184,7 +184,7 @@ public class WallpaperManagerWindow extends JFrame {
 		// Only 1 row to display
 		noFavoriteWallpapersList.setVisibleRowCount(2);
 		// Using a custom render to render every element within JList
-		noFavoriteWallpapersList.setCellRenderer(new WallpaperListRenderer());		
+		noFavoriteWallpapersList.setCellRenderer(new WallpaperListRenderer(WallpaperListRenderer.WITH_TEXT));		
 	}
 	
 	/**

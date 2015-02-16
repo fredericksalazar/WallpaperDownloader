@@ -858,7 +858,7 @@ public class WallpaperDownloader {
 		// Only 1 row to display
 		lastWallpapersList.setVisibleRowCount(1);
 		// Using a custom render to render every element within JList
-		lastWallpapersList.setCellRenderer(new WallpaperListRenderer());
+		lastWallpapersList.setCellRenderer(new WallpaperListRenderer(WallpaperListRenderer.WITHOUT_TEXT));
 	}
 	
 	/**
