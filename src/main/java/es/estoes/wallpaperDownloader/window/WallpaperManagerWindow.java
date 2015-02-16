@@ -45,7 +45,7 @@ public class WallpaperManagerWindow extends JFrame {
 		// DISPOSE_ON_CLOSE for closing only this frame instead of the entire application
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setTitle("Wallpapers Manager");
-		setBounds(100, 100, 1200, 640);
+		setBounds(100, 100, 774, 621);
 		getContentPane().setLayout(null);
 		
 		// Centering window
@@ -60,7 +60,7 @@ public class WallpaperManagerWindow extends JFrame {
 		getContentPane().add(lblFavoriteWallpapers);
 		
 		JScrollPane favoriteScrollPanel = new JScrollPane();
-		favoriteScrollPanel.setBounds(12, 33, 1040, 265);
+		favoriteScrollPanel.setBounds(12, 33, 688, 212);
 		getContentPane().add(favoriteScrollPanel);
 		
 		JList favoriteWallpapersList = new JList();
@@ -71,11 +71,11 @@ public class WallpaperManagerWindow extends JFrame {
 		getContentPane().add(lblNoFavorite);
 		
 		noFavoriteScrollPanel = new JScrollPane();
-		noFavoriteScrollPanel.setBounds(12, 337, 1040, 265);
+		noFavoriteScrollPanel.setBounds(12, 337, 688, 212);
 		getContentPane().add(noFavoriteScrollPanel);
 		
 		noFavoriteWallpapersList = new JList();
-		noFavoriteWallpapersList.setBounds(12, 337, 1037, 287);
+		noFavoriteWallpapersList.setBounds(12, 337, 688, 212);
 		getContentPane().add(noFavoriteWallpapersList);
 		
 		btnRemoveNoFavoriteWallpaper = new JButton();
@@ -84,7 +84,7 @@ public class WallpaperManagerWindow extends JFrame {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/delete_24px_icon.png"));
 			btnRemoveNoFavoriteWallpaper.setIcon(new ImageIcon(img));
 			btnRemoveNoFavoriteWallpaper.setToolTipText("Delete selected wallpaper");
-			btnRemoveNoFavoriteWallpaper.setBounds(1064, 421, 34, 33);
+			btnRemoveNoFavoriteWallpaper.setBounds(712, 410, 34, 33);
 		} catch (IOException ex) {
 			btnRemoveNoFavoriteWallpaper.setText("Delete");
 			btnRemoveNoFavoriteWallpaper.setBounds(1064, 466, 34, 33);
@@ -100,7 +100,7 @@ public class WallpaperManagerWindow extends JFrame {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/favourite_24px_icon.png"));
 			btnSetFavoriteWallpaper.setIcon(new ImageIcon(img));
 			btnSetFavoriteWallpaper.setToolTipText("Set selected wallpaper as favorite");
-			btnSetFavoriteWallpaper.setBounds(1064, 478, 34, 33);
+			btnSetFavoriteWallpaper.setBounds(712, 467, 34, 33);
 		} catch (IOException ex) {
 			btnSetFavoriteWallpaper.setText("Set as favaourite");
 			btnSetFavoriteWallpaper.setBounds(1064, 478, 34, 33);
@@ -113,7 +113,7 @@ public class WallpaperManagerWindow extends JFrame {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/delete_24px_icon.png"));
 			btnRemoveFavoriteWallpaper.setIcon(new ImageIcon(img));
 			btnRemoveFavoriteWallpaper.setToolTipText("Delete selected wallpaper");
-			btnRemoveFavoriteWallpaper.setBounds(1064, 120, 34, 33);
+			btnRemoveFavoriteWallpaper.setBounds(712, 95, 34, 33);
 		} catch (IOException ex) {
 			btnRemoveFavoriteWallpaper.setText("Delete");
 			btnRemoveFavoriteWallpaper.setBounds(1064, 120, 34, 33);
@@ -126,7 +126,7 @@ public class WallpaperManagerWindow extends JFrame {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/no_favorite_24px_icon.png"));
 			btnSetNoFavoriteWallpaper.setIcon(new ImageIcon(img));
 			btnSetNoFavoriteWallpaper.setToolTipText("Set selected wallpaper as no favorite");
-			btnSetNoFavoriteWallpaper.setBounds(1064, 177, 34, 33);
+			btnSetNoFavoriteWallpaper.setBounds(712, 152, 34, 33);
 		} catch (IOException ex) {
 			btnSetNoFavoriteWallpaper.setText("Set as no favorite");
 			btnSetNoFavoriteWallpaper.setBounds(1064, 177, 34, 33);
@@ -136,7 +136,7 @@ public class WallpaperManagerWindow extends JFrame {
 
 		
 		btnClose = new JButton("Close");
-		btnClose.setBounds(1064, 577, 116, 25);
+		btnClose.setBounds(630, 561, 116, 25);
 		getContentPane().add(btnClose);
 		
 		// Setting up configuration
