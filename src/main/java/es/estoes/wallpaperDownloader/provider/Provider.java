@@ -104,7 +104,7 @@ public abstract class Provider {
 	}
 
 	private File pickRandomFile() {
-		List<File> files = WDUtilities.getAllWallpapers();
+		List<File> files = WDUtilities.getAllWallpapers(WDUtilities.WD_PREFIX);
 		if (!files.isEmpty()) {
 			Random generator = new Random();
 			int index = generator.nextInt(files.size());

@@ -35,7 +35,9 @@ public class WallpaperManagerWindow extends JFrame {
 	private JButton btnSetFavoriteWallpaper;
 	private JButton btnClose;
 	private JScrollPane noFavoriteScrollPanel;
-	private JList noFavoriteWallpapersList;
+	private JList<Object> noFavoriteWallpapersList;
+	private JScrollPane favoriteScrollPanel;
+	private JList<Object> favoriteWallpapersList;
 	
 	// Methods
 	/**
@@ -59,11 +61,11 @@ public class WallpaperManagerWindow extends JFrame {
 		lblFavoriteWallpapers.setBounds(12, 12, 151, 15);
 		getContentPane().add(lblFavoriteWallpapers);
 		
-		JScrollPane favoriteScrollPanel = new JScrollPane();
+		favoriteScrollPanel = new JScrollPane();
 		favoriteScrollPanel.setBounds(12, 33, 688, 212);
 		getContentPane().add(favoriteScrollPanel);
 		
-		JList favoriteWallpapersList = new JList();
+		favoriteWallpapersList = new JList<Object>();
 		favoriteScrollPanel.setViewportView(favoriteWallpapersList);
 		
 		JLabel lblNoFavorite = new JLabel("No Favorite Wallpapers");
@@ -74,7 +76,7 @@ public class WallpaperManagerWindow extends JFrame {
 		noFavoriteScrollPanel.setBounds(12, 337, 688, 212);
 		getContentPane().add(noFavoriteScrollPanel);
 		
-		noFavoriteWallpapersList = new JList();
+		noFavoriteWallpapersList = new JList<Object>();
 		noFavoriteWallpapersList.setBounds(12, 337, 688, 212);
 		getContentPane().add(noFavoriteWallpapersList);
 		
@@ -166,14 +168,25 @@ public class WallpaperManagerWindow extends JFrame {
 		});		
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void refreshFavoriteWallpapers() {
-		// TODO Auto-generated method stub
-		
+		ImageIcon[] wallpapers = WDUtilities.getImageIconWallpapers(10, WDUtilities.SORTING_NO_SORTING, WDUtilities.WD_FAVOURITE_PREFIX);
+		favoriteWallpapersList = new JList(wallpapers);
+		changePointerJList();
+		favoriteScrollPanel.setViewportView(favoriteWallpapersList);
+		// JList single selection
+		favoriteWallpapersList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		// JList horizontal orientation
+		favoriteWallpapersList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+		// Only 1 row to display
+		favoriteWallpapersList.setVisibleRowCount(2);
+		// Using a custom render to render every element within JList
+		favoriteWallpapersList.setCellRenderer(new WallpaperListRenderer(WallpaperListRenderer.WITH_TEXT));		
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void refreshNoFavoriteWallpapers() {
-		ImageIcon[] wallpapers = WDUtilities.getImageIconWallpapers(10, WDUtilities.SORTING_NO_SORTING);
+		ImageIcon[] wallpapers = WDUtilities.getImageIconWallpapers(10, WDUtilities.SORTING_NO_SORTING, WDUtilities.WD_PREFIX);
 		noFavoriteWallpapersList = new JList(wallpapers);
 		changePointerJList();
 		noFavoriteScrollPanel.setViewportView(noFavoriteWallpapersList);
@@ -206,6 +219,22 @@ public class WallpaperManagerWindow extends JFrame {
 
     	    public void mouseDragged(MouseEvent e) {
     	    }
-	  });		
+		});
+		favoriteWallpapersList.addMouseMotionListener(new MouseMotionListener() {
+    	    public void mouseMoved(MouseEvent e) {
+    	        final int x = e.getX();
+    	        final int y = e.getY();
+    	        // only display a hand if the cursor is over the items
+    	        final Rectangle cellBounds = favoriteWallpapersList.getCellBounds(0, noFavoriteWallpapersList.getModel().getSize() - 1);
+    	        if (cellBounds != null && cellBounds.contains(x, y)) {
+    	        	favoriteWallpapersList.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    	        } else {
+    	        	noFavoriteWallpapersList.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+    	        }
+    	    }
+
+    	    public void mouseDragged(MouseEvent e) {
+    	    }
+	  });
 	}
 }

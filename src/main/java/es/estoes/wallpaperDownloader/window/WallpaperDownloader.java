@@ -847,7 +847,7 @@ public class WallpaperDownloader {
 	 */
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	public static void refreshJScrollPane() {
-		ImageIcon[] wallpapers = WDUtilities.getImageIconWallpapers(5, WDUtilities.SORTING_BY_DATE);
+		ImageIcon[] wallpapers = WDUtilities.getImageIconWallpapers(5, WDUtilities.SORTING_BY_DATE, WDUtilities.WD_PREFIX);
 		lastWallpapersList = new JList(wallpapers);
 		changePointerJList();
 		scroll.setViewportView(lastWallpapersList);

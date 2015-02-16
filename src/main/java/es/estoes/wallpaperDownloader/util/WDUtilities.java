@@ -5,6 +5,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -44,6 +45,7 @@ public class WDUtilities {
 	public static final String WD_FAVOURITE_PREFIX = "fwd-";
 	public static final String SORTING_BY_DATE = "sort_by_date";
 	public static final String SORTING_NO_SORTING = "no_sorting";
+	public static final String WD_ALL = "all";
 
 	// Attributes
 	private static String appPath;
@@ -98,12 +100,20 @@ public class WDUtilities {
 
 	/**
 	 * Get all the wallpapers from the download directory
+	 * @param wallpapersType Type of the wallpapers wanted to retrieve (favorite, non favorite, all)
 	 * @return
 	 */
-	public static List<File> getAllWallpapers() {
+	public static List<File> getAllWallpapers(String wallpapersType) {
 		LOG.info("Getting all the wallpapers...");
 		File downloadDirectory = new File(WDUtilities.getDownloadsPath());
-		List<File> wallpapers = (List<File>) FileUtils.listFiles(downloadDirectory, FileFilterUtils.prefixFileFilter(WDUtilities.WD_PREFIX), null);		
+		List<File> wallpapers = new ArrayList<File>();
+		if (wallpapersType.equals(WDUtilities.WD_ALL)) {
+			wallpapers = (List<File>) FileUtils.listFiles(downloadDirectory, FileFilterUtils.prefixFileFilter(WDUtilities.WD_FAVOURITE_PREFIX), null);
+			wallpapers.addAll((List<File>) FileUtils.listFiles(downloadDirectory, FileFilterUtils.prefixFileFilter(WDUtilities.WD_PREFIX), null));
+		} else {
+			wallpapers = (List<File>) FileUtils.listFiles(downloadDirectory, FileFilterUtils.prefixFileFilter(wallpapersType), null);
+		}
+				
 		return wallpapers;
 	}
 
@@ -116,7 +126,7 @@ public class WDUtilities {
 			File destDir = new File(newPath);
 			File srcDir = new File(WDUtilities.getDownloadsPath());
 			// Get all the wallpapers from the current location
-			List<File> wallpapers = getAllWallpapers();
+			List<File> wallpapers = getAllWallpapers(WDUtilities.WD_ALL);
 
 			// Copy every file to the new location
 			Iterator<File> wallpaper = wallpapers.iterator();
@@ -249,8 +259,8 @@ public class WDUtilities {
 	 * Get all wallpapers downloaded sorted by date
 	 * @return
 	 */
-	public static File[] getAllWallpapersSortedByDate() {
-		List<File> wallpaperList = getAllWallpapers();
+	public static File[] getAllWallpapersSortedByDate(String wallpapersType) {
+		List<File> wallpaperList = getAllWallpapers(wallpapersType);
 		File[] wallpapers = new File[wallpaperList.size()];
 		wallpapers = wallpaperList.toArray(wallpapers);
 		Arrays.sort(wallpapers, LastModifiedFileComparator.LASTMODIFIED_COMPARATOR);
@@ -260,13 +270,13 @@ public class WDUtilities {
 	/**
 	 * Get the image icon fo the last numWallpapers wallpapers downloaded
 	 */
-	public static ImageIcon[] getImageIconWallpapers(int numWallpapers, String sort) {
+	public static ImageIcon[] getImageIconWallpapers(int numWallpapers, String sort, String wallpapersType) {
 		File[] wallpapers = {};
 		
 		if (sort.equals(SORTING_BY_DATE)) {
-			wallpapers = getAllWallpapersSortedByDate();
+			wallpapers = getAllWallpapersSortedByDate(wallpapersType);
 		} else {
-			List<File> wallpapersList = getAllWallpapers();
+			List<File> wallpapersList = getAllWallpapers(wallpapersType);
 			wallpapers = wallpapersList.toArray(wallpapers);
 		}
 		
