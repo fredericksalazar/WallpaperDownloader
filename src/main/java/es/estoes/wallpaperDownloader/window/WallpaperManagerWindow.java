@@ -173,7 +173,7 @@ public class WallpaperManagerWindow extends JFrame {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void refreshNoFavoriteWallpapers() {
-		ImageIcon[] wallpapers = WDUtilities.getLastImageIconWallpapers(20);
+		ImageIcon[] wallpapers = WDUtilities.getImageIconWallpapers(10, WDUtilities.SORTING_NO_SORTING);
 		noFavoriteWallpapersList = new JList(wallpapers);
 		changePointerJList();
 		noFavoriteScrollPanel.setViewportView(noFavoriteWallpapersList);
@@ -182,7 +182,7 @@ public class WallpaperManagerWindow extends JFrame {
 		// JList horizontal orientation
 		noFavoriteWallpapersList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		// Only 1 row to display
-		noFavoriteWallpapersList.setVisibleRowCount(4);
+		noFavoriteWallpapersList.setVisibleRowCount(2);
 		// Using a custom render to render every element within JList
 		noFavoriteWallpapersList.setCellRenderer(new WallpaperListRenderer());		
 	}

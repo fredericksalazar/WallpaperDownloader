@@ -42,6 +42,8 @@ public class WDUtilities {
 	public static final String DEFAULT_DOWNLOADS_DIRECTORY = "downloads";
 	public static final String UNIT_MB = "MB";
 	public static final String WD_FAVOURITE_PREFIX = "fwd-";
+	public static final String SORTING_BY_DATE = "sort_by_date";
+	public static final String SORTING_NO_SORTING = "no_sorting";
 
 	// Attributes
 	private static String appPath;
@@ -258,8 +260,16 @@ public class WDUtilities {
 	/**
 	 * Get the image icon fo the last numWallpapers wallpapers downloaded
 	 */
-	public static ImageIcon[] getLastImageIconWallpapers(int numWallpapers) {
-		File[] wallpapers = getAllWallpapersSortedByDate();
+	public static ImageIcon[] getImageIconWallpapers(int numWallpapers, String sort) {
+		File[] wallpapers = {};
+		
+		if (sort.equals(SORTING_BY_DATE)) {
+			wallpapers = getAllWallpapersSortedByDate();
+		} else {
+			List<File> wallpapersList = getAllWallpapers();
+			wallpapers = wallpapersList.toArray(wallpapers);
+		}
+		
 		int wallpapersLength = wallpapers.length;
 		if (numWallpapers > wallpapersLength) {
 			numWallpapers = wallpapersLength;
