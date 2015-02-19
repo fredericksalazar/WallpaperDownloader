@@ -87,7 +87,7 @@ public abstract class Provider {
 		Long maxSize = Long.parseLong(prefm.getPreference("application-max-download-folder-size"));
 		long downloadFolderSize = WDUtilities.getDirectorySpaceOccupied(WDUtilities.getDownloadsPath(), WDUtilities.UNIT_MB);
 		while (downloadFolderSize > maxSize) {
-			File fileToRemove = pickRandomFile();
+			File fileToRemove = WDUtilities.pickRandomFile();
 			try {
 				if (fileToRemove != null) {
 					FileUtils.forceDelete(fileToRemove);
@@ -103,15 +103,4 @@ public abstract class Provider {
 		}
 	}
 
-	private File pickRandomFile() {
-		List<File> files = WDUtilities.getAllWallpapers(WDUtilities.WD_PREFIX);
-		if (!files.isEmpty()) {
-			Random generator = new Random();
-			int index = generator.nextInt(files.size());
-			return files.get(index);			
-		} else {
-			return null;
-		}
-		
-	}
 }

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import javax.swing.ImageIcon;
 
@@ -295,5 +296,21 @@ public class WDUtilities {
 			wallpaperIcons[i] = resizedIcon;
 		}
 		return wallpaperIcons;
+	}
+	
+	/**
+	 * It picks a random file from wallpapers download directory
+	 * @return
+	 */
+	public static File pickRandomFile() {
+		List<File> files = WDUtilities.getAllWallpapers(WDUtilities.WD_PREFIX);
+		if (!files.isEmpty()) {
+			Random generator = new Random();
+			int index = generator.nextInt(files.size());
+			return files.get(index);			
+		} else {
+			return null;
+		}
+		
 	}
 }
