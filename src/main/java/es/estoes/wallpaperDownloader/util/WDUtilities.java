@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 
 import es.estoes.wallpaperDownloader.window.DialogManager;
 import es.estoes.wallpaperDownloader.window.WallpaperDownloader;
+import es.estoes.wallpaperDownloader.window.WallpaperManagerWindow;
 
 import org.apache.commons.io.comparator.*;
 
@@ -113,6 +114,12 @@ public class WDUtilities {
 			wallpapers.addAll((List<File>) FileUtils.listFiles(downloadDirectory, FileFilterUtils.prefixFileFilter(WDUtilities.WD_PREFIX), null));
 		} else {
 			wallpapers = (List<File>) FileUtils.listFiles(downloadDirectory, FileFilterUtils.prefixFileFilter(wallpapersType), null);
+			
+			if (wallpapersType.equals(WDUtilities.WD_FAVOURITE_PREFIX)) {
+				// Adding total number of favorite wallpapers to WallpaperManagerWindow if it exists
+				WallpaperManagerWindow.refreshFavoriteWallpapersTotalNumber(wallpapers.size());				
+			}
+
 		}
 				
 		return wallpapers;
@@ -271,8 +278,10 @@ public class WDUtilities {
 	/**
 	 * Get the image icon fo the last numWallpapers wallpapers downloaded
 	 */
-	public static ImageIcon[] getImageIconWallpapers(int numWallpapers, String sort, String wallpapersType) {
+	public static ImageIcon[] getImageIconWallpapers(int numWallpapers, int from, String sort, String wallpapersType) {
 		File[] wallpapers = {};
+		int to = from + numWallpapers;
+		int j = 0;
 		
 		if (sort.equals(SORTING_BY_DATE)) {
 			wallpapers = getAllWallpapersSortedByDate(wallpapersType);
@@ -282,18 +291,19 @@ public class WDUtilities {
 		}
 		
 		int wallpapersLength = wallpapers.length;
-		if (numWallpapers > wallpapersLength) {
-			numWallpapers = wallpapersLength;
+		if (to > wallpapersLength) {
+			to = wallpapersLength;
 		}
 		ImageIcon[] wallpaperIcons = new ImageIcon[numWallpapers];
-		for (int i = 0; i < numWallpapers; i++) {
+		for (int i = from; i < to; i++) {
 			ImageIcon originalIcon = new ImageIcon(wallpapers[wallpapersLength - (i + 1)].getAbsolutePath());
 			Image img = originalIcon.getImage();
 			Image newimg = img.getScaledInstance(127, 100,  java.awt.Image.SCALE_SMOOTH);
 			ImageIcon resizedIcon = new ImageIcon(newimg);
 			// Setting a description (absolute path). Doing this. it will be possible to know this path later
 			resizedIcon.setDescription(wallpapers[wallpapersLength - (i + 1)].getAbsolutePath());
-			wallpaperIcons[i] = resizedIcon;
+			wallpaperIcons[j] = resizedIcon;
+			j ++;
 		}
 		return wallpaperIcons;
 	}

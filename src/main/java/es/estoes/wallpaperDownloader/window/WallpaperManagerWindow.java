@@ -27,6 +27,7 @@ public class WallpaperManagerWindow extends JFrame {
 
 	// Constants
 	private static final long serialVersionUID = 8790655483965002934L;
+	public static JLabel lblTotalFavoriteWallpapers;
 
 	// Attributes
 	private JButton btnRemoveFavoriteWallpaper;
@@ -38,6 +39,11 @@ public class WallpaperManagerWindow extends JFrame {
 	private JList<Object> noFavoriteWallpapersList;
 	private JScrollPane favoriteScrollPanel;
 	private JList<Object> favoriteWallpapersList;
+	private JButton btnBackFavoriteWallpapers;
+	private JButton btnForwardFavoriteWallpapers;
+	private JLabel lblFirstFavoriteWallpaper;
+	private JLabel lblLastFavoriteWallpaper;
+	
 	
 	// Methods
 	/**
@@ -60,6 +66,10 @@ public class WallpaperManagerWindow extends JFrame {
 		JLabel lblFavoriteWallpapers = new JLabel("Favorite Wallpapers");
 		lblFavoriteWallpapers.setBounds(12, 12, 151, 15);
 		getContentPane().add(lblFavoriteWallpapers);
+		
+		lblTotalFavoriteWallpapers = new JLabel("");
+		lblTotalFavoriteWallpapers.setBounds(163, 12, 70, 15);
+		getContentPane().add(lblTotalFavoriteWallpapers);
 		
 		favoriteScrollPanel = new JScrollPane();
 		favoriteScrollPanel.setBounds(12, 33, 688, 212);
@@ -141,6 +151,44 @@ public class WallpaperManagerWindow extends JFrame {
 		btnClose.setBounds(630, 561, 116, 25);
 		getContentPane().add(btnClose);
 		
+		lblFirstFavoriteWallpaper = new JLabel("1");
+		lblFirstFavoriteWallpaper.setBounds(331, 255, 34, 15);
+		getContentPane().add(lblFirstFavoriteWallpaper);
+		
+		JLabel lblBetween = new JLabel("--");
+		lblBetween.setBounds(369, 255, 17, 15);
+		getContentPane().add(lblBetween);
+		
+		lblLastFavoriteWallpaper = new JLabel("10");
+		lblLastFavoriteWallpaper.setBounds(413, 255, 34, 15);
+		getContentPane().add(lblLastFavoriteWallpaper);
+		
+		btnBackFavoriteWallpapers = new JButton();
+		
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/left_arrow_24px_icon.png"));
+			btnBackFavoriteWallpapers.setIcon(new ImageIcon(img));
+			btnBackFavoriteWallpapers.setToolTipText("Back");
+			btnBackFavoriteWallpapers.setBounds(282, 250, 34, 33);
+		} catch (IOException ex) {
+			btnBackFavoriteWallpapers.setText("Back");
+			btnBackFavoriteWallpapers.setBounds(282, 250, 34, 33);
+		}		
+		getContentPane().add(btnBackFavoriteWallpapers);
+		
+		btnForwardFavoriteWallpapers = new JButton();
+		
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/right_arrow_24px_icon.png"));
+			btnForwardFavoriteWallpapers.setIcon(new ImageIcon(img));
+			btnForwardFavoriteWallpapers.setToolTipText("Forward");
+			btnForwardFavoriteWallpapers.setBounds(442, 250, 34, 33);
+		} catch (IOException ex) {
+			btnForwardFavoriteWallpapers.setText("Forward");
+			btnForwardFavoriteWallpapers.setBounds(442, 250, 34, 33);
+		}		
+		getContentPane().add(btnForwardFavoriteWallpapers);
+		
 		// Setting up configuration
 		initializeGUI();
 		
@@ -161,16 +209,87 @@ public class WallpaperManagerWindow extends JFrame {
 	}
 	
 	private void initializeListeners() {
+		/**
+		 * btnClose
+		 */
 		btnClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				dispose();
 			}
-		});		
+		});
+		
+		/**
+		 * btnForwardFavoriteWallpapers
+		 */
+		btnForwardFavoriteWallpapers.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int firstWallpaperToDisplay = Integer.valueOf(lblLastFavoriteWallpaper.getText()) + 1;
+				int totalWallpapers = Integer.valueOf(lblTotalFavoriteWallpapers.getText());
+				
+				// It will be possible to forward the wallpapers list only if there are more wallpapers to display
+				if (totalWallpapers >= firstWallpaperToDisplay) {
+					int to = firstWallpaperToDisplay + 9;
+					if (to > totalWallpapers) {
+						to = totalWallpapers;
+					}
+					lblFirstFavoriteWallpaper.setText(String.valueOf(firstWallpaperToDisplay));
+					lblLastFavoriteWallpaper.setText(String.valueOf(to));
+					refreshFavoriteWallpapers();
+				}
+			}
+		});
+		
+		/**
+		 * btnBackFavoriteWallpapers
+		 */
+		btnBackFavoriteWallpapers.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int firstWallpaperToDisplay = Integer.valueOf(lblFirstFavoriteWallpaper.getText()) - 10;
+				int totalWallpapers = Integer.valueOf(lblTotalFavoriteWallpapers.getText());
+				
+				// It will be possible to backward the wallpapers list only if there are wallpapers to display
+				if (firstWallpaperToDisplay > 0) {
+					int from = firstWallpaperToDisplay;
+					int to = from + 9;
+					if (to > totalWallpapers) {
+						to = totalWallpapers;
+					}
+					lblFirstFavoriteWallpaper.setText(String.valueOf(from));
+					lblLastFavoriteWallpaper.setText(String.valueOf(to));
+					refreshFavoriteWallpapers();
+				}
+			}
+		});
+		
+		/**
+		 * btnRemoveFavoriteWallpaper
+		 */
+		btnRemoveFavoriteWallpaper.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				// Get the selected wallpaper
+				ImageIcon wallpaperSelectedIcon = (ImageIcon) favoriteWallpapersList.getSelectedValue();
+				WDUtilities.removeWallpaper(wallpaperSelectedIcon.getDescription());
+				refreshFavoriteWallpapers();
+			}
+		});
+		
+		/**
+		 * btnSetNoFavoriteWallpaper
+		 */
+		btnSetNoFavoriteWallpaper.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// Get the selected wallpaper
+				ImageIcon wallpaperSelectedIcon = (ImageIcon) favoriteWallpapersList.getSelectedValue();
+				WDUtilities.setNoFavourite(wallpaperSelectedIcon.getDescription());
+				refreshFavoriteWallpapers();
+				refreshNoFavoriteWallpapers();
+			}
+		});
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void refreshFavoriteWallpapers() {
-		ImageIcon[] wallpapers = WDUtilities.getImageIconWallpapers(10, WDUtilities.SORTING_NO_SORTING, WDUtilities.WD_FAVOURITE_PREFIX);
+		ImageIcon[] wallpapers = WDUtilities.getImageIconWallpapers(10, Integer.valueOf(lblFirstFavoriteWallpaper.getText()) - 1, WDUtilities.SORTING_NO_SORTING, WDUtilities.WD_FAVOURITE_PREFIX);
 		favoriteWallpapersList = new JList(wallpapers);
 		changePointerJList();
 		favoriteScrollPanel.setViewportView(favoriteWallpapersList);
@@ -186,7 +305,7 @@ public class WallpaperManagerWindow extends JFrame {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void refreshNoFavoriteWallpapers() {
-		ImageIcon[] wallpapers = WDUtilities.getImageIconWallpapers(10, WDUtilities.SORTING_NO_SORTING, WDUtilities.WD_PREFIX);
+		ImageIcon[] wallpapers = WDUtilities.getImageIconWallpapers(10, 0, WDUtilities.SORTING_NO_SORTING, WDUtilities.WD_PREFIX);
 		noFavoriteWallpapersList = new JList(wallpapers);
 		changePointerJList();
 		noFavoriteScrollPanel.setViewportView(noFavoriteWallpapersList);
@@ -236,5 +355,13 @@ public class WallpaperManagerWindow extends JFrame {
     	    public void mouseDragged(MouseEvent e) {
     	    }
 	  });
+	}
+	
+	/**
+	 * This methods refreshes the total number of favorite wallpapers
+	 * @param total
+	 */
+	public static void refreshFavoriteWallpapersTotalNumber (int total) {
+		lblTotalFavoriteWallpapers.setText(String.valueOf(total));
 	}
 }
