@@ -1,6 +1,7 @@
 package es.estoes.wallpaperDownloader.window;
 
 import java.awt.EventQueue;
+
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFormattedTextField;
@@ -9,6 +10,7 @@ import javax.swing.JList;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.ToolTipManager;
+
 import es.estoes.wallpaperDownloader.harvest.Harvester;
 import es.estoes.wallpaperDownloader.item.ComboItem;
 import es.estoes.wallpaperDownloader.util.PreferencesManager;
@@ -16,11 +18,15 @@ import es.estoes.wallpaperDownloader.util.PropertiesManager;
 import es.estoes.wallpaperDownloader.util.WDConfigManager;
 import es.estoes.wallpaperDownloader.util.WDUtilities;
 import es.estoes.wallpaperDownloader.util.WallpaperListRenderer;
+
 import javax.swing.JTabbedPane;
 import javax.swing.JButton;
+
 import java.awt.Color;
+
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
+
 import java.awt.AWTException;
 import java.awt.Cursor;
 import java.awt.Desktop;
@@ -47,10 +53,18 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.NumberFormat;
+
 import javax.swing.JLabel;
+
 import org.apache.log4j.Logger;
+
 import javax.swing.JComboBox;
+
 import java.text.Format;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 
@@ -728,9 +742,15 @@ public class WallpaperDownloader {
 		  */
 	      btnRemoveWallpaper.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				// Get the selected wallpaper
-				ImageIcon wallpaperSelectedIcon = lastWallpapersList.getSelectedValue();
-				WDUtilities.removeWallpaper(wallpaperSelectedIcon.getDescription());
+				// Get the selected wallpapers
+				List<ImageIcon> wallpapersSelected = lastWallpapersList.getSelectedValuesList();
+				List<String> wallpapersSelectedAbsolutePath = new ArrayList<String>();
+				Iterator<ImageIcon> wallpapersSelectedIterator = wallpapersSelected.iterator();
+				while (wallpapersSelectedIterator.hasNext()) {
+					ImageIcon wallpaperSelectedIcon = (ImageIcon) wallpapersSelectedIterator.next();
+					wallpapersSelectedAbsolutePath.add(wallpaperSelectedIcon.getDescription());
+				}
+				WDUtilities.removeWallpaper(wallpapersSelectedAbsolutePath);
 			}
 	      });
 	      
@@ -739,9 +759,15 @@ public class WallpaperDownloader {
 		  */
 	      btnSetFavoriteWallpaper.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				// Get the selected wallpaper
-				ImageIcon wallpaperSelectedIcon = lastWallpapersList.getSelectedValue();
-				WDUtilities.setFavourite(wallpaperSelectedIcon.getDescription());
+				// Get the selected wallpapers
+				List<ImageIcon> wallpapersSelected = lastWallpapersList.getSelectedValuesList();
+				List<String> wallpapersSelectedAbsolutePath = new ArrayList<String>();
+				Iterator<ImageIcon> wallpapersSelectedIterator = wallpapersSelected.iterator();
+				while (wallpapersSelectedIterator.hasNext()) {
+					ImageIcon wallpaperSelectedIcon = (ImageIcon) wallpapersSelectedIterator.next();
+					wallpapersSelectedAbsolutePath.add(wallpaperSelectedIcon.getDescription());
+				}
+				WDUtilities.setFavorite(wallpapersSelectedAbsolutePath);
 			}
 		  });	      
 	}

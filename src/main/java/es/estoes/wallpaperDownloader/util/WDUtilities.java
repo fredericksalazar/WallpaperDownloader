@@ -210,57 +210,69 @@ public class WDUtilities {
 	}
 
 	/**
-	 * Set a wallpaper as favourite
+	 * Set wallpapers as favorite
 	 * @param originalAbsolutePath
 	 */
-	public static void setFavourite(String originalAbsolutePath) {
-		File originalWallpaper = new File(originalAbsolutePath);
-		String wallpaperOriginalName = originalWallpaper.getName();
-		int index = wallpaperOriginalName.indexOf("-");
-		String wallpaperFavouriteName = WD_FAVOURITE_PREFIX + wallpaperOriginalName.substring(index + 1);
-		File favouriteWallpaper = new File(WDUtilities.getDownloadsPath() + File.separatorChar + wallpaperFavouriteName);
-		originalWallpaper.renameTo(favouriteWallpaper);
-		// Information
-		DialogManager info = new DialogManager(wallpaperOriginalName + " wallpaper set as favourite.", 2000);
-		info.openDialog();
-		WallpaperDownloader.refreshJScrollPane();
-		LOG.info(originalAbsolutePath + " wallpaper has been set as favourite");
-	}
-
-	/**
-	 * Set a wallpaper as no favourite
-	 * @param originalAbsolutePath
-	 */
-	public static void setNoFavourite(String originalAbsolutePath) {
-		File originalWallpaper = new File(originalAbsolutePath);
-		String wallpaperOriginalName = originalWallpaper.getName();
-		int index = wallpaperOriginalName.indexOf("-");
-		String wallpaperNoFavouriteName = WD_PREFIX + wallpaperOriginalName.substring(index + 1);
-		File favouriteWallpaper = new File(WDUtilities.getDownloadsPath() + File.separatorChar + wallpaperNoFavouriteName);
-		originalWallpaper.renameTo(favouriteWallpaper);
-		// Information
-		DialogManager info = new DialogManager(wallpaperOriginalName + " wallpaper set as no favourite.", 2000);
-		info.openDialog();
-		WallpaperDownloader.refreshJScrollPane();
-		LOG.info(originalAbsolutePath + " wallpaper has been set as no favourite");
-	}
-
-	/**
-	 * Remove a wallpaper
-	 * @param originalAbsolutePath
-	 */
-	public static void removeWallpaper(String originalAbsolutePath) {
-		File originalWallpaper = new File(originalAbsolutePath);
-		try {
-			FileUtils.forceDelete(originalWallpaper);
+	public static void setFavorite(List<String> originalAbsolutePaths) {
+		Iterator<String> wallpaperIterator = originalAbsolutePaths.iterator();
+		while (wallpaperIterator.hasNext()) {
+			String currentWallpaperPath = wallpaperIterator.next();
+			File originalWallpaper = new File(currentWallpaperPath);
+			String wallpaperOriginalName = originalWallpaper.getName();
+			int index = wallpaperOriginalName.indexOf("-");
+			String wallpaperFavouriteName = WD_FAVOURITE_PREFIX + wallpaperOriginalName.substring(index + 1);
+			File favouriteWallpaper = new File(WDUtilities.getDownloadsPath() + File.separatorChar + wallpaperFavouriteName);
+			originalWallpaper.renameTo(favouriteWallpaper);
 			// Information
-			DialogManager info = new DialogManager(originalAbsolutePath + " wallpaper removed.", 2000);
+			DialogManager info = new DialogManager(wallpaperOriginalName + " wallpaper set as favourite.", 2000);
 			info.openDialog();
 			WallpaperDownloader.refreshJScrollPane();
-			LOG.info(originalAbsolutePath + " wallpaper has been removed");
-		} catch (IOException e) {
-			LOG.error("The wallpaper " + originalAbsolutePath + " couldn't be removed. Error: " + e.getMessage());
-		}
+			LOG.info(currentWallpaperPath + " wallpaper has been set as favourite");
+		}		
+	}
+
+	/**
+	 * Set wallpapers as no favorite
+	 * @param originalAbsolutePath
+	 */
+	public static void setNoFavorite(List<String> originalAbsolutePaths) {
+		Iterator<String> wallpaperIterator = originalAbsolutePaths.iterator();
+		while (wallpaperIterator.hasNext()) {
+			String currentWallpaperPath = wallpaperIterator.next();
+			File originalWallpaper = new File(currentWallpaperPath);
+			String wallpaperOriginalName = originalWallpaper.getName();
+			int index = wallpaperOriginalName.indexOf("-");
+			String wallpaperNoFavouriteName = WD_PREFIX + wallpaperOriginalName.substring(index + 1);
+			File favouriteWallpaper = new File(WDUtilities.getDownloadsPath() + File.separatorChar + wallpaperNoFavouriteName);
+			originalWallpaper.renameTo(favouriteWallpaper);
+			// Information
+			DialogManager info = new DialogManager(wallpaperOriginalName + " wallpaper set as no favourite.", 2000);
+			info.openDialog();
+			WallpaperDownloader.refreshJScrollPane();
+			LOG.info(currentWallpaperPath + " wallpaper has been set as no favourite");
+		}	
+	}
+
+	/**
+	 * Remove wallpapers
+	 * @param originalAbsolutePaths
+	 */
+	public static void removeWallpaper(List<String> originalAbsolutePaths) {
+		Iterator<String> wallpaperIterator = originalAbsolutePaths.iterator();
+		while (wallpaperIterator.hasNext()) {
+			String currentWallpaperPath = wallpaperIterator.next();
+			File originalWallpaper = new File(currentWallpaperPath);
+			try {
+				FileUtils.forceDelete(originalWallpaper);
+				// Information
+				DialogManager info = new DialogManager(currentWallpaperPath + " wallpaper removed.", 2000);
+				info.openDialog();
+				WallpaperDownloader.refreshJScrollPane();
+				LOG.info(currentWallpaperPath + " wallpaper has been removed");
+			} catch (IOException e) {
+				LOG.error("The wallpaper " + currentWallpaperPath + " couldn't be removed. Error: " + e.getMessage());
+			}
+		}		
 	}
 
 	/**

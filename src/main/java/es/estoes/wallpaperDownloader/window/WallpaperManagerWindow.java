@@ -10,6 +10,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -266,9 +269,15 @@ public class WallpaperManagerWindow extends JFrame {
 		 */
 		btnRemoveFavoriteWallpaper.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				// Get the selected wallpaper
-				ImageIcon wallpaperSelectedIcon = (ImageIcon) favoriteWallpapersList.getSelectedValue();
-				WDUtilities.removeWallpaper(wallpaperSelectedIcon.getDescription());
+				// Get the selected wallpapers
+				List<Object> wallpapersSelected = favoriteWallpapersList.getSelectedValuesList();
+				List<String> wallpapersSelectedAbsolutePath = new ArrayList<String>();
+				Iterator<Object> wallpapersSelectedIterator = wallpapersSelected.iterator();
+				while (wallpapersSelectedIterator.hasNext()) {
+					ImageIcon wallpaperSelectedIcon = (ImageIcon) wallpapersSelectedIterator.next();
+					wallpapersSelectedAbsolutePath.add(wallpaperSelectedIcon.getDescription());
+				}
+				WDUtilities.removeWallpaper(wallpapersSelectedAbsolutePath);
 				refreshFavoriteWallpapers();
 			}
 		});
@@ -279,8 +288,14 @@ public class WallpaperManagerWindow extends JFrame {
 		btnSetNoFavoriteWallpaper.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Get the selected wallpaper
-				ImageIcon wallpaperSelectedIcon = (ImageIcon) favoriteWallpapersList.getSelectedValue();
-				WDUtilities.setNoFavourite(wallpaperSelectedIcon.getDescription());
+				List<Object> wallpapersSelected = favoriteWallpapersList.getSelectedValuesList();
+				List<String> wallpapersSelectedAbsolutePath = new ArrayList<String>();
+				Iterator<Object> wallpapersSelectedIterator = wallpapersSelected.iterator();
+				while (wallpapersSelectedIterator.hasNext()) {
+					ImageIcon wallpaperSelectedIcon = (ImageIcon) wallpapersSelectedIterator.next();
+					wallpapersSelectedAbsolutePath.add(wallpaperSelectedIcon.getDescription());
+				}
+				WDUtilities.setNoFavorite(wallpapersSelectedAbsolutePath);
 				refreshFavoriteWallpapers();
 				refreshNoFavoriteWallpapers();
 			}
