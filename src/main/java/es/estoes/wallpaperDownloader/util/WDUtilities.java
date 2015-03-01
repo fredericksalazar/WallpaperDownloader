@@ -10,17 +10,13 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-
 import javax.swing.ImageIcon;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.log4j.Logger;
-
 import es.estoes.wallpaperDownloader.window.DialogManager;
 import es.estoes.wallpaperDownloader.window.WallpaperDownloader;
 import es.estoes.wallpaperDownloader.window.WallpaperManagerWindow;
-
 import org.apache.commons.io.comparator.*;
 
 /**
@@ -118,6 +114,10 @@ public class WDUtilities {
 			if (wallpapersType.equals(WDUtilities.WD_FAVOURITE_PREFIX)) {
 				// Adding total number of favorite wallpapers to WallpaperManagerWindow if it exists
 				WallpaperManagerWindow.refreshFavoriteWallpapersTotalNumber(wallpapers.size());				
+			} else if (wallpapersType.equals(WDUtilities.WD_PREFIX) && WallpaperManagerWindow.lblTotalNoFavoriteWallpapers != null) {
+				// Adding total number of no favorite wallpapers to WallpaperManagerWindow if it exists only if WallpaperManagerWindow has been
+				// instantiated
+				WallpaperManagerWindow.refreshNoFavoriteWallpapersTotalNumber(wallpapers.size());				
 			}
 
 		}

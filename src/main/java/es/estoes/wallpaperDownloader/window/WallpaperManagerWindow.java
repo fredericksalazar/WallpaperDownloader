@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -22,7 +21,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
-
 import es.estoes.wallpaperDownloader.util.WDUtilities;
 import es.estoes.wallpaperDownloader.util.WallpaperListRenderer;
 
@@ -30,7 +28,10 @@ public class WallpaperManagerWindow extends JFrame {
 
 	// Constants
 	private static final long serialVersionUID = 8790655483965002934L;
+	
 	public static JLabel lblTotalFavoriteWallpapers;
+	
+	public static JLabel lblTotalNoFavoriteWallpapers;
 
 	// Attributes
 	private JButton btnRemoveFavoriteWallpaper;
@@ -46,6 +47,10 @@ public class WallpaperManagerWindow extends JFrame {
 	private JButton btnForwardFavoriteWallpapers;
 	private JLabel lblFirstFavoriteWallpaper;
 	private JLabel lblLastFavoriteWallpaper;
+	private JButton btnBackNoFavoriteWallpapers;
+	private JButton btnForwardNoFavoriteWallpapers;
+	private JLabel lblFirstNoFavoriteWallpaper;
+	private JLabel lblLastNoFavoriteWallpaper;
 	
 	
 	// Methods
@@ -106,9 +111,6 @@ public class WallpaperManagerWindow extends JFrame {
 		}
 		getContentPane().add(btnRemoveNoFavoriteWallpaper);
 		
-		
-		btnRemoveNoFavoriteWallpaper = new JButton();
-		
 		btnSetFavoriteWallpaper = new JButton();
 		
 		try {
@@ -147,8 +149,6 @@ public class WallpaperManagerWindow extends JFrame {
 			btnSetNoFavoriteWallpaper.setBounds(1064, 177, 34, 33);
 		}		
 		getContentPane().add(btnSetNoFavoriteWallpaper);
-		
-
 		
 		btnClose = new JButton("Close");
 		btnClose.setBounds(630, 561, 116, 25);
@@ -191,6 +191,46 @@ public class WallpaperManagerWindow extends JFrame {
 			btnForwardFavoriteWallpapers.setBounds(442, 250, 34, 33);
 		}		
 		getContentPane().add(btnForwardFavoriteWallpapers);
+		
+		btnBackNoFavoriteWallpapers = new JButton();
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/left_arrow_24px_icon.png"));
+			btnBackNoFavoriteWallpapers.setIcon(new ImageIcon(img));
+			btnBackNoFavoriteWallpapers.setToolTipText("Back");
+			btnBackNoFavoriteWallpapers.setBounds(282, 553, 34, 33);
+		} catch (IOException ex) {
+			btnBackNoFavoriteWallpapers.setText("Back");
+			btnBackNoFavoriteWallpapers.setBounds(282, 553, 34, 33);
+		}
+		getContentPane().add(btnBackNoFavoriteWallpapers);
+		
+		btnForwardNoFavoriteWallpapers = new JButton();
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/right_arrow_24px_icon.png"));
+			btnForwardNoFavoriteWallpapers.setIcon(new ImageIcon(img));
+			btnForwardNoFavoriteWallpapers.setToolTipText("Forward");
+			btnForwardNoFavoriteWallpapers.setBounds(442, 553, 34, 33);
+		} catch (IOException ex) {
+			btnForwardNoFavoriteWallpapers.setText("Forward");
+			btnForwardNoFavoriteWallpapers.setBounds(442, 553, 34, 33);
+		}
+		getContentPane().add(btnForwardNoFavoriteWallpapers);
+		
+		lblFirstNoFavoriteWallpaper = new JLabel("1");
+		lblFirstNoFavoriteWallpaper.setBounds(331, 561, 34, 15);
+		getContentPane().add(lblFirstNoFavoriteWallpaper);
+		
+		JLabel lblBetweenNoFavorite = new JLabel("--");
+		lblBetweenNoFavorite.setBounds(369, 561, 17, 15);
+		getContentPane().add(lblBetweenNoFavorite);
+		
+		lblLastNoFavoriteWallpaper = new JLabel("10");
+		lblLastNoFavoriteWallpaper.setBounds(413, 561, 34, 15);
+		getContentPane().add(lblLastNoFavoriteWallpaper);
+		
+		lblTotalNoFavoriteWallpapers = new JLabel("");
+		lblTotalNoFavoriteWallpapers.setBounds(183, 310, 70, 15);
+		getContentPane().add(lblTotalNoFavoriteWallpapers);
 		
 		// Setting up configuration
 		initializeGUI();
@@ -265,6 +305,49 @@ public class WallpaperManagerWindow extends JFrame {
 		});
 		
 		/**
+		 * btnForwardNoFavoriteWallpapers
+		 */
+		btnForwardNoFavoriteWallpapers.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int firstWallpaperToDisplay = Integer.valueOf(lblLastNoFavoriteWallpaper.getText()) + 1;
+				int totalWallpapers = Integer.valueOf(lblTotalNoFavoriteWallpapers.getText());
+				
+				// It will be possible to forward the wallpapers list only if there are more wallpapers to display
+				if (totalWallpapers >= firstWallpaperToDisplay) {
+					int to = firstWallpaperToDisplay + 9;
+					if (to > totalWallpapers) {
+						to = totalWallpapers;
+					}
+					lblFirstNoFavoriteWallpaper.setText(String.valueOf(firstWallpaperToDisplay));
+					lblLastNoFavoriteWallpaper.setText(String.valueOf(to));
+					refreshNoFavoriteWallpapers();
+				}
+			}
+		});
+		
+		/**
+		 * btnBackNoFavoriteWallpapers
+		 */
+		btnBackNoFavoriteWallpapers.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int firstWallpaperToDisplay = Integer.valueOf(lblFirstNoFavoriteWallpaper.getText()) - 10;
+				int totalWallpapers = Integer.valueOf(lblTotalNoFavoriteWallpapers.getText());
+				
+				// It will be possible to backward the wallpapers list only if there are wallpapers to display
+				if (firstWallpaperToDisplay > 0) {
+					int from = firstWallpaperToDisplay;
+					int to = from + 9;
+					if (to > totalWallpapers) {
+						to = totalWallpapers;
+					}
+					lblFirstNoFavoriteWallpaper.setText(String.valueOf(from));
+					lblLastNoFavoriteWallpaper.setText(String.valueOf(to));
+					refreshNoFavoriteWallpapers();
+				}
+			}
+		});
+		
+		/**
 		 * btnRemoveFavoriteWallpaper
 		 */
 		btnRemoveFavoriteWallpaper.addActionListener(new ActionListener() {
@@ -300,6 +383,43 @@ public class WallpaperManagerWindow extends JFrame {
 				refreshNoFavoriteWallpapers();
 			}
 		});
+		
+		/**
+		 * btnRemoveNoFavoriteWallpaper
+		 */
+		btnRemoveNoFavoriteWallpaper.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				// Get the selected wallpapers
+				List<Object> wallpapersSelected = noFavoriteWallpapersList.getSelectedValuesList();
+				List<String> wallpapersSelectedAbsolutePath = new ArrayList<String>();
+				Iterator<Object> wallpapersSelectedIterator = wallpapersSelected.iterator();
+				while (wallpapersSelectedIterator.hasNext()) {
+					ImageIcon wallpaperSelectedIcon = (ImageIcon) wallpapersSelectedIterator.next();
+					wallpapersSelectedAbsolutePath.add(wallpaperSelectedIcon.getDescription());
+				}
+				WDUtilities.removeWallpaper(wallpapersSelectedAbsolutePath);
+				refreshNoFavoriteWallpapers();
+			}
+		});
+		
+		/**
+		 * btnSetFavoriteWallpaper
+		 */
+		btnSetFavoriteWallpaper.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// Get the selected wallpaper
+				List<Object> wallpapersSelected = noFavoriteWallpapersList.getSelectedValuesList();
+				List<String> wallpapersSelectedAbsolutePath = new ArrayList<String>();
+				Iterator<Object> wallpapersSelectedIterator = wallpapersSelected.iterator();
+				while (wallpapersSelectedIterator.hasNext()) {
+					ImageIcon wallpaperSelectedIcon = (ImageIcon) wallpapersSelectedIterator.next();
+					wallpapersSelectedAbsolutePath.add(wallpaperSelectedIcon.getDescription());
+				}
+				WDUtilities.setFavorite(wallpapersSelectedAbsolutePath);
+				refreshFavoriteWallpapers();
+				refreshNoFavoriteWallpapers();
+			}
+		});
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -320,7 +440,7 @@ public class WallpaperManagerWindow extends JFrame {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void refreshNoFavoriteWallpapers() {
-		ImageIcon[] wallpapers = WDUtilities.getImageIconWallpapers(10, 0, WDUtilities.SORTING_NO_SORTING, WDUtilities.WD_PREFIX);
+		ImageIcon[] wallpapers = WDUtilities.getImageIconWallpapers(10, Integer.valueOf(lblFirstNoFavoriteWallpaper.getText()) - 1, WDUtilities.SORTING_NO_SORTING, WDUtilities.WD_PREFIX);
 		noFavoriteWallpapersList = new JList(wallpapers);
 		changePointerJList();
 		noFavoriteScrollPanel.setViewportView(noFavoriteWallpapersList);
@@ -378,5 +498,13 @@ public class WallpaperManagerWindow extends JFrame {
 	 */
 	public static void refreshFavoriteWallpapersTotalNumber (int total) {
 		lblTotalFavoriteWallpapers.setText(String.valueOf(total));
+	}
+	
+	/**
+	 * This methods refreshes the total number of no favorite wallpapers
+	 * @param total
+	 */
+	public static void refreshNoFavoriteWallpapersTotalNumber (int total) {
+		lblTotalNoFavoriteWallpapers.setText(String.valueOf(total));
 	}
 }
