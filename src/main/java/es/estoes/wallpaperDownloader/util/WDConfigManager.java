@@ -124,7 +124,7 @@ public class WDConfigManager {
 	}
 	
 	/**
-	 * This class configures the application's log
+	 * This method configures the application's log
 	 */
 	public static void configureLog() throws WDConfigurationException {
 
@@ -143,6 +143,7 @@ public class WDConfigManager {
 	    	 
 	    	// If the directory doesn't exist, then create it
 	    	if (!appDirectory.exists()) {
+	    		System.out.println("Creating application directory...");
 	    		FileUtils.forceMkdir(appDirectory);
 	    	}
 	    	
