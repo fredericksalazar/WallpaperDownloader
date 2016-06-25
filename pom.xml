@@ -50,34 +50,37 @@
 
     <build>
         <plugins>
+        	<!-- Plugin to include all the libraries in only one executable jar file -->
             <plugin>
-                <groupId>org.dstovall</groupId>
-                <artifactId>onejar-maven-plugin</artifactId>
-                <version>1.4.4</version>
-                <executions>
-                    <execution>
-                        <configuration>
-                            <mainClass>es.estoes.wallpaperDownloader.Main</mainClass>
-                            <!-- Optional -->
-                            <onejarVersion>0.97</onejarVersion>
-                            <!-- Optional, default is false -->
-                            <attachToBuild>true</attachToBuild>
-                            <!-- Optional, default is "onejar" -->
-                            <classifier>onejar</classifier>
-                        </configuration>
-                        <goals>
-                            <goal>one-jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+			  <groupId>org.apache.maven.plugins</groupId>
+			  <artifactId>maven-assembly-plugin</artifactId>
+			  <executions>
+			    <execution>
+			      <id>create-my-bundle</id>
+			      <!-- All the libraries will be included within package stage -->
+			      <phase>package</phase>
+			      <goals>
+			        <goal>single</goal>
+			      </goals>
+			      <configuration>
+			        <descriptorRefs>
+			          <descriptorRef>jar-with-dependencies</descriptorRef>
+			        </descriptorRefs>
+			        <!-- Final name for the executable jar with all the dependencies included -->
+			        <finalName>wallpaperdownloader</finalName>
+			        <!-- Avoid suffix for the final name -->
+        			<appendAssemblyId>false</appendAssemblyId>
+			        <archive>
+				      <manifest>
+				      	<!-- Main class which will be executed (contains main method) -->
+				        <mainClass>es.estoes.wallpaperDownloader.Main</mainClass>
+				      </manifest>
+				    </archive>
+			      </configuration>
+
+			    </execution>
+			  </executions>
+			</plugin>
         </plugins>
     </build>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>onejar-maven-plugin.googlecode.com</id>
-            <url>http://onejar-maven-plugin.googlecode.com/svn/mavenrepo</url>
-        </pluginRepository>
-    </pluginRepositories>
 </project>
