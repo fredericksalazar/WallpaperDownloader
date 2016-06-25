@@ -5,13 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileSystemView;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-
 import es.estoes.wallpaperDownloader.exception.WDConfigurationException;
 
 /**
@@ -132,9 +127,9 @@ public class WDConfigManager {
 	    PropertiesManager pm = PropertiesManager.getInstance();
 	    Path appPath = null;
 	    String absoluteAppPath = null;
-	    JFileChooser fr = new JFileChooser();
-	    FileSystemView fw = fr.getFileSystemView();
-	    appPath = Paths.get(fw.getDefaultDirectory().toURI());
+	    // Getting user's home directory
+	    appPath = Paths.get(System.getProperty("user.home"));
+	    
 	    try {
 	     
 	    	// Application's path
@@ -143,13 +138,11 @@ public class WDConfigManager {
 	    	 
 	    	// If the directory doesn't exist, then create it
 	    	if (!appDirectory.exists()) {
-	    		System.out.println("Creating application directory...");
 	    		FileUtils.forceMkdir(appDirectory);
 	    	}
 	    	
 	    	// Setting the application's path 
 	    	WDUtilities.setAppPath(absoluteAppPath);
-	    	System.out.println("AppPath = " + absoluteAppPath);
 	    	// Setting the application's log name
 	    	pm.setLog4jProperty("log4j.appender.logfile.File", absoluteAppPath + File.separator + pm.getProperty("log.name")); 
 		} catch (FileNotFoundException e) {
