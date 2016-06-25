@@ -148,6 +148,7 @@ public class WDConfigManager {
 	    	
 	    	// Setting the application's path 
 	    	WDUtilities.setAppPath(absoluteAppPath);
+	    	System.out.println("AppPath = " + absoluteAppPath);
 	    	// Setting the application's log name
 	    	pm.setLog4jProperty("log4j.appender.logfile.File", absoluteAppPath + File.separator + pm.getProperty("log.name")); 
 		} catch (FileNotFoundException e) {

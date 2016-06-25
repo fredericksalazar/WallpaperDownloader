@@ -141,9 +141,11 @@ public class WallpaperDownloader {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				// 1.- Log configuration
+				System.out.println("Configuring log...");
 				WDConfigManager.configureLog();
 
 				// 2.- Application configuration
+				System.out.println("Checking configuration...");
 				WDConfigManager.checkConfig();
 				PropertiesManager pm = PropertiesManager.getInstance();
 				window = new WallpaperDownloader();
