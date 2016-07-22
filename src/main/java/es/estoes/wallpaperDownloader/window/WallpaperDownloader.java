@@ -9,7 +9,9 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.ToolTipManager;
+import javax.swing.border.Border;
 
 import es.estoes.wallpaperDownloader.harvest.Harvester;
 import es.estoes.wallpaperDownloader.item.ComboItem;
@@ -51,6 +53,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.text.NumberFormat;
 
@@ -67,12 +70,16 @@ import java.util.List;
 
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JTextArea;
+import javax.swing.UIManager;
 
 public class WallpaperDownloader {
 
 	// Constants
 	protected static final Logger LOG = Logger.getLogger(WallpaperDownloader.class);
 	private static WallpaperDownloader window;
+	private static final PropertiesManager pm = PropertiesManager.getInstance();
 	
 	// Attributes
 	
@@ -107,7 +114,15 @@ public class WallpaperDownloader {
 	private JButton btnManageWallpapers;
 	private JButton btnRemoveWallpaper;
 	private JButton btnSetFavoriteWallpaper;
-	
+	private JPanel aboutPanel;
+	private JTextField version;
+	private JSeparator aboutSeparator1;
+	private JLabel lblDeveloper;
+	private JTextField developer;
+	private JLabel lblSourceCode;
+	private JButton btnRepository;
+	private JSeparator aboutSeparator2;
+
 	
 	// Getters & Setters
 	public JFrame getFrame() {
@@ -145,7 +160,6 @@ public class WallpaperDownloader {
 
 				// 2.- Application configuration
 				WDConfigManager.checkConfig();
-				PropertiesManager pm = PropertiesManager.getInstance();
 				window = new WallpaperDownloader();
 				window.frame.setVisible(true);
 				window.frame.setTitle(pm.getProperty("app.name") + " V" + pm.getProperty("app.version"));
@@ -163,6 +177,7 @@ public class WallpaperDownloader {
 	/**
 	 * Initialize the contents of the frame.
 	 */
+	@SuppressWarnings("serial")
 	private void initialize() {
 		// Configuring tooltips
 		ToolTipManager.sharedInstance().setInitialDelay(100);
@@ -174,8 +189,8 @@ public class WallpaperDownloader {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{116, 386, 73, 96, 0};
 		gridBagLayout.rowHeights = new int[]{338, 53, 25, 0, 0};
-		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.columnWeights = new double[]{1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		frame.getContentPane().setLayout(gridBagLayout);
 		
 		// Centering window
@@ -395,6 +410,72 @@ public class WallpaperDownloader {
 			btnSetFavoriteWallpaper.setBounds(58, 149, 34, 33);
 		}
 		miscPanel_1.add(btnSetFavoriteWallpaper);
+		
+		
+		// About (tab)
+		aboutPanel = new JPanel();
+		tabbedPane.addTab("About", null, aboutPanel, null);
+		aboutPanel.setLayout(null);
+		
+		JLabel lblVersion = new JLabel("Version");
+		lblVersion.setBounds(12, 16, 70, 15);
+		aboutPanel.add(lblVersion);
+		
+		version = new JTextField() {
+			// JTextField without border
+			@Override public void setBorder(Border border) {
+				// No borders!
+			}
+		};
+		version.setEditable(false);
+		version.setBounds(73, 15, 30, 19);
+		aboutPanel.add(version);
+		version.setColumns(10);
+		
+		aboutSeparator1 = new JSeparator();
+		aboutSeparator1.setBounds(11, 43, 531, 2);
+		aboutPanel.add(aboutSeparator1);
+		
+		lblDeveloper = new JLabel("Developer");
+		lblDeveloper.setBounds(12, 57, 95, 15);
+		aboutPanel.add(lblDeveloper);
+		
+		developer = new JTextField() {
+			// JTextField without border
+			@Override public void setBorder(Border border) {
+				// No borders!
+			}
+		};
+		developer.setEditable(false);
+		developer.setBounds(108, 56, 211, 19);
+		aboutPanel.add(developer);
+		developer.setColumns(10);
+		
+		lblSourceCode = new JLabel("Source code");
+		lblSourceCode.setBounds(12, 84, 95, 15);
+		aboutPanel.add(lblSourceCode);
+		
+		btnRepository = new JButton("New button");
+		btnRepository.setBounds(92, 80, 456, 25);
+		btnRepository.setText("<HTML><FONT color=\"#000099\"><U>" + pm.getProperty("repository.code") + "</U></FONT></HTML>");
+		btnRepository.setHorizontalAlignment(SwingConstants.LEFT);
+		btnRepository.setBorderPainted(false);
+		btnRepository.setOpaque(false);
+		btnRepository.setBackground(Color.WHITE);
+		aboutPanel.add(btnRepository);
+		
+		JTextArea txtInfo = new JTextArea();
+		txtInfo.setBackground(UIManager.getColor("Button.background"));
+		txtInfo.setText("Please, if you want to open any issue beause you find a bug, you can do it in the official code repository (link above). if you have any suggestions you can send them there too. Thanks and enjoy!");
+		txtInfo.setEditable(false);
+		txtInfo.setBounds(15, 133, 527, 115);
+		txtInfo.setLineWrap(true);
+		txtInfo.setWrapStyleWord(true);
+		aboutPanel.add(txtInfo);
+		
+		aboutSeparator2 = new JSeparator();
+		aboutSeparator2.setBounds(13, 113, 531, 2);
+		aboutPanel.add(aboutSeparator2);
 		
 		// Global buttons
 		btnCloseExit = new JButton("Close & Exit");
@@ -769,7 +850,22 @@ public class WallpaperDownloader {
 				}
 				WDUtilities.setFavorite(wallpapersSelectedAbsolutePath);
 			}
-		  });	      
+		  });
+	      
+		 /**
+		  * btnRepository Action Listeners
+		  */
+	      btnRepository.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+				    if (Desktop.isDesktopSupported()) {
+				        try {
+				          Desktop.getDesktop().browse(new URI(pm.getProperty("repository.code")));
+				        } catch (Exception exception) { 
+				        	LOG.error(exception.getMessage()); 
+				        }
+				     }
+				}
+	      });
 	}
 
 	/**
@@ -844,6 +940,11 @@ public class WallpaperDownloader {
 		// Populating JScrollPane with the last 5 wallpapers downloaded
 		// ---------------------------------------------------------------------
 		refreshJScrollPane();
+		// ---------------------------------------------------------------------
+		// Checking About tab
+		// ---------------------------------------------------------------------
+		version.setText(pm.getProperty("app.version"));
+		developer.setText(pm.getProperty("developer.name"));
 	}
 	
 	/**
