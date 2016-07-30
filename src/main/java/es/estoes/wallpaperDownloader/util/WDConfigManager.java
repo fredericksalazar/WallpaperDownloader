@@ -5,8 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+
 import es.estoes.wallpaperDownloader.exception.WDConfigurationException;
 
 /**
@@ -51,6 +53,7 @@ public class WDConfigManager {
     	 try {
     		 File userConfigFile = new File(WDUtilities.getUserConfigurationFilePath());
 
+    		 // Configuration file
     		 if (!userConfigFile.exists()) {
         		 /**
         		  *  Downloads directory
@@ -111,7 +114,21 @@ public class WDConfigManager {
     			 WDUtilities.setDownloadsPath(prefm.getPreference("application-downloads-folder"));
     			 LOG.info("Downloads directory -> " + prefm.getPreference("application-downloads-folder"));
     		 }
-
+    		 
+    		 // Blacklist file
+			 if (LOG.isInfoEnabled()) {
+				 LOG.info("Checking blacklist file...");
+			 } 			 PropertiesManager pm = PropertiesManager.getInstance();
+ 			 Path blacklistPath = Paths.get(appPath.toString());
+ 			 blacklistPath = blacklistPath.resolve(pm.getProperty("app.blacklist.path"));
+ 			 System.out.println("HEYYY: " + blacklistPath.toString());
+ 			 File blacklistFile = new File(blacklistPath.toString());
+ 			 if (!blacklistFile.exists()) {
+ 				 if (LOG.isInfoEnabled()) {
+ 					 LOG.info("Blacklist file doesn't exist. Creating...");
+ 				 }
+ 				 FileUtils.touch(blacklistFile);
+ 			 }
     	 } catch (Exception e) {
     		 throw new WDConfigurationException("Error setting up the downloads folder. Error: " + e.getMessage());
     	 }    	 

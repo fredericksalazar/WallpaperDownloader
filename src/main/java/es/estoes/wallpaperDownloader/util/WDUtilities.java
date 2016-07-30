@@ -10,13 +10,17 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+
 import javax.swing.ImageIcon;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.log4j.Logger;
+
 import es.estoes.wallpaperDownloader.window.DialogManager;
 import es.estoes.wallpaperDownloader.window.WallpaperDownloader;
 import es.estoes.wallpaperDownloader.window.WallpaperManagerWindow;
+
 import org.apache.commons.io.comparator.*;
 
 /**
@@ -263,8 +267,11 @@ public class WDUtilities {
 			String currentWallpaperPath = wallpaperIterator.next();
 			File originalWallpaper = new File(currentWallpaperPath);
 			try {
+				// 1.- File is deleted
 				FileUtils.forceDelete(originalWallpaper);
-				// Information
+				// 2.- File is added to the blacklist
+				WDUtilities.addToBlacklist(originalWallpaper.getName());
+				// 3.- Information about deleting is displayed
 				DialogManager info = new DialogManager(currentWallpaperPath + " wallpaper removed.", 2000);
 				info.openDialog();
 				WallpaperDownloader.refreshJScrollPane();
@@ -273,6 +280,14 @@ public class WDUtilities {
 				LOG.error("The wallpaper " + currentWallpaperPath + " couldn't be removed. Error: " + e.getMessage());
 			}
 		}		
+	}
+
+	/**
+	 * Adds a file to the blacklist.
+	 * @param fileName the name of the file
+	 */
+	public static void addToBlacklist(String fileName) {
+		
 	}
 
 	/**
