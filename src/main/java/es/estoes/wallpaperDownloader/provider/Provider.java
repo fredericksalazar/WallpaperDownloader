@@ -4,11 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-
 import es.estoes.wallpaperDownloader.exception.ProviderException;
 import es.estoes.wallpaperDownloader.util.PreferencesManager;
 import es.estoes.wallpaperDownloader.util.WDUtilities;
