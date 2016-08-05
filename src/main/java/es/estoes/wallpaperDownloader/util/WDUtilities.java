@@ -5,6 +5,8 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -78,6 +80,13 @@ public class WDUtilities {
 	public static void setUserConfigurationFilePath(
 			String userConfigurationFilePath) {
 		WDUtilities.userConfigurationFilePath = userConfigurationFilePath;
+	}
+	
+	public static String getBlacklistDirectoryPath() {
+		PropertiesManager pm = PropertiesManager.getInstance();
+		Path blacklistPath = Paths.get(appPath.toString());
+		blacklistPath = blacklistPath.resolve(pm.getProperty("app.blacklist.path"));
+		return blacklistPath.toString();
 	}
 
 	// Methods (All the methods are static)
@@ -283,11 +292,21 @@ public class WDUtilities {
 	}
 
 	/**
-	 * Adds a file to the blacklist.
+	 * Adds a file to the blacklist directory.
 	 * @param fileName the name of the file
 	 */
 	public static void addToBlacklist(String fileName) {
-		
+		File blacklistedFile = new File(WDUtilities.getBlacklistDirectoryPath() + File.separator + fileName);
+		try {
+			FileUtils.touch(blacklistedFile);
+			if (LOG.isInfoEnabled()) {
+				LOG.info(fileName + " added to the blacklist");	
+			}
+		} catch (IOException exception) {
+			if (LOG.isInfoEnabled()) {
+				LOG.info("Error adding " + fileName + " to the blacklist. Error: " + exception.getMessage());	
+			}
+		}
 	}
 
 	/**
@@ -349,5 +368,19 @@ public class WDUtilities {
 			return null;
 		}
 		
+	}
+
+	/**
+	 * Checks if a wallpaper is blacklisted.
+	 * @param wallpaperName wallpaper name
+	 * @return boolean
+	 */
+	public static boolean isWallpaperBlacklisted(String wallpaperName) {
+		File blacklistedFile = new File(WDUtilities.getBlacklistDirectoryPath() + File.separator + wallpaperName);
+		boolean result = blacklistedFile.exists();
+		if (LOG.isInfoEnabled()) {
+			LOG.info("Is " + wallpaperName + " blacklisted?: " + result + ".PS: Only wallpapers not blacklisted will be stored");
+		}
+		return result;
 	}
 }

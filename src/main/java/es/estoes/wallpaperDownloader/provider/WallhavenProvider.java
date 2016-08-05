@@ -79,7 +79,7 @@ public class WallhavenProvider extends Provider {
 				// Obtaining wallpaper's name (string after the last slash)
 				String wallpaperName = WDUtilities.WD_PREFIX + wallpaperURL.substring(index + 1);
 				File wallpaper = new File(WDUtilities.getDownloadsPath() + File.separator + wallpaperName);
-				if (!wallpaper.exists()) {
+				if (!wallpaper.exists() && !WDUtilities.isWallpaperBlacklisted(wallpaperName)) {
 					// Storing the image. It is necessary to download the remote file
 					// First try: JPG format will be used
 					boolean isWallpaperSuccessfullyStored = storeRemoteFile(wallpaper, wallpaperURL);
@@ -113,7 +113,7 @@ public class WallhavenProvider extends Provider {
 						break;
 					}
 				} else {
-					LOG.info("Wallpaper " + wallpaper.getName() + " is already stored. Skipping...");
+					LOG.info("Wallpaper " + wallpaper.getName() + " is already stored or blacklisted. Skipping...");
 				}
 			}
 		} catch (IOException e) {

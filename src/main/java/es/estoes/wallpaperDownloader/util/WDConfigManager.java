@@ -115,19 +115,20 @@ public class WDConfigManager {
     			 LOG.info("Downloads directory -> " + prefm.getPreference("application-downloads-folder"));
     		 }
     		 
-    		 // Blacklist file
+    		 // Blacklist directory
 			 if (LOG.isInfoEnabled()) {
-				 LOG.info("Checking blacklist file...");
-			 } 			 PropertiesManager pm = PropertiesManager.getInstance();
- 			 Path blacklistPath = Paths.get(appPath.toString());
- 			 blacklistPath = blacklistPath.resolve(pm.getProperty("app.blacklist.path"));
- 			 System.out.println("HEYYY: " + blacklistPath.toString());
- 			 File blacklistFile = new File(blacklistPath.toString());
- 			 if (!blacklistFile.exists()) {
+				 LOG.info("Checking blacklist directory...");
+			 } 			 
+			 File blacklistDirectory = new File(WDUtilities.getBlacklistDirectoryPath());
+ 			 if (!blacklistDirectory.exists()) {
  				 if (LOG.isInfoEnabled()) {
- 					 LOG.info("Blacklist file doesn't exist. Creating...");
+ 					 LOG.info("Blacklist directory doesn't exist. Creating...");
  				 }
- 				 FileUtils.touch(blacklistFile);
+ 				FileUtils.forceMkdir(blacklistDirectory);
+ 			 } else {
+ 				 if (LOG.isInfoEnabled()) {
+ 					 LOG.info("Blacklist directory already exists. Skipping...");
+ 				 }
  			 }
     	 } catch (Exception e) {
     		 throw new WDConfigurationException("Error setting up the downloads folder. Error: " + e.getMessage());
