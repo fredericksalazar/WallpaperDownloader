@@ -36,7 +36,7 @@ public class WallhavenProvider extends Provider {
 		switch (new Integer(prefm.getPreference("wallpaper-search-type"))) {
 			case 0: this.order = "relevance";
 					break;
-			case 1: this.order = "date";
+			case 1: this.order = "date_added";
 					break;
 			case 2: this.order = "views";
 					break;
@@ -240,10 +240,10 @@ public class WallhavenProvider extends Provider {
 		if (!resolution.equals(PreferencesManager.DEFAULT_VALUE)) {
 			resolutionString = "resolutions" + WDUtilities.EQUAL + resolution + WDUtilities.AND;
 		}
-		LOG.info(baseURL + "search" + WDUtilities.QM + keywordString + "categories" + WDUtilities.EQUAL + "111" + WDUtilities.AND + "purity" + WDUtilities.EQUAL + "110" + WDUtilities.AND + resolutionString + "thpp" + WDUtilities.EQUAL + "60" + 
+		LOG.info(baseURL + "search" + WDUtilities.QM + keywordString + "categories" + WDUtilities.EQUAL + "111" + WDUtilities.AND + "purity" + WDUtilities.EQUAL + "110" + WDUtilities.AND + resolutionString + 
 				   WDUtilities.AND + "order" + WDUtilities.EQUAL + "desc" + WDUtilities.AND + "sorting" + WDUtilities.EQUAL + order);
-		return baseURL + "search" + WDUtilities.QM + keywordString + "categories" + WDUtilities.EQUAL + "111" +WDUtilities.AND + "purity" + WDUtilities.EQUAL + "110" + WDUtilities.AND + resolutionString + "thpp" + WDUtilities.EQUAL + "60" + 
-				   WDUtilities.AND + "order_mode" + WDUtilities.EQUAL + "desc" + WDUtilities.AND + "sorting" + WDUtilities.EQUAL + order;
+		return baseURL + "search" + WDUtilities.QM + keywordString + "categories" + WDUtilities.EQUAL + "111" +WDUtilities.AND + "purity" + WDUtilities.EQUAL + "110" + WDUtilities.AND + resolutionString + 
+				   WDUtilities.AND + "order" + WDUtilities.EQUAL + "desc" + WDUtilities.AND + "sorting" + WDUtilities.EQUAL + order;
 	}
 
 }
