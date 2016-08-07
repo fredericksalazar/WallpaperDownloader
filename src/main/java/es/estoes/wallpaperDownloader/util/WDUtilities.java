@@ -50,6 +50,7 @@ public class WDUtilities {
 	public static final String SORTING_BY_DATE = "sort_by_date";
 	public static final String SORTING_NO_SORTING = "no_sorting";
 	public static final String WD_ALL = "all";
+	public static final int STATUS_CODE_200 = 200;
 
 	// Attributes
 	private static String appPath;

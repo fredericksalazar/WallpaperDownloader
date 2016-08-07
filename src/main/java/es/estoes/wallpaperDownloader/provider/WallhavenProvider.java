@@ -1,8 +1,14 @@
 package es.estoes.wallpaperDownloader.provider;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
@@ -10,6 +16,7 @@ import org.jsoup.helper.HttpConnection.Response;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.jsoup.nodes.Element;
+
 import es.estoes.wallpaperDownloader.exception.ProviderException;
 import es.estoes.wallpaperDownloader.util.PreferencesManager;
 import es.estoes.wallpaperDownloader.util.PropertiesManager;
@@ -126,7 +133,7 @@ public class WallhavenProvider extends Provider {
 	private boolean storeRemoteFile(File wallpaper, String wallpaperURL) {
 	    
 		boolean success = false;
-		FileOutputStream out = null;
+		OutputStream out = null;
 		
 		try {
 			// Open a URL stream (an image) using JSoup. There was a problem with the old method (commented) and the server, because
@@ -140,14 +147,29 @@ public class WallhavenProvider extends Provider {
 	        								.ignoreContentType(true)
 	        								.execute();
 	
-	        // Output (it will be a file)
-	        out = (new FileOutputStream(wallpaper));
 	        
-	        // resultImageResponse.body() is where the image's contents are.
-	        out.write(resultImageResponse.bodyAsBytes());           
-	        out.close();
-		    success = true;
-		    return true;
+	        if (resultImageResponse.statusCode() == WDUtilities.STATUS_CODE_200) {
+	        	// Wallpaper has been successfully found
+		        // Open a URL Stream
+		        URL url = new URL(wallpaperURL);
+		        HttpURLConnection httpcon = (HttpURLConnection) url.openConnection();
+		        httpcon.addRequestProperty("User-Agent", "Mozilla/4.0");
+		        InputStream in = httpcon.getInputStream();
+		        	 
+		        out = new BufferedOutputStream(new FileOutputStream(wallpaper.getAbsolutePath()));
+		        	 
+		        	        for (int b; (b = in.read()) != -1;) {
+		        	            out.write(b);
+		        	        }
+		        	        out.close();
+		        	        in.close();
+
+	        	success = true;
+			    return true;
+	        } else {
+	        	// Wallpaper was not found
+	        	return false;
+	        }
 		} catch (Exception e) {
 	    	LOG.error("There was an error reading " + wallpaperURL + " image. Error: " + e.getMessage());
 	    	return false;
@@ -167,67 +189,7 @@ public class WallhavenProvider extends Provider {
 			    	return false;
 				}
 			}
-		}
-		
-		/**
-		 * Old method. Now it doesn't work
-		 */
-		/*
-		URL url;
-		boolean success = false;
-		BufferedInputStream bufIn = null;
-		OutputStream out = null;
-		try {
-			url = new URL(wallpaperURL);
-		} catch (MalformedURLException e) {
-			LOG.error("Malformed URL. Error: " + e.getMessage());
-			return false;
-		}
-		URLConnection uc;
-		try {
-			uc = url.openConnection();
-			int contentLength = uc.getContentLength();
-			InputStream input = uc.getInputStream();
-			bufIn = new BufferedInputStream(input);
-			out = new FileOutputStream(wallpaper);
-			byte[] data = new byte[contentLength];
-			int bytesRead = 0;
-			int offset = 0;
-			while (offset < contentLength) {
-			      bytesRead = bufIn.read(data, offset, data.length - offset);
-			      if (bytesRead == -1)
-			        break;
-			      offset += bytesRead;		
-			}
-			bufIn.close();
-		    if (offset != contentLength) {
-		    	LOG.error("Only read " + offset + " bytes; Expected " + contentLength + " bytes");
-		    	return false;
-		    }
-		    out.write(data);
-		    success = true;
-		    return true;
-		} catch (IOException e) {
-	    	LOG.error("IOException. Error: " + e.getMessage());
-	    	return false;
-		} finally {
-			if (out!=null) {
-			    try {
-					out.flush();
-				    out.close();
-				    if (!success) {
-				    	if (wallpaper.exists()) {
-				    		FileUtils.forceDelete(wallpaper);
-				    	}
-				    	return false;
-				    }
-				} catch (IOException e) {
-			    	LOG.error("IOException. Error: " + e.getMessage());
-			    	return false;
-				}
-			}
-		}
-		*/
+		}		
 	}
 
 	private String composeCompleteURL() {
