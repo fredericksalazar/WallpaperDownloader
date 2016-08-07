@@ -913,7 +913,7 @@ public class WallpaperDownloader {
 			searchTypeComboBox.setEnabled(false);
 		}
 		searchTypeComboBox.addItem(new ComboItem("Relevance", "0")); 
-		searchTypeComboBox.addItem(new ComboItem("Date Added", "1")); 
+		searchTypeComboBox.addItem(new ComboItem("Newest", "1")); 
 		searchTypeComboBox.addItem(new ComboItem("Views", "2")); 
 		searchTypeComboBox.addItem(new ComboItem("Favorites", "3")); 
 		searchTypeComboBox.addItem(new ComboItem("Random", "4"));
