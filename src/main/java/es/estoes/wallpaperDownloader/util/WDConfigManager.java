@@ -121,15 +121,19 @@ public class WDConfigManager {
     			 // wallpaper.
     			 String downloadsDirectoryString = prefm.getPreference("application-downloads-folder");
     			 if (downloadsDirectoryString.contains(WDUtilities.SNAP_KEY)) {
-    				 // Iit is assumed that wallpaperdownloader has been installed via snap
+    				 // It is assumed that wallpaperdownloader has been installed via snap
     				 // Downloads directory is moved to the new directory just in case it is a new
     				 // version
+    				 if (LOG.isInfoEnabled()) {
+    					 LOG.info("It has been detected that wallpaperdownloader application has been installed via snap package. Reconfiguring downloads directory just in case it is a new version and it is needed to move downloads directory to the new confinement space...");
+    				 }
             		 absoluteDownloadsPath = absoluteDownloadsPath.resolve(WDUtilities.DEFAULT_DOWNLOADS_DIRECTORY);
             		 File downloadsDirectory = new File(absoluteDownloadsPath.toString());
 
             		 if (downloadsDirectory.exists()) {
                 		 // Setting the downloads path 
                 		 WDUtilities.setDownloadsPath(absoluteDownloadsPath.toString());
+                		 prefm.setPreference("application-downloads-folder", absoluteDownloadsPath.toString());
             		 }  		 
     			 } else {
         			 WDUtilities.setDownloadsPath(prefm.getPreference("application-downloads-folder"));
