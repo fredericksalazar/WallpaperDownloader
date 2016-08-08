@@ -51,6 +51,7 @@ public class WDUtilities {
 	public static final String SORTING_NO_SORTING = "no_sorting";
 	public static final String WD_ALL = "all";
 	public static final int STATUS_CODE_200 = 200;
+	public static final CharSequence SNAP_KEY = "snap";
 
 	// Attributes
 	private static String appPath;

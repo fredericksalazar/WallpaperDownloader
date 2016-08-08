@@ -111,7 +111,29 @@ public class WDConfigManager {
     		 } else {	
     			 // Configuration file exists
     			 // Setting the downloads path
-    			 WDUtilities.setDownloadsPath(prefm.getPreference("application-downloads-folder"));
+    			 // Important: Due to the nature of snap packages, if this application
+    			 // has been installed via snap, then it can be a problem with downloads directory
+    			 // When a new version of the same snap package is installed, the previous files
+    			 // and configuration is copied to the new confinement directory. Because of every
+    			 // snap version has its own permissions to write only in the directory created for
+    			 // it, if user didn't move the downloads directory, it still will be the last one,
+    			 // so permission errors will be thrown when the application tries to write a new
+    			 // wallpaper.
+    			 String downloadsDirectoryString = prefm.getPreference("application-downloads-folder");
+    			 if (downloadsDirectoryString.contains(WDUtilities.SNAP_KEY)) {
+    				 // Iit is assumed that wallpaperdownloader has been installed via snap
+    				 // Downloads directory is moved to the new directory just in case it is a new
+    				 // version
+            		 absoluteDownloadsPath = absoluteDownloadsPath.resolve(WDUtilities.DEFAULT_DOWNLOADS_DIRECTORY);
+            		 File downloadsDirectory = new File(absoluteDownloadsPath.toString());
+
+            		 if (downloadsDirectory.exists()) {
+                		 // Setting the downloads path 
+                		 WDUtilities.setDownloadsPath(absoluteDownloadsPath.toString());
+            		 }  		 
+    			 } else {
+        			 WDUtilities.setDownloadsPath(prefm.getPreference("application-downloads-folder"));
+    			 }
     			 LOG.info("Downloads directory -> " + prefm.getPreference("application-downloads-folder"));
     		 }
     		 
