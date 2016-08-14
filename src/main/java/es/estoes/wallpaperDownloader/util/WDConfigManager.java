@@ -156,6 +156,45 @@ public class WDConfigManager {
  					 LOG.info("Blacklist directory already exists. Skipping...");
  				 }
  			 }
+ 			 
+ 			 // Operating System
+ 			 switch (System.getProperty("os.name")) {
+ 			 case WDUtilities.OS_LINUX:
+ 				 WDUtilities.setOperatingSystem(WDUtilities.OS_LINUX);
+ 				 break;
+ 			 case WDUtilities.OS_WINDOWS:
+ 				 WDUtilities.setOperatingSystem(WDUtilities.OS_WINDOWS);
+ 				 break;
+ 			 default:
+				 WDUtilities.setOperatingSystem(WDUtilities.OS_UNKNOWN);
+				 break;
+ 			 }
+			 if (LOG.isInfoEnabled()) {
+ 				 LOG.info("Operating System detected: " + WDUtilities.getOperatingSystem());
+ 			 }
+ 			 
+ 			 // Desktop environment
+			 // LOG.info(System.getenv("GDMSESSION"));
+			 if (WDUtilities.getOperatingSystem().equals(WDUtilities.OS_LINUX)) {
+	 			 switch (System.getenv("XDG_CURRENT_DESKTOP")) {
+	 			 case WDUtilities.DE_UNITY:
+	 				 WDUtilities.setDesktopEnvironment(WDUtilities.DE_UNITY);
+	 				 break;
+	 			 case WDUtilities.DE_GNOME:
+	 				 WDUtilities.setDesktopEnvironment(WDUtilities.DE_GNOME);
+	 				 break;
+	 			 case WDUtilities.DE_KDE:
+	 				 WDUtilities.setDesktopEnvironment(WDUtilities.DE_KDE);
+	 				 break;
+	 			 default:
+	 				 WDUtilities.setDesktopEnvironment(WDUtilities.DE_UNKNOWN);
+					 break;
+	 			 }
+				 if (LOG.isInfoEnabled()) {
+	 				 LOG.info("Desktop environment detected: " + WDUtilities.getDesktopEnvironment());
+	 			 }
+			 }
+
     	 } catch (Exception e) {
     		 throw new WDConfigurationException("Error setting up the downloads folder. Error: " + e.getMessage());
     	 }    	 

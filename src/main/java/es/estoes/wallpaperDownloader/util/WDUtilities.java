@@ -52,11 +52,20 @@ public class WDUtilities {
 	public static final String WD_ALL = "all";
 	public static final int STATUS_CODE_200 = 200;
 	public static final CharSequence SNAP_KEY = "snap";
+	public static final String OS_LINUX = "Linux";
+	public static final String OS_WINDOWS = "Windows";
+	public static final String OS_UNKNOWN = "UNKNOWN";
+	public static final String DE_UNITY = "Unity";
+	public static final String DE_GNOME = "GNOME";
+	public static final String DE_KDE = "KDE";
+	public static final String DE_UNKNOWN = "UNKNOWN";
 
 	// Attributes
 	private static String appPath;
 	private static String downloadsPath;
 	private static String userConfigurationFilePath;
+	private static String operatingSystem;
+	private static String desktopEnvironment;
 
 	// Getters & Setters
 	public static String getAppPath() {
@@ -89,6 +98,22 @@ public class WDUtilities {
 		Path blacklistPath = Paths.get(appPath.toString());
 		blacklistPath = blacklistPath.resolve(pm.getProperty("app.blacklist.path"));
 		return blacklistPath.toString();
+	}
+
+	public static String getOperatingSystem() {
+		return operatingSystem;
+	}
+
+	public static void setOperatingSystem(String operatingSystem) {
+		WDUtilities.operatingSystem = operatingSystem;
+	}
+
+	public static String getDesktopEnvironment() {
+		return desktopEnvironment;
+	}
+
+	public static void setDesktopEnvironment(String desktopEnvironment) {
+		WDUtilities.desktopEnvironment = desktopEnvironment;
 	}
 
 	// Methods (All the methods are static)
