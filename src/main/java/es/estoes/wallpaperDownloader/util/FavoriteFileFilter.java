@@ -5,11 +5,11 @@ import java.io.File;
 import javax.swing.filechooser.FileFilter;
 
 /**
- * Class to filter only favourite wallpapers (those which start with fwd-). It is used within JFileChooser
+ * Class to filter only favorite wallpapers (those which start with fwd-). It is used within JFileChooser
  * @author egarcia
  *
  */
-public class FavouriteFileFilter extends FileFilter {
+public class FavoriteFileFilter extends FileFilter {
 
 	@Override
 	public boolean accept(File file) {
@@ -18,7 +18,7 @@ public class FavouriteFileFilter extends FileFilter {
 		String fileName = file.getName();
 		int index = fileName.indexOf("-");
 		String prefix = fileName.substring(0,index + 1);
-		if (prefix.equals(WDUtilities.WD_FAVOURITE_PREFIX)) {
+		if (prefix.equals(WDUtilities.WD_FAVORITE_PREFIX)) {
 			accept = true;
 		}
 		return accept;
@@ -26,7 +26,7 @@ public class FavouriteFileFilter extends FileFilter {
 
 	@Override
 	public String getDescription() {
-		return "Favourite wallpapers";
+		return "Favorite wallpapers";
 	}
 
 }

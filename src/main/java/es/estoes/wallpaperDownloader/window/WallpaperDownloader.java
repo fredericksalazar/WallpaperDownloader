@@ -353,7 +353,7 @@ public class WallpaperDownloader {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/warning_24px_icon.png"));
 			ImageIcon icon = new ImageIcon(img);
 			lblSpaceWarning = new JLabel(icon);
-			lblSpaceWarning.setToolTipText("Directory full. Wallpapers (execpt favourite ones) will be removed randomly in order to download more.");
+			lblSpaceWarning.setToolTipText("Directory full. Wallpapers (execpt favorite ones) will be removed randomly in order to download more.");
 			lblSpaceWarning.setBounds(588, 53, 30, 23);
 			miscPanel.add(lblSpaceWarning);
 			// At first, the label won't be visible
@@ -403,7 +403,7 @@ public class WallpaperDownloader {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/favourite_24px_icon.png"));
 			btnSetFavoriteWallpaper.setIcon(new ImageIcon(img));
-			btnSetFavoriteWallpaper.setToolTipText("Set selected wallpaper as favourite");
+			btnSetFavoriteWallpaper.setToolTipText("Set selected wallpaper as favorite");
 			btnSetFavoriteWallpaper.setBounds(53, 149, 34, 33);
 		} catch (IOException ex) {
 			btnSetFavoriteWallpaper.setText("Set as favaourite");
@@ -836,7 +836,7 @@ public class WallpaperDownloader {
 	      });
 	      
 		 /**
-		  * btnSetFavouriteWallpaper Action Listeners
+		  * btnSetFavoriteWallpaper Action Listeners
 		  */
 	      btnSetFavoriteWallpaper.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -865,6 +865,19 @@ public class WallpaperDownloader {
 				        }
 				     }
 				}
+	      });
+	      
+	      /**
+	       * lastWallpaperList Double-click Listener
+	       */
+	      lastWallpapersList.addMouseListener(new MouseAdapter() {
+				public void mouseClicked(MouseEvent evt) {
+	    	        if (evt.getClickCount() == 2) {
+	    				// Get the selected wallpaper
+	    				ImageIcon wallpaperSelected = lastWallpapersList.getSelectedValue();
+	    				String wallpaperSelectedAbsolutePath = wallpaperSelected.getDescription();
+	    	        }	    	    
+	    	    }
 	      });
 	}
 

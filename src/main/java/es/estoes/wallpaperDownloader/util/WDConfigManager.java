@@ -9,6 +9,9 @@ import java.nio.file.Paths;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
+import es.estoes.wallpaperDownloader.changer.LinuxWallpaperChanger;
+import es.estoes.wallpaperDownloader.changer.UnknownWallpaperChanger;
+import es.estoes.wallpaperDownloader.changer.WindowsWallpaperChanger;
 import es.estoes.wallpaperDownloader.exception.WDConfigurationException;
 
 /**
@@ -173,32 +176,18 @@ public class WDConfigManager {
  				 LOG.info("Operating System detected: " + WDUtilities.getOperatingSystem());
  			 }
  			 
- 			 // Desktop environment
-			 // LOG.info(System.getenv("GDMSESSION"));
+ 			 // Wallpaper changer (Factory method)
 			 if (WDUtilities.getOperatingSystem().equals(WDUtilities.OS_LINUX)) {
-	 			 switch (System.getenv("XDG_CURRENT_DESKTOP")) {
-	 			 case WDUtilities.DE_UNITY:
-	 				 WDUtilities.setDesktopEnvironment(WDUtilities.DE_UNITY);
-	 				 break;
-	 			 case WDUtilities.DE_GNOME:
-	 				 WDUtilities.setDesktopEnvironment(WDUtilities.DE_GNOME);
-	 				 break;
-	 			 case WDUtilities.DE_KDE:
-	 				 WDUtilities.setDesktopEnvironment(WDUtilities.DE_KDE);
-	 				 break;
-	 			 default:
-	 				 WDUtilities.setDesktopEnvironment(WDUtilities.DE_UNKNOWN);
-					 break;
-	 			 }
-				 if (LOG.isInfoEnabled()) {
-	 				 LOG.info("Desktop environment detected: " + WDUtilities.getDesktopEnvironment());
-	 			 }
+				 WDUtilities.setWallpaperChanger(new LinuxWallpaperChanger());
+			 } else if (WDUtilities.getOperatingSystem().equals(WDUtilities.OS_LINUX)) {
+				 WDUtilities.setWallpaperChanger(new WindowsWallpaperChanger());
+			 } else {
+				 WDUtilities.setWallpaperChanger(new UnknownWallpaperChanger());
 			 }
 
     	 } catch (Exception e) {
     		 throw new WDConfigurationException("Error setting up the downloads folder. Error: " + e.getMessage());
     	 }    	 
-
 	}
 	
 	/**

@@ -5,11 +5,11 @@ import java.io.File;
 import javax.swing.filechooser.FileFilter;
 
 /**
- * Class to filter only no favourite wallpapers (those which start with wd-). It is used within JFileChooser
+ * Class to filter only no favorite wallpapers (those which start with wd-). It is used within JFileChooser
  * @author egarcia
  *
  */
-public class NoFavouriteFileFilter extends FileFilter {
+public class NoFavoriteFileFilter extends FileFilter {
 
 	@Override
 	public boolean accept(File file) {
@@ -26,7 +26,7 @@ public class NoFavouriteFileFilter extends FileFilter {
 
 	@Override
 	public String getDescription() {
-		return "No favourite wallpapers";
+		return "No favorite wallpapers";
 	}
 
 }

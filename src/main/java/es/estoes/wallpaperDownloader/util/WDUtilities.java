@@ -19,6 +19,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.log4j.Logger;
 
+import es.estoes.wallpaperDownloader.changer.WallpaperChanger;
 import es.estoes.wallpaperDownloader.window.DialogManager;
 import es.estoes.wallpaperDownloader.window.WallpaperDownloader;
 import es.estoes.wallpaperDownloader.window.WallpaperManagerWindow;
@@ -46,7 +47,7 @@ public class WDUtilities {
 	public static final String WD_PREFIX = "wd-";
 	public static final String DEFAULT_DOWNLOADS_DIRECTORY = "downloads";
 	public static final String UNIT_MB = "MB";
-	public static final String WD_FAVOURITE_PREFIX = "fwd-";
+	public static final String WD_FAVORITE_PREFIX = "fwd-";
 	public static final String SORTING_BY_DATE = "sort_by_date";
 	public static final String SORTING_NO_SORTING = "no_sorting";
 	public static final String WD_ALL = "all";
@@ -65,7 +66,7 @@ public class WDUtilities {
 	private static String downloadsPath;
 	private static String userConfigurationFilePath;
 	private static String operatingSystem;
-	private static String desktopEnvironment;
+	private static WallpaperChanger wallpaperChanger;
 
 	// Getters & Setters
 	public static String getAppPath() {
@@ -108,14 +109,14 @@ public class WDUtilities {
 		WDUtilities.operatingSystem = operatingSystem;
 	}
 
-	public static String getDesktopEnvironment() {
-		return desktopEnvironment;
+	public static WallpaperChanger getWallpaperChanger() {
+		return wallpaperChanger;
 	}
 
-	public static void setDesktopEnvironment(String desktopEnvironment) {
-		WDUtilities.desktopEnvironment = desktopEnvironment;
+	public static void setWallpaperChanger(WallpaperChanger wallpaperChanger) {
+		WDUtilities.wallpaperChanger = wallpaperChanger;
 	}
-
+	
 	// Methods (All the methods are static)
 
 	/**
@@ -126,7 +127,7 @@ public class WDUtilities {
 	}
 
 	/**
-	 * Get screen resolution
+	 * Get screen resolution.
 	 * @return
 	 */
 	public static String getResolution() {
@@ -137,7 +138,7 @@ public class WDUtilities {
 	}
 
 	/**
-	 * Get all the wallpapers from the download directory
+	 * Get all the wallpapers from the download directory.
 	 * @param wallpapersType Type of the wallpapers wanted to retrieve (favorite, non favorite, all)
 	 * @return
 	 */
@@ -146,12 +147,12 @@ public class WDUtilities {
 		File downloadDirectory = new File(WDUtilities.getDownloadsPath());
 		List<File> wallpapers = new ArrayList<File>();
 		if (wallpapersType.equals(WDUtilities.WD_ALL)) {
-			wallpapers = (List<File>) FileUtils.listFiles(downloadDirectory, FileFilterUtils.prefixFileFilter(WDUtilities.WD_FAVOURITE_PREFIX), null);
+			wallpapers = (List<File>) FileUtils.listFiles(downloadDirectory, FileFilterUtils.prefixFileFilter(WDUtilities.WD_FAVORITE_PREFIX), null);
 			wallpapers.addAll((List<File>) FileUtils.listFiles(downloadDirectory, FileFilterUtils.prefixFileFilter(WDUtilities.WD_PREFIX), null));
 		} else {
 			wallpapers = (List<File>) FileUtils.listFiles(downloadDirectory, FileFilterUtils.prefixFileFilter(wallpapersType), null);
 			
-			if (wallpapersType.equals(WDUtilities.WD_FAVOURITE_PREFIX)) {
+			if (wallpapersType.equals(WDUtilities.WD_FAVORITE_PREFIX)) {
 				// Adding total number of favorite wallpapers to WallpaperManagerWindow if it exists
 				WallpaperManagerWindow.refreshFavoriteWallpapersTotalNumber(wallpapers.size());				
 			} else if (wallpapersType.equals(WDUtilities.WD_PREFIX) && WallpaperManagerWindow.lblTotalNoFavoriteWallpapers != null) {
@@ -166,7 +167,7 @@ public class WDUtilities {
 	}
 
 	/**
-	 * Move all the wallpapers to a new location
+	 * Move all the wallpapers to a new location.
 	 * @param newPath
 	 */
 	public static void moveDownloadedWallpapers(String newPath) {
@@ -214,7 +215,7 @@ public class WDUtilities {
 	}
 
 	/**
-	 * Calculates the percentage of the space occupied within the directory
+	 * Calculates the percentage of the space occupied within the directory.
 	 * @param directoryPath
 	 * @return int
 	 */
@@ -232,7 +233,7 @@ public class WDUtilities {
 	}
 
 	/**
-	 * Calculate the space occupied within the directory
+	 * Calculate the space occupied within the directory.
 	 * @param directoryPath
 	 * @param unit
 	 * @return
@@ -250,7 +251,7 @@ public class WDUtilities {
 	}
 
 	/**
-	 * Set wallpapers as favorite
+	 * Set wallpapers as favorite.
 	 * @param originalAbsolutePath
 	 */
 	public static void setFavorite(List<String> originalAbsolutePaths) {
@@ -260,19 +261,19 @@ public class WDUtilities {
 			File originalWallpaper = new File(currentWallpaperPath);
 			String wallpaperOriginalName = originalWallpaper.getName();
 			int index = wallpaperOriginalName.indexOf("-");
-			String wallpaperFavouriteName = WD_FAVOURITE_PREFIX + wallpaperOriginalName.substring(index + 1);
-			File favouriteWallpaper = new File(WDUtilities.getDownloadsPath() + File.separatorChar + wallpaperFavouriteName);
-			originalWallpaper.renameTo(favouriteWallpaper);
+			String wallpaperFavoriteName = WD_FAVORITE_PREFIX + wallpaperOriginalName.substring(index + 1);
+			File favoriteWallpaper = new File(WDUtilities.getDownloadsPath() + File.separatorChar + wallpaperFavoriteName);
+			originalWallpaper.renameTo(favoriteWallpaper);
 			// Information
-			DialogManager info = new DialogManager(wallpaperOriginalName + " wallpaper set as favourite.", 2000);
+			DialogManager info = new DialogManager(wallpaperOriginalName + " wallpaper set as favorite.", 2000);
 			info.openDialog();
 			WallpaperDownloader.refreshJScrollPane();
-			LOG.info(currentWallpaperPath + " wallpaper has been set as favourite");
+			LOG.info(currentWallpaperPath + " wallpaper has been set as favorite");
 		}		
 	}
 
 	/**
-	 * Set wallpapers as no favorite
+	 * Set wallpapers as no favorite.
 	 * @param originalAbsolutePath
 	 */
 	public static void setNoFavorite(List<String> originalAbsolutePaths) {
@@ -282,19 +283,19 @@ public class WDUtilities {
 			File originalWallpaper = new File(currentWallpaperPath);
 			String wallpaperOriginalName = originalWallpaper.getName();
 			int index = wallpaperOriginalName.indexOf("-");
-			String wallpaperNoFavouriteName = WD_PREFIX + wallpaperOriginalName.substring(index + 1);
-			File favouriteWallpaper = new File(WDUtilities.getDownloadsPath() + File.separatorChar + wallpaperNoFavouriteName);
-			originalWallpaper.renameTo(favouriteWallpaper);
+			String wallpaperNoFavoriteName = WD_PREFIX + wallpaperOriginalName.substring(index + 1);
+			File favoriteWallpaper = new File(WDUtilities.getDownloadsPath() + File.separatorChar + wallpaperNoFavoriteName);
+			originalWallpaper.renameTo(favoriteWallpaper);
 			// Information
-			DialogManager info = new DialogManager(wallpaperOriginalName + " wallpaper set as no favourite.", 2000);
+			DialogManager info = new DialogManager(wallpaperOriginalName + " wallpaper set as no favorite.", 2000);
 			info.openDialog();
 			WallpaperDownloader.refreshJScrollPane();
-			LOG.info(currentWallpaperPath + " wallpaper has been set as no favourite");
+			LOG.info(currentWallpaperPath + " wallpaper has been set as no favorite");
 		}	
 	}
 
 	/**
-	 * Remove wallpapers
+	 * Remove wallpapers.
 	 * @param originalAbsolutePaths
 	 */
 	public static void removeWallpaper(List<String> originalAbsolutePaths) {
@@ -337,7 +338,7 @@ public class WDUtilities {
 	}
 
 	/**
-	 * Get all wallpapers downloaded sorted by date
+	 * Get all wallpapers downloaded sorted by date.
 	 * @return
 	 */
 	public static File[] getAllWallpapersSortedByDate(String wallpapersType) {
@@ -348,9 +349,14 @@ public class WDUtilities {
 		return wallpapers;
 	}
 	
-	/**
-	 * Get the image icon fo the last numWallpapers wallpapers downloaded
-	 */
+/**
+ * Get the image icon fo the last numWallpapers wallpapers downloaded.
+ * @param numWallpapers number of wallpapers
+ * @param from first wallpaper to get
+ * @param sort sorting
+ * @param wallpapersType type of the wallpapers to get (favorite, no favorite)
+ * @return
+ */
 	public static ImageIcon[] getImageIconWallpapers(int numWallpapers, int from, String sort, String wallpapersType) {
 		File[] wallpapers = {};
 		int to = from + numWallpapers;
@@ -410,4 +416,5 @@ public class WDUtilities {
 		}
 		return result;
 	}
+
 }

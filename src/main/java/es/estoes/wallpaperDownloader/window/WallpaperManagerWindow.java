@@ -424,7 +424,7 @@ public class WallpaperManagerWindow extends JFrame {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void refreshFavoriteWallpapers() {
-		ImageIcon[] wallpapers = WDUtilities.getImageIconWallpapers(10, Integer.valueOf(lblFirstFavoriteWallpaper.getText()) - 1, WDUtilities.SORTING_NO_SORTING, WDUtilities.WD_FAVOURITE_PREFIX);
+		ImageIcon[] wallpapers = WDUtilities.getImageIconWallpapers(10, Integer.valueOf(lblFirstFavoriteWallpaper.getText()) - 1, WDUtilities.SORTING_NO_SORTING, WDUtilities.WD_FAVORITE_PREFIX);
 		favoriteWallpapersList = new JList(wallpapers);
 		changePointerJList();
 		favoriteScrollPanel.setViewportView(favoriteWallpapersList);
