@@ -7,6 +7,11 @@
 	<version>2.1</version>
 	<name>wallpaperDownloader</name>
 	<url>http://maven.apache.org</url>
+	<!-- Properties -->
+	<properties>
+    	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    	<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	</properties>
 	<!-- Dependencies -->
 	<dependencies>
 		<dependency>
@@ -50,6 +55,16 @@
 
     <build>
         <plugins>
+        	<!-- Plugin to compile -->
+            <plugin>
+                   <groupId>org.apache.maven.plugins</groupId>
+                   <artifactId>maven-compiler-plugin</artifactId>
+                   <version>3.5.1</version>
+                   <configuration>
+                           <source>1.8</source>
+                           <target>1.8</target>
+                   </configuration>
+           </plugin>       	
         	<!-- Plugin to include all the libraries in only one executable jar file -->
             <plugin>
 			  <groupId>org.apache.maven.plugins</groupId>
