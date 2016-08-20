@@ -122,7 +122,8 @@ public class WallpaperDownloader {
 	private JLabel lblSourceCode;
 	private JButton btnRepository;
 	private JSeparator aboutSeparator2;
-
+	private JTextField icons;
+	private JButton btnIcons;
 	
 	// Getters & Setters
 	public JFrame getFrame() {
@@ -468,14 +469,40 @@ public class WallpaperDownloader {
 		txtInfo.setBackground(UIManager.getColor("Button.background"));
 		txtInfo.setText("Please, if you want to open any issue beause you find a bug, you can do it in the official code repository (link above). if you have any suggestions you can send them there too. Thanks and enjoy!");
 		txtInfo.setEditable(false);
-		txtInfo.setBounds(15, 133, 527, 115);
+		txtInfo.setBounds(12, 159, 527, 115);
 		txtInfo.setLineWrap(true);
 		txtInfo.setWrapStyleWord(true);
 		aboutPanel.add(txtInfo);
 		
 		aboutSeparator2 = new JSeparator();
-		aboutSeparator2.setBounds(13, 113, 531, 2);
+		aboutSeparator2.setBounds(12, 143, 531, 2);
 		aboutPanel.add(aboutSeparator2);
+		
+		JLabel lblIcons = new JLabel("Icons");
+		lblIcons.setBounds(12, 111, 95, 15);
+		aboutPanel.add(lblIcons);
+		
+		icons = new JTextField() {
+			public void setBorder(Border border) {
+			}
+		};
+		icons.setText("Dave Gandy from");
+		icons.setEditable(false);
+		icons.setColumns(10);
+		icons.setBounds(108, 109, 114, 19);
+		aboutPanel.add(icons);
+		
+		btnIcons = new JButton("<HTML><FONT color=\"#000099\"><U>http://www.flaticon.com/</U></FONT></HTML>");
+		btnIcons.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		btnIcons.setOpaque(false);
+		btnIcons.setHorizontalAlignment(SwingConstants.LEFT);
+		btnIcons.setBorderPainted(false);
+		btnIcons.setBackground(Color.WHITE);
+		btnIcons.setBounds(223, 106, 456, 25);
+		aboutPanel.add(btnIcons);
 		
 		// Global buttons
 		btnCloseExit = new JButton("Close & Exit");
@@ -866,7 +893,22 @@ public class WallpaperDownloader {
 				     }
 				}
 	      });
-	      
+
+		 /**
+		  * btnIcons Action Listeners
+		  */
+	      btnIcons.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+				    if (Desktop.isDesktopSupported()) {
+				        try {
+				          Desktop.getDesktop().browse(new URI(pm.getProperty("repository.icons")));
+				        } catch (Exception exception) { 
+				        	LOG.error(exception.getMessage()); 
+				        }
+				     }
+				}
+	      });
+		      
 	      /**
 	       * lastWallpaperList Double-click Listener
 	       */
