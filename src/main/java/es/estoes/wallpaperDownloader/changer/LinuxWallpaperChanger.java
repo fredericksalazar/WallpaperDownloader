@@ -46,8 +46,37 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 
 	@Override
 	public void setWallpaper(String wallpaperPath) {
-		// TODO Auto-generated method stub
-		
+		switch (this.getDesktopEnvironment()) {
+		case WDUtilities.DE_UNITY:
+			this.setUnityGnome3Wallpaper(wallpaperPath);
+			break;
+		case WDUtilities.DE_GNOME:
+			break;
+		case WDUtilities.DE_KDE:
+			break;
+		default:
+			break;
+		}
+	}
+
+	/**
+	 * Sets wallpaper for Unity and Gnome 3 desktop
+	 * @param wallpaperPath
+	 */
+	private void setUnityGnome3Wallpaper(String wallpaperPath) {
+      Process process;
+      try {
+          process = Runtime.getRuntime().exec("gsettings set org.gnome.desktop.background picture-uri file://" + wallpaperPath);
+          process.waitFor();
+          process.destroy();
+    	  if (LOG.isInfoEnabled()) {
+    		LOG.error("Wallpaper set in Unity or Gnome 3: " + wallpaperPath);  
+    	  }
+      } catch (Exception exception) {
+    	  if (LOG.isInfoEnabled()) {
+    		LOG.error("Wallpaper couldn't be set in Unity or Gnome 3. Error: " + exception.getMessage());  
+    	  }
+      }	
 	}
 
 	@Override

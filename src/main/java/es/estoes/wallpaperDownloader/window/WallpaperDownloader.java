@@ -108,12 +108,13 @@ public class WallpaperDownloader {
 	private JComboBox<ComboItem> timerComboBox;
 	private JFormattedTextField downloadDirectorySize;
 	private JPanel miscPanel;
-	private JPanel miscPanel_1;
+	private JPanel wallpapersPanel;
 	private JFormattedTextField downloadsDirectory;
 	private JButton btnChangeDownloadsDirectory;
 	private JButton btnManageWallpapers;
 	private JButton btnRemoveWallpaper;
 	private JButton btnSetFavoriteWallpaper;
+	private JButton btnSetWallpaper;
 	private JPanel aboutPanel;
 	private JTextField version;
 	private JSeparator aboutSeparator1;
@@ -368,23 +369,23 @@ public class WallpaperDownloader {
 		}
 		
 		// Wallpapers (tab)
-		miscPanel_1 = new JPanel();
-		tabbedPane.addTab("Wallpapers", null, miscPanel_1, null);
-		miscPanel_1.setLayout(null);
+		wallpapersPanel = new JPanel();
+		tabbedPane.addTab("Wallpapers", null, wallpapersPanel, null);
+		wallpapersPanel.setLayout(null);
 
 		JLabel lblLastWallpapers = new JLabel("Last 5 wallpapers downloaded");
 		lblLastWallpapers.setBounds(12, 12, 238, 15);
-		miscPanel_1.add(lblLastWallpapers);
+		wallpapersPanel.add(lblLastWallpapers);
 		
         scroll = new JScrollPane();
         scroll.setPreferredSize(new Dimension(300, 400));
 		scroll.setBounds(12, 36, 652, 105);
-		miscPanel_1.add(scroll);
+		wallpapersPanel.add(scroll);
 		
 		btnManageWallpapers = new JButton("Manage All Wallpapers");
 		btnManageWallpapers.setBackground(Color.WHITE);
 		btnManageWallpapers.setBounds(12, 277, 197, 25);
-		miscPanel_1.add(btnManageWallpapers);
+		wallpapersPanel.add(btnManageWallpapers);
 		
 		btnRemoveWallpaper = new JButton();
 		
@@ -397,7 +398,7 @@ public class WallpaperDownloader {
 			btnRemoveWallpaper.setText("Delete");
 			btnRemoveWallpaper.setBounds(12, 149, 34, 33);
 		}
-		miscPanel_1.add(btnRemoveWallpaper);
+		wallpapersPanel.add(btnRemoveWallpaper);
 		
 		btnSetFavoriteWallpaper = new JButton();
 		
@@ -410,9 +411,25 @@ public class WallpaperDownloader {
 			btnSetFavoriteWallpaper.setText("Set as favaourite");
 			btnSetFavoriteWallpaper.setBounds(58, 149, 34, 33);
 		}
-		miscPanel_1.add(btnSetFavoriteWallpaper);
+		wallpapersPanel.add(btnSetFavoriteWallpaper);
 		
 		
+		btnSetWallpaper = new JButton();
+
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/desktop_24px_icon.png"));
+			btnSetWallpaper.setIcon(new ImageIcon(img));
+			btnSetWallpaper.setToolTipText("Set selected wallpaper");
+			btnSetWallpaper.setBounds(94, 149, 34, 33);
+		} catch (IOException ex) {
+			btnSetWallpaper.setText("Set wallpaper");
+			btnSetWallpaper.setBounds(99, 149, 34, 33);
+		}
+		// This button only will be available for those desktops which support setting wallpapers directly
+		if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
+			wallpapersPanel.add(btnSetWallpaper);			
+		}
+
 		// About (tab)
 		aboutPanel = new JPanel();
 		tabbedPane.addTab("About", null, aboutPanel, null);
@@ -878,8 +895,25 @@ public class WallpaperDownloader {
 				WDUtilities.setFavorite(wallpapersSelectedAbsolutePath);
 			}
 		  });
-	      
+
 		 /**
+		  * btnSetWallpaper Action Listeners
+		  */
+	      btnSetWallpaper.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				// Get the selected wallpapers
+				List<ImageIcon> wallpapersSelected = lastWallpapersList.getSelectedValuesList();
+				List<String> wallpapersSelectedAbsolutePath = new ArrayList<String>();
+				Iterator<ImageIcon> wallpapersSelectedIterator = wallpapersSelected.iterator();
+				while (wallpapersSelectedIterator.hasNext()) {
+					ImageIcon wallpaperSelectedIcon = (ImageIcon) wallpapersSelectedIterator.next();
+					wallpapersSelectedAbsolutePath.add(wallpaperSelectedIcon.getDescription());
+				}
+				WDUtilities.getWallpaperChanger().setWallpaper(wallpapersSelectedAbsolutePath.get(0));
+			}
+		  });	      
+
+	      /**
 		  * btnRepository Action Listeners
 		  */
 	      btnRepository.addActionListener(new ActionListener() {
