@@ -60,6 +60,12 @@ public class WDUtilities {
 	public static final String DE_GNOME = "GNOME";
 	public static final String DE_KDE = "KDE";
 	public static final String DE_UNKNOWN = "UNKNOWN";
+	public static final Object GDM_SESSION_GNOME = "gnome";
+	public static final String GDM_SESSION_GNOME_SHELL = "gnome-shell";
+	public static final String GDM_SESSION_GNOME_CLASSIC = "gnome-classic";
+	public static final String GDM_SESSION_GNOME_FALLBACK = "gnome-fallback";
+	public static final String DE_GNOME3 = "GNOME3";
+	public static final String DE_GNOME2 = "GNOME2";
 
 	// Attributes
 	private static String appPath;

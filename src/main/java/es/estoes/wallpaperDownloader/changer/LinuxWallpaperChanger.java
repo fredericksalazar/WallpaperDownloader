@@ -29,7 +29,16 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 				this.setDesktopEnvironment(WDUtilities.DE_UNITY);
 				break;
 			case WDUtilities.DE_GNOME:
-				this.setDesktopEnvironment(WDUtilities.DE_GNOME);
+				if (System.getenv("GDMSESSION").equals(WDUtilities.GDM_SESSION_GNOME) ||
+					System.getenv("GDMSESSION").equals(WDUtilities.GDM_SESSION_GNOME_SHELL) || 
+					System.getenv("GDMSESSION").equals(WDUtilities.GDM_SESSION_GNOME_CLASSIC) ||
+					System.getenv("GDMSESSION").equals(WDUtilities.GDM_SESSION_GNOME_FALLBACK)) {
+					// TODO: Comprobar esto porque no está detectando bien GNOME3
+					this.setDesktopEnvironment(WDUtilities.DE_GNOME3);	
+				} else {
+					this.setDesktopEnvironment(WDUtilities.DE_GNOME2);
+				}
+				
 				break;
 			case WDUtilities.DE_KDE:
 				this.setDesktopEnvironment(WDUtilities.DE_KDE);
@@ -50,7 +59,8 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 		case WDUtilities.DE_UNITY:
 			this.setUnityGnome3Wallpaper(wallpaperPath);
 			break;
-		case WDUtilities.DE_GNOME:
+		case WDUtilities.DE_GNOME3:
+			this.setUnityGnome3Wallpaper(wallpaperPath);
 			break;
 		case WDUtilities.DE_KDE:
 			break;
@@ -86,7 +96,7 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 		case WDUtilities.DE_UNITY:
 			result = true;
 			break;
-		case WDUtilities.DE_GNOME:
+		case WDUtilities.DE_GNOME3:
 			result = true;
 			break;
 		case WDUtilities.DE_KDE:
