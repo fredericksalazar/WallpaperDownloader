@@ -952,6 +952,11 @@ public class WallpaperDownloader {
 	    				// Get the selected wallpaper
 	    				ImageIcon wallpaperSelected = lastWallpapersList.getSelectedValue();
 	    				String wallpaperSelectedAbsolutePath = wallpaperSelected.getDescription();
+	    				
+	    				// Opens the preview window
+	    				PreviewWallpaperWindow previewWindow = new PreviewWallpaperWindow();
+	    				previewWindow.setWallpaperToRemove(wallpaperSelectedAbsolutePath);
+	    				previewWindow.setVisible(true);
 	    	        }	    	    
 	    	    }
 	      });
