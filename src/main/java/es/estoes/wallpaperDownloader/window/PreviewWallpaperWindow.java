@@ -1,14 +1,23 @@
 package es.estoes.wallpaperDownloader.window;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.Toolkit;
+
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JButton;
+
 import es.estoes.wallpaperDownloader.util.WDUtilities;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,18 +50,45 @@ public class PreviewWallpaperWindow extends JFrame {
 
 	/**
 	 * Constructor
+	 * @param wallpaperSelectedAbsolutePath 
 	 */
-	public PreviewWallpaperWindow() {
+	public PreviewWallpaperWindow(String wallpaperSelectedAbsolutePath) {
+		// Setting wallpaperToRemove
+		this.setWallpaperToRemove(wallpaperSelectedAbsolutePath);
+		
 		// DISPOSE_ON_CLOSE for closing only this frame instead of the entire application
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setTitle("Wallpaper Preview");
 		setBounds(100, 100, 1024, 768);
 		getContentPane().setLayout(null);
 		
-		JPanel previewPanel = new JPanel();
+		// Centering window
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		Dimension screenSize = toolkit.getScreenSize();
+		int x = (screenSize.width - getWidth()) / 2;
+		int y = (screenSize.height - getHeight()) / 2;
+		setLocation(x, y);
+		
+		JPanel previewPanel = new JPanel(new BorderLayout());
 		previewPanel.setBounds(12, 0, 992, 693);
 		getContentPane().add(previewPanel);
+
+		// Loading image to preview it
+		BufferedImage bufferedImage = null;
 		
+		try {
+		    bufferedImage = ImageIO.read(new File(this.getWallpaperToRemove()));
+		} catch (IOException e) {
+		    e.printStackTrace();
+		}
+		
+		// Resizing buffered image
+		Image resizedImage = bufferedImage.getScaledInstance(992, 693, Image.SCALE_SMOOTH);
+		ImageIcon previewImage = new ImageIcon(resizedImage);		
+		
+		JLabel previewLabel = new JLabel("", previewImage, JLabel.CENTER);
+		previewPanel.add(previewLabel, BorderLayout.CENTER);		
+
 		btnRemoveWallpaper = new JButton();
 
 		try {
