@@ -7,12 +7,14 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -21,6 +23,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
+
 import es.estoes.wallpaperDownloader.util.WDUtilities;
 import es.estoes.wallpaperDownloader.util.WallpaperListRenderer;
 
@@ -420,6 +423,41 @@ public class WallpaperManagerWindow extends JFrame {
 				refreshNoFavoriteWallpapers();
 			}
 		});
+		
+	      /**
+	       * favoriteWallpaperList Double-click Listener
+	       */
+	      favoriteWallpapersList.addMouseListener(new MouseAdapter() {
+				public void mouseClicked(MouseEvent evt) {
+	    	        if (evt.getClickCount() == 2) {
+	    				// Get the selected wallpaper
+	    				ImageIcon wallpaperSelected = (ImageIcon) favoriteWallpapersList.getSelectedValue();
+	    				String wallpaperSelectedAbsolutePath = wallpaperSelected.getDescription();
+	    				
+	    				// Opens the preview window
+	    				PreviewWallpaperWindow previewWindow = new PreviewWallpaperWindow(wallpaperSelectedAbsolutePath);
+	    				previewWindow.setVisible(true);
+	    	        }	    	    
+	    	    }
+	      });
+
+	      /**
+	       * noFavoriteWallpapersList Double-click Listener
+	       */
+	      noFavoriteWallpapersList.addMouseListener(new MouseAdapter() {
+				public void mouseClicked(MouseEvent evt) {
+	    	        if (evt.getClickCount() == 2) {
+	    				// Get the selected wallpaper
+	    				ImageIcon wallpaperSelected = (ImageIcon) noFavoriteWallpapersList.getSelectedValue();
+	    				String wallpaperSelectedAbsolutePath = wallpaperSelected.getDescription();
+	    				
+	    				// Opens the preview window
+	    				PreviewWallpaperWindow previewWindow = new PreviewWallpaperWindow(wallpaperSelectedAbsolutePath);
+	    				previewWindow.setVisible(true);
+	    	        }	    	    
+	    	    }
+	      });
+
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

@@ -954,8 +954,7 @@ public class WallpaperDownloader {
 	    				String wallpaperSelectedAbsolutePath = wallpaperSelected.getDescription();
 	    				
 	    				// Opens the preview window
-	    				PreviewWallpaperWindow previewWindow = new PreviewWallpaperWindow();
-	    				previewWindow.setWallpaperToRemove(wallpaperSelectedAbsolutePath);
+	    				PreviewWallpaperWindow previewWindow = new PreviewWallpaperWindow(wallpaperSelectedAbsolutePath);
 	    				previewWindow.setVisible(true);
 	    	        }	    	    
 	    	    }
