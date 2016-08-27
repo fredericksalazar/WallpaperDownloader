@@ -12,7 +12,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.ToolTipManager;
 import javax.swing.border.Border;
-
 import es.estoes.wallpaperDownloader.harvest.Harvester;
 import es.estoes.wallpaperDownloader.item.ComboItem;
 import es.estoes.wallpaperDownloader.util.PreferencesManager;
@@ -20,15 +19,11 @@ import es.estoes.wallpaperDownloader.util.PropertiesManager;
 import es.estoes.wallpaperDownloader.util.WDConfigManager;
 import es.estoes.wallpaperDownloader.util.WDUtilities;
 import es.estoes.wallpaperDownloader.util.WallpaperListRenderer;
-
 import javax.swing.JTabbedPane;
 import javax.swing.JButton;
-
 import java.awt.Color;
-
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
-
 import java.awt.AWTException;
 import java.awt.Cursor;
 import java.awt.Desktop;
@@ -56,18 +51,13 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.text.NumberFormat;
-
 import javax.swing.JLabel;
-
 import org.apache.log4j.Logger;
-
 import javax.swing.JComboBox;
-
 import java.text.Format;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
@@ -115,6 +105,7 @@ public class WallpaperDownloader {
 	private JButton btnRemoveWallpaper;
 	private JButton btnSetFavoriteWallpaper;
 	private JButton btnSetWallpaper;
+	private JButton btnPreviewWallpaper;
 	private JPanel aboutPanel;
 	private JTextField version;
 	private JSeparator aboutSeparator1;
@@ -413,14 +404,26 @@ public class WallpaperDownloader {
 		}
 		wallpapersPanel.add(btnSetFavoriteWallpaper);
 		
-		
+		btnPreviewWallpaper = new JButton();
+
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/view_24px_icon.png"));
+			btnPreviewWallpaper.setIcon(new ImageIcon(img));
+			btnPreviewWallpaper.setToolTipText("Preview wallpaper");
+			btnPreviewWallpaper.setBounds(95, 149, 34, 33);
+		} catch (IOException ex) {
+			btnPreviewWallpaper.setText("Preview wallpaper");
+			btnPreviewWallpaper.setBounds(95, 149, 34, 33);
+		}
+		wallpapersPanel.add(btnPreviewWallpaper);
+
 		btnSetWallpaper = new JButton();
 
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/desktop_24px_icon.png"));
 			btnSetWallpaper.setIcon(new ImageIcon(img));
 			btnSetWallpaper.setToolTipText("Set selected wallpaper");
-			btnSetWallpaper.setBounds(94, 149, 34, 33);
+			btnSetWallpaper.setBounds(137, 149, 34, 33);
 		} catch (IOException ex) {
 			btnSetWallpaper.setText("Set wallpaper");
 			btnSetWallpaper.setBounds(99, 149, 34, 33);
@@ -428,6 +431,7 @@ public class WallpaperDownloader {
 		// This button only will be available for those desktops which support setting wallpapers directly
 		if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
 			wallpapersPanel.add(btnSetWallpaper);			
+
 		}
 
 		// About (tab)
@@ -818,45 +822,6 @@ public class WallpaperDownloader {
 			}
 		});
 		
-		/**
-		 * lastWallpapersList Action Listeners
-		 */
-		/*
-	    ListSelectionListener listSelectionListener = new ListSelectionListener() {
-	        @SuppressWarnings("rawtypes")
-			public void valueChanged(ListSelectionEvent listSelectionEvent) {
-	          System.out.println("First index: " + listSelectionEvent.getFirstIndex());
-	          System.out.println(", Last index: " + listSelectionEvent.getLastIndex());
-	          boolean adjust = listSelectionEvent.getValueIsAdjusting();
-	          System.out.println(", Adjusting? " + adjust);
-	          if (!adjust) {
-	            JList list = (JList) listSelectionEvent.getSource();
-	            int selections[] = list.getSelectedIndices();
-	            List selectionValues = list.getSelectedValuesList();
-	            for (int i = 0, n = selections.length; i < n; i++) {
-	              if (i == 0) {
-	                System.out.println(" Selections: ");
-	              }
-	              System.out.println(selections[i] + "/" + selectionValues.get(i) + " ");
-	            }
-	          }
-	          // Good code bellow
-	          
-	          JList list = (JList) listSelectionEvent.getSource();
-	          int selections[] = list.getSelectedIndices();
-	          List selectionValues = list.getSelectedValuesList();
-	          for (int i = 0, n = selections.length; i < n; i++) {
-	        	  ImageIcon icon = (ImageIcon)selectionValues.get(i);
-	        	  DialogManager dm = new DialogManager(icon.getDescription(), 2000);
-	        	  dm.openDialog();
-		      }
-	          
-	        }
-	        
-	      };
-	      lastWallpapersList.addListSelectionListener(listSelectionListener);
-	      */
-		
 		  /**
 		  * lastWallpapersList Mouse Motion Listeners
 		  */
@@ -944,21 +909,20 @@ public class WallpaperDownloader {
 	      });
 		      
 	      /**
-	       * lastWallpaperList Double-click Listener
+	       * btnPreviewWallpaper Action Listeners
 	       */
-	      lastWallpapersList.addMouseListener(new MouseAdapter() {
-				public void mouseClicked(MouseEvent evt) {
-	    	        if (evt.getClickCount() == 2) {
-	    				// Get the selected wallpaper
-	    				ImageIcon wallpaperSelected = lastWallpapersList.getSelectedValue();
-	    				String wallpaperSelectedAbsolutePath = wallpaperSelected.getDescription();
-	    				
-	    				// Opens the preview window
-	    				PreviewWallpaperWindow previewWindow = new PreviewWallpaperWindow(wallpaperSelectedAbsolutePath);
-	    				previewWindow.setVisible(true);
-	    	        }	    	    
-	    	    }
+	      btnPreviewWallpaper.addActionListener(new ActionListener() {
+	    	  public void actionPerformed(ActionEvent arg0) {
+  				// Get the selected wallpaper
+  				ImageIcon wallpaperSelected = lastWallpapersList.getSelectedValue();
+  				String wallpaperSelectedAbsolutePath = wallpaperSelected.getDescription();
+  				
+  				// Opens the preview window
+  				PreviewWallpaperWindow previewWindow = new PreviewWallpaperWindow(wallpaperSelectedAbsolutePath);
+  				previewWindow.setVisible(true);
+	    	  }
 	      });
+			
 	}
 
 	/**
