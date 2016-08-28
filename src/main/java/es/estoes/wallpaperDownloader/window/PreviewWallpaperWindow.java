@@ -4,16 +4,13 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
-
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JButton;
-
 import es.estoes.wallpaperDownloader.util.WDUtilities;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
@@ -33,28 +30,29 @@ public class PreviewWallpaperWindow extends JFrame {
 	/**
 	 * Attributes.
 	 */
+	private String wallpaperToPreview;
 	private JButton btnRemoveWallpaper;
-	private String wallpaperToRemove;
-
+	private JButton btnSetNoFavoriteWallpaper;
+	private JButton btnSetFavoriteWallpaper;
 	
 	/**
 	 * Getters & Setters.
 	 */
-	public String getWallpaperToRemove() {
-		return wallpaperToRemove;
+	public String getWallpaperToPreview() {
+		return wallpaperToPreview;
 	}
 
-	public void setWallpaperToRemove(String wallpaperToRemove) {
-		this.wallpaperToRemove = wallpaperToRemove;
+	public void setWallpaperToPreview(String wallpaperToRemove) {
+		this.wallpaperToPreview = wallpaperToRemove;
 	}
 
 	/**
 	 * Constructor
 	 * @param wallpaperSelectedAbsolutePath 
 	 */
-	public PreviewWallpaperWindow(String wallpaperSelectedAbsolutePath) {
+	public PreviewWallpaperWindow(String wallpaperSelectedAbsolutePath, WallpaperManagerWindow wallpaperManagerWindow) {
 		// Setting wallpaperToRemove
-		this.setWallpaperToRemove(wallpaperSelectedAbsolutePath);
+		this.setWallpaperToPreview(wallpaperSelectedAbsolutePath);
 		
 		// DISPOSE_ON_CLOSE for closing only this frame instead of the entire application
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -77,7 +75,7 @@ public class PreviewWallpaperWindow extends JFrame {
 		BufferedImage bufferedImage = null;
 		
 		try {
-		    bufferedImage = ImageIO.read(new File(this.getWallpaperToRemove()));
+		    bufferedImage = ImageIO.read(new File(this.getWallpaperToPreview()));
 		} catch (IOException e) {
 		    e.printStackTrace();
 		}
@@ -101,7 +99,7 @@ public class PreviewWallpaperWindow extends JFrame {
 			btnRemoveWallpaper.setBounds(12, 698, 34, 33);
 		}
 		getContentPane().add(btnRemoveWallpaper);
-
+		
 		/**
 		  * btnRemoveWallpaper Action Listeners
 		  */
@@ -109,10 +107,70 @@ public class PreviewWallpaperWindow extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				// Get the selected wallpaper and remove it
 				List<String> wallpaperToRemoveList = new ArrayList<String>();
-				wallpaperToRemoveList.add(wallpaperToRemove);
+				wallpaperToRemoveList.add(wallpaperToPreview);
 				WDUtilities.removeWallpaper(wallpaperToRemoveList);
+				if (wallpaperManagerWindow != null) {
+					wallpaperManagerWindow.refreshFavoriteWallpapers();
+					wallpaperManagerWindow.refreshNoFavoriteWallpapers();
+				}
 				dispose();
 			}
 	     });
+	     
+		if (WDUtilities.isWallpaperFavorite(this.getWallpaperToPreview())) {
+
+			btnSetNoFavoriteWallpaper = new JButton();
+
+			try {
+				Image img = ImageIO.read(getClass().getResource("/images/icons/no_favorite_24px_icon.png"));
+				btnSetNoFavoriteWallpaper.setIcon(new ImageIcon(img));
+				btnSetNoFavoriteWallpaper.setToolTipText("Set selected wallpaper as no favorite");
+				btnSetNoFavoriteWallpaper.setBounds(51, 698, 34, 33);
+			} catch (IOException ex) {
+				btnSetNoFavoriteWallpaper.setText("Set as no favorite");
+				btnSetNoFavoriteWallpaper.setBounds(51, 698, 34, 33);
+			}		
+			getContentPane().add(btnSetNoFavoriteWallpaper);
+
+			btnSetNoFavoriteWallpaper.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					List<String> favoriteWallpaperList = new ArrayList<String>();
+					favoriteWallpaperList.add(wallpaperToPreview);
+					WDUtilities.setNoFavorite(favoriteWallpaperList);
+					if (wallpaperManagerWindow != null) {
+						wallpaperManagerWindow.refreshFavoriteWallpapers();
+						wallpaperManagerWindow.refreshNoFavoriteWallpapers();
+					}
+					dispose();
+				}
+			});			
+		} else {
+			
+			btnSetFavoriteWallpaper = new JButton();
+			
+			try {
+				Image img = ImageIO.read(getClass().getResource("/images/icons/favourite_24px_icon.png"));
+				btnSetFavoriteWallpaper.setIcon(new ImageIcon(img));
+				btnSetFavoriteWallpaper.setToolTipText("Set selected wallpaper as favorite");
+				btnSetFavoriteWallpaper.setBounds(51, 698, 34, 33);
+			} catch (IOException ex) {
+				btnSetFavoriteWallpaper.setText("Set as favaourite");
+				btnSetFavoriteWallpaper.setBounds(51, 698, 34, 33);
+			}
+			getContentPane().add(btnSetFavoriteWallpaper);
+
+			btnSetFavoriteWallpaper.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					List<String> noFavoriteWallpaperList = new ArrayList<String>();
+					noFavoriteWallpaperList.add(wallpaperToPreview);
+					WDUtilities.setFavorite(noFavoriteWallpaperList);
+					if (wallpaperManagerWindow != null) {
+						wallpaperManagerWindow.refreshFavoriteWallpapers();
+						wallpaperManagerWindow.refreshNoFavoriteWallpapers();
+					}
+					dispose();
+				}
+			});	
+		}
 	}
 }

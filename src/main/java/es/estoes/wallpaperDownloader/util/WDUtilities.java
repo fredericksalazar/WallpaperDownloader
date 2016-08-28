@@ -422,5 +422,18 @@ public class WDUtilities {
 		}
 		return result;
 	}
+	
+	/**
+	 * Checks if a wallpaper is favorite.
+	 * @param wallpaperAbsolutePath wallpaper absolute path
+	 * @return boolean
+	 */
+	public static boolean isWallpaperFavorite(String wallpaperAbsolutePath) {
+		if (wallpaperAbsolutePath.contains(WD_FAVORITE_PREFIX)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 }
