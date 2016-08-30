@@ -14,6 +14,8 @@ parts:
   wallpaperdownloader:
     plugin: maven
     source: .
+    stage-packages:
+      - libglib2.0-bin
 
   # It will copy wallpaperdownloader script into /bin/
   # This script contains all the commands needed (sets env variables, launches the jar file...) to
