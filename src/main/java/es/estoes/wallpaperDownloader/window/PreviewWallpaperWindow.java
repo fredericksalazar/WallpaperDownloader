@@ -34,6 +34,7 @@ public class PreviewWallpaperWindow extends JFrame {
 	private JButton btnRemoveWallpaper;
 	private JButton btnSetNoFavoriteWallpaper;
 	private JButton btnSetFavoriteWallpaper;
+	private JButton btnSetWallpaper;
 	
 	/**
 	 * Getters & Setters.
@@ -116,8 +117,8 @@ public class PreviewWallpaperWindow extends JFrame {
 				dispose();
 			}
 	     });
-	     
-		if (WDUtilities.isWallpaperFavorite(this.getWallpaperToPreview())) {
+			
+	     if (WDUtilities.isWallpaperFavorite(this.getWallpaperToPreview())) {
 
 			btnSetNoFavoriteWallpaper = new JButton();
 
@@ -172,5 +173,33 @@ public class PreviewWallpaperWindow extends JFrame {
 				}
 			});	
 		}
+	     
+	    btnSetWallpaper = new JButton();
+	     
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/desktop_24px_icon.png"));
+			btnSetWallpaper.setIcon(new ImageIcon(img));
+			btnSetWallpaper.setToolTipText("Set selected wallpaper");
+			btnSetWallpaper.setBounds(90, 698, 34, 33);
+		} catch (IOException ex) {
+			btnSetWallpaper.setText("Set wallpaper");
+			btnSetWallpaper.setBounds(90, 698, 34, 33);
+		}
+
+		// This button only will be available for those desktops which support setting wallpapers directly
+		if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
+		getContentPane().add(btnSetWallpaper);			
+
+		 /**
+		  * btnSetWallpaper Action Listeners
+		  */
+	      btnSetWallpaper.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				// Get the selected wallpaper and remove it
+				WDUtilities.getWallpaperChanger().setWallpaper(wallpaperToPreview);
+			}
+		  });	  
+		}
+		
 	}
 }

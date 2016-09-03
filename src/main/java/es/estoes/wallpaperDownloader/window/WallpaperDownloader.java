@@ -893,24 +893,29 @@ public class WallpaperDownloader {
 		  */
 	      btnRepository.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-//				    if (Desktop.isDesktopSupported()) {
-//				        try {
-//				          Desktop.getDesktop().browse(new URI(pm.getProperty("repository.code")));
-//				        } catch (Exception exception) { 
-//				        	LOG.error(exception.getMessage()); 
-//				        }
-//				     }
-				  
-					Process process;
-				      try {
-				          process = Runtime.getRuntime().exec("xdg-open " + pm.getProperty("repository.code"));
-				          process.waitFor();
-				          process.destroy();
-				      } catch (Exception exception) {
-				    	  if (LOG.isInfoEnabled()) {
-				    		LOG.error("Browser couldn't be opened. Error: " + exception.getMessage());  
-				    	  }
-				      }						
+					switch (WDUtilities.getOperatingSystem()) {
+					case WDUtilities.OS_LINUX:
+						Process process;
+					      try {
+					          process = Runtime.getRuntime().exec("xdg-open " + pm.getProperty("repository.code"));
+					          process.waitFor();
+					          process.destroy();
+					      } catch (Exception exception) {
+					    	  if (LOG.isInfoEnabled()) {
+					    		LOG.error("Browser couldn't be opened. Error: " + exception.getMessage());  
+					    	  }
+					      }						
+					      break;
+					default:
+					    if (Desktop.isDesktopSupported()) {
+				        try {
+				          Desktop.getDesktop().browse(new URI(pm.getProperty("repository.code")));
+				        } catch (Exception exception) { 
+				        	LOG.error(exception.getMessage()); 
+				        }
+				     }
+						break;
+					}
 					
 				}
 	      });
@@ -920,13 +925,30 @@ public class WallpaperDownloader {
 		  */
 	      btnIcons.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-				    if (Desktop.isDesktopSupported()) {
+					switch (WDUtilities.getOperatingSystem()) {
+					case WDUtilities.OS_LINUX:
+						Process process;
+					      try {
+					          process = Runtime.getRuntime().exec("xdg-open " + pm.getProperty("repository.icons"));
+					          process.waitFor();
+					          process.destroy();
+					      } catch (Exception exception) {
+					    	  if (LOG.isInfoEnabled()) {
+					    		LOG.error("Browser couldn't be opened. Error: " + exception.getMessage());  
+					    	  }
+					      }						
+					      break;
+					default:
+					    if (Desktop.isDesktopSupported()) {
 				        try {
 				          Desktop.getDesktop().browse(new URI(pm.getProperty("repository.icons")));
 				        } catch (Exception exception) { 
 				        	LOG.error(exception.getMessage()); 
 				        }
 				     }
+						break;
+					}
+					
 				}
 	      });
 		      

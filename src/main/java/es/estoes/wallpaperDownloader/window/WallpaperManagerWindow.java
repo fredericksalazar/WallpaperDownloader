@@ -532,6 +532,41 @@ public class WallpaperManagerWindow extends JFrame {
 				previewWindow.setVisible(true);
 			}
 		});
+		
+		 /**
+		  * btnSeDskFavoritetWallpaper Action Listeners
+		  */
+	      btnSetDskFavoriteWallpaper.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				// Get the selected wallpapers
+				List<Object> wallpapersSelected = favoriteWallpapersList.getSelectedValuesList();
+				List<String> wallpapersSelectedAbsolutePath = new ArrayList<String>();
+				Iterator<Object> wallpapersSelectedIterator = wallpapersSelected.iterator();
+				while (wallpapersSelectedIterator.hasNext()) {
+					ImageIcon wallpaperSelectedIcon = (ImageIcon) wallpapersSelectedIterator.next();
+					wallpapersSelectedAbsolutePath.add(wallpaperSelectedIcon.getDescription());
+				}
+				WDUtilities.getWallpaperChanger().setWallpaper(wallpapersSelectedAbsolutePath.get(0));
+			}
+		  });	  
+
+		 /**
+		  * btnSeDskNoFavoritetWallpaper Action Listeners
+		  */
+	      btnSetDskNoFavoriteWallpaper.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				// Get the selected wallpapers
+				List<Object> wallpapersSelected = noFavoriteWallpapersList.getSelectedValuesList();
+				List<String> wallpapersSelectedAbsolutePath = new ArrayList<String>();
+				Iterator<Object> wallpapersSelectedIterator = wallpapersSelected.iterator();
+				while (wallpapersSelectedIterator.hasNext()) {
+					ImageIcon wallpaperSelectedIcon = (ImageIcon) wallpapersSelectedIterator.next();
+					wallpapersSelectedAbsolutePath.add(wallpaperSelectedIcon.getDescription());
+				}
+				WDUtilities.getWallpaperChanger().setWallpaper(wallpapersSelectedAbsolutePath.get(0));
+			}
+		  });	  
+
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
