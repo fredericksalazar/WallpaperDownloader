@@ -7,7 +7,7 @@ confinement: strict
 apps:
   wallpaperdownloader:
     command: wallpaperdownloader.sh
-    plugs: [x11, network-bind, home]
+    plugs: [x11, network-bind, home, browser-support, gsettings]
 
 parts:
   # Pulls the code from the original source (master branch)
