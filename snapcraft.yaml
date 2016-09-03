@@ -16,6 +16,7 @@ parts:
     source: .
     stage-packages:
       - libglib2.0-bin
+      - xdg-utils
 
   # It will copy wallpaperdownloader script into /bin/
   # This script contains all the commands needed (sets env variables, launches the jar file...) to

@@ -12,6 +12,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.ToolTipManager;
 import javax.swing.border.Border;
+
 import es.estoes.wallpaperDownloader.harvest.Harvester;
 import es.estoes.wallpaperDownloader.item.ComboItem;
 import es.estoes.wallpaperDownloader.util.PreferencesManager;
@@ -19,11 +20,15 @@ import es.estoes.wallpaperDownloader.util.PropertiesManager;
 import es.estoes.wallpaperDownloader.util.WDConfigManager;
 import es.estoes.wallpaperDownloader.util.WDUtilities;
 import es.estoes.wallpaperDownloader.util.WallpaperListRenderer;
+
 import javax.swing.JTabbedPane;
 import javax.swing.JButton;
+
 import java.awt.Color;
+
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
+
 import java.awt.AWTException;
 import java.awt.Cursor;
 import java.awt.Desktop;
@@ -51,13 +56,18 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.text.NumberFormat;
+
 import javax.swing.JLabel;
+
 import org.apache.log4j.Logger;
+
 import javax.swing.JComboBox;
+
 import java.text.Format;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
@@ -883,13 +893,25 @@ public class WallpaperDownloader {
 		  */
 	      btnRepository.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-				    if (Desktop.isDesktopSupported()) {
-				        try {
-				          Desktop.getDesktop().browse(new URI(pm.getProperty("repository.code")));
-				        } catch (Exception exception) { 
-				        	LOG.error(exception.getMessage()); 
-				        }
-				     }
+//				    if (Desktop.isDesktopSupported()) {
+//				        try {
+//				          Desktop.getDesktop().browse(new URI(pm.getProperty("repository.code")));
+//				        } catch (Exception exception) { 
+//				        	LOG.error(exception.getMessage()); 
+//				        }
+//				     }
+				  
+					Process process;
+				      try {
+				          process = Runtime.getRuntime().exec("xdg-open " + pm.getProperty("repository.code"));
+				          process.waitFor();
+				          process.destroy();
+				      } catch (Exception exception) {
+				    	  if (LOG.isInfoEnabled()) {
+				    		LOG.error("Browser couldn't be opened. Error: " + exception.getMessage());  
+				    	  }
+				      }						
+					
 				}
 	      });
 
