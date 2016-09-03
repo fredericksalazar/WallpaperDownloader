@@ -41,9 +41,11 @@ public class WallpaperManagerWindow extends JFrame {
 	private JButton btnRemoveFavoriteWallpaper;
 	private JButton btnSetNoFavoriteWallpaper;
 	private JButton btnPreviewNoFavoriteWallpaper;
+	private JButton btnSetDskNoFavoriteWallpaper;
 	private JButton btnRemoveNoFavoriteWallpaper;
 	private JButton btnSetFavoriteWallpaper;
 	private JButton btnPreviewFavoriteWallpaper;
+	private JButton btnSetDskFavoriteWallpaper;
 	private JButton btnClose;
 	private JScrollPane noFavoriteScrollPanel;
 	private JList<Object> noFavoriteWallpapersList;
@@ -57,7 +59,6 @@ public class WallpaperManagerWindow extends JFrame {
 	private JButton btnForwardNoFavoriteWallpapers;
 	private JLabel lblFirstNoFavoriteWallpaper;
 	private JLabel lblLastNoFavoriteWallpaper;
-	
 	
 	// Methods
 	/**
@@ -110,7 +111,7 @@ public class WallpaperManagerWindow extends JFrame {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/delete_24px_icon.png"));
 			btnRemoveNoFavoriteWallpaper.setIcon(new ImageIcon(img));
 			btnRemoveNoFavoriteWallpaper.setToolTipText("Delete selected wallpaper");
-			btnRemoveNoFavoriteWallpaper.setBounds(712, 389, 34, 33);
+			btnRemoveNoFavoriteWallpaper.setBounds(712, 369, 34, 33);
 		} catch (IOException ex) {
 			btnRemoveNoFavoriteWallpaper.setText("Delete");
 			btnRemoveNoFavoriteWallpaper.setBounds(1064, 466, 34, 33);
@@ -123,13 +124,29 @@ public class WallpaperManagerWindow extends JFrame {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/favourite_24px_icon.png"));
 			btnSetFavoriteWallpaper.setIcon(new ImageIcon(img));
 			btnSetFavoriteWallpaper.setToolTipText("Set selected wallpaper as favorite");
-			btnSetFavoriteWallpaper.setBounds(712, 430, 34, 33);
+			btnSetFavoriteWallpaper.setBounds(712, 410, 34, 33);
 		} catch (IOException ex) {
 			btnSetFavoriteWallpaper.setText("Set as favaourite");
 			btnSetFavoriteWallpaper.setBounds(1064, 478, 34, 33);
 		}
 		getContentPane().add(btnSetFavoriteWallpaper);
+		
+		btnSetDskFavoriteWallpaper = new JButton();
 
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/desktop_24px_icon.png"));
+			btnSetDskFavoriteWallpaper.setIcon(new ImageIcon(img));
+			btnSetDskFavoriteWallpaper.setToolTipText("Set selected wallpaper");
+			btnSetDskFavoriteWallpaper.setBounds(713, 182, 34, 33);
+		} catch (IOException ex) {
+			btnSetDskFavoriteWallpaper.setText("Set wallpaper");
+			btnSetDskFavoriteWallpaper.setBounds(713, 182, 34, 33);
+		}
+		// This button only will be available for those desktops which support setting wallpapers directly
+		if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
+			getContentPane().add(btnSetDskFavoriteWallpaper);			
+
+		}
 		
 		btnPreviewFavoriteWallpaper = new JButton();
 
@@ -137,7 +154,7 @@ public class WallpaperManagerWindow extends JFrame {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/view_24px_icon.png"));
 			btnPreviewFavoriteWallpaper.setIcon(new ImageIcon(img));
 			btnPreviewFavoriteWallpaper.setToolTipText("Preview wallpaper");
-			btnPreviewFavoriteWallpaper.setBounds(712, 161, 34, 33);
+			btnPreviewFavoriteWallpaper.setBounds(712, 141, 34, 33);
 		} catch (IOException ex) {
 			btnPreviewFavoriteWallpaper.setText("Preview wallpaper");
 			btnPreviewFavoriteWallpaper.setBounds(712, 161, 34, 33);
@@ -150,7 +167,7 @@ public class WallpaperManagerWindow extends JFrame {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/delete_24px_icon.png"));
 			btnRemoveFavoriteWallpaper.setIcon(new ImageIcon(img));
 			btnRemoveFavoriteWallpaper.setToolTipText("Delete selected wallpaper");
-			btnRemoveFavoriteWallpaper.setBounds(712, 80, 34, 33);
+			btnRemoveFavoriteWallpaper.setBounds(712, 60, 34, 33);
 		} catch (IOException ex) {
 			btnRemoveFavoriteWallpaper.setText("Delete");
 			btnRemoveFavoriteWallpaper.setBounds(1064, 120, 34, 33);
@@ -163,7 +180,7 @@ public class WallpaperManagerWindow extends JFrame {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/no_favorite_24px_icon.png"));
 			btnSetNoFavoriteWallpaper.setIcon(new ImageIcon(img));
 			btnSetNoFavoriteWallpaper.setToolTipText("Set selected wallpaper as no favorite");
-			btnSetNoFavoriteWallpaper.setBounds(712, 121, 34, 33);
+			btnSetNoFavoriteWallpaper.setBounds(712, 101, 34, 33);
 		} catch (IOException ex) {
 			btnSetNoFavoriteWallpaper.setText("Set as no favorite");
 			btnSetNoFavoriteWallpaper.setBounds(1064, 177, 34, 33);
@@ -177,12 +194,29 @@ public class WallpaperManagerWindow extends JFrame {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/view_24px_icon.png"));
 			btnPreviewNoFavoriteWallpaper.setIcon(new ImageIcon(img));
 			btnPreviewNoFavoriteWallpaper.setToolTipText("Preview wallpaper");
-			btnPreviewNoFavoriteWallpaper.setBounds(712, 470, 34, 33);
+			btnPreviewNoFavoriteWallpaper.setBounds(712, 450, 34, 33);
 		} catch (IOException ex) {
 			btnPreviewNoFavoriteWallpaper.setText("Preview wallpaper");
 			btnPreviewNoFavoriteWallpaper.setBounds(712, 470, 34, 33);
 		}
 		getContentPane().add(btnPreviewNoFavoriteWallpaper);
+		
+		btnSetDskNoFavoriteWallpaper = new JButton();
+
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/desktop_24px_icon.png"));
+			btnSetDskNoFavoriteWallpaper.setIcon(new ImageIcon(img));
+			btnSetDskNoFavoriteWallpaper.setToolTipText("Set selected wallpaper");
+			btnSetDskNoFavoriteWallpaper.setBounds(712, 490, 34, 33);
+		} catch (IOException ex) {
+			btnSetDskNoFavoriteWallpaper.setText("Set wallpaper");
+			btnSetDskNoFavoriteWallpaper.setBounds(712, 490, 34, 33);
+		}
+		// This button only will be available for those desktops which support setting wallpapers directly
+		if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
+			getContentPane().add(btnSetDskNoFavoriteWallpaper);			
+
+		}
 		
 		btnClose = new JButton("Close");
 		btnClose.setBounds(630, 561, 116, 25);
