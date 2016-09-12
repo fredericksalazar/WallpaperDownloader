@@ -897,7 +897,7 @@ public class WallpaperDownloader {
 					case WDUtilities.OS_LINUX:
 						Process process;
 					      try {
-					          process = Runtime.getRuntime().exec("snapd-xdg-open " + pm.getProperty("repository.code"));
+					          process = Runtime.getRuntime().exec("xdg-open " + pm.getProperty("repository.code"));
 					          process.waitFor();
 					          process.destroy();
 					      } catch (Exception exception) {
