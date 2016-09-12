@@ -16,7 +16,12 @@ parts:
     source: .
     stage-packages:
       - libglib2.0-bin
-      - xdg-utils
+
+  xdg-open:
+    plugin: autotools
+    source: https://github.com/snapcore/snapd-xdg-open.git
+    stage-packages:
+      - libglib2.0-dev
 
   # It will copy wallpaperdownloader script into /bin/
   # This script contains all the commands needed (sets env variables, launches the jar file...) to
