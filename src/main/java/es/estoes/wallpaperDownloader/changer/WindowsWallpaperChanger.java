@@ -1,5 +1,7 @@
 package es.estoes.wallpaperDownloader.changer;
 
+import es.estoes.wallpaperDownloader.jna.User32;
+
 public class WindowsWallpaperChanger extends WallpaperChanger {
 	
 	// Constants
@@ -18,11 +20,11 @@ public class WindowsWallpaperChanger extends WallpaperChanger {
 
 	@Override
 	public void setWallpaper(String wallpaperPath) {
-		// TODO Auto-generated method stub
+		User32.INSTANCE.SystemParametersInfo(0x0014, 0, wallpaperPath , 1);
 	}
 
 	@Override
 	public boolean isWallpaperChangeable() {
-		return false;
+		return true;
 	}
 }

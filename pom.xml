@@ -51,6 +51,12 @@
 			<artifactId>jsoup</artifactId>
 			<version>1.9.2</version>
 		</dependency>
+		<!-- JNA for native shared libraries -->
+		<dependency>
+		    <groupId>net.java.dev.jna</groupId>
+		    <artifactId>jna</artifactId>
+		    <version>3.2.7</version>
+		</dependency>
 	</dependencies>
 
     <build>

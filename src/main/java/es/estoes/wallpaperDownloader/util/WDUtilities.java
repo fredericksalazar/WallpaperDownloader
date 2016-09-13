@@ -55,6 +55,7 @@ public class WDUtilities {
 	public static final CharSequence SNAP_KEY = "snap";
 	public static final String OS_LINUX = "Linux";
 	public static final String OS_WINDOWS = "Windows";
+	public static final String OS_WINDOWS_7 = "Windows 7";
 	public static final String OS_UNKNOWN = "UNKNOWN";
 	public static final String DE_UNITY = "Unity";
 	public static final String DE_GNOME = "GNOME";
