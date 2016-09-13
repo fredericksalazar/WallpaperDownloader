@@ -1,5 +1,8 @@
 package es.estoes.wallpaperDownloader.changer;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
 import es.estoes.wallpaperDownloader.util.WDUtilities;
 
 public class LinuxWallpaperChanger extends WallpaperChanger {
@@ -77,11 +80,31 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
       Process process;
       try {
           process = Runtime.getRuntime().exec("gsettings set org.gnome.desktop.background picture-uri file://" + wallpaperPath);
-          process.waitFor();
-          process.destroy();
+
+    	  BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+    	  BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+
+    	  // Read the output from the command
+    	  String processOutput = null;
+    	  while ((processOutput = stdInput.readLine()) != null) {
+        	  if (LOG.isInfoEnabled()) {
+        		  LOG.info(processOutput);
+        	  }
+    	  }
+			
+    	  // Read any errors from the attempted command
+    	  while ((processOutput = stdError.readLine()) != null) {
+        	  if (LOG.isInfoEnabled()) {
+        		  LOG.error(processOutput);
+        	  }
+    	  }
+
     	  if (LOG.isInfoEnabled()) {
     		LOG.error("Wallpaper set in Unity or Gnome 3: " + wallpaperPath);  
     	  }
+
+          process.waitFor();
+          process.destroy();
       } catch (Exception exception) {
     	  if (LOG.isInfoEnabled()) {
     		LOG.error("Wallpaper couldn't be set in Unity or Gnome 3. Error: " + exception.getMessage());  
