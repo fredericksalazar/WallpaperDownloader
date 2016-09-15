@@ -7,21 +7,14 @@ confinement: strict
 apps:
   wallpaperdownloader:
     command: wallpaperdownloader.sh
-    plugs: [x11, network-bind, home, browser-support, gsettings]
+    plugs: [x11, network-bind, home, gsettings]
 
 parts:
   # Pulls the code from the original source (master branch)
   wallpaperdownloader:
     plugin: maven
     source: .
-    stage-packages:
-      - libglib2.0-bin
-
-  xdg-open:
-    plugin: autotools
-    source: https://github.com/snapcore/snapd-xdg-open.git
-    stage-packages:
-      - libglib2.0-dev
+    after: [desktop/gtk3]
 
   # It will copy wallpaperdownloader script into /bin/
   # This script contains all the commands needed (sets env variables, launches the jar file...) to
