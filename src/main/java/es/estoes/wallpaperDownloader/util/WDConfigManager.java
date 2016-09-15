@@ -161,6 +161,7 @@ public class WDConfigManager {
  			 }
  			 
  			 // Operating System
+ 			 LOG.info("Retrieving operating system... " + System.getProperty("os.name"));
  			 switch (System.getProperty("os.name")) {
  			 case WDUtilities.OS_LINUX:
  				 WDUtilities.setOperatingSystem(WDUtilities.OS_LINUX);
@@ -169,7 +170,7 @@ public class WDConfigManager {
  				 WDUtilities.setOperatingSystem(WDUtilities.OS_WINDOWS);
  				 break;
  			 case WDUtilities.OS_WINDOWS_7:
- 				 WDUtilities.setOperatingSystem(WDUtilities.OS_WINDOWS);
+ 				 WDUtilities.setOperatingSystem(WDUtilities.OS_WINDOWS_7);
  				 break;
  			 default:
 				 WDUtilities.setOperatingSystem(WDUtilities.OS_UNKNOWN);
