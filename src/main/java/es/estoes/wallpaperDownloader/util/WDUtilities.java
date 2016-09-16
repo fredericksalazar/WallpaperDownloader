@@ -60,6 +60,7 @@ public class WDUtilities {
 	public static final String DE_UNITY = "Unity";
 	public static final String DE_GNOME = "GNOME";
 	public static final String DE_KDE = "KDE";
+	public static final String DE_MATE = "MATE";
 	public static final String DE_UNKNOWN = "UNKNOWN";
 	public static final Object GDM_SESSION_GNOME = "gnome";
 	public static final String GDM_SESSION_GNOME_SHELL = "gnome-shell";

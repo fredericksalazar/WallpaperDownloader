@@ -41,6 +41,9 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 					this.setDesktopEnvironment(WDUtilities.DE_GNOME2);
 				}
 				break;
+			case WDUtilities.DE_MATE:
+				this.setDesktopEnvironment(WDUtilities.DE_MATE);
+				break;
 			case WDUtilities.DE_KDE:
 				this.setDesktopEnvironment(WDUtilities.DE_KDE);
 				break;
@@ -63,6 +66,9 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 		case WDUtilities.DE_GNOME3:
 			this.setUnityGnome3Wallpaper(wallpaperPath);
 			break;
+		case WDUtilities.DE_MATE:
+			this.setMateWallpaper(wallpaperPath);
+			break;
 		case WDUtilities.DE_KDE:
 			break;
 		default:
@@ -71,7 +77,47 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 	}
 
 	/**
-	 * Sets wallpaper for Unity and Gnome 3 desktop
+	 * Sets wallpaper for Mate desktop.
+	 * @param wallpaperPath
+	 */
+	private void setMateWallpaper(String wallpaperPath) {
+	      Process process;
+	      try {
+	          process = Runtime.getRuntime().exec("gsettings set org.mate.background picture-filename " + wallpaperPath);
+
+	    	  BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+	    	  BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+
+	    	  // Read the output from the command
+	    	  String processOutput = null;
+	    	  while ((processOutput = stdInput.readLine()) != null) {
+	        	  if (LOG.isInfoEnabled()) {
+	        		  LOG.info(processOutput);
+	        	  }
+	    	  }
+				
+	    	  // Read any errors from the attempted command
+	    	  while ((processOutput = stdError.readLine()) != null) {
+	        	  if (LOG.isInfoEnabled()) {
+	        		  LOG.error(processOutput);
+	        	  }
+	    	  }
+
+	    	  if (LOG.isInfoEnabled()) {
+	    		LOG.error("Wallpaper set in Mate: " + wallpaperPath);  
+	    	  }
+
+	          process.waitFor();
+	          process.destroy();
+	      } catch (Exception exception) {
+	    	  if (LOG.isInfoEnabled()) {
+	    		LOG.error("Wallpaper couldn't be set in Mate. Error: " + exception.getMessage());  
+	    	  }
+	      }	
+	}
+
+	/**
+	 * Sets wallpaper for Unity and Gnome 3 desktop.
 	 * @param wallpaperPath
 	 */
 	private void setUnityGnome3Wallpaper(String wallpaperPath) {
@@ -118,6 +164,9 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 			result = true;
 			break;
 		case WDUtilities.DE_GNOME3:
+			result = true;
+			break;
+		case WDUtilities.DE_MATE:
 			result = true;
 			break;
 		case WDUtilities.DE_KDE:
