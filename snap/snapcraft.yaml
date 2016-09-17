@@ -2,6 +2,7 @@ name: wallpaperdownloader
 version: "2.2"
 summary: Download and manage your favorite wallpapers from the Internet
 description: WallpaperDownloader is a simple GUI Java based application for downloading and managing wallpapers from the Internet
+grade: stable
 confinement: strict
 
 apps:
@@ -13,13 +14,12 @@ parts:
   # Pulls the code from the original source (master branch)
   wallpaperdownloader:
     plugin: maven
-    source: .
+    source: ..
     after: [desktop/gtk3]
 
   # It will copy wallpaperdownloader script into /bin/
   # This script contains all the commands needed (sets env variables, launches the jar file...) to
   # execute the application
   exec:
-    plugin: copy
-    files:
-      wallpaperdownloader.sh: bin/wallpaperdownloader.sh
+    plugin: dump
+    source: scripts
