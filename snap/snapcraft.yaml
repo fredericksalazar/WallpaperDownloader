@@ -12,10 +12,11 @@ apps:
 
 parts:
   # Pulls the code from the original source (master branch)
-  # desktop/gtk3 is a snapcraft part from the Wiki: https://wiki.ubuntu.com/snapcraft/parts
+  # desktop/gtk3 is a snapcraft part (snapcraft-desktop-helpers) from the Wiki: https://wiki.ubuntu.com/snapcraft/parts
   # It enables desktop integration and gsettings manipulation from the confined application
   # It is necessary to use gsettings interface (see above) in order to have a fully functional
   # desktop/gtk3 part
+  # Github repository for snapcraft-desktop-helpers: https://github.com/ubuntu/snapcraft-desktop-helpers
   wallpaperdownloader:
     plugin: maven
     source: ..
