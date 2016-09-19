@@ -20,6 +20,8 @@ parts:
   wallpaperdownloader:
     plugin: maven
     source: ..
+    stage-packages:
+      - mate-desktop-common
     after: [desktop/gtk3]
 
   # It will copy wallpaperdownloader script into /bin/
