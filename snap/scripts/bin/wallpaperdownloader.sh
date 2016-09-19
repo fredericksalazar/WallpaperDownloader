@@ -7,4 +7,4 @@ export XDG_DATA_HOME=$SNAP/usr/share
 export FONTCONFIG_PATH=$SNAP/etc/fonts/config.d
 export FONTCONFIG_FILE=$SNAP/etc/fonts/fonts.conf
 export HOME=$SNAP_USER_DATA
-desktop-launch java -jar -Duser.home=$SNAP_USER_DATA $SNAP/jar/wallpaperdownloader.jar
+desktop-launch java -Xmx512m -Xms256m -jar -Duser.home=$SNAP_USER_DATA $SNAP/jar/wallpaperdownloader.jar
