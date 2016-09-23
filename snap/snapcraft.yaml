@@ -21,6 +21,7 @@ parts:
     plugin: maven
     source: ..
     stage-packages:
+      # mate-desktop-common is necessary to have MATE gsettings schemas available for the application
       - mate-desktop-common
     after: [desktop/gtk3]
 
