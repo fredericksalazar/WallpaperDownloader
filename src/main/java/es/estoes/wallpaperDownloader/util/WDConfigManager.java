@@ -93,6 +93,16 @@ public class WDConfigManager {
         		 // 3 -> 30 min
         		 prefm.setPreference("application-timer", "0");
 
+        		 // Initializing changer timer
+        		 // By default, changer is off
+        		 // 0 -> Off
+        		 // 1 -> 1 min
+        		 // 2 -> 5 min
+        		 // 3 -> 10 min
+        		 // 4 -> 30 min
+        		 // 5 -> 60 min
+        		 prefm.setPreference("application-changer", "0");
+        		 
         		 // Initializing maximum download directory size
         		 // By default, it will be 40 MBytes
         		 prefm.setPreference("application-max-download-folder-size", "40");
@@ -189,6 +199,11 @@ public class WDConfigManager {
 				 WDUtilities.setWallpaperChanger(new UnknownWallpaperChanger());
 			 }
 
+			 // Changer timer
+			 if (prefm.getPreference("application-changer").equals(PreferencesManager.DEFAULT_VALUE)) {
+				 // Changer timer was not defined within configuration file
+        		 prefm.setPreference("application-changer", "0");
+			 }
     	 } catch (Exception e) {
     		 throw new WDConfigurationException("Error setting up the downloads folder. Error: " + e.getMessage());
     	 }    	 

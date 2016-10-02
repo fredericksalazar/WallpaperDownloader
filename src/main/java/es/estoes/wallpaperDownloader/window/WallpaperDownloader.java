@@ -126,6 +126,7 @@ public class WallpaperDownloader {
 	private JSeparator aboutSeparator2;
 	private JTextField icons;
 	private JButton btnIcons;
+	private JComboBox<ComboItem> changerComboBox;
 	
 	// Getters & Setters
 	public JFrame getFrame() {
@@ -301,6 +302,23 @@ public class WallpaperDownloader {
 		downloadDirectorySize.setBounds(317, 37, 49, 19);
 		appSettingsPanel.add(downloadDirectorySize);
 		
+		// Only those desktop environment programmed to be changeable will display this option
+		// TODO: Uncomment if when this part is coded
+//		if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
+
+			JSeparator settingsSeparator1 = new JSeparator();
+			settingsSeparator1.setBounds(12, 74, 531, 2);
+			appSettingsPanel.add(settingsSeparator1);
+		
+			JLabel lblChanger = new JLabel("Change wallpaper automatically every");
+			lblChanger.setBounds(12, 88, 439, 19);
+			appSettingsPanel.add(lblChanger);
+			
+			changerComboBox = new JComboBox<ComboItem>();
+			changerComboBox.setBounds(317, 88, 94, 19);
+			appSettingsPanel.add(changerComboBox);
+//		}
+
 		// Downloads Directory (tab)
 		miscPanel = new JPanel();
 		tabbedPane.addTab("Downloads Directory", null, miscPanel, null);
@@ -479,7 +497,7 @@ public class WallpaperDownloader {
 			}
 		};
 		developer.setEditable(false);
-		developer.setBounds(108, 56, 211, 19);
+		developer.setBounds(108, 56, 405, 19);
 		aboutPanel.add(developer);
 		developer.setColumns(10);
 		
@@ -768,7 +786,7 @@ public class WallpaperDownloader {
 				// ---------------------------------------------------------------------------
 				prefm.setPreference("application-timer", new Integer(timerComboBox.getSelectedIndex()).toString());
 				prefm.setPreference("application-max-download-folder-size", downloadDirectorySize.getValue().toString());
-				
+				prefm.setPreference("application-changer", new Integer(changerComboBox.getSelectedIndex()).toString());
 				// Stopping and starting harvesting process
 				harvester.stop();
 				harvester.start();
@@ -1028,6 +1046,15 @@ public class WallpaperDownloader {
 		timerComboBox.addItem(new ComboItem("20 min", "3"));
 		timerComboBox.addItem(new ComboItem("30 min", "4"));
 		timerComboBox.setSelectedIndex(new Integer(prefm.getPreference("application-timer")));
+
+		changerComboBox.addItem(new ComboItem("Off", "0"));
+		changerComboBox.addItem(new ComboItem("1 min", "1"));
+		changerComboBox.addItem(new ComboItem("5 min", "2"));
+		changerComboBox.addItem(new ComboItem("10 min", "3"));
+		changerComboBox.addItem(new ComboItem("30 min", "4"));
+		changerComboBox.addItem(new ComboItem("60 min", "5"));
+		changerComboBox.setSelectedIndex(new Integer(prefm.getPreference("application-changer")));
+
 		downloadDirectorySize.setValue(new Integer(prefm.getPreference("application-max-download-folder-size")));
 		// ---------------------------------------------------------------------
 		// Checking Miscelanea
@@ -1045,7 +1072,7 @@ public class WallpaperDownloader {
 		// Checking About tab
 		// ---------------------------------------------------------------------
 		version.setText(pm.getProperty("app.version"));
-		developer.setText(pm.getProperty("developer.name"));
+		developer.setText("Eloy Garcia Almaden (eloy.garcia.pca@gmail.com)");
 	}
 	
 	/**
