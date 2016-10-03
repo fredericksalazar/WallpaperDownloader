@@ -396,11 +396,16 @@ public class WDUtilities {
 	}
 	
 	/**
-	 * It picks a random file from wallpapers download directory
+	 * It picks a random file from wallpapers download directory.
+	 * @param includeFavoriteWallpapers if it is set to TRUE, this method will pick favorite and not favorite wallpapers
 	 * @return
 	 */
-	public static File pickRandomFile() {
-		List<File> files = WDUtilities.getAllWallpapers(WDUtilities.WD_PREFIX);
+	public static File pickRandomFile(Boolean includeFavoriteWallpapers) {
+		String wallpapersType = WDUtilities.WD_ALL;
+		if (!includeFavoriteWallpapers) {
+			wallpapersType = WDUtilities.WD_PREFIX;
+		}
+		List<File> files = WDUtilities.getAllWallpapers(wallpapersType);
 		if (!files.isEmpty()) {
 			Random generator = new Random();
 			int index = generator.nextInt(files.size());

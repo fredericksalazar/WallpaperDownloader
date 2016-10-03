@@ -13,6 +13,7 @@ import javax.swing.SwingConstants;
 import javax.swing.ToolTipManager;
 import javax.swing.border.Border;
 
+import es.estoes.wallpaperDownloader.changer.ChangerDaemon;
 import es.estoes.wallpaperDownloader.harvest.Harvester;
 import es.estoes.wallpaperDownloader.item.ComboItem;
 import es.estoes.wallpaperDownloader.util.PreferencesManager;
@@ -91,6 +92,7 @@ public class WallpaperDownloader {
 	public static JList<ImageIcon> lastWallpapersList;
 	
 	private Harvester harvester;
+	private ChangerDaemon changer;
 	private JFrame frame;
 	private JTextField wallhavenKeywords;
 	private JCheckBox wallhavenCheckbox;
@@ -585,12 +587,15 @@ public class WallpaperDownloader {
 		// Setting up listeners
 		initializeListeners();
 		
-		// Starting the application
+		// Starting harvesting process
 		initializeHarvesting();
+		
+		// Starting automated changer process
+		initializeChanger();
 	}
 
 	/**
-	 * This method configures all the listeners
+	 * This method configures all the listeners.
 	 */
 	private void initializeListeners() {
 		
@@ -790,6 +795,10 @@ public class WallpaperDownloader {
 				// Stopping and starting harvesting process
 				harvester.stop();
 				harvester.start();
+				
+				//Stoping and starting changer process
+				changer.stop();
+				changer.start();
 				
 				// Information
 				DialogManager info = new DialogManager("Changes applied. Downloading process started.", 2000);
@@ -1076,15 +1085,23 @@ public class WallpaperDownloader {
 	}
 	
 	/**
-	 * This method starts the harvesting process
+	 * This method starts the harvesting process.
 	 */
 	private void initializeHarvesting() {
 		harvester = Harvester.getInstance();
 		harvester.start();
 	}
-	
+
 	/**
-	 * This method refreshes the progress bar representing the space occupied within the downloads directory
+	 * Starts automated wallpaper changing process.
+	 */
+	private void initializeChanger() {
+		changer = ChangerDaemon.getInstance();
+		changer.start();
+	}
+
+	/**
+	 * This method refreshes the progress bar representing the space occupied within the downloads directory.
 	 */
 	public static void refreshProgressBar() {
 		int percentage = WDUtilities.getPercentageSpaceOccupied(WDUtilities.getDownloadsPath());
