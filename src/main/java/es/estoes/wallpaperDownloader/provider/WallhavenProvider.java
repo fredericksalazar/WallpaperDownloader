@@ -49,8 +49,11 @@ public class WallhavenProvider extends Provider {
 		obtainActiveKeyword();
 		String completeURL = composeCompleteURL();
 		try {
-			checkAndPrepareDownloadDirectory();			
-			LOG.info("Downloading wallpaper with keyword -> " + activeKeyword);
+			checkAndPrepareDownloadDirectory();	
+			if (LOG.isInfoEnabled()) {
+				LOG.info("Downloading wallpaper with keyword -> " + activeKeyword);
+				
+			}
 			// 1.- Getting HTML document (New method including userAgent and other options)
 			Document doc = Jsoup.connect(completeURL).userAgent("Mozilla").get();
 			// Old method 1
@@ -75,8 +78,10 @@ public class WallhavenProvider extends Provider {
 				int index = wallpaperURL.lastIndexOf(WDUtilities.URL_SLASH);
 				// Obtaining wallpaper's name (string after the last slash)
 				String wallpaperName = WDUtilities.WD_PREFIX + wallpaperURL.substring(index + 1);
+				String wallpaperNameFavorite = WDUtilities.WD_FAVORITE_PREFIX + wallpaperURL.substring(index + 1);
 				File wallpaper = new File(WDUtilities.getDownloadsPath() + File.separator + wallpaperName);
-				if (!wallpaper.exists() && !WDUtilities.isWallpaperBlacklisted(wallpaperName)) {
+				File wallpaperFavorite = new File(WDUtilities.getDownloadsPath() + File.separator + wallpaperNameFavorite);
+				if (!wallpaper.exists() && !wallpaperFavorite.exists() && !WDUtilities.isWallpaperBlacklisted(wallpaperName) && !WDUtilities.isWallpaperBlacklisted(wallpaperNameFavorite)) {
 					// Storing the image. It is necessary to download the remote file
 					// First try: JPG format will be used
 					boolean isWallpaperSuccessfullyStored = storeRemoteFile(wallpaper, wallpaperURL);
@@ -85,8 +90,10 @@ public class WallhavenProvider extends Provider {
 						wallpaperURL = wallpaperURL.replace("jpg", "png");
 						LOG.info("JPG format wasn't found. Trying PNG format...");
 						wallpaperName = wallpaperName.replace("jpg", "png");
+						wallpaperNameFavorite = wallpaperNameFavorite.replace("jpg", "png");
 						wallpaper = new File(WDUtilities.getDownloadsPath() + File.separator + wallpaperName);
-						if (!wallpaper.exists()) {
+						wallpaperFavorite = new File(WDUtilities.getDownloadsPath() + File.separator + wallpaperNameFavorite);
+						if (!wallpaper.exists() && !wallpaperFavorite.exists() && !WDUtilities.isWallpaperBlacklisted(wallpaperName) && !WDUtilities.isWallpaperBlacklisted(wallpaperNameFavorite)) {
 							isWallpaperSuccessfullyStored = storeRemoteFile(wallpaper, wallpaperURL);
 							if (!isWallpaperSuccessfullyStored) {
 								LOG.info("Error trying to store wallpaper " + wallpaperURL + ". Skipping...");							

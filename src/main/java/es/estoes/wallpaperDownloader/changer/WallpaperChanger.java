@@ -43,7 +43,7 @@ public abstract class WallpaperChanger {
 	public abstract boolean isWallpaperChangeable();
 
 	/**
-	 * Sets a random wallpaper
+	 * Sets a random wallpaper.
 	 */
 	public void setRandomWallpaper() {
 		File randomWallpaper = WDUtilities.pickRandomFile(Boolean.FALSE);
