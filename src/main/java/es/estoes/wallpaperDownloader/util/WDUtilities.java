@@ -47,6 +47,7 @@ public class WDUtilities {
 	public static final String WD_PREFIX = "wd-";
 	public static final String DEFAULT_DOWNLOADS_DIRECTORY = "downloads";
 	public static final String UNIT_MB = "MB";
+	public static final String UNIT_KB = "KB";
 	public static final String WD_FAVORITE_PREFIX = "fwd-";
 	public static final String SORTING_BY_DATE = "sort_by_date";
 	public static final String SORTING_NO_SORTING = "no_sorting";
@@ -230,9 +231,9 @@ public class WDUtilities {
 	public static int getPercentageSpaceOccupied(String directoryPath) {
 		PreferencesManager prefm = PreferencesManager.getInstance();
 		int downloadsDirectorySize = new Integer(prefm.getPreference("application-max-download-folder-size"));
-		long spaceLong = WDUtilities.getDirectorySpaceOccupied(directoryPath, WDUtilities.UNIT_MB);
+		long spaceLong = WDUtilities.getDirectorySpaceOccupied(directoryPath, WDUtilities.UNIT_KB);
 		// Obtaining percentage
-		int percentage = (int) ((spaceLong * 100) / downloadsDirectorySize);
+		int percentage = (int) ((spaceLong * 100) / (downloadsDirectorySize * 1024));
 		if (percentage > 100) {
 			percentage = 100;
 		}
@@ -249,11 +250,14 @@ public class WDUtilities {
 	public static long getDirectorySpaceOccupied(String directoryPath, String unit) {
 		long space = 0;
 		File directory = new File(directoryPath);
+		// Calculates the space in bytes
+		space = FileUtils.sizeOfDirectory(directory);
 		if (unit.equals(WDUtilities.UNIT_MB)) {
-			// Calculates the space in MBytes
-			space = FileUtils.sizeOfDirectory(directory);
 			// Turning bytes into Megabytes
 			space = (space / 1024) / 1024;
+		} else if (unit.equals(WDUtilities.UNIT_KB)) {
+			// Turning bytes into Kilobytes
+			space = space / 1024;
 		}
 		return space;
 	}
@@ -319,8 +323,12 @@ public class WDUtilities {
 				// 3.- Information about deleting is displayed
 				DialogManager info = new DialogManager(currentWallpaperPath + " wallpaper removed.", 2000);
 				info.openDialog();
+				if (LOG.isInfoEnabled()) {
+					LOG.info(currentWallpaperPath + " wallpaper has been removed");
+					LOG.info("Refreshing space occupied progress bar...");
+				}
+				WallpaperDownloader.refreshProgressBar();
 				WallpaperDownloader.refreshJScrollPane();
-				LOG.info(currentWallpaperPath + " wallpaper has been removed");
 			} catch (IOException e) {
 				LOG.error("The wallpaper " + currentWallpaperPath + " couldn't be removed. Error: " + e.getMessage());
 			}
