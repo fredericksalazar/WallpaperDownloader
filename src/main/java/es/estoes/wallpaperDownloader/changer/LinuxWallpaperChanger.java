@@ -47,6 +47,9 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 			case WDUtilities.DE_KDE:
 				this.setDesktopEnvironment(WDUtilities.DE_KDE);
 				break;
+			case WDUtilities.DE_XFCE:
+				this.setDesktopEnvironment(WDUtilities.DE_XFCE);
+				break;
 			default:
 				this.setDesktopEnvironment(WDUtilities.DE_UNKNOWN);
 				break;
@@ -70,6 +73,9 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 			this.setMateWallpaper(wallpaperPath);
 			break;
 		case WDUtilities.DE_KDE:
+			break;
+		case WDUtilities.DE_XFCE:
+			this.setXfceWallpaper(wallpaperPath);
 			break;
 		default:
 			break;
@@ -104,7 +110,7 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 	    	  }
 
 	    	  if (LOG.isInfoEnabled()) {
-	    		LOG.error("Wallpaper set in Mate: " + wallpaperPath);  
+	    		LOG.info("Wallpaper set in Mate: " + wallpaperPath);  
 	    	  }
 
 	          process.waitFor();
@@ -144,7 +150,7 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
     	  }
 
     	  if (LOG.isInfoEnabled()) {
-    		LOG.error("Wallpaper set in Unity or Gnome 3: " + wallpaperPath);  
+    		LOG.info("Wallpaper set in Unity or Gnome 3: " + wallpaperPath);  
     	  }
 
           process.waitFor();
@@ -154,6 +160,46 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
     		LOG.error("Wallpaper couldn't be set in Unity or Gnome 3. Error: " + exception.getMessage());  
     	  }
       }	
+	}
+
+	/**
+	 * Sets wallpaper for XFCE desktop.
+	 * @param wallpaperPath
+	 */
+	private void setXfceWallpaper(String wallpaperPath) {
+	      Process process;
+	      try {
+	          process = Runtime.getRuntime().exec("xfconf-query --channel xfce4-desktop --property /backdrop/screen0/monitor0/workspace0/last-image --set " + wallpaperPath);
+
+	    	  BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+	    	  BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+
+	    	  // Read the output from the command
+	    	  String processOutput = null;
+	    	  while ((processOutput = stdInput.readLine()) != null) {
+	        	  if (LOG.isInfoEnabled()) {
+	        		  LOG.info(processOutput);
+	        	  }
+	    	  }
+				
+	    	  // Read any errors from the attempted command
+	    	  while ((processOutput = stdError.readLine()) != null) {
+	        	  if (LOG.isInfoEnabled()) {
+	        		  LOG.error(processOutput);
+	        	  }
+	    	  }
+
+	    	  if (LOG.isInfoEnabled()) {
+	    		LOG.info("Wallpaper set in XFCE: " + wallpaperPath);  
+	    	  }
+
+	          process.waitFor();
+	          process.destroy();
+	      } catch (Exception exception) {
+	    	  if (LOG.isInfoEnabled()) {
+	    		LOG.error("Wallpaper couldn't be set in XFCE. Error: " + exception.getMessage());  
+	    	  }
+	      }	
 	}
 
 	@Override
@@ -171,6 +217,9 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 			break;
 		case WDUtilities.DE_KDE:
 			result = false;
+			break;
+		case WDUtilities.DE_XFCE:
+			result = true;
 			break;
 		default:
 			result = false;
