@@ -19,6 +19,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.log4j.Logger;
 
+import es.estoes.wallpaperDownloader.changer.LinuxWallpaperChanger;
 import es.estoes.wallpaperDownloader.changer.WallpaperChanger;
 import es.estoes.wallpaperDownloader.window.DialogManager;
 import es.estoes.wallpaperDownloader.window.WallpaperDownloader;
@@ -450,6 +451,49 @@ public class WDUtilities {
 		} else {
 			return false;
 		}
+	}
+	
+	/**
+	 * Checks if wallpaperdownloader application has been installed via snap package.
+	 * @return boolean
+	 */
+	public static boolean isSnapPackage() {
+		boolean result = Boolean.FALSE;
+		PreferencesManager prefm = PreferencesManager.getInstance();
+		String downloadsDirectoryString = prefm.getPreference("application-downloads-folder");
+		if (downloadsDirectoryString.contains(WDUtilities.SNAP_KEY)) {
+			result = Boolean.TRUE;
+		}
+		return result;
+
+	}
+
+	/**
+	 * Checks if the application can be minimized to system tray.
+	 * Plasma 5 and GNOME 3 don't support traditional system tray icon and behaviour
+	 * @return boolean
+	 */
+	public static boolean isMinimizable() {
+		boolean result = Boolean.FALSE;
+		if (WDUtilities.getOperatingSystem().equals(WDUtilities.OS_WINDOWS) || WDUtilities.getOperatingSystem().equals(WDUtilities.OS_WINDOWS_7)) {
+			result = Boolean.TRUE;
+		} else {
+			LinuxWallpaperChanger wallpaperChanger = (LinuxWallpaperChanger)WDUtilities.getWallpaperChanger();
+			switch (wallpaperChanger.getDesktopEnvironment()) {
+			case WDUtilities.DE_UNITY:
+				result = Boolean.TRUE;
+				break;
+			case WDUtilities.DE_MATE:
+				result = Boolean.TRUE;
+				break;
+			case WDUtilities.DE_XFCE:
+				result = Boolean.TRUE;
+				break;
+			default:
+				break;
+			}
+		}
+		return result;
 	}
 
 }

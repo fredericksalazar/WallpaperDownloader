@@ -306,7 +306,7 @@ public class WallpaperDownloader {
 		
 		// Only those desktop environment programmed to be changeable will display this option
 		// TODO: Uncomment if when this part is coded
-//		if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
+		if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
 
 			JSeparator settingsSeparator1 = new JSeparator();
 			settingsSeparator1.setBounds(12, 74, 531, 2);
@@ -319,7 +319,7 @@ public class WallpaperDownloader {
 			changerComboBox = new JComboBox<ComboItem>();
 			changerComboBox.setBounds(317, 88, 94, 19);
 			appSettingsPanel.add(changerComboBox);
-//		}
+		}
 
 		// Downloads Directory (tab)
 		miscPanel = new JPanel();
@@ -670,8 +670,10 @@ public class WallpaperDownloader {
 			public void actionPerformed(ActionEvent evt) {
 				// The application is minimized within System Tray
 		        //Check the SystemTray is supported
-		        if (!SystemTray.isSupported()) {
-		            LOG.error("SystemTray is not supported");
+		        if (!SystemTray.isSupported() || !WDUtilities.isMinimizable()) {
+		            LOG.error("SystemTray is not supported. Frame is traditionally minimized");
+		            // Frame is traditionally minimized
+		            window.frame.setState(Frame.ICONIFIED);
 		            return;
 		        } else {
 		            final PopupMenu popup = new PopupMenu();
@@ -720,6 +722,15 @@ public class WallpaperDownloader {
 		            //Add components to pop-up menu
 		            popup.add(maximizeItem);
 		            popup.add(browseItem);
+		            if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
+			            MenuItem changeItem = new MenuItem("Change wallpaper randomly");
+			            changeItem.addActionListener(new ActionListener() {
+			            	public void actionPerformed(ActionEvent evt) {
+			            		WDUtilities.getWallpaperChanger().setRandomWallpaper();
+			            	}
+			            });
+			            popup.add(changeItem);
+		            }
 		            popup.addSeparator();
 		            popup.add(exitItem);
 		           
@@ -1056,13 +1067,15 @@ public class WallpaperDownloader {
 		timerComboBox.addItem(new ComboItem("30 min", "4"));
 		timerComboBox.setSelectedIndex(new Integer(prefm.getPreference("application-timer")));
 
-		changerComboBox.addItem(new ComboItem("Off", "0"));
-		changerComboBox.addItem(new ComboItem("1 min", "1"));
-		changerComboBox.addItem(new ComboItem("5 min", "2"));
-		changerComboBox.addItem(new ComboItem("10 min", "3"));
-		changerComboBox.addItem(new ComboItem("30 min", "4"));
-		changerComboBox.addItem(new ComboItem("60 min", "5"));
-		changerComboBox.setSelectedIndex(new Integer(prefm.getPreference("application-changer")));
+		if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
+			changerComboBox.addItem(new ComboItem("Off", "0"));
+			changerComboBox.addItem(new ComboItem("1 min", "1"));
+			changerComboBox.addItem(new ComboItem("5 min", "2"));
+			changerComboBox.addItem(new ComboItem("10 min", "3"));
+			changerComboBox.addItem(new ComboItem("30 min", "4"));
+			changerComboBox.addItem(new ComboItem("60 min", "5"));
+			changerComboBox.setSelectedIndex(new Integer(prefm.getPreference("application-changer")));
+		}
 
 		downloadDirectorySize.setValue(new Integer(prefm.getPreference("application-max-download-folder-size")));
 		// ---------------------------------------------------------------------

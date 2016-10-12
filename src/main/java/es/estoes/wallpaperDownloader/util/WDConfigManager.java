@@ -132,8 +132,7 @@ public class WDConfigManager {
     			 // it, if user didn't move the downloads directory, it still will be the last one,
     			 // so permission errors will be thrown when the application tries to write a new
     			 // wallpaper.
-    			 String downloadsDirectoryString = prefm.getPreference("application-downloads-folder");
-    			 if (downloadsDirectoryString.contains(WDUtilities.SNAP_KEY)) {
+    			 if (WDUtilities.isSnapPackage()) {
     				 // It is assumed that wallpaperdownloader has been installed via snap
     				 // Downloads directory is moved to the new directory just in case it is a new
     				 // version

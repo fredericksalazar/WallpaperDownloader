@@ -219,7 +219,12 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 			result = false;
 			break;
 		case WDUtilities.DE_XFCE:
-			result = true;
+			if (WDUtilities.isSnapPackage()) {
+				// Snap package installation doens't allow to change wallpapers in XFCE
+				result = false;
+			} else {
+				result = true;				
+			}
 			break;
 		default:
 			result = false;
