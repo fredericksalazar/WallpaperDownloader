@@ -27,15 +27,22 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 	 */
 	public LinuxWallpaperChanger () {
 		super();
+		if (LOG.isInfoEnabled()) {
+			LOG.info("Checking XDG_CURRENT_DESKTOP environment variable. Value = " + System.getenv("XDG_CURRENT_DESKTOP"));
+		}
 		switch (System.getenv("XDG_CURRENT_DESKTOP")) {
 			case WDUtilities.DE_UNITY:
 				this.setDesktopEnvironment(WDUtilities.DE_UNITY);
 				break;
 			case WDUtilities.DE_GNOME:
+				if (LOG.isInfoEnabled()) {
+					LOG.info("GNOME desktop detected. Checking GDMSESSION environment variable to know version. Value = " + System.getenv("GDMSESSION"));
+				}
 				if (System.getenv("GDMSESSION").equals(WDUtilities.GDM_SESSION_GNOME) ||
 					System.getenv("GDMSESSION").equals(WDUtilities.GDM_SESSION_GNOME_SHELL) || 
 					System.getenv("GDMSESSION").equals(WDUtilities.GDM_SESSION_GNOME_CLASSIC) ||
-					System.getenv("GDMSESSION").equals(WDUtilities.GDM_SESSION_GNOME_FALLBACK)) {
+					System.getenv("GDMSESSION").equals(WDUtilities.GDM_SESSION_GNOME_FALLBACK) ||
+					System.getenv("GDMSESSION").equals(WDUtilities.GDM_SESSION_GNOME_XORG)) {
 					this.setDesktopEnvironment(WDUtilities.DE_GNOME3);	
 				} else {
 					this.setDesktopEnvironment(WDUtilities.DE_GNOME2);

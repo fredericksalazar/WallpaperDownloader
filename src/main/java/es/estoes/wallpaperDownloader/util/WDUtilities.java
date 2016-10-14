@@ -69,6 +69,7 @@ public class WDUtilities {
 	public static final String GDM_SESSION_GNOME_SHELL = "gnome-shell";
 	public static final String GDM_SESSION_GNOME_CLASSIC = "gnome-classic";
 	public static final String GDM_SESSION_GNOME_FALLBACK = "gnome-fallback";
+	public static final String GDM_SESSION_GNOME_XORG = "gnome-xorg";
 	public static final String DE_GNOME3 = "GNOME3";
 	public static final String DE_GNOME2 = "GNOME2";
 
