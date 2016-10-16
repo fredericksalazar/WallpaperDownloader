@@ -46,7 +46,7 @@ public abstract class WallpaperChanger {
 	 * Sets a random wallpaper.
 	 */
 	public void setRandomWallpaper() {
-		File randomWallpaper = WDUtilities.pickRandomFile(Boolean.FALSE);
+		File randomWallpaper = WDUtilities.pickRandomFile(Boolean.TRUE);
 		this.setWallpaper(randomWallpaper.getAbsolutePath());
 		if (LOG.isInfoEnabled()) {
 			LOG.info("Setting random wallpaper: " + randomWallpaper.getAbsolutePath());
