@@ -103,6 +103,9 @@ public class WDConfigManager {
         		 // 5 -> 60 min
         		 prefm.setPreference("application-changer", "0");
         		 
+        		 // Initializing changer directory
+        		 prefm.setPreference("application-changer-folder", absoluteDownloadsPath.toString());
+        		 
         		 // Initializing maximum download directory size
         		 // By default, it will be 40 MBytes
         		 prefm.setPreference("application-max-download-folder-size", "40");
@@ -114,12 +117,6 @@ public class WDConfigManager {
         		 // Initializing search type
         		 // By default, the application will download Favorites wallpapers
         		 prefm.setPreference("wallpaper-search-type", "3");
-        		 
-        		 /**
-        		  * WallpaperDownloader icon
-        		  */
-        		 //app.icon.path
-        		 // TODO: Copy application icon to folder      		 
         		 
     		 } else {	
     			 // Configuration file exists
@@ -203,6 +200,13 @@ public class WDConfigManager {
 				 // Changer timer was not defined within configuration file
         		 prefm.setPreference("application-changer", "0");
 			 }
+
+			 // Changer directory
+			 if (prefm.getPreference("application-changer-folder").equals(PreferencesManager.DEFAULT_VALUE)) {
+				 // Changer folder was not defined within configuration file
+				 prefm.setPreference("application-changer-folder", absoluteDownloadsPath.toString());
+			 }
+
     	 } catch (Exception e) {
     		 throw new WDConfigurationException("Error setting up the downloads folder. Error: " + e.getMessage());
     	 }    	 

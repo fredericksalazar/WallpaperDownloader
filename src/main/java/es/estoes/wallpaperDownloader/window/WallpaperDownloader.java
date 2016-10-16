@@ -129,6 +129,9 @@ public class WallpaperDownloader {
 	private JTextField icons;
 	private JButton btnIcons;
 	private JComboBox<ComboItem> changerComboBox;
+	private JButton btnChangeChangerDirectory = new JButton();
+	private JFormattedTextField changerDirectory;
+
 	
 	// Getters & Setters
 	public JFrame getFrame() {
@@ -155,6 +158,14 @@ public class WallpaperDownloader {
 		this.downloadsDirectory = downloadsDirectory;
 	}
 
+	public JFormattedTextField getChangerDirectory() {
+		return changerDirectory;
+	}
+
+	public void setChangerDirectory(JFormattedTextField changerDirectory) {
+		this.changerDirectory = changerDirectory;
+	}
+	
 	/**
 	 * Launch the application.
 	 */
@@ -305,7 +316,6 @@ public class WallpaperDownloader {
 		appSettingsPanel.add(downloadDirectorySize);
 		
 		// Only those desktop environment programmed to be changeable will display this option
-		// TODO: Uncomment if when this part is coded
 		if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
 
 			JSeparator settingsSeparator1 = new JSeparator();
@@ -319,6 +329,28 @@ public class WallpaperDownloader {
 			changerComboBox = new JComboBox<ComboItem>();
 			changerComboBox.setBounds(317, 88, 94, 19);
 			appSettingsPanel.add(changerComboBox);
+			
+			changerDirectory = new JFormattedTextField((Format) null);
+			changerDirectory.setEditable(false);
+			changerDirectory.setColumns(4);
+			changerDirectory.setBounds(144, 133, 405, 19);
+			appSettingsPanel.add(changerDirectory);
+			
+			JLabel lblChangerDirectory = new JLabel("Changer directory");
+			lblChangerDirectory.setBounds(12, 133, 134, 19);
+			appSettingsPanel.add(lblChangerDirectory);
+			
+			btnChangeChangerDirectory = new JButton();
+			try {
+				Image img = ImageIO.read(getClass().getResource("/images/icons/change_folder_24px_icon.png"));
+				btnChangeChangerDirectory.setIcon(new ImageIcon(img));
+				btnChangeChangerDirectory.setToolTipText("Change changer directory");
+				btnChangeChangerDirectory.setBounds(561, 126, 34, 33);
+			} catch (IOException ex) {
+				btnOpenDownloadsDirectory.setText("Change changer directory");
+				btnChangeChangerDirectory.setBounds(561, 126, 34, 33);
+			}		
+			appSettingsPanel.add(btnChangeChangerDirectory);
 		}
 
 		// Downloads Directory (tab)
@@ -603,7 +635,7 @@ public class WallpaperDownloader {
 		
 		// Listeners
 		/**
-		 * wallhavenCheckbox Action Listeners
+		 * wallhavenCheckbox Action Listener.
 		 */
 		// Clicking event
 		wallhavenCheckbox.addActionListener(new ActionListener() {
@@ -630,7 +662,7 @@ public class WallpaperDownloader {
 		});
 
 		/**
-		 * allResolutionsCheckbox Action Listeners
+		 * allResolutionsCheckbox Action Listener.
 		 */
 		// Clicking event
 		allResolutionsCheckbox.addActionListener(new ActionListener() {
@@ -652,7 +684,7 @@ public class WallpaperDownloader {
 		});
 		
 		/**
-		 * btnCloseExit Action Listeners
+		 * btnCloseExit Action Listener.
 		 */
 		// Clicking event
 		btnCloseExit.addActionListener(new ActionListener() {
@@ -663,7 +695,7 @@ public class WallpaperDownloader {
 		});
 
 		/**
-		 * btnMinimize Action Listeners
+		 * btnMinimize Action Listener.
 		 */
 		// Clicking event
 		btnMinimize.addActionListener(new ActionListener() {
@@ -767,7 +799,7 @@ public class WallpaperDownloader {
 		});
 		
 		/**
-		 * btnApply Action Listeners
+		 * btnApply Action Listener.
 		 */
 		// Clicking event
 		btnApply.addActionListener(new ActionListener() {
@@ -803,6 +835,8 @@ public class WallpaperDownloader {
 				prefm.setPreference("application-timer", new Integer(timerComboBox.getSelectedIndex()).toString());
 				prefm.setPreference("application-max-download-folder-size", downloadDirectorySize.getValue().toString());
 				prefm.setPreference("application-changer", new Integer(changerComboBox.getSelectedIndex()).toString());
+				prefm.setPreference("application-changer-folder", changerDirectory.getText());
+
 				// Stopping and starting harvesting process
 				harvester.stop();
 				harvester.start();
@@ -818,7 +852,7 @@ public class WallpaperDownloader {
 		});	
 		
 		/**
-		 * btnOpenDownloadsDirectory Action Listeners
+		 * btnOpenDownloadsDirectory Action Listener.
 		 */
 		// Clicking event
 		btnOpenDownloadsDirectory.addActionListener(new ActionListener() {
@@ -836,7 +870,7 @@ public class WallpaperDownloader {
 		});
 
 		/**
-		 * btnClipboard Action Listeners
+		 * btnClipboard Action Listener.
 		 */
 		// Clicking event
 		btnClipboard.addActionListener(new ActionListener() {
@@ -851,17 +885,17 @@ public class WallpaperDownloader {
 		});
 		
 		/**
-		 * btnChangeDownloadsDirectory Action Listeners
+		 * btnChangeDownloadsDirectory Action Listener.
 		 */
 		btnChangeDownloadsDirectory.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				DownloadsPathChangerWindow downloadsPathChangerWindow = new DownloadsPathChangerWindow(window);
-				downloadsPathChangerWindow.setVisible(true);
+				PathChangerWindow pathChangerWindow = new PathChangerWindow(window, WDUtilities.DOWNLOADS_DIRECTORY);
+				pathChangerWindow.setVisible(true);
 			}
 		});
 		
 		/**
-		 * btnManageWallpapers Action Listeners
+		 * btnManageWallpapers Action Listener.
 		 */
 		btnManageWallpapers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -871,12 +905,12 @@ public class WallpaperDownloader {
 		});
 		
 		  /**
-		  * lastWallpapersList Mouse Motion Listeners
+		  * lastWallpapersList Mouse Motion Listener.
 		  */
 		  changePointerJList();
 	      
 		 /**
-		  * btnRemoveWallpaper Action Listeners
+		  * btnRemoveWallpaper Action Listener.
 		  */
 	      btnRemoveWallpaper.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -893,7 +927,7 @@ public class WallpaperDownloader {
 	      });
 	      
 		 /**
-		  * btnSetFavoriteWallpaper Action Listeners
+		  * btnSetFavoriteWallpaper Action Listener.
 		  */
 	      btnSetFavoriteWallpaper.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -910,7 +944,7 @@ public class WallpaperDownloader {
 		  });
 
 		 /**
-		  * btnSetWallpaper Action Listeners
+		  * btnSetWallpaper Action Listener.
 		  */
 	      btnSetWallpaper.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -927,7 +961,7 @@ public class WallpaperDownloader {
 		  });	      
 
 	      /**
-		  * btnRepository Action Listeners
+		  * btnRepository Action Listener.
 		  */
 	      btnRepository.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
@@ -959,7 +993,7 @@ public class WallpaperDownloader {
 	      });
 
 		 /**
-		  * btnIcons Action Listeners
+		  * btnIcons Action Listener.
 		  */
 	      btnIcons.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
@@ -991,7 +1025,7 @@ public class WallpaperDownloader {
 	      });
 		      
 	      /**
-	       * btnPreviewWallpaper Action Listeners
+	       * btnPreviewWallpaper Action Listener.
 	       */
 	      btnPreviewWallpaper.addActionListener(new ActionListener() {
 	    	  public void actionPerformed(ActionEvent arg0) {
@@ -1004,6 +1038,17 @@ public class WallpaperDownloader {
   				previewWindow.setVisible(true);
 	    	  }
 	      });
+	      
+	      /**
+	       * btnChangeChangerDirectory Action Listener.
+	       */
+	      btnChangeChangerDirectory.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					PathChangerWindow pathChangerWindow = new PathChangerWindow(window, WDUtilities.CHANGER_DIRECTORY);
+					pathChangerWindow.setVisible(true);
+				}
+		});
+
 			
 	}
 
@@ -1075,6 +1120,7 @@ public class WallpaperDownloader {
 			changerComboBox.addItem(new ComboItem("30 min", "4"));
 			changerComboBox.addItem(new ComboItem("60 min", "5"));
 			changerComboBox.setSelectedIndex(new Integer(prefm.getPreference("application-changer")));
+			changerDirectory.setValue(prefm.getPreference("application-changer-folder"));
 		}
 
 		downloadDirectorySize.setValue(new Integer(prefm.getPreference("application-max-download-folder-size")));

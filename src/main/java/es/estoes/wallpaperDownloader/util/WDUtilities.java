@@ -72,6 +72,8 @@ public class WDUtilities {
 	public static final String GDM_SESSION_GNOME_XORG = "gnome-xorg";
 	public static final String DE_GNOME3 = "GNOME3";
 	public static final String DE_GNOME2 = "GNOME2";
+	public static final String DOWNLOADS_DIRECTORY = "downloads_directory";
+	public static final String CHANGER_DIRECTORY = "changer_directory";
 
 	// Attributes
 	private static String appPath;
@@ -495,6 +497,16 @@ public class WDUtilities {
 			}
 		}
 		return result;
+	}
+
+	/**
+	 * Gets changer directory.
+	 * @return String
+	 */
+	public static String getChangerPath() {
+		PreferencesManager prefm = PreferencesManager.getInstance();
+		String changerDirectoryString = prefm.getPreference("application-changer-folder");
+		return changerDirectoryString;
 	}
 
 }

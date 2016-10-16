@@ -16,22 +16,30 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.Locale;
 
-public class DownloadsPathChangerWindow extends JFrame {
+public class PathChangerWindow extends JFrame {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JTextField newDownloadsPath;
+	private JTextField newPath;
 
 	/**
 	 * Create the frame.
 	 * @param mainWindow 
 	 */
-	public DownloadsPathChangerWindow(final WallpaperDownloader mainWindow) {
+	public PathChangerWindow(final WallpaperDownloader mainWindow, String whatToChange) {
 		// DISPOSE_ON_CLOSE for closing only this frame instead of the entire application
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setTitle("Change Downloads Directory Path");
+		switch (whatToChange) {
+		case WDUtilities.DOWNLOADS_DIRECTORY:
+			setTitle("Change Downloads Directory Path");
+			break;
+		case WDUtilities.CHANGER_DIRECTORY:
+			setTitle("Change Changer Directory Path");
+		default:
+			break;
+		}
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(null);
 		
@@ -42,13 +50,30 @@ public class DownloadsPathChangerWindow extends JFrame {
 		int y = (screenSize.height - getHeight()) / 2;
 		setLocation(x, y);
 		
-		newDownloadsPath = new JTextField();
-		newDownloadsPath.setBounds(12, 36, 298, 19);
-		getContentPane().add(newDownloadsPath);
-		newDownloadsPath.setColumns(10);
-		newDownloadsPath.setText(WDUtilities.getDownloadsPath());
+		newPath = new JTextField();
+		newPath.setBounds(12, 36, 298, 19);
+		getContentPane().add(newPath);
+		newPath.setColumns(10);
+		switch (whatToChange) {
+		case WDUtilities.DOWNLOADS_DIRECTORY:
+			newPath.setText(WDUtilities.getDownloadsPath());
+			break;
+		case WDUtilities.CHANGER_DIRECTORY:
+			newPath.setText(WDUtilities.getChangerPath());
+		default:
+			break;
+		}
 		
-		JLabel lblSelectDownloadsPath = new JLabel("Please, select the new downloads directory");
+		JLabel lblSelectDownloadsPath = null;
+		switch (whatToChange) {
+		case WDUtilities.DOWNLOADS_DIRECTORY:
+			lblSelectDownloadsPath = new JLabel("Please, select the new downloads directory");
+			break;
+		case WDUtilities.CHANGER_DIRECTORY:
+			lblSelectDownloadsPath = new JLabel("Please, select the new changer directory");
+		default:
+			break;
+		}
 		lblSelectDownloadsPath.setBounds(12, 12, 312, 15);
 		getContentPane().add(lblSelectDownloadsPath);
 				
@@ -66,7 +91,7 @@ public class DownloadsPathChangerWindow extends JFrame {
 			    fileChooser.setFileHidingEnabled(false);
 
 			    if (fileChooser.showOpenDialog(getContentPane()) == JFileChooser.APPROVE_OPTION) { 
-			    	newDownloadsPath.setText(fileChooser.getSelectedFile().getAbsolutePath());
+			    	newPath.setText(fileChooser.getSelectedFile().getAbsolutePath());
 			    }
 			}
 		});
@@ -80,11 +105,19 @@ public class DownloadsPathChangerWindow extends JFrame {
 				// All the downloaded wallpapers are moved to the new location
 				// Stop harvesting process
 				mainWindow.getHarvester().stop();
-				WDUtilities.moveDownloadedWallpapers(newDownloadsPath.getText());
+				WDUtilities.moveDownloadedWallpapers(newPath.getText());
 				// Start harvesting process
 				mainWindow.getHarvester().start();
 				// Refresh new path in main window
-				mainWindow.getDownloadsDirectory().setText(newDownloadsPath.getText());
+				switch (whatToChange) {
+				case WDUtilities.DOWNLOADS_DIRECTORY:
+					mainWindow.getDownloadsDirectory().setText(newPath.getText());
+					break;
+				case WDUtilities.CHANGER_DIRECTORY:
+					mainWindow.getChangerDirectory().setText(newPath.getText());
+				default:
+					break;
+				}				
 				// Close frame
 				dispose();
 			}
