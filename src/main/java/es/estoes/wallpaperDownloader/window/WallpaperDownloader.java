@@ -333,11 +333,11 @@ public class WallpaperDownloader {
 			changerDirectory = new JFormattedTextField((Format) null);
 			changerDirectory.setEditable(false);
 			changerDirectory.setColumns(4);
-			changerDirectory.setBounds(144, 133, 405, 19);
+			changerDirectory.setBounds(144, 117, 405, 19);
 			appSettingsPanel.add(changerDirectory);
 			
 			JLabel lblChangerDirectory = new JLabel("Changer directory");
-			lblChangerDirectory.setBounds(12, 133, 134, 19);
+			lblChangerDirectory.setBounds(12, 117, 134, 19);
 			appSettingsPanel.add(lblChangerDirectory);
 			
 			btnChangeChangerDirectory = new JButton();
@@ -345,7 +345,7 @@ public class WallpaperDownloader {
 				Image img = ImageIO.read(getClass().getResource("/images/icons/change_folder_24px_icon.png"));
 				btnChangeChangerDirectory.setIcon(new ImageIcon(img));
 				btnChangeChangerDirectory.setToolTipText("Change changer directory");
-				btnChangeChangerDirectory.setBounds(561, 126, 34, 33);
+				btnChangeChangerDirectory.setBounds(561, 110, 34, 33);
 			} catch (IOException ex) {
 				btnOpenDownloadsDirectory.setText("Change changer directory");
 				btnChangeChangerDirectory.setBounds(561, 126, 34, 33);
