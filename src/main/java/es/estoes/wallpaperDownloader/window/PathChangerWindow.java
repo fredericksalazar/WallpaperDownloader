@@ -102,22 +102,27 @@ public class PathChangerWindow extends JFrame {
 		btnApplyPathChange.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent arg0) {
-				// All the downloaded wallpapers are moved to the new location
-				// Stop harvesting process
-				mainWindow.getHarvester().stop();
-				WDUtilities.moveDownloadedWallpapers(newPath.getText());
-				// Start harvesting process
-				mainWindow.getHarvester().start();
-				// Refresh new path in main window
 				switch (whatToChange) {
 				case WDUtilities.DOWNLOADS_DIRECTORY:
+					// All the downloaded wallpapers are moved to the new location
+					// Stop harvesting process
+					mainWindow.getHarvester().stop();
+					WDUtilities.moveDownloadedWallpapers(newPath.getText());
+					// Start harvesting process
+					mainWindow.getHarvester().start();
+					// Refresh new path in main window
 					mainWindow.getDownloadsDirectory().setText(newPath.getText());
 					break;
 				case WDUtilities.CHANGER_DIRECTORY:
+					// Refresh new path in main window
 					mainWindow.getChangerDirectory().setText(newPath.getText());
+					// Information
+					DialogManager info = new DialogManager("Changer directory has been succesfully changed to " + newPath.getText(), 2000);
+					info.openDialog();
 				default:
 					break;
-				}				
+				}					
+			
 				// Close frame
 				dispose();
 			}
