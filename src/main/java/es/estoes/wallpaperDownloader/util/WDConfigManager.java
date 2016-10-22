@@ -146,6 +146,7 @@ public class WDConfigManager {
             		 }  		 
     			 } else {
         			 WDUtilities.setDownloadsPath(prefm.getPreference("application-downloads-folder"));
+        			 absoluteDownloadsPath = absoluteDownloadsPath.resolve(prefm.getPreference("application-downloads-folder"));
     			 }
     			 LOG.info("Downloads directory -> " + prefm.getPreference("application-downloads-folder"));
     		 }
