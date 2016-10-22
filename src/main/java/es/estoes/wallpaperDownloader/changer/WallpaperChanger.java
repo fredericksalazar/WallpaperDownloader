@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.apache.log4j.Logger;
 
+import es.estoes.wallpaperDownloader.util.PreferencesManager;
 import es.estoes.wallpaperDownloader.util.WDUtilities;
 
 /**
@@ -46,7 +47,8 @@ public abstract class WallpaperChanger {
 	 * Sets a random wallpaper.
 	 */
 	public void setRandomWallpaper() {
-		File randomWallpaper = WDUtilities.pickRandomFile(Boolean.TRUE);
+		PreferencesManager prefm = PreferencesManager.getInstance();
+		File randomWallpaper = WDUtilities.pickRandomFile(Boolean.TRUE, prefm.getPreference("application-changer-folder"));
 		this.setWallpaper(randomWallpaper.getAbsolutePath());
 		if (LOG.isInfoEnabled()) {
 			LOG.info("Setting random wallpaper: " + randomWallpaper.getAbsolutePath());

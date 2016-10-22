@@ -152,13 +152,19 @@ public class WDUtilities {
 	}
 
 	/**
-	 * Get all the wallpapers from the download directory.
+	 * Get all the wallpapers from a directory.
 	 * @param wallpapersType Type of the wallpapers wanted to retrieve (favorite, non favorite, all)
-	 * @return
+	 * @param directory Directory to gell all the wallpapers
+	 * @return a list of File
 	 */
-	public static List<File> getAllWallpapers(String wallpapersType) {
-		LOG.info("Getting all the wallpapers...");
-		File downloadDirectory = new File(WDUtilities.getDownloadsPath());
+	public static List<File> getAllWallpapers(String wallpapersType, String directory) {
+		LOG.info("Getting all the wallpapers in " + directory + "...");
+		File downloadDirectory;
+		if (directory.equals(WDUtilities.DOWNLOADS_DIRECTORY)) {
+			downloadDirectory = new File(WDUtilities.getDownloadsPath());
+		} else {
+			downloadDirectory = new File(directory);
+		}
 		List<File> wallpapers = new ArrayList<File>();
 		if (wallpapersType.equals(WDUtilities.WD_ALL)) {
 			wallpapers = (List<File>) FileUtils.listFiles(downloadDirectory, FileFilterUtils.prefixFileFilter(WDUtilities.WD_FAVORITE_PREFIX), null);
@@ -189,7 +195,7 @@ public class WDUtilities {
 			File destDir = new File(newPath);
 			File srcDir = new File(WDUtilities.getDownloadsPath());
 			// Get all the wallpapers from the current location
-			List<File> wallpapers = getAllWallpapers(WDUtilities.WD_ALL);
+			List<File> wallpapers = getAllWallpapers(WDUtilities.WD_ALL, WDUtilities.DOWNLOADS_DIRECTORY);
 
 			// Copy every file to the new location
 			Iterator<File> wallpaper = wallpapers.iterator();
@@ -363,7 +369,7 @@ public class WDUtilities {
 	 * @return
 	 */
 	public static File[] getAllWallpapersSortedByDate(String wallpapersType) {
-		List<File> wallpaperList = getAllWallpapers(wallpapersType);
+		List<File> wallpaperList = getAllWallpapers(wallpapersType, WDUtilities.DOWNLOADS_DIRECTORY);
 		File[] wallpapers = new File[wallpaperList.size()];
 		wallpapers = wallpaperList.toArray(wallpapers);
 		Arrays.sort(wallpapers, LastModifiedFileComparator.LASTMODIFIED_COMPARATOR);
@@ -386,7 +392,7 @@ public class WDUtilities {
 		if (sort.equals(SORTING_BY_DATE)) {
 			wallpapers = getAllWallpapersSortedByDate(wallpapersType);
 		} else {
-			List<File> wallpapersList = getAllWallpapers(wallpapersType);
+			List<File> wallpapersList = getAllWallpapers(wallpapersType, WDUtilities.DOWNLOADS_DIRECTORY);
 			wallpapers = wallpapersList.toArray(wallpapers);
 		}
 		
@@ -409,16 +415,16 @@ public class WDUtilities {
 	}
 	
 	/**
-	 * It picks a random file from wallpapers download directory.
+	 * It picks a random file from a directory.
 	 * @param includeFavoriteWallpapers if it is set to TRUE, this method will pick favorite and not favorite wallpapers
 	 * @return
 	 */
-	public static File pickRandomFile(Boolean includeFavoriteWallpapers) {
+	public static File pickRandomFile(Boolean includeFavoriteWallpapers, String directory) {
 		String wallpapersType = WDUtilities.WD_ALL;
 		if (!includeFavoriteWallpapers) {
 			wallpapersType = WDUtilities.WD_PREFIX;
 		}
-		List<File> files = WDUtilities.getAllWallpapers(wallpapersType);
+		List<File> files = WDUtilities.getAllWallpapers(wallpapersType, directory);
 		if (!files.isEmpty()) {
 			Random generator = new Random();
 			int index = generator.nextInt(files.size());

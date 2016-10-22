@@ -94,7 +94,7 @@ public abstract class Provider {
 		Long maxSize = Long.parseLong(prefm.getPreference("application-max-download-folder-size"));
 		long downloadFolderSize = WDUtilities.getDirectorySpaceOccupied(WDUtilities.getDownloadsPath(), WDUtilities.UNIT_MB);
 		while (downloadFolderSize > (maxSize * 1024)) {
-			File fileToRemove = WDUtilities.pickRandomFile(Boolean.FALSE);
+			File fileToRemove = WDUtilities.pickRandomFile(Boolean.FALSE, WDUtilities.DOWNLOADS_DIRECTORY);
 			try {
 				if (fileToRemove != null) {
 					FileUtils.forceDelete(fileToRemove);
