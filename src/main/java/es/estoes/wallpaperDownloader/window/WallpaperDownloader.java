@@ -1,7 +1,6 @@
 package es.estoes.wallpaperDownloader.window;
 
 import java.awt.EventQueue;
-
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFormattedTextField;
@@ -12,7 +11,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.ToolTipManager;
 import javax.swing.border.Border;
-
 import es.estoes.wallpaperDownloader.changer.ChangerDaemon;
 import es.estoes.wallpaperDownloader.harvest.Harvester;
 import es.estoes.wallpaperDownloader.item.ComboItem;
@@ -21,15 +19,11 @@ import es.estoes.wallpaperDownloader.util.PropertiesManager;
 import es.estoes.wallpaperDownloader.util.WDConfigManager;
 import es.estoes.wallpaperDownloader.util.WDUtilities;
 import es.estoes.wallpaperDownloader.util.WallpaperListRenderer;
-
 import javax.swing.JTabbedPane;
 import javax.swing.JButton;
-
 import java.awt.Color;
-
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
-
 import java.awt.AWTException;
 import java.awt.Cursor;
 import java.awt.Desktop;
@@ -57,18 +51,13 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.text.NumberFormat;
-
 import javax.swing.JLabel;
-
 import org.apache.log4j.Logger;
-
 import javax.swing.JComboBox;
-
 import java.text.Format;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
@@ -129,8 +118,11 @@ public class WallpaperDownloader {
 	private JTextField icons;
 	private JButton btnIcons;
 	private JComboBox<ComboItem> changerComboBox;
-	private JButton btnChangeChangerDirectory = new JButton();
+	private JButton btnChangeChangerDirectory;
 	private JFormattedTextField changerDirectory;
+	JButton btnChangeMoveDirectory;
+	JFormattedTextField moveDirectory;
+	private JLabel lblMoveHelp;
 
 	
 	// Getters & Setters
@@ -315,29 +307,73 @@ public class WallpaperDownloader {
 		downloadDirectorySize.setBounds(317, 37, 49, 19);
 		appSettingsPanel.add(downloadDirectorySize);
 		
+		JSeparator settingsSeparator1 = new JSeparator();
+		settingsSeparator1.setBounds(12, 74, 531, 2);
+		appSettingsPanel.add(settingsSeparator1);
+		
+		JCheckBox MoveFavoritecheckBox = new JCheckBox("Move favorite wallpapers");
+		MoveFavoritecheckBox.setBounds(12, 84, 196, 23);
+		appSettingsPanel.add(MoveFavoritecheckBox);
+
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/help_24px_icon.png"));
+			ImageIcon icon = new ImageIcon(img);
+			lblMoveHelp = new JLabel(icon);
+			lblMoveHelp.setToolTipText("Enable this option to have an extra button within Wallpaper Manager window to move all your favorite wallpapers to another location");
+			lblMoveHelp.setBounds(213, 85, 30, 23);
+			appSettingsPanel.add(lblMoveHelp);
+		} catch (IOException ex) {
+			JLabel lblMoveHelp = new JLabel("Move favorite wallpapers to another directory");
+			lblMoveHelp.setBounds(213, 85, 30, 23);
+			appSettingsPanel.add(lblMoveHelp);
+		}
+		
+		JLabel lblMoveFavoriteDirectory = new JLabel("Directory ");
+		lblMoveFavoriteDirectory.setBounds(12, 115, 134, 19);
+		appSettingsPanel.add(lblMoveFavoriteDirectory);
+		
+		moveDirectory = new JFormattedTextField((Format) null);
+		moveDirectory.setEditable(false);
+		moveDirectory.setColumns(4);
+		moveDirectory.setBounds(144, 115, 405, 19);
+		appSettingsPanel.add(moveDirectory);
+		
+		btnChangeMoveDirectory = new JButton();
+		
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/change_folder_24px_icon.png"));
+			btnChangeMoveDirectory.setIcon(new ImageIcon(img));
+			btnChangeMoveDirectory.setToolTipText("Change directory where you want to move your favorite wallpapers");
+			btnChangeMoveDirectory.setBounds(561, 107, 34, 33);
+		} catch (IOException ex) {
+			btnChangeMoveDirectory.setText("Change directory where you want to move your favorite wallpapers");
+			btnChangeMoveDirectory.setBounds(561, 107, 34, 33);
+		}	
+		appSettingsPanel.add(btnChangeMoveDirectory);
+
+		
 		// Only those desktop environment programmed to be changeable will display this option
 		if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
 
-			JSeparator settingsSeparator1 = new JSeparator();
-			settingsSeparator1.setBounds(12, 74, 531, 2);
-			appSettingsPanel.add(settingsSeparator1);
-		
+			JSeparator settingsSeparator2 = new JSeparator();
+			settingsSeparator2.setBounds(18, 153, 531, 2);
+			appSettingsPanel.add(settingsSeparator2);		
 			JLabel lblChanger = new JLabel("Change wallpaper automatically every");
-			lblChanger.setBounds(12, 88, 439, 19);
+			lblChanger.setBounds(12, 168, 304, 19);
 			appSettingsPanel.add(lblChanger);
 			
 			changerComboBox = new JComboBox<ComboItem>();
-			changerComboBox.setBounds(317, 88, 94, 19);
+			changerComboBox.setBounds(317, 168, 94, 19);
 			appSettingsPanel.add(changerComboBox);
 			
 			changerDirectory = new JFormattedTextField((Format) null);
 			changerDirectory.setEditable(false);
 			changerDirectory.setColumns(4);
-			changerDirectory.setBounds(144, 117, 405, 19);
+			changerDirectory.setBounds(144, 197, 405, 19);
 			appSettingsPanel.add(changerDirectory);
 			
 			JLabel lblChangerDirectory = new JLabel("Changer directory");
-			lblChangerDirectory.setBounds(12, 117, 134, 19);
+			lblChangerDirectory.setBounds(12, 197, 134, 19);
 			appSettingsPanel.add(lblChangerDirectory);
 			
 			btnChangeChangerDirectory = new JButton();
@@ -345,12 +381,13 @@ public class WallpaperDownloader {
 				Image img = ImageIO.read(getClass().getResource("/images/icons/change_folder_24px_icon.png"));
 				btnChangeChangerDirectory.setIcon(new ImageIcon(img));
 				btnChangeChangerDirectory.setToolTipText("Change changer directory");
-				btnChangeChangerDirectory.setBounds(561, 110, 34, 33);
+				btnChangeChangerDirectory.setBounds(561, 190, 34, 33);
 			} catch (IOException ex) {
 				btnOpenDownloadsDirectory.setText("Change changer directory");
 				btnChangeChangerDirectory.setBounds(561, 126, 34, 33);
 			}		
-			appSettingsPanel.add(btnChangeChangerDirectory);
+			appSettingsPanel.add(btnChangeChangerDirectory);			
+
 		}
 
 		// Downloads Directory (tab)
