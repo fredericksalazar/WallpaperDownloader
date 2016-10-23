@@ -124,7 +124,7 @@ public class WallpaperDownloader {
 	private JFormattedTextField moveDirectory;
 	private JLabel lblMoveHelp;
 	private JCheckBox moveFavoriteCheckBox;
-
+	private JButton btnMoveWallpapers;
 
 	
 	// Getters & Setters
@@ -329,7 +329,7 @@ public class WallpaperDownloader {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/help_24px_icon.png"));
 			ImageIcon icon = new ImageIcon(img);
 			lblMoveHelp = new JLabel(icon);
-			lblMoveHelp.setToolTipText("Enable this option to have an extra button within Wallpaper Manager window to move all your favorite wallpapers to another location");
+			lblMoveHelp.setToolTipText("Enable this option to have an extra button within Wallpapers tab to move all your favorite wallpapers to another location");
 			lblMoveHelp.setBounds(213, 85, 30, 23);
 			appSettingsPanel.add(lblMoveHelp);
 		} catch (IOException ex) {
@@ -484,7 +484,7 @@ public class WallpaperDownloader {
 		
 		btnManageWallpapers = new JButton("Manage All Wallpapers");
 		btnManageWallpapers.setBackground(Color.WHITE);
-		btnManageWallpapers.setBounds(12, 277, 197, 25);
+		btnManageWallpapers.setBounds(12, 239, 197, 25);
 		wallpapersPanel.add(btnManageWallpapers);
 		
 		btnRemoveWallpaper = new JButton();
@@ -525,6 +525,11 @@ public class WallpaperDownloader {
 			btnPreviewWallpaper.setBounds(95, 149, 34, 33);
 		}
 		wallpapersPanel.add(btnPreviewWallpaper);
+		
+		btnMoveWallpapers = new JButton("Move Fav. Wallpapers");
+		btnMoveWallpapers.setBackground(Color.WHITE);
+		btnMoveWallpapers.setBounds(12, 276, 197, 25);
+		wallpapersPanel.add(btnMoveWallpapers);
 
 		btnSetWallpaper = new JButton();
 
@@ -1115,11 +1120,13 @@ public class WallpaperDownloader {
 					moveDirectory.setEnabled(true);
 					moveDirectory.setText(WDUtilities.getDownloadsPath());
 					btnChangeMoveDirectory.setEnabled(true);
+					btnMoveWallpapers.setEnabled(true);
 				} else {
 					moveFavoriteCheckBox.setSelected(false);
 					moveDirectory.setEnabled(false);
 					moveDirectory.setText("");
 					btnChangeMoveDirectory.setEnabled(false);
+					btnMoveWallpapers.setEnabled(false);
 				}
 			}
 	      });
@@ -1202,10 +1209,12 @@ public class WallpaperDownloader {
 			moveDirectory.setEnabled(true);
 			moveDirectory.setText(prefm.getPreference("move-favorite-folder"));
 			btnChangeMoveDirectory.setEnabled(true);
+			btnMoveWallpapers.setEnabled(true);
 		} else {
 			moveFavoriteCheckBox.setSelected(false);
 			moveDirectory.setEnabled(false);
 			btnChangeMoveDirectory.setEnabled(false);
+			btnMoveWallpapers.setEnabled(false);
 		}
 
 		// Move favorite feature
