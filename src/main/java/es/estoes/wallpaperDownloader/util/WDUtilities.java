@@ -74,6 +74,7 @@ public class WDUtilities {
 	public static final String DE_GNOME2 = "GNOME2";
 	public static final String DOWNLOADS_DIRECTORY = "downloads_directory";
 	public static final String CHANGER_DIRECTORY = "changer_directory";
+	public static final String MOVE_DIRECTORY = "move_directory";
 
 	// Attributes
 	private static String appPath;
@@ -513,6 +514,19 @@ public class WDUtilities {
 		PreferencesManager prefm = PreferencesManager.getInstance();
 		String changerDirectoryString = prefm.getPreference("application-changer-folder");
 		return changerDirectoryString;
+	}
+
+	/**
+	 * Gets move favorite directory.
+	 * @return String
+	 */
+	public static String getMoveFavoritePath() {
+		PreferencesManager prefm = PreferencesManager.getInstance();
+		String moveFavoriteDirectoryString = prefm.getPreference("move-favorite-folder");
+		if (moveFavoriteDirectoryString.equals(PreferencesManager.DEFAULT_VALUE)) {
+			moveFavoriteDirectoryString = WDUtilities.getDownloadsPath();
+		}
+		return moveFavoriteDirectoryString;
 	}
 
 }

@@ -93,6 +93,10 @@ public class WDConfigManager {
         		 // 3 -> 30 min
         		 prefm.setPreference("application-timer", "0");
 
+        		 // Initializing move favorite feature
+        		 prefm.setPreference("move-favorite", WDUtilities.APP_NO);
+        		 prefm.setPreference("move-favorite-folder", PreferencesManager.DEFAULT_VALUE);
+        		 
         		 // Initializing changer timer
         		 // By default, changer is off
         		 // 0 -> Off
@@ -196,6 +200,12 @@ public class WDConfigManager {
 				 WDUtilities.setWallpaperChanger(new UnknownWallpaperChanger());
 			 }
 
+    		 // Move favorite feature
+			 if (prefm.getPreference("move-favorite").equals(PreferencesManager.DEFAULT_VALUE)) {
+	    		 prefm.setPreference("move-favorite", WDUtilities.APP_NO);
+	    		 prefm.setPreference("move-favorite-folder", PreferencesManager.DEFAULT_VALUE);
+			 }
+			 
 			 // Changer timer
 			 if (prefm.getPreference("application-changer").equals(PreferencesManager.DEFAULT_VALUE)) {
 				 // Changer timer was not defined within configuration file

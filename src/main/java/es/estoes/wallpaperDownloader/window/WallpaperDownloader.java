@@ -120,9 +120,11 @@ public class WallpaperDownloader {
 	private JComboBox<ComboItem> changerComboBox;
 	private JButton btnChangeChangerDirectory;
 	private JFormattedTextField changerDirectory;
-	JButton btnChangeMoveDirectory;
-	JFormattedTextField moveDirectory;
+	private JButton btnChangeMoveDirectory;
+	private JFormattedTextField moveDirectory;
 	private JLabel lblMoveHelp;
+	private JCheckBox moveFavoriteCheckBox;
+
 
 	
 	// Getters & Setters
@@ -157,7 +159,15 @@ public class WallpaperDownloader {
 	public void setChangerDirectory(JFormattedTextField changerDirectory) {
 		this.changerDirectory = changerDirectory;
 	}
-	
+
+	public JFormattedTextField getMoveDirectory() {
+		return moveDirectory;
+	}
+
+	public void setMoveDirectory(JFormattedTextField moveDirectory) {
+		this.moveDirectory = moveDirectory;
+	}
+
 	/**
 	 * Launch the application.
 	 */
@@ -311,9 +321,9 @@ public class WallpaperDownloader {
 		settingsSeparator1.setBounds(12, 74, 531, 2);
 		appSettingsPanel.add(settingsSeparator1);
 		
-		JCheckBox MoveFavoritecheckBox = new JCheckBox("Move favorite wallpapers");
-		MoveFavoritecheckBox.setBounds(12, 84, 196, 23);
-		appSettingsPanel.add(MoveFavoritecheckBox);
+		moveFavoriteCheckBox = new JCheckBox("Move favorite wallpapers");
+		moveFavoriteCheckBox.setBounds(12, 84, 196, 23);
+		appSettingsPanel.add(moveFavoriteCheckBox);
 
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/help_24px_icon.png"));
@@ -690,6 +700,7 @@ public class WallpaperDownloader {
 					wallhavenHeigthResolution.setValue(new Integer(resolution[1]));
 				} else {
 					wallhavenKeywords.setEnabled(false);
+					wallhavenKeywords.setText("");
 					wallhavenWidthResolution.setEnabled(false);
 					wallhavenHeigthResolution.setEnabled(false);
 					searchTypeComboBox.setEnabled(false);
@@ -871,6 +882,13 @@ public class WallpaperDownloader {
 				// ---------------------------------------------------------------------------
 				prefm.setPreference("application-timer", new Integer(timerComboBox.getSelectedIndex()).toString());
 				prefm.setPreference("application-max-download-folder-size", downloadDirectorySize.getValue().toString());
+				if (moveFavoriteCheckBox.isSelected()) {
+					prefm.setPreference("move-favorite", WDUtilities.APP_YES);
+					prefm.setPreference("move-favorite-folder", moveDirectory.getText());
+				} else {
+					prefm.setPreference("move-favorite", WDUtilities.APP_NO);
+					prefm.setPreference("move-favorite-folder", PreferencesManager.DEFAULT_VALUE);
+				}
 				prefm.setPreference("application-changer", new Integer(changerComboBox.getSelectedIndex()).toString());
 				prefm.setPreference("application-changer-folder", changerDirectory.getText());
 
@@ -1084,8 +1102,37 @@ public class WallpaperDownloader {
 					PathChangerWindow pathChangerWindow = new PathChangerWindow(window, WDUtilities.CHANGER_DIRECTORY);
 					pathChangerWindow.setVisible(true);
 				}
-		});
+	      });
 
+	      /**
+	       * moveFavoriteCheckBox Action Listener.
+	       */
+	      // Clicking event
+	      moveFavoriteCheckBox.addActionListener(new ActionListener() {
+	    	  public void actionPerformed(ActionEvent evt) {
+				if (moveFavoriteCheckBox.isSelected()) {
+					moveFavoriteCheckBox.setSelected(true);
+					moveDirectory.setEnabled(true);
+					moveDirectory.setText(WDUtilities.getDownloadsPath());
+					btnChangeMoveDirectory.setEnabled(true);
+				} else {
+					moveFavoriteCheckBox.setSelected(false);
+					moveDirectory.setEnabled(false);
+					moveDirectory.setText("");
+					btnChangeMoveDirectory.setEnabled(false);
+				}
+			}
+	      });
+	      
+	      /**
+	       * btnChangeMoveDirectory Action Listener.
+	       */
+	      btnChangeMoveDirectory.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					PathChangerWindow pathChangerWindow = new PathChangerWindow(window, WDUtilities.MOVE_DIRECTORY);
+					pathChangerWindow.setVisible(true);
+				}
+	      });
 			
 	}
 
@@ -1149,6 +1196,24 @@ public class WallpaperDownloader {
 		timerComboBox.addItem(new ComboItem("30 min", "4"));
 		timerComboBox.setSelectedIndex(new Integer(prefm.getPreference("application-timer")));
 
+		String moveFavoriteEnable = prefm.getPreference("move-favorite");
+		if (moveFavoriteEnable.equals(WDUtilities.APP_YES)) {
+			moveFavoriteCheckBox.setSelected(true);
+			moveDirectory.setEnabled(true);
+			moveDirectory.setText(prefm.getPreference("move-favorite-folder"));
+			btnChangeMoveDirectory.setEnabled(true);
+		} else {
+			moveFavoriteCheckBox.setSelected(false);
+			moveDirectory.setEnabled(false);
+			btnChangeMoveDirectory.setEnabled(false);
+		}
+
+		// Move favorite feature
+		if (prefm.getPreference("move-favorite").equals(PreferencesManager.DEFAULT_VALUE)) {
+		prefm.setPreference("move-favorite", WDUtilities.APP_NO);
+		prefm.setPreference("move-favorite-folder", PreferencesManager.DEFAULT_VALUE);
+		}
+		
 		if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
 			changerComboBox.addItem(new ComboItem("Off", "0"));
 			changerComboBox.addItem(new ComboItem("1 min", "1"));

@@ -37,6 +37,10 @@ public class PathChangerWindow extends JFrame {
 			break;
 		case WDUtilities.CHANGER_DIRECTORY:
 			setTitle("Change Changer Directory Path");
+			break;
+		case WDUtilities.MOVE_DIRECTORY:
+			setTitle("Change Move Favorite Directory Path");
+			break;
 		default:
 			break;
 		}
@@ -60,6 +64,10 @@ public class PathChangerWindow extends JFrame {
 			break;
 		case WDUtilities.CHANGER_DIRECTORY:
 			newPath.setText(WDUtilities.getChangerPath());
+			break;
+		case WDUtilities.MOVE_DIRECTORY:
+			newPath.setText(WDUtilities.getMoveFavoritePath());
+			break;
 		default:
 			break;
 		}
@@ -71,6 +79,10 @@ public class PathChangerWindow extends JFrame {
 			break;
 		case WDUtilities.CHANGER_DIRECTORY:
 			lblSelectDownloadsPath = new JLabel("Please, select the new changer directory");
+			break;
+		case WDUtilities.MOVE_DIRECTORY:
+			lblSelectDownloadsPath = new JLabel("Please, select the new directory to move favorite wallpapers");
+			break;
 		default:
 			break;
 		}
@@ -119,6 +131,14 @@ public class PathChangerWindow extends JFrame {
 					// Information
 					DialogManager info = new DialogManager("Changer directory has been succesfully changed to " + newPath.getText(), 2000);
 					info.openDialog();
+					break;
+				case WDUtilities.MOVE_DIRECTORY:
+					// Refresh new path in main window
+					mainWindow.getMoveDirectory().setText(newPath.getText());
+					// Information
+					DialogManager info1 = new DialogManager("Move favorite wallpapers directory has been succesfully changed to " + newPath.getText(), 2000);
+					info1.openDialog();
+					break;
 				default:
 					break;
 				}					
