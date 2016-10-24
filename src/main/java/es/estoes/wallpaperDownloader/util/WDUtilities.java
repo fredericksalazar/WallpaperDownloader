@@ -529,4 +529,30 @@ public class WDUtilities {
 		return moveFavoriteDirectoryString;
 	}
 
+	/**
+	 * Moves all favorite wallpapers to another directory.
+	 * @param destDir directory where all the favorite wallpapers are going to be moved.
+	 */
+	public static void moveFavoriteWallpapers(String destDir) {
+		if (!destDir.equals(PreferencesManager.DEFAULT_VALUE)) {
+			// Get all favorite wallpapers from the current location
+			List<File> wallpapers = getAllWallpapers(WDUtilities.WD_FAVORITE_PREFIX, WDUtilities.getDownloadsPath());
+			Iterator<File> wallpapersIterator = wallpapers.iterator();
+			while (wallpapersIterator.hasNext()) {
+				File wallpaper = wallpapersIterator.next();
+				File destFile = new File(destDir + File.separator + wallpaper.getName());
+				try {
+					FileUtils.moveFile(wallpaper, destFile);
+					if (LOG.isInfoEnabled()) {
+						LOG.info(wallpaper.getAbsolutePath() + " favorite wallpaper moved to " + destFile.getAbsolutePath());
+					}
+				} catch (IOException exception) {
+					if (LOG.isInfoEnabled()) {
+						LOG.error("Error moving " + wallpaper.getAbsolutePath() + ". Error: " + exception.getMessage());
+					}
+				}
+			}
+		}
+	}
+
 }

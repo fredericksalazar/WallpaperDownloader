@@ -1140,6 +1140,18 @@ public class WallpaperDownloader {
 					pathChangerWindow.setVisible(true);
 				}
 	      });
+	      
+	      /**
+	       * btnMoveWallpapers Action Listener.
+	       */
+	      btnMoveWallpapers.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					WDUtilities.moveFavoriteWallpapers(prefm.getPreference("move-favorite-folder"));
+					// Information
+					DialogManager info = new DialogManager("All you favorite wallpapers have been successfully moved", 2000);
+					info.openDialog();	
+				}
+	      });
 			
 	}
 
