@@ -47,25 +47,57 @@ public class DialogManager {
 	}
 
 	/**
+	 * Constructor
+	 * @param message message to display
+	 */
+	public DialogManager(String message) {
+		super();
+		this.message = message;
+		this.time = 0;
+		optionPane = new JOptionPane(this.message, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+		dialog = new JDialog();
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		Dimension screenSize = toolkit.getScreenSize();
+		dialog.setTitle(TITLE);
+		dialog.setModal(true);	
+		dialog.setContentPane(optionPane);	
+		dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		dialog.pack();
+		
+		// Centering dialog after pack method
+		int x = (screenSize.width - dialog.getWidth()) / 2;
+		int y = (screenSize.height - dialog.getHeight()) / 2;
+		dialog.setLocation(x, y);
+	}
+
+	/**
 	 * Opens dialog.
 	 */
 	public void openDialog() {
 		// Create timer to dispose of dialog after n seconds defined in time attribute
-		Timer timer = new Timer(this.time, new AbstractAction() {
-			private static final long serialVersionUID = 1L;
+		if (time != 0) {
+			Timer timer = new Timer(this.time, new AbstractAction() {
+				private static final long serialVersionUID = 1L;
 
-			public void actionPerformed(ActionEvent ae) {
-		        dialog.dispose();
-		    }
-		});
-		
-		// The timer should only go off once
-		timer.setRepeats(false);
+				public void actionPerformed(ActionEvent ae) {
+			        dialog.dispose();
+			    }
+			});
+			
+			// The timer should only go off once
+			timer.setRepeats(false);
 
-		// Start timer to close JDialog as dialog modal we must start the timer before its visible
-		timer.start();
+			// Start timer to close JDialog as dialog modal we must start the timer before its visible
+			timer.start();
+		}
 		dialog.setVisible(true);
 
 	}
-	
+
+	/**
+	 * Closes dialog.s
+	 */
+	public void closeDialog() {
+		dialog.dispose();
+	}
 }

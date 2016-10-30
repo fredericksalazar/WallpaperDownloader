@@ -9,6 +9,7 @@ import javax.swing.JList;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingWorker;
 import javax.swing.ToolTipManager;
 import javax.swing.border.Border;
 import es.estoes.wallpaperDownloader.changer.ChangerDaemon;
@@ -1146,8 +1147,31 @@ public class WallpaperDownloader {
 	       */
 	      btnMoveWallpapers.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					WDUtilities.moveFavoriteWallpapers(prefm.getPreference("move-favorite-folder"));
-					refreshProgressBar();
+					
+				    // Dialog for please wait. It has to be executed on a SwingWorker (another Thread) in 
+					// order to not block the entire execution of the application
+					final DialogManager pleaseWaitDialog = new DialogManager("Please wait...");
+
+				    SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
+				        @Override
+				        protected String doInBackground() throws InterruptedException  {
+							WDUtilities.moveFavoriteWallpapers(prefm.getPreference("move-favorite-folder"));
+							refreshProgressBar();
+				        	return null;
+				        }
+				        @Override
+				        protected void done() {
+				            pleaseWaitDialog.closeDialog();
+				        }
+				    };
+				    worker.execute();
+				    pleaseWaitDialog.openDialog();
+				    try {
+				        worker.get();
+				    } catch (Exception e1) {
+				        e1.printStackTrace();
+				    }
+					
 					// Information
 					DialogManager info = new DialogManager("All you favorite wallpapers have been successfully moved", 2000);
 					info.openDialog();	
