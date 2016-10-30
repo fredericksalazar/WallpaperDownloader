@@ -322,7 +322,7 @@ public class WDUtilities {
 	 * Remove wallpapers.
 	 * @param originalAbsolutePaths
 	 */
-	public static void removeWallpaper(List<String> originalAbsolutePaths) {
+	public static void removeWallpaper(List<String> originalAbsolutePaths, Boolean notification) {
 		Iterator<String> wallpaperIterator = originalAbsolutePaths.iterator();
 		while (wallpaperIterator.hasNext()) {
 			String currentWallpaperPath = wallpaperIterator.next();
@@ -332,9 +332,11 @@ public class WDUtilities {
 				FileUtils.forceDelete(originalWallpaper);
 				// 2.- File is added to the blacklist
 				WDUtilities.addToBlacklist(originalWallpaper.getName());
-				// 3.- Information about deleting is displayed
-				DialogManager info = new DialogManager(currentWallpaperPath + " wallpaper removed.", 2000);
-				info.openDialog();
+				// 3.- Information about deleting is displayed if it is required
+				if (notification) {
+					DialogManager info = new DialogManager(currentWallpaperPath + " wallpaper removed.", 2000);
+					info.openDialog();
+				}
 				if (LOG.isInfoEnabled()) {
 					LOG.info(currentWallpaperPath + " wallpaper has been removed");
 					LOG.info("Refreshing space occupied progress bar...");
@@ -535,14 +537,20 @@ public class WDUtilities {
 	 */
 	public static void moveFavoriteWallpapers(String destDir) {
 		if (!destDir.equals(PreferencesManager.DEFAULT_VALUE)) {
+			// Information
+
 			// Get all favorite wallpapers from the current location
 			List<File> wallpapers = getAllWallpapers(WDUtilities.WD_FAVORITE_PREFIX, WDUtilities.getDownloadsPath());
 			Iterator<File> wallpapersIterator = wallpapers.iterator();
+			// Wallpapers will be copied and blacklisted in order to prevent them to be downloaded again
 			while (wallpapersIterator.hasNext()) {
 				File wallpaper = wallpapersIterator.next();
 				File destFile = new File(destDir + File.separator + wallpaper.getName());
 				try {
-					FileUtils.moveFile(wallpaper, destFile);
+					FileUtils.copyFile(wallpaper, destFile);
+					List<String> wallpaperPathList = new ArrayList<String>();
+					wallpaperPathList.add(wallpaper.getAbsolutePath());
+					WDUtilities.removeWallpaper(wallpaperPathList, Boolean.FALSE);
 					if (LOG.isInfoEnabled()) {
 						LOG.info(wallpaper.getAbsolutePath() + " favorite wallpaper moved to " + destFile.getAbsolutePath());
 					}
@@ -552,6 +560,7 @@ public class WDUtilities {
 					}
 				}
 			}
+
 		}
 	}
 

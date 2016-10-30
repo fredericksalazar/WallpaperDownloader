@@ -109,7 +109,7 @@ public class PreviewWallpaperWindow extends JFrame {
 				// Get the selected wallpaper and remove it
 				List<String> wallpaperToRemoveList = new ArrayList<String>();
 				wallpaperToRemoveList.add(wallpaperToPreview);
-				WDUtilities.removeWallpaper(wallpaperToRemoveList);
+				WDUtilities.removeWallpaper(wallpaperToRemoveList, Boolean.TRUE);
 				if (wallpaperManagerWindow != null) {
 					wallpaperManagerWindow.refreshFavoriteWallpapers();
 					wallpaperManagerWindow.refreshNoFavoriteWallpapers();

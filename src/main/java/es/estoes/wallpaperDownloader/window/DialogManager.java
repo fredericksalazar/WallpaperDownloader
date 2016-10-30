@@ -23,6 +23,8 @@ public class DialogManager {
 	// Methods
 	/**
 	 * Constructor
+	 * @param message message to display
+	 * @param time time in msec to close the message automatically
 	 */
 	public DialogManager(String message, int time) {
 		super();
@@ -43,7 +45,10 @@ public class DialogManager {
 		int y = (screenSize.height - dialog.getHeight()) / 2;
 		dialog.setLocation(x, y);
 	}
-	
+
+	/**
+	 * Opens dialog.
+	 */
 	public void openDialog() {
 		// Create timer to dispose of dialog after n seconds defined in time attribute
 		Timer timer = new Timer(this.time, new AbstractAction() {
@@ -59,17 +64,8 @@ public class DialogManager {
 
 		// Start timer to close JDialog as dialog modal we must start the timer before its visible
 		timer.start();
-
 		dialog.setVisible(true);
 
 	}
-	
-
-
-
-
-
-
-
 	
 }

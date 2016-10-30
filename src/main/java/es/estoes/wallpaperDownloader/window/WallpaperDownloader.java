@@ -982,7 +982,7 @@ public class WallpaperDownloader {
 					ImageIcon wallpaperSelectedIcon = (ImageIcon) wallpapersSelectedIterator.next();
 					wallpapersSelectedAbsolutePath.add(wallpaperSelectedIcon.getDescription());
 				}
-				WDUtilities.removeWallpaper(wallpapersSelectedAbsolutePath);
+				WDUtilities.removeWallpaper(wallpapersSelectedAbsolutePath, Boolean.TRUE);
 			}
 	      });
 	      

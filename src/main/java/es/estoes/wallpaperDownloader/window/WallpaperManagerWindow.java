@@ -428,7 +428,7 @@ public class WallpaperManagerWindow extends JFrame {
 					ImageIcon wallpaperSelectedIcon = (ImageIcon) wallpapersSelectedIterator.next();
 					wallpapersSelectedAbsolutePath.add(wallpaperSelectedIcon.getDescription());
 				}
-				WDUtilities.removeWallpaper(wallpapersSelectedAbsolutePath);
+				WDUtilities.removeWallpaper(wallpapersSelectedAbsolutePath, Boolean.TRUE);
 				refreshFavoriteWallpapers();
 			}
 		});
@@ -487,7 +487,7 @@ public class WallpaperManagerWindow extends JFrame {
 					ImageIcon wallpaperSelectedIcon = (ImageIcon) wallpapersSelectedIterator.next();
 					wallpapersSelectedAbsolutePath.add(wallpaperSelectedIcon.getDescription());
 				}
-				WDUtilities.removeWallpaper(wallpapersSelectedAbsolutePath);
+				WDUtilities.removeWallpaper(wallpapersSelectedAbsolutePath, Boolean.TRUE);
 				refreshNoFavoriteWallpapers();
 			}
 		});
