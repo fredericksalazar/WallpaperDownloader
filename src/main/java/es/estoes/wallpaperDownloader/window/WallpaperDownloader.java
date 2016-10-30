@@ -397,7 +397,18 @@ public class WallpaperDownloader {
 				btnOpenDownloadsDirectory.setText("Change changer directory");
 				btnChangeChangerDirectory.setBounds(561, 126, 34, 33);
 			}		
-			appSettingsPanel.add(btnChangeChangerDirectory);			
+			appSettingsPanel.add(btnChangeChangerDirectory);
+			
+			/**
+			 * btnChangeChangerDirectory Action Listener.
+			 */
+			btnChangeChangerDirectory.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					PathChangerWindow pathChangerWindow = new PathChangerWindow(window, WDUtilities.CHANGER_DIRECTORY);
+					pathChangerWindow.setVisible(true);
+				}
+			});
+
 
 		}
 
@@ -1098,16 +1109,6 @@ public class WallpaperDownloader {
   				PreviewWallpaperWindow previewWindow = new PreviewWallpaperWindow(wallpaperSelectedAbsolutePath, null);
   				previewWindow.setVisible(true);
 	    	  }
-	      });
-	      
-	      /**
-	       * btnChangeChangerDirectory Action Listener.
-	       */
-	      btnChangeChangerDirectory.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					PathChangerWindow pathChangerWindow = new PathChangerWindow(window, WDUtilities.CHANGER_DIRECTORY);
-					pathChangerWindow.setVisible(true);
-				}
 	      });
 
 	      /**
