@@ -644,7 +644,9 @@ public class WallpaperManagerWindow extends JFrame {
 	 * @param total
 	 */
 	public static void refreshFavoriteWallpapersTotalNumber (int total) {
-		lblTotalFavoriteWallpapers.setText(String.valueOf(total));
+		if (lblTotalFavoriteWallpapers != null) {
+			lblTotalFavoriteWallpapers.setText(String.valueOf(total));
+		}
 	}
 	
 	/**
@@ -652,6 +654,8 @@ public class WallpaperManagerWindow extends JFrame {
 	 * @param total
 	 */
 	public static void refreshNoFavoriteWallpapersTotalNumber (int total) {
-		lblTotalNoFavoriteWallpapers.setText(String.valueOf(total));
+		if (lblTotalNoFavoriteWallpapers != null) {
+			lblTotalNoFavoriteWallpapers.setText(String.valueOf(total));
+		}
 	}
 }
