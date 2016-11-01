@@ -191,46 +191,53 @@ public class WDUtilities {
 	 * Move all the wallpapers to a new location.
 	 * @param newPath
 	 */
-	public static void moveDownloadedWallpapers(String newPath) {
+	public static void moveDownloadedWallpapers(String newPath, boolean deleteOldFolder) {
 		if (!WDUtilities.getDownloadsPath().equals(newPath)) {
 			File destDir = new File(newPath);
 			File srcDir = new File(WDUtilities.getDownloadsPath());
 			// Get all the wallpapers from the current location
 			List<File> wallpapers = getAllWallpapers(WDUtilities.WD_ALL, WDUtilities.DOWNLOADS_DIRECTORY);
 
-			// Copy every file to the new location
-			Iterator<File> wallpaper = wallpapers.iterator();
-			while (wallpaper.hasNext()) {
+			// Move every file to the new location
+			Iterator<File> wallpaperIterator = wallpapers.iterator();
+			while (wallpaperIterator.hasNext()) {
+				File wallpaper = wallpaperIterator.next();
 				try {
-					FileUtils.copyFileToDirectory((File) wallpaper.next(), destDir, true);
+					FileUtils.moveFileToDirectory(wallpaper , destDir, true);
+					if (LOG.isInfoEnabled()) {
+						LOG.info("Wallpaper " + wallpaper.getAbsolutePath() + " has been moved to " + destDir.getAbsolutePath());
+					}
 				} catch (IOException e) {
 					// Something went wrong
-					LOG.error("Error copying file " + wallpaper.toString());
+					LOG.error("Error moving file " + wallpaper.getAbsolutePath());
 					// Information
 					DialogManager info = new DialogManager("Something went wrong. Downloads directory couldn't be changed. Check log for more information.", 2000);
 					info.openDialog();
 				}
 			}
 
-			// Remove old directory
-			try {
-				FileUtils.deleteDirectory(srcDir);
-			} catch (IOException e) {
-				// Something went wrong
-				LOG.error("The original downloads directory " + WDUtilities.getDownloadsPath() + " couldn't be removed. Please, check also directory " + destDir.getAbsolutePath() + " because all the wallpapers were copyied there");
-				// Information
-				DialogManager info = new DialogManager("Something went wrong. Downloads directory couldn't be changed. Check log for more information.", 2000);
-				info.openDialog();
+			// Remove old directory if it is necessary
+			if (deleteOldFolder) {
+				try {
+					FileUtils.deleteDirectory(srcDir);
+					if (LOG.isInfoEnabled()) {
+						LOG.info("Old downlad folder " + srcDir.getAbsolutePath() + " has been removed");
+					}
+				} catch (IOException e) {
+					// Something went wrong
+					LOG.error("The original downloads directory " + WDUtilities.getDownloadsPath() + " couldn't be removed. Please, check also directory " + destDir.getAbsolutePath() + " because all the wallpapers were copyied there");
+					// Information
+					DialogManager info = new DialogManager("Something went wrong. Downloads directory couldn't be changed. Check log for more information.", 2000);
+					info.openDialog();
+				}
 			}
-
-			// Change Downloads path within application properties and WDUtilities
-			PreferencesManager prefm = PreferencesManager.getInstance();
-			prefm.setPreference("application-downloads-folder", destDir.getAbsolutePath());
-			WDUtilities.setDownloadsPath(destDir.getAbsolutePath());
 
 			// Information
 			DialogManager info = new DialogManager("Dowloads directory has been succesfully changed to " + destDir.getAbsolutePath(), 2000);
 			info.openDialog();
+			if (LOG.isInfoEnabled()) {
+				LOG.info("Downloads directory has been successfully changed to " + destDir.getAbsolutePath());
+			}
 
 		}
 	}

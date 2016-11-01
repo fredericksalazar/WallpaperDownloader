@@ -906,8 +906,10 @@ public class WallpaperDownloader {
 					prefm.setPreference("move-favorite", WDUtilities.APP_NO);
 					prefm.setPreference("move-favorite-folder", PreferencesManager.DEFAULT_VALUE);
 				}
-				prefm.setPreference("application-changer", new Integer(changerComboBox.getSelectedIndex()).toString());
-				prefm.setPreference("application-changer-folder", changerDirectory.getText());
+				if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
+					prefm.setPreference("application-changer", new Integer(changerComboBox.getSelectedIndex()).toString());
+					prefm.setPreference("application-changer-folder", changerDirectory.getText());
+				}
 
 				// Stopping and starting harvesting process
 				harvester.stop();

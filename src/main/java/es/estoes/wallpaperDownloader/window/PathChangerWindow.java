@@ -10,11 +10,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import es.estoes.wallpaperDownloader.util.PreferencesManager;
 import es.estoes.wallpaperDownloader.util.WDUtilities;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.Locale;
+import javax.swing.JCheckBox;
 
 public class PathChangerWindow extends JFrame {
 
@@ -23,6 +25,7 @@ public class PathChangerWindow extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JTextField newPath;
+	private JCheckBox oldFolderCheckbox;
 
 	/**
 	 * Create the frame.
@@ -114,18 +117,24 @@ public class PathChangerWindow extends JFrame {
 		btnApplyPathChange.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent arg0) {
+				PreferencesManager prefm = PreferencesManager.getInstance();
 				switch (whatToChange) {
 				case WDUtilities.DOWNLOADS_DIRECTORY:
 					// All the downloaded wallpapers are moved to the new location
 					// Stop harvesting process
 					mainWindow.getHarvester().stop();
-					WDUtilities.moveDownloadedWallpapers(newPath.getText());
+					WDUtilities.moveDownloadedWallpapers(newPath.getText(), oldFolderCheckbox.isSelected());
+					// Change Downloads path within application properties and WDUtilities
+					prefm.setPreference("application-downloads-folder", newPath.getText());
+					WDUtilities.setDownloadsPath(newPath.getText());
 					// Start harvesting process
 					mainWindow.getHarvester().start();
 					// Refresh new path in main window
 					mainWindow.getDownloadsDirectory().setText(newPath.getText());
 					break;
 				case WDUtilities.CHANGER_DIRECTORY:
+					// Change Changer directory path within application properties
+					prefm.setPreference("application-changer-folder", newPath.getText());
 					// Refresh new path in main window
 					mainWindow.getChangerDirectory().setText(newPath.getText());
 					// Information
@@ -133,6 +142,8 @@ public class PathChangerWindow extends JFrame {
 					info.openDialog();
 					break;
 				case WDUtilities.MOVE_DIRECTORY:
+					// Change Changer directory path within application properties
+					prefm.setPreference("move-favorite-folder", newPath.getText());
 					// Refresh new path in main window
 					mainWindow.getMoveDirectory().setText(newPath.getText());
 					// Information
@@ -158,5 +169,11 @@ public class PathChangerWindow extends JFrame {
 		});
 		btnCancel.setBounds(12, 236, 91, 25);
 		getContentPane().add(btnCancel);
+		
+		if (whatToChange.equals(WDUtilities.DOWNLOADS_DIRECTORY)) {
+			oldFolderCheckbox = new JCheckBox("I want to delete completely the old downloads folder");
+			oldFolderCheckbox.setBounds(12, 76, 422, 23);
+			getContentPane().add(oldFolderCheckbox);
+		}
 	}
 }
