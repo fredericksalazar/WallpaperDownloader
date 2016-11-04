@@ -779,6 +779,7 @@ public class WallpaperDownloader {
 		            final SystemTray tray = SystemTray.getSystemTray();
 		           
 		            // Create a pop-up menu components -- BEGIN
+		            // Maximize
 		            MenuItem maximizeItem = new MenuItem("Maximize");
 		            maximizeItem.addActionListener(new ActionListener() {
 		            	public void actionPerformed(ActionEvent evt) {
@@ -791,6 +792,7 @@ public class WallpaperDownloader {
 		                	tray.remove(trayIcon);
 		            	}
 		            });
+		            // Open downloads directory
 		            MenuItem browseItem = new MenuItem("Open downloaded wallpapers");
 		            browseItem.addActionListener(new ActionListener() {
 		            	public void actionPerformed(ActionEvent evt) {
@@ -804,6 +806,7 @@ public class WallpaperDownloader {
 							}
 		            	}
 		            });
+		            // Exit
 		            MenuItem exitItem = new MenuItem("Exit");
 		            exitItem.addActionListener(new ActionListener() {
 		            	public void actionPerformed(ActionEvent evt) {
@@ -814,11 +817,12 @@ public class WallpaperDownloader {
 		    				System.exit(0);		                	
 		            	}
 		            });
-		            // Create a pop-up menu components -- END
 		           
 		            //Add components to pop-up menu
 		            popup.add(maximizeItem);
 		            popup.add(browseItem);
+		            
+		            // Change wallpaper
 		            if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
 			            MenuItem changeItem = new MenuItem("Change wallpaper randomly");
 			            changeItem.addActionListener(new ActionListener() {
@@ -828,9 +832,25 @@ public class WallpaperDownloader {
 			            });
 			            popup.add(changeItem);
 		            }
+
+		            // Move favorite wallpapers
+		    		String moveFavoriteEnable = prefm.getPreference("move-favorite");
+		    		if (moveFavoriteEnable.equals(WDUtilities.APP_YES)) {
+			            MenuItem moveItem = new MenuItem("Move favorite wallpapers");
+			            moveItem.addActionListener(new ActionListener() {
+			            	public void actionPerformed(ActionEvent evt) {
+			            		moveFavoriteWallpapers();
+			            	}
+			            });
+			            popup.add(moveItem);
+		            	
+		            }
+		            
 		            popup.addSeparator();
 		            popup.add(exitItem);
-		           
+
+		            // Create a pop-up menu components -- END
+
 		            trayIcon.setPopupMenu(popup);
 		            
 		            // Adding a new event. When the user clicks the left button the application window is restored again in the same
@@ -1150,37 +1170,44 @@ public class WallpaperDownloader {
 	       */
 	      btnMoveWallpapers.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					
-				    // Dialog for please wait. It has to be executed on a SwingWorker (another Thread) in 
-					// order to not block the entire execution of the application
-					final DialogManager pleaseWaitDialog = new DialogManager("Please wait...");
-
-				    SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
-				        @Override
-				        protected String doInBackground() throws InterruptedException  {
-							WDUtilities.moveFavoriteWallpapers(prefm.getPreference("move-favorite-folder"));
-							refreshProgressBar();
-				        	return null;
-				        }
-				        @Override
-				        protected void done() {
-				            pleaseWaitDialog.closeDialog();
-				        }
-				    };
-				    worker.execute();
-				    pleaseWaitDialog.openDialog();
-				    try {
-				        worker.get();
-				    } catch (Exception e1) {
-				        e1.printStackTrace();
-				    }
-					
-					// Information
-					DialogManager info = new DialogManager("All you favorite wallpapers have been successfully moved", 2000);
-					info.openDialog();	
+					moveFavoriteWallpapers();
 				}
 	      });
 			
+	}
+	
+	private void moveFavoriteWallpapers() {
+
+		final PreferencesManager prefm = PreferencesManager.getInstance();
+		
+		// Dialog for please wait. It has to be executed on a SwingWorker (another Thread) in 
+		// order to not block the entire execution of the application
+		final DialogManager pleaseWaitDialog = new DialogManager("Please wait...");
+
+	    SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
+	        @Override
+	        protected String doInBackground() throws InterruptedException  {
+				WDUtilities.moveFavoriteWallpapers(prefm.getPreference("move-favorite-folder"));
+				refreshProgressBar();
+	        	return null;
+	        }
+	        @Override
+	        protected void done() {
+	            pleaseWaitDialog.closeDialog();
+	        }
+	    };
+	    worker.execute();
+	    pleaseWaitDialog.openDialog();
+	    try {
+	        worker.get();
+	    } catch (Exception e1) {
+	        e1.printStackTrace();
+	    }
+		
+		// Information
+		DialogManager info = new DialogManager("All you favorite wallpapers have been successfully moved", 2000);
+		info.openDialog();	
+		
 	}
 
 	/**
@@ -1259,8 +1286,8 @@ public class WallpaperDownloader {
 
 		// Move favorite feature
 		if (prefm.getPreference("move-favorite").equals(PreferencesManager.DEFAULT_VALUE)) {
-		prefm.setPreference("move-favorite", WDUtilities.APP_NO);
-		prefm.setPreference("move-favorite-folder", PreferencesManager.DEFAULT_VALUE);
+			prefm.setPreference("move-favorite", WDUtilities.APP_NO);
+			prefm.setPreference("move-favorite-folder", PreferencesManager.DEFAULT_VALUE);
 		}
 		
 		if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
