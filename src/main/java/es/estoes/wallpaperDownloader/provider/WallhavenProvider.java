@@ -56,16 +56,6 @@ public class WallhavenProvider extends Provider {
 			}
 			// 1.- Getting HTML document (New method including userAgent and other options)
 			Document doc = Jsoup.connect(completeURL).userAgent("Mozilla").get();
-			// Old method 1
-			//Document doc = Jsoup.connect(completeURL).get();
-			// Old method 2
-			//Document doc = Jsoup.connect(completeURL)
-					//.userAgent("Mozilla/5.0 (X11; Linux x86_64; rv:35.0) Gecko/20100101 Firefox/35.0")
-					//.referrer("http://www.google.com")
-					//.ignoreHttpErrors(true)
-					//.followRedirects(true)
-					//.timeout(0)
-					//.get();
 			// 2.- Getting all thumbnails. They are identified because they have 'lazyload' classed img elements
 			Elements thumbnails = doc.select("img.lazyload");
 			// 3.- Getting a wallpaper which is not already stored in the filesystem
