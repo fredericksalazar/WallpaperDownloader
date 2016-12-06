@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import org.apache.log4j.Logger;
 
+import es.estoes.wallpaperDownloader.provider.DevianartProvider;
 import es.estoes.wallpaperDownloader.provider.Provider;
 import es.estoes.wallpaperDownloader.provider.WallhavenProvider;
 import es.estoes.wallpaperDownloader.util.PreferencesManager;
@@ -49,6 +50,14 @@ public class Harvester {
 		if (wallhavenEnable.equals(WDUtilities.APP_YES)) {
 			LOG.info("Wallhaven provider added");
 			providers.add(new WallhavenProvider());	// Factory method
+		}				
+		// -----------------------------------------------
+		// Devianart
+		// -----------------------------------------------
+		String devianartEnable = prefm.getPreference("provider-devianart");
+		if (devianartEnable.equals(WDUtilities.APP_YES)) {
+			LOG.info("Devianart provider added");
+			providers.add(new DevianartProvider());	// Factory method
 		}				
 	}
 	
