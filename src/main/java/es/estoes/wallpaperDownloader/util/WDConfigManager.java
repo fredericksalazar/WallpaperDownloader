@@ -84,6 +84,7 @@ public class WDConfigManager {
         		 
     			 // Providers
         		 prefm.setPreference("provider-wallhaven", WDUtilities.APP_NO);
+        		 prefm.setPreference("provider-devianart", WDUtilities.APP_NO);
         		 
         		 // Initializing timer
         		 // By default, the application will download a new wallpaper every 5 minutes
@@ -119,8 +120,12 @@ public class WDConfigManager {
         		 prefm.setPreference("wallpaper-resolution", PreferencesManager.DEFAULT_VALUE);
 
         		 // Initializing search type
+        		 // Wallhaven.cc
         		 // By default, the application will download Favorites wallpapers
         		 prefm.setPreference("wallpaper-search-type", "3");
+        		 // Devianrt
+        		 // By default, the application will download Newest wallpapers
+        		 prefm.setPreference("wallpaper-devianart-search-type", "0");
         		 
     		 } else {	
     			 // Configuration file exists
@@ -216,6 +221,12 @@ public class WDConfigManager {
 			 if (prefm.getPreference("application-changer-folder").equals(PreferencesManager.DEFAULT_VALUE)) {
 				 // Changer folder was not defined within configuration file
 				 prefm.setPreference("application-changer-folder", absoluteDownloadsPath.toString());
+			 }
+			 
+			 // Devianart provider
+			 if (prefm.getPreference("provider-devianart").equals(PreferencesManager.DEFAULT_VALUE)) {
+				 prefm.setPreference("provider-devianart", WDUtilities.APP_NO);
+        		 prefm.setPreference("wallpaper-devianart-search-type", "0");
 			 }
 
     	 } catch (Exception e) {

@@ -86,6 +86,7 @@ public class WallpaperDownloader {
 	private JFrame frame;
 	private JTextField searchKeywords;
 	private JCheckBox wallhavenCheckbox;
+	private JCheckBox devianartCheckbox;
 	private JButton btnApply;
 	private JButton btnCloseExit;
 	private JButton btnMinimize;
@@ -97,6 +98,7 @@ public class WallpaperDownloader {
 	private JLabel lblX;
 	private JFormattedTextField wallhavenHeigthResolution;
 	private JCheckBox allResolutionsCheckbox;
+	private JComboBox<ComboItem> devianartSearchTypeComboBox;
 	private JComboBox<ComboItem> timerComboBox;
 	private JFormattedTextField downloadDirectorySize;
 	private JPanel miscPanel;
@@ -247,7 +249,24 @@ public class WallpaperDownloader {
 		searchKeywords.setBounds(100, 6, 255, 19);
 		providersPanel.add(searchKeywords);
 		searchKeywords.setColumns(10);
+
+		JSeparator separator1 = new JSeparator();
+		separator1.setBounds(12, 45, 531, 2);
+		providersPanel.add(separator1);
 		
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/help_24px_icon.png"));
+			ImageIcon icon = new ImageIcon(img);
+			JLabel lblKeywordsHelp = new JLabel(icon);
+			lblKeywordsHelp.setToolTipText("Each keyword must be separated by ';'. If it is empty then it will search any wallpaper");
+			lblKeywordsHelp.setBounds(358, 4, 30, 23);
+			providersPanel.add(lblKeywordsHelp);
+		} catch (IOException ex) {
+			JLabel lblKeywordsHelp = new JLabel("(separated by ;) (Empty->All wallpapers)");
+			lblKeywordsHelp.setBounds(362, 39, 70, 15);
+			providersPanel.add(lblKeywordsHelp);
+		}
+
 		JLabel lblResolution = new JLabel("Resolution");
 		lblResolution.setBounds(12, 75, 94, 15);
 		providersPanel.add(lblResolution);
@@ -282,27 +301,22 @@ public class WallpaperDownloader {
 		allResolutionsCheckbox = new JCheckBox("All Resolutions");
 		allResolutionsCheckbox.setBounds(224, 71, 151, 23);
 		providersPanel.add(allResolutionsCheckbox);
+
+		JSeparator separator2 = new JSeparator();
+		separator2.setBounds(8, 103, 531, 2);
+		providersPanel.add(separator2);
 		
-		try {
-			Image img = ImageIO.read(getClass().getResource("/images/icons/help_24px_icon.png"));
-			ImageIcon icon = new ImageIcon(img);
-			JLabel lblKeywordsHelp = new JLabel(icon);
-			lblKeywordsHelp.setToolTipText("Each keyword must be separated by ';'. If it is empty then it will search any wallpaper");
-			lblKeywordsHelp.setBounds(358, 4, 30, 23);
-			providersPanel.add(lblKeywordsHelp);
-			
-			JSeparator separator1 = new JSeparator();
-			separator1.setBounds(12, 45, 531, 2);
-			providersPanel.add(separator1);
-			
-			JSeparator separator2 = new JSeparator();
-			separator2.setBounds(8, 103, 531, 2);
-			providersPanel.add(separator2);
-		} catch (IOException ex) {
-			JLabel lblKeywordsHelp = new JLabel("(separated by ;) (Empty->All wallpapers)");
-			lblKeywordsHelp.setBounds(362, 39, 70, 15);
-			providersPanel.add(lblKeywordsHelp);
-		}
+		devianartCheckbox = new JCheckBox("Devianart");
+		devianartCheckbox.setBounds(8, 107, 129, 23);
+		providersPanel.add(devianartCheckbox);
+		
+		JLabel lblDevianartSearchType = new JLabel("Search Type");
+		lblDevianartSearchType.setBounds(12, 135, 94, 15);
+		providersPanel.add(lblDevianartSearchType);
+
+		devianartSearchTypeComboBox = new JComboBox<ComboItem>();
+		devianartSearchTypeComboBox.setBounds(107, 133, 150, 19);
+		providersPanel.add(devianartSearchTypeComboBox);
 		
 		// Application Settings (tab)
 		JPanel appSettingsPanel = new JPanel();
@@ -732,6 +746,20 @@ public class WallpaperDownloader {
 		});
 
 		/**
+		 * devianartCheckbox Action Listener.
+		 */
+		// Clicking event
+		devianartCheckbox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				if (devianartCheckbox.isSelected()) {
+					devianartSearchTypeComboBox.setEnabled(true);
+				} else {
+					devianartSearchTypeComboBox.setEnabled(false);
+				}
+			}
+		});
+
+		/**
 		 * allResolutionsCheckbox Action Listener.
 		 */
 		// Clicking event
@@ -920,6 +948,17 @@ public class WallpaperDownloader {
 					prefm.setPreference("wallpaper-resolution", PreferencesManager.DEFAULT_VALUE);
 					prefm.setPreference("wallpaper-search-type", "3");
 				}
+
+				// Devianart
+				if (devianartCheckbox.isSelected()) {
+					prefm.setPreference("provider-devianart", WDUtilities.APP_YES);
+					prefm.setPreference("wallpaper-devianart-search-type", new Integer(devianartSearchTypeComboBox.getSelectedIndex()).toString());
+
+				} else {
+					prefm.setPreference("provider-devianart", WDUtilities.APP_NO);
+					prefm.setPreference("wallpaper-devianart-search-type", "0");
+				}
+
 				// ---------------------------------------------------------------------------
 				// User settings
 				// ---------------------------------------------------------------------------
@@ -1266,6 +1305,20 @@ public class WallpaperDownloader {
 		searchTypeComboBox.addItem(new ComboItem("Favorites", "3")); 
 		searchTypeComboBox.addItem(new ComboItem("Random", "4"));
 		searchTypeComboBox.setSelectedIndex(new Integer(prefm.getPreference("wallpaper-search-type")));
+		
+		// Devianart
+		String devianartEnable = prefm.getPreference("provider-devianart");
+		if (devianartEnable.equals(WDUtilities.APP_YES)) {
+			devianartCheckbox.setSelected(true);
+			devianartSearchTypeComboBox.setEnabled(true);
+		} else {
+			devianartSearchTypeComboBox.setEnabled(false);
+		}
+		devianartSearchTypeComboBox.addItem(new ComboItem("Newest", "0")); 
+		devianartSearchTypeComboBox.addItem(new ComboItem("What's hot", "1")); 
+		devianartSearchTypeComboBox.addItem(new ComboItem("Popular", "2")); 
+		devianartSearchTypeComboBox.setSelectedIndex(new Integer(prefm.getPreference("wallpaper-devianart-search-type")));
+
 		// ---------------------------------------------------------------------
 		// Checking user settings
 		// ---------------------------------------------------------------------
