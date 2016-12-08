@@ -93,15 +93,17 @@ public abstract class Provider {
 		PreferencesManager prefm = PreferencesManager.getInstance();
 		Long maxSize = Long.parseLong(prefm.getPreference("application-max-download-folder-size"));
 		long downloadFolderSize = WDUtilities.getDirectorySpaceOccupied(WDUtilities.getDownloadsPath(), WDUtilities.UNIT_MB);
-		while (downloadFolderSize > (maxSize * 1024)) {
+		while (downloadFolderSize > maxSize) {
 			File fileToRemove = WDUtilities.pickRandomFile(Boolean.FALSE, WDUtilities.DOWNLOADS_DIRECTORY);
 			try {
 				if (fileToRemove != null) {
 					FileUtils.forceDelete(fileToRemove);
-					LOG.info(fileToRemove.getPath() + " deleted");
-					LOG.info("Refreshing space occupied progress bar...");
 					WallpaperDownloader.refreshProgressBar();
 					WallpaperDownloader.refreshJScrollPane();
+					if (LOG.isInfoEnabled()) {
+						LOG.info("The current size of the downloads folder is " + downloadFolderSize + " which is greater than " + maxSize + ". "  + fileToRemove.getPath() + " deleted");
+						LOG.info("Refreshing space occupied progress bar...");
+					}
 				}
 			} catch (IOException e) {
 				throw new ProviderException("Error deleting file " + fileToRemove.getPath() + ". Error: " + e.getMessage());
