@@ -36,60 +36,72 @@ public abstract class Provider {
 	protected String resolution;
 	
 	// Getters & Setters
+	/**
+	 * Gets areKeywordsDone.
+	 * @return areKeywordsDone
+	 */
 	public boolean getAreKeywordsDone() {
-		return areKeywordsDone;
+		return this.areKeywordsDone;
 	}
 
 	// Methods
 	/**
-	 * Constructor
+	 * Constructor.
 	 */
 	public Provider () {
 		PreferencesManager prefm = PreferencesManager.getInstance();
-		activeIndex = 0;
+		this.activeIndex = 0;
 		
 		// Obtaining resolution
-		resolution = prefm.getPreference("wallpaper-resolution");		
+		this.resolution = prefm.getPreference("wallpaper-resolution");
+		
+		// Obtaining keywords
+		this.keywordsProperty = "provider-wallhaven-keywords";
 	}
 	
 	/**
 	 * This method gets the keywords defined by the user for a specific provider
-	 * and split them using delimiter 'zero or more whitespace, ; , zero or more whitespace'
+	 * and split them using delimiter 'zero or more whitespace, ; , zero or more whitespace'.
 	 */
 	public void obtainKeywords() {
 		PreferencesManager prefm = PreferencesManager.getInstance();
-		String keywordsFromPreferences = prefm.getPreference(keywordsProperty);
-		keywords = Arrays.asList(keywordsFromPreferences.split("\\s*" + WDUtilities.PROVIDER_SEPARATOR + "\\s*"));
-		if (keywords.isEmpty()) {
-			areKeywordsDone = true;
+		String keywordsFromPreferences = prefm.getPreference(this.keywordsProperty);
+		this.keywords = Arrays.asList(keywordsFromPreferences.split("\\s*" + WDUtilities.PROVIDER_SEPARATOR + "\\s*"));
+		if (this.keywords.isEmpty()) {
+			this.areKeywordsDone = true;
 		} else {
-			areKeywordsDone = false;
+			this.areKeywordsDone = false;
 		}
 	}
 
 	/**
-	 * This method gets the active keyword which will be used for the search
+	 * This method gets the active keyword which will be used for the search.
 	 */
 	protected void obtainActiveKeyword() {
-		activeKeyword = keywords.get(activeIndex);
-		if (keywords.size() == activeIndex + 1) {
+		this.activeKeyword = this.keywords.get(this.activeIndex);
+		if (this.keywords.size() == this.activeIndex + 1) {
 			// The end of the keywords list has been reached. Starts again
-			activeIndex = 0;
-			areKeywordsDone = true;
+			this.activeIndex = 0;
+			this.areKeywordsDone = true;
 		} else {
-			activeIndex++;
+			this.activeIndex++;
 		}
 	}
 	
+	/**
+	 * Gets a wallpaper.
+	 */
 	public void getWallpaper() {
 	}
 	
 	/**
 	 * This method checks the disk space within download directory. If it is full, it will remove one or several wallpapers
-	 * in order to prepare it to a new download
+	 * in order to prepare it to a new download.
 	 */
 	protected void checkAndPrepareDownloadDirectory () {
-		LOG.info("Checking download directory. Removing some wallpapers if it is necessary...");
+		if (LOG.isInfoEnabled()) {
+			LOG.info("Checking download directory. Removing some wallpapers if it is necessary...");
+		}
 		PreferencesManager prefm = PreferencesManager.getInstance();
 		Long maxSize = Long.parseLong(prefm.getPreference("application-max-download-folder-size"));
 		long downloadFolderSize = WDUtilities.getDirectorySpaceOccupied(WDUtilities.getDownloadsPath(), WDUtilities.UNIT_MB);
@@ -105,8 +117,8 @@ public abstract class Provider {
 						LOG.info("Refreshing space occupied progress bar...");
 					}
 				}
-			} catch (IOException e) {
-				throw new ProviderException("Error deleting file " + fileToRemove.getPath() + ". Error: " + e.getMessage());
+			} catch (IOException exception) {
+				throw new ProviderException("Error deleting file " + fileToRemove.getPath() + ". Error: " + exception.getMessage());
 			}
 			downloadFolderSize = WDUtilities.getDirectorySpaceOccupied(WDUtilities.getDownloadsPath(), WDUtilities.UNIT_MB);
 		}
@@ -158,8 +170,10 @@ public abstract class Provider {
 	        	// Wallpaper was not found
 	        	return false;
 	        }
-		} catch (Exception e) {
-	    	LOG.error("There was an error reading " + wallpaperURL + " image. Error: " + e.getMessage());
+		} catch (Exception exception) {
+			if (LOG.isInfoEnabled()) {
+		    	LOG.error("There was an error reading " + wallpaperURL + " image. Error: " + exception.getMessage());
+			}
 	    	return false;
 		} finally {
 			if (out!=null) {
@@ -173,7 +187,9 @@ public abstract class Provider {
 				    	return false;
 				    }
 				} catch (IOException e) {
-			    	LOG.error("IOException. Error: " + e.getMessage());
+					if (LOG.isInfoEnabled()) {
+						LOG.error("IOException. Error: " + e.getMessage());
+					}
 			    	return false;
 				}
 			}
