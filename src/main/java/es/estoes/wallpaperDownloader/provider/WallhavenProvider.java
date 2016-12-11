@@ -28,7 +28,6 @@ public class WallhavenProvider extends Provider {
 		super();
 		PropertiesManager pm = PropertiesManager.getInstance();
 		PreferencesManager prefm = PreferencesManager.getInstance();
-		keywordsProperty = "provider-wallhaven-keywords";
 		baseURL = pm.getProperty("provider.wallhaven.baseurl");
 		switch (new Integer(prefm.getPreference("wallpaper-search-type"))) {
 			case 0: this.order = "relevance";

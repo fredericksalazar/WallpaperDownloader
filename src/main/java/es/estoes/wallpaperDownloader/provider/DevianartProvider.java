@@ -64,7 +64,6 @@ public class DevianartProvider extends Provider {
 		super();
 		PropertiesManager pm = PropertiesManager.getInstance();
 		PreferencesManager prefm = PreferencesManager.getInstance();
-		keywordsProperty = "provider-wallhaven-keywords";
 		baseURL = pm.getProperty("provider.devianart.baseurl");
 		// Order
 		switch (new Integer(prefm.getPreference("wallpaper-devianart-search-type"))) {
