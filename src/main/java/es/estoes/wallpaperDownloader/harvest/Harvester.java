@@ -4,9 +4,7 @@ import java.util.LinkedList;
 
 import org.apache.log4j.Logger;
 
-import es.estoes.wallpaperDownloader.provider.DevianartProvider;
-import es.estoes.wallpaperDownloader.provider.Provider;
-import es.estoes.wallpaperDownloader.provider.WallhavenProvider;
+import es.estoes.wallpaperDownloader.provider.*;
 import es.estoes.wallpaperDownloader.util.PreferencesManager;
 import es.estoes.wallpaperDownloader.util.WDUtilities;
 
@@ -59,6 +57,14 @@ public class Harvester {
 			LOG.info("Devianart provider added");
 			providers.add(new DevianartProvider());	// Factory method
 		}				
+		// -----------------------------------------------
+		// Bing
+		// -----------------------------------------------
+		String bingEnable = prefm.getPreference("provider-bing");
+		if (bingEnable.equals(WDUtilities.APP_YES)) {
+			LOG.info("Bing provider added");
+			providers.add(new BingProvider());	// Factory method
+		}				
 	}
 	
 	public static Harvester getInstance() {
@@ -96,12 +102,12 @@ public class Harvester {
 		}
 		
 		if (providers.size() > 0) {
-			LOG.info("Providers found. Starting to download...");
+			LOG.info("Providers configured. Starting to download...");
 			backgroundHarvestingProcess = new BackgroundHarvestingProcess();
 			backgroundHarvestingProcess.setProviders(providers);
 			backgroundHarvestingProcess.execute();								
 		} else {
-			LOG.info("Providers were not found. Nothing to do.");
+			LOG.info("No providers configured. Nothing to do.");
 		}
 	}
 }
