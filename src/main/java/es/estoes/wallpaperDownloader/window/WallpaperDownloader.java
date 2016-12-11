@@ -87,6 +87,7 @@ public class WallpaperDownloader {
 	private JTextField searchKeywords;
 	private JCheckBox wallhavenCheckbox;
 	private JCheckBox devianartCheckbox;
+	private JCheckBox bingCheckbox;
 	private JButton btnApply;
 	private JButton btnCloseExit;
 	private JButton btnMinimize;
@@ -318,6 +319,14 @@ public class WallpaperDownloader {
 		devianartSearchTypeComboBox.setBounds(107, 133, 150, 19);
 		providersPanel.add(devianartSearchTypeComboBox);
 		
+		JSeparator separator3 = new JSeparator();
+		separator3.setBounds(7, 162, 531, 2);
+		providersPanel.add(separator3);
+		
+		bingCheckbox = new JCheckBox("Bing daily wallpaper");
+		bingCheckbox.setBounds(8, 172, 249, 23);
+		providersPanel.add(bingCheckbox);
+		
 		// Application Settings (tab)
 		JPanel appSettingsPanel = new JPanel();
 		tabbedPane.addTab("Application Settings", null, appSettingsPanel, null);
@@ -345,7 +354,7 @@ public class WallpaperDownloader {
 		appSettingsPanel.add(settingsSeparator1);
 		
 		moveFavoriteCheckBox = new JCheckBox("Move favorite wallpapers");
-		moveFavoriteCheckBox.setBounds(12, 84, 196, 23);
+		moveFavoriteCheckBox.setBounds(12, 84, 250, 23);
 		appSettingsPanel.add(moveFavoriteCheckBox);
 
 		try {
@@ -353,7 +362,7 @@ public class WallpaperDownloader {
 			ImageIcon icon = new ImageIcon(img);
 			lblMoveHelp = new JLabel(icon);
 			lblMoveHelp.setToolTipText("Enable this option to have an extra button within Wallpapers tab to move all your favorite wallpapers to another location");
-			lblMoveHelp.setBounds(213, 85, 30, 23);
+			lblMoveHelp.setBounds(262, 85, 30, 23);
 			appSettingsPanel.add(lblMoveHelp);
 		} catch (IOException ex) {
 			JLabel lblMoveHelp = new JLabel("Move favorite wallpapers to another directory");
@@ -959,6 +968,14 @@ public class WallpaperDownloader {
 					prefm.setPreference("wallpaper-devianart-search-type", "0");
 				}
 
+				// Bing
+				if (bingCheckbox.isSelected()) {
+					prefm.setPreference("provider-bing", WDUtilities.APP_YES);
+
+				} else {
+					prefm.setPreference("provider-bing", WDUtilities.APP_NO);
+				}
+
 				// ---------------------------------------------------------------------------
 				// User settings
 				// ---------------------------------------------------------------------------
@@ -1318,6 +1335,12 @@ public class WallpaperDownloader {
 		devianartSearchTypeComboBox.addItem(new ComboItem("What's hot", "1")); 
 		devianartSearchTypeComboBox.addItem(new ComboItem("Popular", "2")); 
 		devianartSearchTypeComboBox.setSelectedIndex(new Integer(prefm.getPreference("wallpaper-devianart-search-type")));
+
+		// Bing
+		String bingEnable = prefm.getPreference("provider-bing");
+		if (bingEnable.equals(WDUtilities.APP_YES)) {
+			bingCheckbox.setSelected(true);
+		}
 
 		// ---------------------------------------------------------------------
 		// Checking user settings
