@@ -28,7 +28,7 @@ public class WallhavenProvider extends Provider {
 		super();
 		PropertiesManager pm = PropertiesManager.getInstance();
 		PreferencesManager prefm = PreferencesManager.getInstance();
-		baseURL = pm.getProperty("provider.wallhaven.baseurl");
+		this.baseURL = pm.getProperty("provider.wallhaven.baseurl");
 		switch (new Integer(prefm.getPreference("wallpaper-search-type"))) {
 			case 0: this.order = "relevance";
 					break;
@@ -45,10 +45,10 @@ public class WallhavenProvider extends Provider {
 	}
 	
 	public void getWallpaper() throws ProviderException {
-		obtainActiveKeyword();
-		String completeURL = composeCompleteURL();
+		this.obtainActiveKeyword();
+		String completeURL = this.composeCompleteURL();
 		try {
-			checkAndPrepareDownloadDirectory();	
+			this.checkAndPrepareDownloadDirectory();	
 			if (LOG.isInfoEnabled()) {
 				LOG.info("Downloading wallpaper with keyword -> " + activeKeyword);
 				
@@ -77,7 +77,9 @@ public class WallhavenProvider extends Provider {
 					if (!isWallpaperSuccessfullyStored) {
 						// Second try: PNG format will be used
 						wallpaperURL = wallpaperURL.replace("jpg", "png");
-						LOG.info("JPG format wasn't found. Trying PNG format...");
+						if (LOG.isInfoEnabled()) {
+							LOG.info("JPG format wasn't found. Trying PNG format...");
+						}
 						wallpaperName = wallpaperName.replace("jpg", "png");
 						wallpaperNameFavorite = wallpaperNameFavorite.replace("jpg", "png");
 						wallpaper = new File(WDUtilities.getDownloadsPath() + File.separator + wallpaperName);
@@ -85,28 +87,38 @@ public class WallhavenProvider extends Provider {
 						if (!wallpaper.exists() && !wallpaperFavorite.exists() && !WDUtilities.isWallpaperBlacklisted(wallpaperName) && !WDUtilities.isWallpaperBlacklisted(wallpaperNameFavorite)) {
 							isWallpaperSuccessfullyStored = storeRemoteFile(wallpaper, wallpaperURL);
 							if (!isWallpaperSuccessfullyStored) {
-								LOG.info("Error trying to store wallpaper " + wallpaperURL + ". Skipping...");							
+								if (LOG.isInfoEnabled()) {
+									LOG.info("Error trying to store wallpaper " + wallpaperURL + ". Skipping...");
+								}
 							} else {
-								LOG.info("Wallpaper " + wallpaper.getName() + " successfully stored");
-								LOG.info("Refreshing space occupied progress bar...");
+								if (LOG.isInfoEnabled()) {
+									LOG.info("Wallpaper " + wallpaper.getName() + " successfully stored");
+									LOG.info("Refreshing space occupied progress bar...");
+								}
 								WallpaperDownloader.refreshProgressBar();
 								WallpaperDownloader.refreshJScrollPane();
 								// Exit the process because one wallpaper was downloaded successfully
 								break;
 							}							
 						} else {
-							LOG.info("Wallpaper " + wallpaper.getName() + " is already stored. Skipping...");
+							if (LOG.isInfoEnabled()) {
+								LOG.info("Wallpaper " + wallpaper.getName() + " is already stored. Skipping...");
+							}
 						}
 					} else {
-						LOG.info("Wallpaper " + wallpaper.getName() + " successfully stored");
-						LOG.info("Refreshing space occupied progress bar...");
+						if (LOG.isInfoEnabled()) {
+							LOG.info("Wallpaper " + wallpaper.getName() + " successfully stored");
+							LOG.info("Refreshing space occupied progress bar...");
+						}
 						WallpaperDownloader.refreshProgressBar();
 						WallpaperDownloader.refreshJScrollPane();
 						// Exit the process because one wallpaper was downloaded successfully
 						break;
 					}
 				} else {
-					LOG.info("Wallpaper " + wallpaper.getName() + " is already stored or blacklisted. Skipping...");
+					if (LOG.isInfoEnabled()) {
+						LOG.info("Wallpaper " + wallpaper.getName() + " is already stored or blacklisted. Skipping...");
+					}
 				}
 			}
 		} catch (IOException e) {
@@ -126,8 +138,10 @@ public class WallhavenProvider extends Provider {
 		if (!resolution.equals(PreferencesManager.DEFAULT_VALUE)) {
 			resolutionString = "resolutions" + WDUtilities.EQUAL + resolution + WDUtilities.AND;
 		}
-		LOG.info(baseURL + "search" + WDUtilities.QM + keywordString + "categories" + WDUtilities.EQUAL + "111" + WDUtilities.AND + "purity" + WDUtilities.EQUAL + "110" + WDUtilities.AND + resolutionString + 
-				   WDUtilities.AND + "order" + WDUtilities.EQUAL + "desc" + WDUtilities.AND + "sorting" + WDUtilities.EQUAL + order);
+		if (LOG.isInfoEnabled()) {
+			LOG.info(baseURL + "search" + WDUtilities.QM + keywordString + "categories" + WDUtilities.EQUAL + "111" + WDUtilities.AND + "purity" + WDUtilities.EQUAL + "110" + WDUtilities.AND + resolutionString + 
+					WDUtilities.AND + "order" + WDUtilities.EQUAL + "desc" + WDUtilities.AND + "sorting" + WDUtilities.EQUAL + order);
+		}
 		return baseURL + "search" + WDUtilities.QM + keywordString + "categories" + WDUtilities.EQUAL + "111" +WDUtilities.AND + "purity" + WDUtilities.EQUAL + "110" + WDUtilities.AND + resolutionString + 
 				   WDUtilities.AND + "order" + WDUtilities.EQUAL + "desc" + WDUtilities.AND + "sorting" + WDUtilities.EQUAL + order;
 	}
