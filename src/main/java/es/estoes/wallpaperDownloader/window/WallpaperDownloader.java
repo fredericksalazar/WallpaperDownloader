@@ -88,6 +88,7 @@ public class WallpaperDownloader {
 	private JCheckBox wallhavenCheckbox;
 	private JCheckBox devianartCheckbox;
 	private JCheckBox bingCheckbox;
+	private JCheckBox socialWallpaperingCheckbox;
 	private JButton btnApply;
 	private JButton btnCloseExit;
 	private JButton btnMinimize;
@@ -326,6 +327,14 @@ public class WallpaperDownloader {
 		bingCheckbox = new JCheckBox("Bing daily wallpaper");
 		bingCheckbox.setBounds(8, 172, 249, 23);
 		providersPanel.add(bingCheckbox);
+		
+		JSeparator separator4 = new JSeparator();
+		separator4.setBounds(8, 203, 531, 2);
+		providersPanel.add(separator4);
+		
+		socialWallpaperingCheckbox = new JCheckBox("Social Wallpapering");
+		socialWallpaperingCheckbox.setBounds(8, 213, 249, 23);
+		providersPanel.add(socialWallpaperingCheckbox);
 		
 		// Application Settings (tab)
 		JPanel appSettingsPanel = new JPanel();
@@ -976,6 +985,14 @@ public class WallpaperDownloader {
 					prefm.setPreference("provider-bing", WDUtilities.APP_NO);
 				}
 
+				// Social Wallpapering
+				if (socialWallpaperingCheckbox.isSelected()) {
+					prefm.setPreference("provider-socialWallpapering", WDUtilities.APP_YES);
+
+				} else {
+					prefm.setPreference("provider-socialWallpapering", WDUtilities.APP_NO);
+				}
+
 				// ---------------------------------------------------------------------------
 				// User settings
 				// ---------------------------------------------------------------------------
@@ -1340,6 +1357,12 @@ public class WallpaperDownloader {
 		String bingEnable = prefm.getPreference("provider-bing");
 		if (bingEnable.equals(WDUtilities.APP_YES)) {
 			bingCheckbox.setSelected(true);
+		}
+
+		// Social Wallpapering
+		String socialWallpaperingEnable = prefm.getPreference("provider-socialWallpapering");
+		if (socialWallpaperingEnable.equals(WDUtilities.APP_YES)) {
+			socialWallpaperingCheckbox.setSelected(true);
 		}
 
 		// ---------------------------------------------------------------------

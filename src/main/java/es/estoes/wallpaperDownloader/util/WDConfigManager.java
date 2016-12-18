@@ -86,6 +86,7 @@ public class WDConfigManager {
         		 prefm.setPreference("provider-wallhaven", WDUtilities.APP_NO);
         		 prefm.setPreference("provider-devianart", WDUtilities.APP_NO);
         		 prefm.setPreference("provider-bing", WDUtilities.APP_NO);
+        		 prefm.setPreference("provider-socialWallpapering", WDUtilities.APP_NO);
         		 
         		 // Initializing timer
         		 // By default, the application will download a new wallpaper every 5 minutes
@@ -233,6 +234,11 @@ public class WDConfigManager {
 			 // Bing provider
 			 if (prefm.getPreference("provider-bing").equals(PreferencesManager.DEFAULT_VALUE)) {
 				 prefm.setPreference("provider-bing", WDUtilities.APP_NO);
+			 }
+
+			 // Social Wallpapering provider
+			 if (prefm.getPreference("provider-socialWallpapering").equals(PreferencesManager.DEFAULT_VALUE)) {
+				 prefm.setPreference("provider-socialWallpapering", WDUtilities.APP_NO);
 			 }
 
     	 } catch (Exception e) {
