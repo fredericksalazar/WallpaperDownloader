@@ -85,7 +85,7 @@ public class DevianartProvider extends Provider {
 	public void getWallpaper() throws ProviderException {
 		Boolean wallpaperFound = Boolean.FALSE;
 		this.obtainActiveKeyword();
-		String completeURL = composeCompleteURL();
+		String completeURL = this.composeCompleteURL();
 		try {
 			this.checkAndPrepareDownloadDirectory();	
 			if (LOG.isInfoEnabled()) {
@@ -166,8 +166,10 @@ public class DevianartProvider extends Provider {
 			this.activeKeyword = this.activeKeyword.replace(" ", "+");
 			keywordString = "q" + WDUtilities.EQUAL + this.activeKeyword + WDUtilities.AND;
 		}
-		LOG.info(baseURL + WDUtilities.QM + keywordString + "order" + WDUtilities.EQUAL + this.order + 
-				WDUtilities.AND + "offset" + WDUtilities.EQUAL + this.offset);
+		if (LOG.isInfoEnabled()) {
+			LOG.info(baseURL + WDUtilities.QM + keywordString + "order" + WDUtilities.EQUAL + this.order + 
+					WDUtilities.AND + "offset" + WDUtilities.EQUAL + this.offset);
+		}
 		return baseURL + WDUtilities.QM + keywordString + "order" + WDUtilities.EQUAL + this.order + 
 				WDUtilities.AND + "offset" + WDUtilities.EQUAL + this.offset;
 	}
