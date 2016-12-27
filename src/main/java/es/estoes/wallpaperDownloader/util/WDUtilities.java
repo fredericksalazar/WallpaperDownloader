@@ -48,6 +48,7 @@ public class WDUtilities {
 	public static final String UNDERSCORE = "_";
 	public static final String PERIOD = ".";
 	public static final String DASH = "-";
+	public static final String COLON = ":";
 	public static final String WD_PREFIX = "wd-";
 	public static final String DEFAULT_DOWNLOADS_DIRECTORY = "downloads";
 	public static final String UNIT_MB = "MB";
