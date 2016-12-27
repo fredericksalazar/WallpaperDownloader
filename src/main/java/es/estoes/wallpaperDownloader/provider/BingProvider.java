@@ -30,7 +30,7 @@ public class BingProvider extends Provider {
 	}
 	
 	public void getWallpaper() throws ProviderException {
-		String completeURL = composeCompleteURL();
+		String completeURL = this.composeCompleteURL();
 		try {
 			checkAndPrepareDownloadDirectory();	
 			if (LOG.isInfoEnabled()) {
