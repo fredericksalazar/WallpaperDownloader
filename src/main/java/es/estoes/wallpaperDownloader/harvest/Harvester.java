@@ -39,7 +39,7 @@ public class Harvester {
 	private void initializeProviders() {
 		LOG.info("Initializing providers...");
 		PreferencesManager prefm = PreferencesManager.getInstance();
-		providers = new LinkedList<Provider>();
+		this.providers = new LinkedList<Provider>();
 		// Reading user preferences
 		// -----------------------------------------------
 		// Wallhaven.cc
@@ -47,7 +47,7 @@ public class Harvester {
 		String wallhavenEnable = prefm.getPreference("provider-wallhaven");
 		if (wallhavenEnable.equals(WDUtilities.APP_YES)) {
 			LOG.info("Wallhaven provider added");
-			providers.add(new WallhavenProvider());	// Factory method
+			this.providers.add(new WallhavenProvider());	// Factory method
 		}				
 		// -----------------------------------------------
 		// Devianart
@@ -55,7 +55,7 @@ public class Harvester {
 		String devianartEnable = prefm.getPreference("provider-devianart");
 		if (devianartEnable.equals(WDUtilities.APP_YES)) {
 			LOG.info("Devianart provider added");
-			providers.add(new DevianartProvider());	// Factory method
+			this.providers.add(new DevianartProvider());	// Factory method
 		}				
 		// -----------------------------------------------
 		// Bing
@@ -63,7 +63,15 @@ public class Harvester {
 		String bingEnable = prefm.getPreference("provider-bing");
 		if (bingEnable.equals(WDUtilities.APP_YES)) {
 			LOG.info("Bing provider added");
-			providers.add(new BingProvider());	// Factory method
+			this.providers.add(new BingProvider());	// Factory method
+		}				
+		// -----------------------------------------------
+		// Social Wallpapering
+		// -----------------------------------------------
+		String socialWallpaperingEnable = prefm.getPreference("provider-socialWallpapering");
+		if (socialWallpaperingEnable.equals(WDUtilities.APP_YES)) {
+			LOG.info("Social Wallpapering provider added");
+			this.providers.add(new SocialWallpaperingProvider());	// Factory method
 		}				
 	}
 	
