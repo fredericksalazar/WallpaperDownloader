@@ -83,10 +83,26 @@ public class WDConfigManager {
         		 prefm.setPreference("application-downloads-folder", absoluteDownloadsPath.toString());
         		 
     			 // Providers
+        		 // Wallhaven.cc
         		 prefm.setPreference("provider-wallhaven", WDUtilities.APP_NO);
+        		 // Initializing resolution
+        		 // By default, the application will download all kind of resolutions
+        		 prefm.setPreference("wallpaper-resolution", PreferencesManager.DEFAULT_VALUE);
+        		 // Initializing search type
+        		 // By default, the application will download Favorites wallpapers
+        		 prefm.setPreference("wallpaper-search-type", "3");
+
+        		 // Devianrt
         		 prefm.setPreference("provider-devianart", WDUtilities.APP_NO);
+        		 // By default, the application will download Newest wallpapers
+        		 prefm.setPreference("wallpaper-devianart-search-type", "0");
+
+        		 // Bing
         		 prefm.setPreference("provider-bing", WDUtilities.APP_NO);
+        		 
+        		 // Social Wallpapering
         		 prefm.setPreference("provider-socialWallpapering", WDUtilities.APP_NO);
+        		 prefm.setPreference("provider-socialWallpapering-ignore-keywords", WDUtilities.APP_NO);
         		 
         		 // Initializing timer
         		 // By default, the application will download a new wallpaper every 5 minutes
@@ -117,17 +133,6 @@ public class WDConfigManager {
         		 // By default, it will be 40 MBytes
         		 prefm.setPreference("application-max-download-folder-size", "40");
 
-        		 // Initializing resolution
-        		 // By default, the application will download all kind of resolutions
-        		 prefm.setPreference("wallpaper-resolution", PreferencesManager.DEFAULT_VALUE);
-
-        		 // Initializing search type
-        		 // Wallhaven.cc
-        		 // By default, the application will download Favorites wallpapers
-        		 prefm.setPreference("wallpaper-search-type", "3");
-        		 // Devianrt
-        		 // By default, the application will download Newest wallpapers
-        		 prefm.setPreference("wallpaper-devianart-search-type", "0");
         		 
     		 } else {	
     			 // Configuration file exists
@@ -239,6 +244,7 @@ public class WDConfigManager {
 			 // Social Wallpapering provider
 			 if (prefm.getPreference("provider-socialWallpapering").equals(PreferencesManager.DEFAULT_VALUE)) {
 				 prefm.setPreference("provider-socialWallpapering", WDUtilities.APP_NO);
+        		 prefm.setPreference("provider-socialWallpapering-ignore-keywords", WDUtilities.APP_NO);
 			 }
 
     	 } catch (Exception e) {

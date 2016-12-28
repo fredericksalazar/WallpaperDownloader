@@ -89,6 +89,7 @@ public class WallpaperDownloader {
 	private JCheckBox devianartCheckbox;
 	private JCheckBox bingCheckbox;
 	private JCheckBox socialWallpaperingCheckbox;
+	private JCheckBox socialWallpaperingIgnoreKeywordsCheckbox;
 	private JButton btnApply;
 	private JButton btnCloseExit;
 	private JButton btnMinimize;
@@ -333,8 +334,27 @@ public class WallpaperDownloader {
 		providersPanel.add(separator4);
 		
 		socialWallpaperingCheckbox = new JCheckBox("Social Wallpapering");
-		socialWallpaperingCheckbox.setBounds(8, 213, 249, 23);
+		socialWallpaperingCheckbox.setBounds(8, 213, 210, 23);
 		providersPanel.add(socialWallpaperingCheckbox);
+		
+		socialWallpaperingIgnoreKeywordsCheckbox = new JCheckBox("Ignore keywords");
+		socialWallpaperingIgnoreKeywordsCheckbox.setBounds(222, 213, 143, 23);
+		providersPanel.add(socialWallpaperingIgnoreKeywordsCheckbox);
+		
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/help_24px_icon.png"));
+			ImageIcon icon = new ImageIcon(img);
+			JLabel lblIgnoreKeywordsSocialWallpaperingHelp = new JLabel(icon);
+			lblIgnoreKeywordsSocialWallpaperingHelp.setToolTipText("Social Wallpapering only allows the download of reviewed wallpapers. Those found using keywords and not reviewed won't be downloaded");
+			lblIgnoreKeywordsSocialWallpaperingHelp.setBounds(366, 212, 30, 23);
+			providersPanel.add(lblIgnoreKeywordsSocialWallpaperingHelp);
+
+		} catch (IOException ex) {
+			JLabel lblIgnoreKeywordsSocialWallpaperingHelp = new JLabel("Ignore keywords");
+			lblIgnoreKeywordsSocialWallpaperingHelp.setBounds(366, 212, 30, 23);
+			providersPanel.add(lblIgnoreKeywordsSocialWallpaperingHelp);
+		}
+
 		
 		// Application Settings (tab)
 		JPanel appSettingsPanel = new JPanel();
@@ -778,6 +798,20 @@ public class WallpaperDownloader {
 		});
 
 		/**
+		 * socialWallpaperingCheckbox Action Listener.
+		 */
+		// Clicking event
+		socialWallpaperingCheckbox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				if (socialWallpaperingCheckbox.isSelected()) {
+					socialWallpaperingIgnoreKeywordsCheckbox.setEnabled(true);
+				} else {
+					socialWallpaperingIgnoreKeywordsCheckbox.setEnabled(false);
+				}
+			}
+		});
+
+		/**
 		 * allResolutionsCheckbox Action Listener.
 		 */
 		// Clicking event
@@ -988,10 +1022,15 @@ public class WallpaperDownloader {
 				// Social Wallpapering
 				if (socialWallpaperingCheckbox.isSelected()) {
 					prefm.setPreference("provider-socialWallpapering", WDUtilities.APP_YES);
-
 				} else {
 					prefm.setPreference("provider-socialWallpapering", WDUtilities.APP_NO);
 				}
+				if (socialWallpaperingIgnoreKeywordsCheckbox.isSelected()) {
+					prefm.setPreference("provider-socialWallpapering-ignore-keywords", WDUtilities.APP_YES);
+				} else {
+					prefm.setPreference("provider-socialWallpapering-ignore-keywords", WDUtilities.APP_NO);
+				}
+				
 
 				// ---------------------------------------------------------------------------
 				// User settings
@@ -1363,6 +1402,14 @@ public class WallpaperDownloader {
 		String socialWallpaperingEnable = prefm.getPreference("provider-socialWallpapering");
 		if (socialWallpaperingEnable.equals(WDUtilities.APP_YES)) {
 			socialWallpaperingCheckbox.setSelected(true);
+			socialWallpaperingIgnoreKeywordsCheckbox.setEnabled(true);
+		} else {
+			socialWallpaperingIgnoreKeywordsCheckbox.setEnabled(false);
+		}
+		if (prefm.getPreference("provider-socialWallpapering-ignore-keywords").equals(WDUtilities.APP_YES)) {
+			socialWallpaperingIgnoreKeywordsCheckbox.setSelected(true);
+		} else {
+			socialWallpaperingIgnoreKeywordsCheckbox.setSelected(false);
 		}
 
 		// ---------------------------------------------------------------------
