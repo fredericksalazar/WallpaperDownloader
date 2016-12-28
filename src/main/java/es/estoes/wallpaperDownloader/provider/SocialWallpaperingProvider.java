@@ -110,6 +110,10 @@ public class SocialWallpaperingProvider extends Provider {
 							} else {
 								LOG.info("Wallpaper " + wallpaper.getName() + " is already stored or blacklisted. Skipping...");
 							}
+						} else {
+							if (LOG.isInfoEnabled()) {
+								LOG.info("Wallpaper with URL " + this.baseURL + linkURL.attr("href") + " has not been reviewed yet, so it can't be downloaded");
+							}
 						}
 					}
 					if (!wallpaperFound) {
