@@ -104,6 +104,9 @@ public class WDConfigManager {
         		 prefm.setPreference("provider-socialWallpapering", WDUtilities.APP_NO);
         		 prefm.setPreference("provider-socialWallpapering-ignore-keywords", WDUtilities.APP_NO);
         		 
+        		 // WallpaperFusion
+        		 prefm.setPreference("provider-wallpaperFusion", WDUtilities.APP_NO);
+        		 
         		 // Initializing timer
         		 // By default, the application will download a new wallpaper every 5 minutes
         		 // 0 -> 5 min
@@ -245,6 +248,11 @@ public class WDConfigManager {
 			 if (prefm.getPreference("provider-socialWallpapering").equals(PreferencesManager.DEFAULT_VALUE)) {
 				 prefm.setPreference("provider-socialWallpapering", WDUtilities.APP_NO);
         		 prefm.setPreference("provider-socialWallpapering-ignore-keywords", WDUtilities.APP_NO);
+			 }
+			 
+    		 // WallpaperFusion
+			 if (prefm.getPreference("provider-wallpaperFusion").equals(PreferencesManager.DEFAULT_VALUE)) {
+				 prefm.setPreference("provider-wallpaperFusion", WDUtilities.APP_NO);			 
 			 }
 
     	 } catch (Exception e) {

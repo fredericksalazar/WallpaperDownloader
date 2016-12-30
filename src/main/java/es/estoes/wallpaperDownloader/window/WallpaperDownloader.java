@@ -90,6 +90,7 @@ public class WallpaperDownloader {
 	private JCheckBox bingCheckbox;
 	private JCheckBox socialWallpaperingCheckbox;
 	private JCheckBox socialWallpaperingIgnoreKeywordsCheckbox;
+	private JCheckBox wallpaperFusionCheckbox;
 	private JButton btnApply;
 	private JButton btnCloseExit;
 	private JButton btnMinimize;
@@ -348,13 +349,19 @@ public class WallpaperDownloader {
 			lblIgnoreKeywordsSocialWallpaperingHelp.setToolTipText("Social Wallpapering only allows the download of reviewed wallpapers. Those found using keywords and not reviewed won't be downloaded");
 			lblIgnoreKeywordsSocialWallpaperingHelp.setBounds(366, 212, 30, 23);
 			providersPanel.add(lblIgnoreKeywordsSocialWallpaperingHelp);
-
 		} catch (IOException ex) {
 			JLabel lblIgnoreKeywordsSocialWallpaperingHelp = new JLabel("Ignore keywords");
 			lblIgnoreKeywordsSocialWallpaperingHelp.setBounds(366, 212, 30, 23);
 			providersPanel.add(lblIgnoreKeywordsSocialWallpaperingHelp);
 		}
 
+		JSeparator separator5 = new JSeparator();
+		separator5.setBounds(8, 247, 531, 2);
+		providersPanel.add(separator5);
+		
+		wallpaperFusionCheckbox = new JCheckBox("WallpaperFusion");
+		wallpaperFusionCheckbox.setBounds(8, 257, 210, 23);
+		providersPanel.add(wallpaperFusionCheckbox);
 		
 		// Application Settings (tab)
 		JPanel appSettingsPanel = new JPanel();
@@ -1031,6 +1038,13 @@ public class WallpaperDownloader {
 					prefm.setPreference("provider-socialWallpapering-ignore-keywords", WDUtilities.APP_NO);
 				}
 				
+				// WallpaperFusion
+				if (wallpaperFusionCheckbox.isSelected()) {
+					prefm.setPreference("provider-wallpaperFusion", WDUtilities.APP_YES);
+
+				} else {
+					prefm.setPreference("provider-wallpaperFusion", WDUtilities.APP_NO);
+				}
 
 				// ---------------------------------------------------------------------------
 				// User settings
@@ -1410,6 +1424,12 @@ public class WallpaperDownloader {
 			socialWallpaperingIgnoreKeywordsCheckbox.setSelected(true);
 		} else {
 			socialWallpaperingIgnoreKeywordsCheckbox.setSelected(false);
+		}
+		
+		// WallpaperFusion
+		String wallpaperFusionEnable = prefm.getPreference("provider-wallpaperFusion");
+		if (wallpaperFusionEnable.equals(WDUtilities.APP_YES)) {
+			wallpaperFusionCheckbox.setSelected(true);
 		}
 
 		// ---------------------------------------------------------------------
