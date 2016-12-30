@@ -138,9 +138,11 @@ public class SocialWallpaperingProvider extends Provider {
 	}
 		
 	private String composeCompleteURL() {
-		// If activeKeyword is empty, the search operation will be done within the whole repository 
+		PreferencesManager prefm = PreferencesManager.getInstance();
+		// If activeKeyword is empty or user wants to ignore keywords for this provider, 
+		// the search operation will be done within the whole repository 
 		String keywordString = "";
-		if (!this.activeKeyword.equals(PreferencesManager.DEFAULT_VALUE)) {
+		if (!this.activeKeyword.equals(PreferencesManager.DEFAULT_VALUE) && prefm.getPreference("provider-socialWallpapering-ignore-keywords").equals(WDUtilities.APP_NO)) {
 			// Replacing blank spaces with +
 			this.activeKeyword = this.activeKeyword.replace(" ", "+");
 			// Removing double quotes
