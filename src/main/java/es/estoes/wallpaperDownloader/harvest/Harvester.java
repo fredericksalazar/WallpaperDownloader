@@ -72,7 +72,15 @@ public class Harvester {
 		if (socialWallpaperingEnable.equals(WDUtilities.APP_YES)) {
 			LOG.info("Social Wallpapering provider added");
 			this.providers.add(new SocialWallpaperingProvider());	// Factory method
-		}				
+		}
+		// -----------------------------------------------
+		// WallpaperFusion
+		// -----------------------------------------------
+		String wallpaperFusionEnable = prefm.getPreference("provider-wallpaperFusion");
+		if (wallpaperFusionEnable.equals(WDUtilities.APP_YES)) {
+			LOG.info("WallpaperFusion provider added");
+			this.providers.add(new WallpaperFusionProvider());	// Factory method
+		}
 	}
 	
 	public static Harvester getInstance() {

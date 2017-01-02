@@ -150,12 +150,29 @@ public class WDUtilities {
 	 * @return
 	 */
 	public static String getResolution() {
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		Double width = screenSize.getWidth();
-		Double height = screenSize.getHeight();
-		return width.intValue() + "x" + height.intValue();
+		return getWidthResolution() + "x" + getHeightResolution();
 	}
 
+	/**
+	 * Get screen width resolution.
+	 * @return
+	 */
+	public static int getWidthResolution() {
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		Double width = screenSize.getWidth();
+		return width.intValue();
+	}
+	
+	/**
+	 * Get screen height resolution.
+	 * @return
+	 */
+	public static int getHeightResolution() {
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		Double height = screenSize.getHeight();
+		return height.intValue();
+	}
+	
 	/**
 	 * Get all the wallpapers from a directory.
 	 * @param wallpapersType Type of the wallpapers wanted to retrieve (favorite, non favorite, all)
