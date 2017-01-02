@@ -20,6 +20,7 @@ public class WallpaperFusionProvider extends Provider {
 	private static final String WF_DOWNLOAD_URL = "https://www.wallpaperfusion.com/Download/";
 	private static final String WF_ORIGINAL_PARAMETERS = "?W=-1&H=-1";
 	private static final String WF_SEARCH_URL = "https://www.wallpaperfusion.com/Ajax/BuildSearchResultsHTML/";
+	private static final String WF_PREFIX = "wf-";
 
 	// Attributes
 	private String page;
@@ -109,8 +110,8 @@ public class WallpaperFusionProvider extends Provider {
 						String wallpaperId = wallpaperMainURLDownloadPage.substring(wallpaperMainURLDownloadPage.lastIndexOf(WDUtilities.URL_SLASH) + 1);
 						// Retrieves the source for the full image
 						String wallpaperURL = WF_DOWNLOAD_URL + wallpaperId + WDUtilities.URL_SLASH + "?W=" + WDUtilities.getWidthResolution() + "&H=" + WDUtilities.getHeightResolution();
-						String wallpaperName = WDUtilities.WD_PREFIX + wallpaperId + WDUtilities.PERIOD + "jpg";
-						String wallpaperNameFavorite = WDUtilities.WD_FAVORITE_PREFIX + wallpaperId + WDUtilities.PERIOD + "jpg";
+						String wallpaperName = WDUtilities.WD_PREFIX + WF_PREFIX + wallpaperId + WDUtilities.PERIOD + "jpg";
+						String wallpaperNameFavorite = WDUtilities.WD_FAVORITE_PREFIX + WF_PREFIX + wallpaperId + WDUtilities.PERIOD + "jpg";
 						// Storing the image. It is necessary to download the remote file
 						File wallpaper = new File(WDUtilities.getDownloadsPath() + File.separator + wallpaperName);
 						File wallpaperFavorite = new File(WDUtilities.getDownloadsPath() + File.separator + wallpaperNameFavorite);
