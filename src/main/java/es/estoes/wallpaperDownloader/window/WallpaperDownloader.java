@@ -1227,7 +1227,7 @@ public class WallpaperDownloader {
 					case WDUtilities.OS_LINUX:
 						Process process;
 					      try {
-					          process = Runtime.getRuntime().exec("xdg-open " + pm.getProperty("repository.icons"));
+					          process = Runtime.getRuntime().exec("/usr/local/xdg-open " + pm.getProperty("repository.icons"));
 					          process.waitFor();
 					          process.destroy();
 					      } catch (Exception exception) {
