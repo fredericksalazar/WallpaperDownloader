@@ -1195,7 +1195,11 @@ public class WallpaperDownloader {
 					case WDUtilities.OS_LINUX:
 						Process process;
 					      try {
-					          process = Runtime.getRuntime().exec("xdg-open " + pm.getProperty("repository.code"));
+					    	  if (WDUtilities.isSnapPackage()) {
+						          process = Runtime.getRuntime().exec("/usr/local/bin/xdg-open " + pm.getProperty("repository.code"));
+					    	  } else {
+						          process = Runtime.getRuntime().exec("xdg-open " + pm.getProperty("repository.code"));
+					    	  }
 					          process.waitFor();
 					          process.destroy();
 					      } catch (Exception exception) {
@@ -1227,7 +1231,11 @@ public class WallpaperDownloader {
 					case WDUtilities.OS_LINUX:
 						Process process;
 					      try {
-					          process = Runtime.getRuntime().exec("/usr/local/xdg-open " + pm.getProperty("repository.icons"));
+					    	  if (WDUtilities.isSnapPackage()) {
+						          process = Runtime.getRuntime().exec("/usr/local/bin/xdg-open " + pm.getProperty("repository.icons"));
+					    	  } else {
+						          process = Runtime.getRuntime().exec("xdg-open " + pm.getProperty("repository.code"));
+					    	  }
 					          process.waitFor();
 					          process.destroy();
 					      } catch (Exception exception) {
