@@ -31,6 +31,9 @@ public class BingProvider extends Provider {
 	
 	public void getWallpaper() throws ProviderException {
 		String completeURL = this.composeCompleteURL();
+		// Set keywords done to true because this provider only has one daily wallpaper and
+		// it is not affected by keywords typed by the user
+		this.setAreKeywordsDone(true);
 		try {
 			checkAndPrepareDownloadDirectory();	
 			if (LOG.isInfoEnabled()) {

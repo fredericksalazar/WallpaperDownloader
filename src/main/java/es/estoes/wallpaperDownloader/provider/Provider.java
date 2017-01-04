@@ -43,6 +43,14 @@ public abstract class Provider {
 	public boolean getAreKeywordsDone() {
 		return this.areKeywordsDone;
 	}
+	
+	/**
+	 * Sets areKeywordsDone.
+	 * @param areKeywordsDone areKeywordsDone
+	 */
+	public void setAreKeywordsDone(boolean areKeywordsDone) {
+		this.areKeywordsDone = areKeywordsDone;
+	}
 
 	// Methods
 	/**
@@ -68,9 +76,9 @@ public abstract class Provider {
 		String keywordsFromPreferences = prefm.getPreference(this.keywordsProperty);
 		this.keywords = Arrays.asList(keywordsFromPreferences.split("\\s*" + WDUtilities.PROVIDER_SEPARATOR + "\\s*"));
 		if (this.keywords.isEmpty()) {
-			this.areKeywordsDone = true;
+			this.setAreKeywordsDone(true);
 		} else {
-			this.areKeywordsDone = false;
+			this.setAreKeywordsDone(false);
 		}
 	}
 
