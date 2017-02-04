@@ -9,7 +9,7 @@ This is a JAVA open source software project developed for downloading, managing 
 It is a crossed-platform standalone application.
 
 ## Current Version ##
-2.5
+2.6
 
 ## Wiki ##
 Please, visit the Wiki related to the project for more information. Thank you!
