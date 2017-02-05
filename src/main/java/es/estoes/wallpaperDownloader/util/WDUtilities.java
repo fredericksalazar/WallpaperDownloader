@@ -318,8 +318,10 @@ public class WDUtilities {
 			File favoriteWallpaper = new File(WDUtilities.getDownloadsPath() + File.separatorChar + wallpaperFavoriteName);
 			originalWallpaper.renameTo(favoriteWallpaper);
 			// Information
-			DialogManager info = new DialogManager(wallpaperOriginalName + " wallpaper set as favorite.", 2000);
-			info.openDialog();
+			if (!wallpaperIterator.hasNext()) {
+				DialogManager info = new DialogManager("Wallpaper/s set as favorite.", 2000);
+				info.openDialog();
+			}
 			WallpaperDownloader.refreshJScrollPane();
 			LOG.info(currentWallpaperPath + " wallpaper has been set as favorite");
 		}		
@@ -340,8 +342,10 @@ public class WDUtilities {
 			File favoriteWallpaper = new File(WDUtilities.getDownloadsPath() + File.separatorChar + wallpaperNoFavoriteName);
 			originalWallpaper.renameTo(favoriteWallpaper);
 			// Information
-			DialogManager info = new DialogManager(wallpaperOriginalName + " wallpaper set as no favorite.", 2000);
-			info.openDialog();
+			if (!wallpaperIterator.hasNext()) {
+				DialogManager info = new DialogManager("Wallpaper/s set as no favorite.", 2000);
+				info.openDialog();
+			}
 			WallpaperDownloader.refreshJScrollPane();
 			LOG.info(currentWallpaperPath + " wallpaper has been set as no favorite");
 		}	
@@ -362,8 +366,8 @@ public class WDUtilities {
 				// 2.- File is added to the blacklist
 				WDUtilities.addToBlacklist(originalWallpaper.getName());
 				// 3.- Information about deleting is displayed if it is required
-				if (notification) {
-					DialogManager info = new DialogManager(currentWallpaperPath + " wallpaper removed.", 2000);
+				if (notification && !wallpaperIterator.hasNext()) {
+					DialogManager info = new DialogManager("Wallpaper/s removed.", 2000);
 					info.openDialog();
 				}
 				if (LOG.isInfoEnabled()) {
