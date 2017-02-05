@@ -198,7 +198,9 @@ public class WDConfigManager {
  			 case WDUtilities.OS_WINDOWS_7:
  				 WDUtilities.setOperatingSystem(WDUtilities.OS_WINDOWS_7);
  				 break;
- 			 default:
+ 			 case WDUtilities.OS_WINDOWS_10:
+ 				 WDUtilities.setOperatingSystem(WDUtilities.OS_WINDOWS_10);
+ 				 break; 			 default:
 				 WDUtilities.setOperatingSystem(WDUtilities.OS_UNKNOWN);
 				 break;
  			 }
@@ -209,7 +211,9 @@ public class WDConfigManager {
  			 // Wallpaper changer (Factory method)
 			 if (WDUtilities.getOperatingSystem().equals(WDUtilities.OS_LINUX)) {
 				 WDUtilities.setWallpaperChanger(new LinuxWallpaperChanger());
-			 } else if (WDUtilities.getOperatingSystem().equals(WDUtilities.OS_WINDOWS) || WDUtilities.getOperatingSystem().equals(WDUtilities.OS_WINDOWS_7)) {
+			 } else if (WDUtilities.getOperatingSystem().equals(WDUtilities.OS_WINDOWS) || 
+					 WDUtilities.getOperatingSystem().equals(WDUtilities.OS_WINDOWS_7) || 
+					 WDUtilities.getOperatingSystem().equals(WDUtilities.OS_WINDOWS_10)) {
 				 WDUtilities.setWallpaperChanger(new WindowsWallpaperChanger());
 			 } else {
 				 WDUtilities.setWallpaperChanger(new UnknownWallpaperChanger());

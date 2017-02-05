@@ -62,6 +62,7 @@ public class WDUtilities {
 	public static final String OS_LINUX = "Linux";
 	public static final String OS_WINDOWS = "Windows";
 	public static final String OS_WINDOWS_7 = "Windows 7";
+	public static final String OS_WINDOWS_10 = "Windows 10";
 	public static final String OS_UNKNOWN = "UNKNOWN";
 	public static final String DE_UNITY = "Unity";
 	public static final String DE_GNOME = "GNOME";
@@ -515,7 +516,9 @@ public class WDUtilities {
 	 */
 	public static boolean isMinimizable() {
 		boolean result = Boolean.FALSE;
-		if (WDUtilities.getOperatingSystem().equals(WDUtilities.OS_WINDOWS) || WDUtilities.getOperatingSystem().equals(WDUtilities.OS_WINDOWS_7)) {
+		if (WDUtilities.getOperatingSystem().equals(WDUtilities.OS_WINDOWS) || 
+			WDUtilities.getOperatingSystem().equals(WDUtilities.OS_WINDOWS_7) || 
+			WDUtilities.getOperatingSystem().equals(WDUtilities.OS_WINDOWS_10)) {
 			result = Boolean.TRUE;
 		} else {
 			LinuxWallpaperChanger wallpaperChanger = (LinuxWallpaperChanger)WDUtilities.getWallpaperChanger();
