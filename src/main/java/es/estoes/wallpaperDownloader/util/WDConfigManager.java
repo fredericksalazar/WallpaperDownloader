@@ -119,6 +119,9 @@ public class WDConfigManager {
         		 prefm.setPreference("move-favorite", WDUtilities.APP_NO);
         		 prefm.setPreference("move-favorite-folder", PreferencesManager.DEFAULT_VALUE);
         		 
+        		 // Initializing notifications
+        		 prefm.setPreference("application-notifications", "3");        		 
+        		 
         		 // Initializing changer timer
         		 // By default, changer is off
         		 // 0 -> Off
@@ -224,7 +227,13 @@ public class WDConfigManager {
 	    		 prefm.setPreference("move-favorite", WDUtilities.APP_NO);
 	    		 prefm.setPreference("move-favorite-folder", PreferencesManager.DEFAULT_VALUE);
 			 }
-			 
+
+    		 // Notifications feature
+			 if (prefm.getPreference("application-notifications").equals(PreferencesManager.DEFAULT_VALUE)) {
+				 // Notifications were not defined within configuration file
+	    		 prefm.setPreference("application-notifications", "2");        		 
+			 }
+
 			 // Changer timer
 			 if (prefm.getPreference("application-changer").equals(PreferencesManager.DEFAULT_VALUE)) {
 				 // Changer timer was not defined within configuration file

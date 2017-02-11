@@ -132,6 +132,8 @@ public class WallpaperDownloader {
 	private JLabel lblMoveHelp;
 	private JCheckBox moveFavoriteCheckBox;
 	private JButton btnMoveWallpapers;
+	private JLabel lblNotifications;
+	private JComboBox<ComboItem> notificationsComboBox;
 
 	
 	// Getters & Setters
@@ -368,7 +370,7 @@ public class WallpaperDownloader {
 		tabbedPane.addTab("Application Settings", null, appSettingsPanel, null);
 		appSettingsPanel.setLayout(null);
 		
-		JLabel lblTimer = new JLabel("Wallpaper Downloader will download a new wallpaper every");
+		JLabel lblTimer = new JLabel("WallpaperDownloader will download a new wallpaper every");
 		lblTimer.setBounds(12, 12, 439, 19);
 		appSettingsPanel.add(lblTimer);
 		
@@ -429,29 +431,41 @@ public class WallpaperDownloader {
 		}	
 		appSettingsPanel.add(btnChangeMoveDirectory);
 
+		JSeparator settingsSeparator2 = new JSeparator();
+		settingsSeparator2.setBounds(18, 153, 531, 2);
+		appSettingsPanel.add(settingsSeparator2);
+		
+		lblNotifications = new JLabel("Please, select the level of notifications");
+		lblNotifications.setBounds(12, 167, 304, 19);
+		appSettingsPanel.add(lblNotifications);
+		
+		notificationsComboBox = new JComboBox<ComboItem>();
+		notificationsComboBox.setBounds(317, 167, 134, 19);
+		appSettingsPanel.add(notificationsComboBox);
+
 		
 		// Only those desktop environment programmed to be changeable will display this option
 		if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
 
-			JSeparator settingsSeparator2 = new JSeparator();
-			settingsSeparator2.setBounds(18, 153, 531, 2);
-			appSettingsPanel.add(settingsSeparator2);		
+			JSeparator settingsSeparator3 = new JSeparator();
+			settingsSeparator3.setBounds(18, 209, 531, 2);
+			appSettingsPanel.add(settingsSeparator3);		
 			JLabel lblChanger = new JLabel("Change wallpaper automatically every");
-			lblChanger.setBounds(12, 168, 304, 19);
+			lblChanger.setBounds(12, 223, 304, 19);
 			appSettingsPanel.add(lblChanger);
 			
 			changerComboBox = new JComboBox<ComboItem>();
-			changerComboBox.setBounds(317, 168, 94, 19);
+			changerComboBox.setBounds(317, 223, 94, 19);
 			appSettingsPanel.add(changerComboBox);
 			
 			changerDirectory = new JFormattedTextField((Format) null);
 			changerDirectory.setEditable(false);
 			changerDirectory.setColumns(4);
-			changerDirectory.setBounds(144, 197, 405, 19);
+			changerDirectory.setBounds(144, 252, 405, 19);
 			appSettingsPanel.add(changerDirectory);
 			
 			JLabel lblChangerDirectory = new JLabel("Changer directory");
-			lblChangerDirectory.setBounds(12, 197, 134, 19);
+			lblChangerDirectory.setBounds(12, 252, 134, 19);
 			appSettingsPanel.add(lblChangerDirectory);
 			
 			btnChangeChangerDirectory = new JButton();
@@ -459,13 +473,13 @@ public class WallpaperDownloader {
 				Image img = ImageIO.read(getClass().getResource("/images/icons/change_folder_24px_icon.png"));
 				btnChangeChangerDirectory.setIcon(new ImageIcon(img));
 				btnChangeChangerDirectory.setToolTipText("Change changer directory");
-				btnChangeChangerDirectory.setBounds(561, 190, 34, 33);
+				btnChangeChangerDirectory.setBounds(561, 245, 34, 33);
 			} catch (IOException ex) {
 				btnOpenDownloadsDirectory.setText("Change changer directory");
 				btnChangeChangerDirectory.setBounds(561, 126, 34, 33);
 			}		
 			appSettingsPanel.add(btnChangeChangerDirectory);
-			
+						
 			/**
 			 * btnChangeChangerDirectory Action Listener.
 			 */
@@ -475,8 +489,6 @@ public class WallpaperDownloader {
 					pathChangerWindow.setVisible(true);
 				}
 			});
-
-
 		}
 
 		// Downloads Directory (tab)
@@ -1058,6 +1070,7 @@ public class WallpaperDownloader {
 					prefm.setPreference("move-favorite", WDUtilities.APP_NO);
 					prefm.setPreference("move-favorite-folder", PreferencesManager.DEFAULT_VALUE);
 				}
+				prefm.setPreference("application-notifications", new Integer(notificationsComboBox.getSelectedIndex()).toString());
 				if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
 					prefm.setPreference("application-changer", new Integer(changerComboBox.getSelectedIndex()).toString());
 					prefm.setPreference("application-changer-folder", changerDirectory.getText());
@@ -1470,6 +1483,13 @@ public class WallpaperDownloader {
 			prefm.setPreference("move-favorite-folder", PreferencesManager.DEFAULT_VALUE);
 		}
 		
+		// Notifications
+		notificationsComboBox.addItem(new ComboItem("None", "0"));
+		notificationsComboBox.addItem(new ComboItem("Only important", "1"));
+		notificationsComboBox.addItem(new ComboItem("All", "2"));
+		notificationsComboBox.setSelectedIndex(new Integer(prefm.getPreference("application-notifications")));
+		
+		// Changer
 		if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
 			changerComboBox.addItem(new ComboItem("Off", "0"));
 			changerComboBox.addItem(new ComboItem("1 min", "1"));
