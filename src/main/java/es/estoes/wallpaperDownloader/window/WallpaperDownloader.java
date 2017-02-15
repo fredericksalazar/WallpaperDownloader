@@ -1118,8 +1118,11 @@ public class WallpaperDownloader {
 				Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 				StringSelection data = new StringSelection(downloadsDirectory.getText());
 				clipboard.setContents(data, data);
-				DialogManager info = new DialogManager("The downloads directory path was copied to the clipboard", 2000);
-				info.openDialog();
+				// Information
+				if (WDUtilities.getLevelOfNotifications() > 1) {
+					DialogManager info = new DialogManager("The downloads directory path was copied to the clipboard", 2000);
+					info.openDialog();
+				}
 			}
 		});
 		
@@ -1358,8 +1361,10 @@ public class WallpaperDownloader {
 	    }
 		
 		// Information
-		DialogManager info = new DialogManager("All you favorite wallpapers have been successfully moved", 2000);
-		info.openDialog();	
+		if (WDUtilities.getLevelOfNotifications() > 1) {
+			DialogManager info = new DialogManager("All you favorite wallpapers have been successfully moved", 2000);
+			info.openDialog();
+		}
 		
 	}
 

@@ -138,17 +138,21 @@ public class PathChangerWindow extends JFrame {
 					// Refresh new path in main window
 					mainWindow.getChangerDirectory().setText(newPath.getText());
 					// Information
-					DialogManager info = new DialogManager("Changer directory has been succesfully changed to " + newPath.getText(), 2000);
-					info.openDialog();
+					if (WDUtilities.getLevelOfNotifications() > 0) {
+						DialogManager info = new DialogManager("Changer directory has been succesfully changed to " + newPath.getText(), 2000);
+						info.openDialog();
+					}
 					break;
 				case WDUtilities.MOVE_DIRECTORY:
-					// Change Changer directory path within application properties
+					// Change Move favorite directory path within application properties
 					prefm.setPreference("move-favorite-folder", newPath.getText());
 					// Refresh new path in main window
 					mainWindow.getMoveDirectory().setText(newPath.getText());
 					// Information
-					DialogManager info1 = new DialogManager("Move favorite wallpapers directory has been succesfully changed to " + newPath.getText(), 2000);
-					info1.openDialog();
+					if (WDUtilities.getLevelOfNotifications() > 0) {
+						DialogManager info1 = new DialogManager("Move favorite wallpapers directory has been succesfully changed to " + newPath.getText(), 2000);
+						info1.openDialog();
+					}
 					break;
 				default:
 					break;

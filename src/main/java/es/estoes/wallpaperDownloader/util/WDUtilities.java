@@ -255,8 +255,10 @@ public class WDUtilities {
 			}
 
 			// Information
-			DialogManager info = new DialogManager("Dowloads directory has been succesfully changed to " + destDir.getAbsolutePath(), 2000);
-			info.openDialog();
+			if (WDUtilities.getLevelOfNotifications() > 0) {
+				DialogManager info = new DialogManager("Dowloads directory has been succesfully changed to " + destDir.getAbsolutePath(), 2000);
+				info.openDialog();
+			}
 			if (LOG.isInfoEnabled()) {
 				LOG.info("Downloads directory has been successfully changed to " + destDir.getAbsolutePath());
 			}
@@ -317,10 +319,13 @@ public class WDUtilities {
 			String wallpaperFavoriteName = WD_FAVORITE_PREFIX + wallpaperOriginalName.substring(index + 1);
 			File favoriteWallpaper = new File(WDUtilities.getDownloadsPath() + File.separatorChar + wallpaperFavoriteName);
 			originalWallpaper.renameTo(favoriteWallpaper);
+
 			// Information
-			if (!wallpaperIterator.hasNext()) {
-				DialogManager info = new DialogManager("Wallpaper/s set as favorite.", 2000);
-				info.openDialog();
+			if (WDUtilities.getLevelOfNotifications() > 1) {
+				if (!wallpaperIterator.hasNext()) {
+					DialogManager info = new DialogManager("Wallpaper/s set as favorite.", 2000);
+					info.openDialog();
+				}
 			}
 			WallpaperDownloader.refreshJScrollPane();
 			LOG.info(currentWallpaperPath + " wallpaper has been set as favorite");
@@ -341,10 +346,13 @@ public class WDUtilities {
 			String wallpaperNoFavoriteName = WD_PREFIX + wallpaperOriginalName.substring(index + 1);
 			File favoriteWallpaper = new File(WDUtilities.getDownloadsPath() + File.separatorChar + wallpaperNoFavoriteName);
 			originalWallpaper.renameTo(favoriteWallpaper);
+			
 			// Information
-			if (!wallpaperIterator.hasNext()) {
-				DialogManager info = new DialogManager("Wallpaper/s set as no favorite.", 2000);
-				info.openDialog();
+			if (WDUtilities.getLevelOfNotifications() > 1) {
+				if (!wallpaperIterator.hasNext()) {
+					DialogManager info = new DialogManager("Wallpaper/s set as no favorite.", 2000);
+					info.openDialog();
+				}
 			}
 			WallpaperDownloader.refreshJScrollPane();
 			LOG.info(currentWallpaperPath + " wallpaper has been set as no favorite");
@@ -366,9 +374,11 @@ public class WDUtilities {
 				// 2.- File is added to the blacklist
 				WDUtilities.addToBlacklist(originalWallpaper.getName());
 				// 3.- Information about deleting is displayed if it is required
-				if (notification && !wallpaperIterator.hasNext()) {
-					DialogManager info = new DialogManager("Wallpaper/s removed.", 2000);
-					info.openDialog();
+				if (WDUtilities.getLevelOfNotifications() > 1) {
+					if (notification && !wallpaperIterator.hasNext()) {
+						DialogManager info = new DialogManager("Wallpaper/s removed.", 2000);
+						info.openDialog();
+					}
 				}
 				if (LOG.isInfoEnabled()) {
 					LOG.info(currentWallpaperPath + " wallpaper has been removed");
@@ -597,6 +607,15 @@ public class WDUtilities {
 			}
 
 		}
+	}
+	
+	/**
+	 * Gets the level of notifications defined by the user.
+	 * @return Integer
+	 */
+	public static Integer getLevelOfNotifications() {
+		PreferencesManager prefm = PreferencesManager.getInstance();
+		return new Integer(prefm.getPreference("application-notifications"));
 	}
 
 }
