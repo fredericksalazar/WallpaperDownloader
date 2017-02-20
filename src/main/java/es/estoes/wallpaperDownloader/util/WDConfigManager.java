@@ -120,7 +120,7 @@ public class WDConfigManager {
         		 prefm.setPreference("move-favorite-folder", PreferencesManager.DEFAULT_VALUE);
         		 
         		 // Initializing notifications
-        		 prefm.setPreference("application-notifications", "3");        		 
+        		 prefm.setPreference("application-notifications", "2");        		 
         		 
         		 // Initializing changer timer
         		 // By default, changer is off
