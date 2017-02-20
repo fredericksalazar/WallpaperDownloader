@@ -8,7 +8,7 @@ arch=('i686' 'x86_64')
 url="https://bitbucket.org/eloy_garcia_pca/wallpaperdownloader"
 license=('GPL')
 groups=()
-depends=('java-runtime' 'xdg-utils')
+depends=('java-runtime>=8' 'xdg-utils')
 makedepends=('git' 'maven')
 checkdepends=()
 optdepends=()
