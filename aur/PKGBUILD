@@ -21,7 +21,7 @@ install=
 changelog=
 source=('git+https://bitbucket.org/eloy_garcia_pca/wallpaperdownloader.git#branch=master')
 noextract=()
-md5sums=()
+md5sums=('SKIP')
 validpgpkeys=()
 
 build() {
