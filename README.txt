@@ -160,7 +160,7 @@ window.
 ## Who do I talk to? ##
 
 * Repo owner and developer: <eloy.garcia.pca@gmail.com>
-* For mor information, plese check my [portfolio web page at](https://egara.github.io)
+* For more information, please check my [portfolio web page at https://egara.github.io](https://egara.github.io)
 
 ## Issues ##
 
