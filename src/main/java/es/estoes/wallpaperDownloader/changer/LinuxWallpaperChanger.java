@@ -4,10 +4,12 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 import es.estoes.wallpaperDownloader.util.WDUtilities;
+import es.estoes.wallpaperDownloader.window.DialogManager;
 
 public class LinuxWallpaperChanger extends WallpaperChanger {
 	
 	// Constants
+	private static final String PLASMA_ERROR = "org.freedesktop.DBus.Error.Failed";
 
 	// Attributes
 	private String desktopEnvironment;
@@ -80,6 +82,7 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 			this.setMateWallpaper(wallpaperPath);
 			break;
 		case WDUtilities.DE_KDE:
+			this.setKDEWallpaper(wallpaperPath);
 			break;
 		case WDUtilities.DE_XFCE:
 			this.setXfceWallpaper(wallpaperPath);
@@ -209,6 +212,62 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 	      }	
 	}
 
+	/**
+	 * Sets wallpaper for KDE (Plasma 5) desktop.
+	 * @param wallpaperPath
+	 */
+	private void setKDEWallpaper(String wallpaperPath) {
+      Process process;
+      Boolean plasmaError = Boolean.FALSE;
+      try {
+    	  process = Runtime.getRuntime().exec("/bin/sh " + WDUtilities.getAppPath() + WDUtilities.URL_SLASH + WDUtilities.PLASMA_SCRIPT + " " +  wallpaperPath);
+          
+    	  BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+    	  BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+
+    	  // Read the output from the command
+    	  String processOutput = null;
+    	  while ((processOutput = stdInput.readLine()) != null) {
+        	  if (LOG.isInfoEnabled()) {
+        		  LOG.info(processOutput);
+        	  }
+        	  if (processOutput.contains(PLASMA_ERROR)) {
+        		  // Probably Widgets are locked
+        		  plasmaError = Boolean.TRUE;
+        	  }
+    	  }
+			
+    	  // Read any errors from the attempted command
+    	  if (plasmaError) {
+        	  if (LOG.isInfoEnabled()) {
+        		  LOG.error("Wallpaper couldn't be changed. Widgets are probably locked");
+        	  }
+        	  // Information
+			  DialogManager info = new DialogManager("Wallpaper couldn't be changed. Widgets must be unlocked", 2500);
+			  info.openDialog();
+    	  } else {
+        	  if ((processOutput = stdError.readLine()) != null) {
+            	  while ((processOutput = stdError.readLine()) != null) {
+                	  if (LOG.isInfoEnabled()) {
+                		  LOG.error(processOutput);
+                	  }
+            	  }    		  
+        	  } else {
+        		  // Everything is OK
+            	  if (LOG.isInfoEnabled()) {
+              		LOG.info("Wallpaper set in KDE (Plasma 5): " + wallpaperPath);  
+              	  }
+        	  }    		  
+    	  }
+          process.waitFor();
+          process.destroy();
+      } catch (Exception exception) {
+    	  if (LOG.isInfoEnabled()) {
+    		LOG.error("Wallpaper couldn't be set in KDE. Error: " + exception.getMessage());  
+    	  }
+      }	
+	}
+
 	@Override
 	public boolean isWallpaperChangeable() {
 		boolean result;
@@ -223,7 +282,11 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 			result = true;
 			break;
 		case WDUtilities.DE_KDE:
-			result = false;
+			if (this.plasmaVersionSupportsChange()) {
+				result = true;
+			} else {
+				result = false;
+			}
 			break;
 		case WDUtilities.DE_XFCE:
 			if (WDUtilities.isSnapPackage()) {
@@ -237,6 +300,42 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 			result = false;
 			break;
 		}
+		return result;
+	}
+
+	/**
+	 * Checks KDE Plasma version and detects if it has support for changing wallpaper from command line.
+	 * Only KDE Plasma version 5.8 or greater supports wallpaper changer functionality from command line
+	 * @return boolean
+	 */
+	private boolean plasmaVersionSupportsChange() {
+		Process process;
+		boolean result = false;
+		try {
+			process = Runtime.getRuntime().exec("plasmashell --version");
+		  
+			BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+		
+			// Read the output from the command
+			String processOutput = null;
+	    	while ((processOutput = stdInput.readLine()) != null) {
+	    		String[] plasmaVersion = processOutput.split("\\.");
+	    		Integer firstNumberVersion = Integer.valueOf(plasmaVersion[0].substring(plasmaVersion[0].length() - 1));
+	    		Integer secondNumberVersion = Integer.valueOf(plasmaVersion[1]);
+	    		if (firstNumberVersion > 5) {
+	    			result = true;
+	    		} else {
+	    			if (secondNumberVersion > 7) {
+	    				result = true;
+	    			}
+	    		}
+	    	}
+		} catch (Exception exception) {
+			if (LOG.isInfoEnabled()) {
+				LOG.error("Error checking KDE Plasma version: " + exception.getMessage());  
+		  	}
+		}	
+		
 		return result;
 	}
 }

@@ -3,10 +3,13 @@ package es.estoes.wallpaperDownloader.util;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import es.estoes.wallpaperDownloader.changer.LinuxWallpaperChanger;
@@ -138,8 +141,7 @@ public class WDConfigManager {
         		 // Initializing maximum download directory size
         		 // By default, it will be 40 MBytes
         		 prefm.setPreference("application-max-download-folder-size", "40");
-
-        		 
+        		         		 
     		 } else {	
     			 // Configuration file exists
     			 // Setting the downloads path
@@ -267,6 +269,22 @@ public class WDConfigManager {
 			 if (prefm.getPreference("provider-wallpaperFusion").equals(PreferencesManager.DEFAULT_VALUE)) {
 				 prefm.setPreference("provider-wallpaperFusion", WDUtilities.APP_NO);			 
 			 }
+			 
+    		 // Copying plasma-shell script to default app path if it doesn't exist
+    		 File destFile = new File(WDUtilities.getAppPath() + WDUtilities.URL_SLASH + WDUtilities.PLASMA_SCRIPT);
+    		 if (!destFile.exists()) {
+        		 try {
+     		        InputStream inputStream = WDConfigManager.class.getResourceAsStream(WDUtilities.SCRIPT_LOCATION + WDUtilities.PLASMA_SCRIPT);
+     		        OutputStream outputStream = FileUtils.openOutputStream(destFile);
+     		        IOUtils.copy(inputStream, outputStream);
+     		        inputStream.close();
+     		        outputStream.close();
+        		 } catch (Exception exception) {
+        			 if (LOG.isInfoEnabled()) {
+        				 LOG.error("KDE Plasma script for changer couldn't be extracted. Error: " + exception.getMessage());
+        			 }       			 
+        		 }        		  
+    		 }
 
     	 } catch (Exception e) {
     		 throw new WDConfigurationException("Error setting up the downloads folder. Error: " + e.getMessage());

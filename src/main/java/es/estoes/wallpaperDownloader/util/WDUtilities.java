@@ -80,6 +80,8 @@ public class WDUtilities {
 	public static final String DOWNLOADS_DIRECTORY = "downloads_directory";
 	public static final String CHANGER_DIRECTORY = "changer_directory";
 	public static final String MOVE_DIRECTORY = "move_directory";
+	public static final String PLASMA_SCRIPT = "plasma-changer.sh";
+	public static final String SCRIPT_LOCATION = "/scripts/";
 
 	// Attributes
 	private static String appPath;
