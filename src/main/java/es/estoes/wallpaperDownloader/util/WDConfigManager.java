@@ -124,7 +124,10 @@ public class WDConfigManager {
         		 
         		 // Initializing notifications
         		 prefm.setPreference("application-notifications", "2");        		 
-        		 
+
+        		 // Initializing start minimize feature
+        		 prefm.setPreference("start-minimized", PreferencesManager.DEFAULT_VALUE);
+
         		 // Initializing changer timer
         		 // By default, changer is off
         		 // 0 -> Off
@@ -234,6 +237,11 @@ public class WDConfigManager {
 			 if (prefm.getPreference("application-notifications").equals(PreferencesManager.DEFAULT_VALUE)) {
 				 // Notifications were not defined within configuration file
 	    		 prefm.setPreference("application-notifications", "2");        		 
+			 }
+
+    		 // Start minimize feature
+			 if (prefm.getPreference("start-minimized").equals(PreferencesManager.DEFAULT_VALUE)) {
+	    		 prefm.setPreference("start-minimized", PreferencesManager.DEFAULT_VALUE);
 			 }
 
 			 // Changer timer

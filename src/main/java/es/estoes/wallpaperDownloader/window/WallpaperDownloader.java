@@ -69,7 +69,7 @@ public class WallpaperDownloader {
 
 	// Constants
 	protected static final Logger LOG = Logger.getLogger(WallpaperDownloader.class);
-	private static WallpaperDownloader window;
+	protected static WallpaperDownloader window;
 	private static final PropertiesManager pm = PropertiesManager.getInstance();
 	
 	// Attributes
@@ -80,7 +80,6 @@ public class WallpaperDownloader {
 	public static JLabel lblSpaceWarning;
 	public static JScrollPane scroll;
 	public static JList<ImageIcon> lastWallpapersList;
-	
 	private Harvester harvester;
 	private ChangerDaemon changer;
 	private JFrame frame;
@@ -134,6 +133,7 @@ public class WallpaperDownloader {
 	private JButton btnMoveWallpapers;
 	private JLabel lblNotifications;
 	private JComboBox<ComboItem> notificationsComboBox;
+	private static JCheckBox startMinimizedCheckBox;
 
 	
 	// Getters & Setters
@@ -191,6 +191,11 @@ public class WallpaperDownloader {
 				window = new WallpaperDownloader();
 				window.frame.setVisible(true);
 				window.frame.setTitle(pm.getProperty("app.name") + " V" + pm.getProperty("app.version"));
+				// Minimize the application if start minimized feature is enable
+				if (startMinimizedCheckBox.isSelected()) {
+					minimizeApplication();
+				}
+
 			}
 		});
 	}
@@ -212,7 +217,7 @@ public class WallpaperDownloader {
 		
 		// Configuring frames
 		frame = new JFrame();
-		frame.setBounds(100, 100, 690, 440);
+		frame.setBounds(100, 100, 694, 496);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{116, 386, 73, 96, 0};
@@ -230,7 +235,7 @@ public class WallpaperDownloader {
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		GridBagConstraints gbc_tabbedPane = new GridBagConstraints();
-		gbc_tabbedPane.gridheight = 2;
+		gbc_tabbedPane.gridheight = 3;
 		gbc_tabbedPane.fill = GridBagConstraints.BOTH;
 		gbc_tabbedPane.insets = new Insets(0, 0, 5, 0);
 		gbc_tabbedPane.gridwidth = 4;
@@ -388,11 +393,11 @@ public class WallpaperDownloader {
 		appSettingsPanel.add(downloadDirectorySize);
 		
 		JSeparator settingsSeparator1 = new JSeparator();
-		settingsSeparator1.setBounds(12, 74, 531, 2);
+		settingsSeparator1.setBounds(12, 62, 531, 2);
 		appSettingsPanel.add(settingsSeparator1);
 		
 		moveFavoriteCheckBox = new JCheckBox("Move favorite wallpapers");
-		moveFavoriteCheckBox.setBounds(12, 84, 250, 23);
+		moveFavoriteCheckBox.setBounds(12, 72, 226, 23);
 		appSettingsPanel.add(moveFavoriteCheckBox);
 
 		try {
@@ -400,7 +405,7 @@ public class WallpaperDownloader {
 			ImageIcon icon = new ImageIcon(img);
 			lblMoveHelp = new JLabel(icon);
 			lblMoveHelp.setToolTipText("Enable this option to have an extra button within Wallpapers tab to move all your favorite wallpapers to another location");
-			lblMoveHelp.setBounds(262, 85, 30, 23);
+			lblMoveHelp.setBounds(244, 72, 30, 23);
 			appSettingsPanel.add(lblMoveHelp);
 		} catch (IOException ex) {
 			JLabel lblMoveHelp = new JLabel("Move favorite wallpapers to another directory");
@@ -409,13 +414,13 @@ public class WallpaperDownloader {
 		}
 		
 		JLabel lblMoveFavoriteDirectory = new JLabel("Directory ");
-		lblMoveFavoriteDirectory.setBounds(12, 115, 134, 19);
+		lblMoveFavoriteDirectory.setBounds(12, 103, 134, 19);
 		appSettingsPanel.add(lblMoveFavoriteDirectory);
 		
 		moveDirectory = new JFormattedTextField((Format) null);
 		moveDirectory.setEditable(false);
 		moveDirectory.setColumns(4);
-		moveDirectory.setBounds(144, 115, 405, 19);
+		moveDirectory.setBounds(144, 103, 405, 19);
 		appSettingsPanel.add(moveDirectory);
 		
 		btnChangeMoveDirectory = new JButton();
@@ -424,7 +429,7 @@ public class WallpaperDownloader {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/change_folder_24px_icon.png"));
 			btnChangeMoveDirectory.setIcon(new ImageIcon(img));
 			btnChangeMoveDirectory.setToolTipText("Change directory where you want to move your favorite wallpapers");
-			btnChangeMoveDirectory.setBounds(561, 107, 34, 33);
+			btnChangeMoveDirectory.setBounds(561, 95, 34, 33);
 		} catch (IOException ex) {
 			btnChangeMoveDirectory.setText("Change directory where you want to move your favorite wallpapers");
 			btnChangeMoveDirectory.setBounds(561, 107, 34, 33);
@@ -432,40 +437,47 @@ public class WallpaperDownloader {
 		appSettingsPanel.add(btnChangeMoveDirectory);
 
 		JSeparator settingsSeparator2 = new JSeparator();
-		settingsSeparator2.setBounds(18, 153, 531, 2);
+		settingsSeparator2.setBounds(12, 134, 531, 2);
 		appSettingsPanel.add(settingsSeparator2);
 		
 		lblNotifications = new JLabel("Please, select the level of notifications");
-		lblNotifications.setBounds(12, 167, 304, 19);
+		lblNotifications.setBounds(12, 143, 304, 19);
 		appSettingsPanel.add(lblNotifications);
 		
 		notificationsComboBox = new JComboBox<ComboItem>();
-		notificationsComboBox.setBounds(317, 167, 134, 19);
+		notificationsComboBox.setBounds(317, 143, 134, 19);
 		appSettingsPanel.add(notificationsComboBox);
 
+		startMinimizedCheckBox = new JCheckBox("Start minimized");
+		startMinimizedCheckBox.setBounds(12, 173, 249, 23);
+		appSettingsPanel.add(startMinimizedCheckBox);
+		
+		JSeparator settingsSeparator3 = new JSeparator();
+		settingsSeparator3.setBounds(12, 168, 531, 2);
+		appSettingsPanel.add(settingsSeparator3);
 		
 		// Only those desktop environment programmed to be changeable will display this option
 		if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
 
-			JSeparator settingsSeparator3 = new JSeparator();
-			settingsSeparator3.setBounds(18, 209, 531, 2);
-			appSettingsPanel.add(settingsSeparator3);		
+			JSeparator settingsSeparator4 = new JSeparator();
+			settingsSeparator4.setBounds(12, 199, 531, 2);
+			appSettingsPanel.add(settingsSeparator4);		
 			JLabel lblChanger = new JLabel("Change wallpaper automatically every");
-			lblChanger.setBounds(12, 223, 304, 19);
+			lblChanger.setBounds(12, 208, 304, 19);
 			appSettingsPanel.add(lblChanger);
 			
 			changerComboBox = new JComboBox<ComboItem>();
-			changerComboBox.setBounds(317, 223, 94, 19);
+			changerComboBox.setBounds(317, 210, 94, 19);
 			appSettingsPanel.add(changerComboBox);
 			
 			changerDirectory = new JFormattedTextField((Format) null);
 			changerDirectory.setEditable(false);
 			changerDirectory.setColumns(4);
-			changerDirectory.setBounds(144, 252, 405, 19);
+			changerDirectory.setBounds(144, 237, 405, 19);
 			appSettingsPanel.add(changerDirectory);
 			
 			JLabel lblChangerDirectory = new JLabel("Changer directory");
-			lblChangerDirectory.setBounds(12, 252, 134, 19);
+			lblChangerDirectory.setBounds(12, 237, 134, 19);
 			appSettingsPanel.add(lblChangerDirectory);
 			
 			btnChangeChangerDirectory = new JButton();
@@ -473,13 +485,13 @@ public class WallpaperDownloader {
 				Image img = ImageIO.read(getClass().getResource("/images/icons/change_folder_24px_icon.png"));
 				btnChangeChangerDirectory.setIcon(new ImageIcon(img));
 				btnChangeChangerDirectory.setToolTipText("Change changer directory");
-				btnChangeChangerDirectory.setBounds(561, 245, 34, 33);
+				btnChangeChangerDirectory.setBounds(561, 230, 34, 33);
 			} catch (IOException ex) {
 				btnOpenDownloadsDirectory.setText("Change changer directory");
 				btnChangeChangerDirectory.setBounds(561, 126, 34, 33);
 			}		
 			appSettingsPanel.add(btnChangeChangerDirectory);
-						
+									
 			/**
 			 * btnChangeChangerDirectory Action Listener.
 			 */
@@ -733,27 +745,23 @@ public class WallpaperDownloader {
 		// Global buttons
 		btnCloseExit = new JButton("Close & Exit");
 		GridBagConstraints gbc_btnCloseExit = new GridBagConstraints();
-		gbc_btnCloseExit.anchor = GridBagConstraints.WEST;
-		gbc_btnCloseExit.insets = new Insets(0, 0, 5, 5);
+		gbc_btnCloseExit.insets = new Insets(0, 0, 0, 5);
 		gbc_btnCloseExit.gridx = 0;
-		gbc_btnCloseExit.gridy = 2;
+		gbc_btnCloseExit.gridy = 3;
 		frame.getContentPane().add(btnCloseExit, gbc_btnCloseExit);		
 		
 		btnApply = new JButton("Apply");
 		GridBagConstraints gbc_btnApply = new GridBagConstraints();
-		gbc_btnApply.anchor = GridBagConstraints.NORTHWEST;
-		gbc_btnApply.insets = new Insets(0, 0, 5, 5);
+		gbc_btnApply.insets = new Insets(0, 0, 0, 5);
 		gbc_btnApply.gridx = 2;
-		gbc_btnApply.gridy = 2;
+		gbc_btnApply.gridy = 3;
 		frame.getContentPane().add(btnApply, gbc_btnApply);
 		
 		btnMinimize = new JButton("Minimize");
 		btnMinimize.setBackground(Color.WHITE);
 		GridBagConstraints gbc_btnMinimize = new GridBagConstraints();
-		gbc_btnMinimize.insets = new Insets(0, 0, 5, 0);
-		gbc_btnMinimize.anchor = GridBagConstraints.NORTHWEST;
 		gbc_btnMinimize.gridx = 3;
-		gbc_btnMinimize.gridy = 2;
+		gbc_btnMinimize.gridy = 3;
 		frame.getContentPane().add(btnMinimize, gbc_btnMinimize);
 		
 		// Setting up configuration
@@ -767,6 +775,7 @@ public class WallpaperDownloader {
 		
 		// Starting automated changer process
 		initializeChanger();
+		
 	}
 
 	/**
@@ -869,122 +878,9 @@ public class WallpaperDownloader {
 		// Clicking event
 		btnMinimize.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				// The application is minimized within System Tray
-		        //Check the SystemTray is supported
-		        if (!SystemTray.isSupported() || !WDUtilities.isMinimizable()) {
-		            LOG.error("SystemTray is not supported. Frame is traditionally minimized");
-		            // Frame is traditionally minimized
-		            window.frame.setState(Frame.ICONIFIED);
-		            return;
-		        } else {
-		            final PopupMenu popup = new PopupMenu();
-		            URL systemTrayIcon = WallpaperDownloader.class.getResource("/images/icons/wd_systemtray_icon.png");
-		            final TrayIcon trayIcon = new TrayIcon(new ImageIcon(systemTrayIcon, "Wallpaper Downloader").getImage(), "Wallpaper Downloader");
-		            final SystemTray tray = SystemTray.getSystemTray();
-		           
-		            // Create a pop-up menu components -- BEGIN
-		            // Maximize
-		            MenuItem maximizeItem = new MenuItem("Maximize");
-		            maximizeItem.addActionListener(new ActionListener() {
-		            	public void actionPerformed(ActionEvent evt) {
-		                	int state = window.frame.getExtendedState();  
-		                	state = state & ~Frame.ICONIFIED;  
-		                	window.frame.setExtendedState(state);  
-		                	window.frame.setVisible(true);
-		                	
-		                	// Removing system tray icon
-		                	tray.remove(trayIcon);
-		            	}
-		            });
-		            // Open downloads directory
-		            MenuItem browseItem = new MenuItem("Open downloaded wallpapers");
-		            browseItem.addActionListener(new ActionListener() {
-		            	public void actionPerformed(ActionEvent evt) {
-		            		File downloadsDirectory = new File(WDUtilities.getDownloadsPath());
-		            		Desktop desktop = Desktop.getDesktop();
-		            		try {
-								desktop.open(downloadsDirectory);
-							} catch (IOException e) {
-								// There was some error trying to open the downloads Directory
-								LOG.error("Error trying to open the Downloads directory. Error: " + e.getMessage());
-							}
-		            	}
-		            });
-		            // Exit
-		            MenuItem exitItem = new MenuItem("Exit");
-		            exitItem.addActionListener(new ActionListener() {
-		            	public void actionPerformed(ActionEvent evt) {
-		                	// Removing system tray icon
-		                	tray.remove(trayIcon);
-
-		    				// The application is closed
-		    				System.exit(0);		                	
-		            	}
-		            });
-		           
-		            //Add components to pop-up menu
-		            popup.add(maximizeItem);
-		            popup.add(browseItem);
-		            
-		            // Change wallpaper
-		            if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
-			            MenuItem changeItem = new MenuItem("Change wallpaper randomly");
-			            changeItem.addActionListener(new ActionListener() {
-			            	public void actionPerformed(ActionEvent evt) {
-			            		WDUtilities.getWallpaperChanger().setRandomWallpaper();
-			            	}
-			            });
-			            popup.add(changeItem);
-		            }
-
-		            // Move favorite wallpapers
-		    		String moveFavoriteEnable = prefm.getPreference("move-favorite");
-		    		if (moveFavoriteEnable.equals(WDUtilities.APP_YES)) {
-			            MenuItem moveItem = new MenuItem("Move favorite wallpapers");
-			            moveItem.addActionListener(new ActionListener() {
-			            	public void actionPerformed(ActionEvent evt) {
-			            		moveFavoriteWallpapers();
-			            	}
-			            });
-			            popup.add(moveItem);
-		            	
-		            }
-		            
-		            popup.addSeparator();
-		            popup.add(exitItem);
-
-		            // Create a pop-up menu components -- END
-
-		            trayIcon.setPopupMenu(popup);
-		            
-		            // Adding a new event. When the user clicks the left button the application window is restored again in the same
-		            // state
-		            MouseAdapter mouseAdapter = new MouseAdapter() {
-
-		                @Override
-		                public void mouseClicked(MouseEvent e) {
-		                	int state = window.frame.getExtendedState();  
-		                	state = state & ~Frame.ICONIFIED;  
-		                	window.frame.setExtendedState(state);  
-		                	window.frame.setVisible(true);
-		                	
-		                	// Removing system tray icon
-		                	tray.remove(trayIcon);
-		                }
-		            };
-		            trayIcon.addMouseListener(mouseAdapter);
-		            trayIcon.setImageAutoSize(true);
-		           
-		            try {
-		                tray.add(trayIcon);
-		            } catch (AWTException e) {
-		                LOG.error("TrayIcon could not be added.");
-		            }
-		            
-		            // Hiding window
-		            window.frame.setVisible(false);
-		        }
-			}		
+				minimizeApplication();
+			}
+		
 		});
 		
 		/**
@@ -1071,6 +967,11 @@ public class WallpaperDownloader {
 					prefm.setPreference("move-favorite-folder", PreferencesManager.DEFAULT_VALUE);
 				}
 				prefm.setPreference("application-notifications", new Integer(notificationsComboBox.getSelectedIndex()).toString());
+				if (startMinimizedCheckBox.isSelected()) {
+					prefm.setPreference("start-minimized", WDUtilities.APP_YES);
+				} else {
+					prefm.setPreference("start-minimized", WDUtilities.APP_NO);
+				}
 				if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
 					prefm.setPreference("application-changer", new Integer(changerComboBox.getSelectedIndex()).toString());
 					prefm.setPreference("application-changer-folder", changerDirectory.getText());
@@ -1331,8 +1232,131 @@ public class WallpaperDownloader {
 	      });
 			
 	}
+
+	public static void minimizeApplication() {
+
+		final PreferencesManager prefm = PreferencesManager.getInstance();
+		
+		// The application is minimized within System Tray
+        //Check the SystemTray is supported
+        if (!SystemTray.isSupported() || !WDUtilities.isMinimizable()) {
+            LOG.error("SystemTray is not supported. Frame is traditionally minimized");
+            // Frame is traditionally minimized
+            //window.frame.setState(Frame.ICONIFIED);
+            window.frame.setState(Frame.ICONIFIED);
+
+            return;
+        } else {
+            final PopupMenu popup = new PopupMenu();
+            URL systemTrayIcon = WallpaperDownloader.class.getResource("/images/icons/wd_systemtray_icon.png");
+            final TrayIcon trayIcon = new TrayIcon(new ImageIcon(systemTrayIcon, "Wallpaper Downloader").getImage(), "Wallpaper Downloader");
+            final SystemTray tray = SystemTray.getSystemTray();
+           
+            // Create a pop-up menu components -- BEGIN
+            // Maximize
+            MenuItem maximizeItem = new MenuItem("Maximize");
+            maximizeItem.addActionListener(new ActionListener() {
+            	public void actionPerformed(ActionEvent evt) {
+                	int state = window.frame.getExtendedState();  
+                	state = state & ~Frame.ICONIFIED;  
+                	window.frame.setExtendedState(state);  
+                	window.frame.setVisible(true);
+                	
+                	// Removing system tray icon
+                	tray.remove(trayIcon);
+            	}
+            });
+            // Open downloads directory
+            MenuItem browseItem = new MenuItem("Open downloaded wallpapers");
+            browseItem.addActionListener(new ActionListener() {
+            	public void actionPerformed(ActionEvent evt) {
+            		File downloadsDirectory = new File(WDUtilities.getDownloadsPath());
+            		Desktop desktop = Desktop.getDesktop();
+            		try {
+						desktop.open(downloadsDirectory);
+					} catch (IOException e) {
+						// There was some error trying to open the downloads Directory
+						LOG.error("Error trying to open the Downloads directory. Error: " + e.getMessage());
+					}
+            	}
+            });
+            // Exit
+            MenuItem exitItem = new MenuItem("Exit");
+            exitItem.addActionListener(new ActionListener() {
+            	public void actionPerformed(ActionEvent evt) {
+                	// Removing system tray icon
+                	tray.remove(trayIcon);
+
+    				// The application is closed
+    				System.exit(0);		                	
+            	}
+            });
+           
+            //Add components to pop-up menu
+            popup.add(maximizeItem);
+            popup.add(browseItem);
+            
+            // Change wallpaper
+            if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
+	            MenuItem changeItem = new MenuItem("Change wallpaper randomly");
+	            changeItem.addActionListener(new ActionListener() {
+	            	public void actionPerformed(ActionEvent evt) {
+	            		WDUtilities.getWallpaperChanger().setRandomWallpaper();
+	            	}
+	            });
+	            popup.add(changeItem);
+            }
+
+            // Move favorite wallpapers
+    		String moveFavoriteEnable = prefm.getPreference("move-favorite");
+    		if (moveFavoriteEnable.equals(WDUtilities.APP_YES)) {
+	            MenuItem moveItem = new MenuItem("Move favorite wallpapers");
+	            moveItem.addActionListener(new ActionListener() {
+	            	public void actionPerformed(ActionEvent evt) {
+	            		moveFavoriteWallpapers();
+	            	}
+	            });
+	            popup.add(moveItem);
+            	
+            }
+            
+            popup.addSeparator();
+            popup.add(exitItem);
+
+            // Create a pop-up menu components -- END
+
+            trayIcon.setPopupMenu(popup);
+            
+            // Adding a new event. When the user clicks the left button the application window is restored again in the same
+            // state
+            MouseAdapter mouseAdapter = new MouseAdapter() {
+
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                	int state = window.frame.getExtendedState();  
+                	state = state & ~Frame.ICONIFIED;  
+                	window.frame.setExtendedState(state);  
+                	window.frame.setVisible(true);
+                	
+                	// Removing system tray icon
+                	tray.remove(trayIcon);
+                }
+            };
+            trayIcon.addMouseListener(mouseAdapter);
+            trayIcon.setImageAutoSize(true);
+           
+            try {
+                tray.add(trayIcon);
+            } catch (AWTException e) {
+                LOG.error("TrayIcon could not be added.");
+            }
+            
+            // Hiding window
+            window.frame.setVisible(false);
+        }
+	}
 	
-	private void moveFavoriteWallpapers() {
+	private static void moveFavoriteWallpapers() {
 
 		final PreferencesManager prefm = PreferencesManager.getInstance();
 		
@@ -1493,7 +1517,15 @@ public class WallpaperDownloader {
 		notificationsComboBox.addItem(new ComboItem("Only important", "1"));
 		notificationsComboBox.addItem(new ComboItem("All", "2"));
 		notificationsComboBox.setSelectedIndex(new Integer(prefm.getPreference("application-notifications")));
-		
+
+		// Start minimized feature
+		String startMinimizedEnable = prefm.getPreference("start-minimized");
+		if (startMinimizedEnable.equals(WDUtilities.APP_YES)) {
+			startMinimizedCheckBox.setSelected(true);
+		} else {
+			startMinimizedCheckBox.setSelected(false);
+		}
+
 		// Changer
 		if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
 			changerComboBox.addItem(new ComboItem("Off", "0"));
