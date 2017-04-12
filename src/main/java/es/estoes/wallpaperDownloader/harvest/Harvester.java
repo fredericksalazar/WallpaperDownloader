@@ -23,10 +23,23 @@ public class Harvester {
 	// Constants
 	private static final Logger LOG = Logger.getLogger(Harvester.class);
 	private static volatile Harvester instance;
+	public static final String STATUS_DISABLED = "DISABLED";
+	public static final String STATUS_ENABLED = "ENABLED";
 	
 	// Attributes
 	private BackgroundHarvestingProcess backgroundHarvestingProcess = null;
 	private LinkedList<Provider> providers = null;
+	public String status;
+	
+	// Getters & Setters	
+	/**
+	 * Gets status.
+	 * status will be DISABLED when no providers are defined
+	 * @return status
+	 */
+	public String getStatus() {
+		return this.status;
+	}
 	
 	// Methods
 	/**
@@ -34,10 +47,13 @@ public class Harvester {
 	 */
 	private Harvester () {
 		initializeProviders();
+		this.status = STATUS_ENABLED;
 	}
 	
 	private void initializeProviders() {
-		LOG.info("Initializing providers...");
+		if (LOG.isInfoEnabled()) {
+			LOG.info("Initializing providers...");
+		}
 		PreferencesManager prefm = PreferencesManager.getInstance();
 		this.providers = new LinkedList<Provider>();
 		// Reading user preferences
@@ -46,7 +62,9 @@ public class Harvester {
 		// -----------------------------------------------
 		String wallhavenEnable = prefm.getPreference("provider-wallhaven");
 		if (wallhavenEnable.equals(WDUtilities.APP_YES)) {
-			LOG.info("Wallhaven provider added");
+			if (LOG.isInfoEnabled()) {
+				LOG.info("Wallhaven provider added");
+			}
 			this.providers.add(new WallhavenProvider());	// Factory method
 		}				
 		// -----------------------------------------------
@@ -54,7 +72,9 @@ public class Harvester {
 		// -----------------------------------------------
 		String devianartEnable = prefm.getPreference("provider-devianart");
 		if (devianartEnable.equals(WDUtilities.APP_YES)) {
-			LOG.info("Devianart provider added");
+			if (LOG.isInfoEnabled()) {
+				LOG.info("Devianart provider added");
+			}
 			this.providers.add(new DevianartProvider());	// Factory method
 		}				
 		// -----------------------------------------------
@@ -62,7 +82,9 @@ public class Harvester {
 		// -----------------------------------------------
 		String bingEnable = prefm.getPreference("provider-bing");
 		if (bingEnable.equals(WDUtilities.APP_YES)) {
-			LOG.info("Bing provider added");
+			if (LOG.isInfoEnabled()) {
+				LOG.info("Bing provider added");
+			}
 			this.providers.add(new BingProvider());	// Factory method
 		}				
 		// -----------------------------------------------
@@ -70,7 +92,9 @@ public class Harvester {
 		// -----------------------------------------------
 		String socialWallpaperingEnable = prefm.getPreference("provider-socialWallpapering");
 		if (socialWallpaperingEnable.equals(WDUtilities.APP_YES)) {
-			LOG.info("Social Wallpapering provider added");
+			if (LOG.isInfoEnabled()) {
+				LOG.info("Social Wallpapering provider added");
+			}
 			this.providers.add(new SocialWallpaperingProvider());	// Factory method
 		}
 		// -----------------------------------------------
@@ -78,7 +102,9 @@ public class Harvester {
 		// -----------------------------------------------
 		String wallpaperFusionEnable = prefm.getPreference("provider-wallpaperFusion");
 		if (wallpaperFusionEnable.equals(WDUtilities.APP_YES)) {
-			LOG.info("WallpaperFusion provider added");
+			if (LOG.isInfoEnabled()) {
+				LOG.info("WallpaperFusion provider added");
+			}
 			this.providers.add(new WallpaperFusionProvider());	// Factory method
 		}
 	}
@@ -99,8 +125,11 @@ public class Harvester {
 	 * This method stops the harvesting process
 	 */
 	public void stop () {
-		LOG.info("Stoping harvesting process...");
+		if (LOG.isInfoEnabled()) {
+			LOG.info("Stoping harvesting process...");
+		}
 		providers = null;
+		status = STATUS_DISABLED;
 		if (backgroundHarvestingProcess != null) {
 			backgroundHarvestingProcess.cancel(true);			
 			backgroundHarvestingProcess = null;
@@ -110,20 +139,35 @@ public class Harvester {
 	/**
 	 * This method starts the harvesting process
 	 */
-	public void start () {		
-		LOG.info("Starting harvesting process...");
+	public void start () {
+		PreferencesManager prefm = PreferencesManager.getInstance();
+		if (LOG.isInfoEnabled()) {
+			LOG.info("Starting harvesting process...");
+		}
 		
 		if (providers == null) {
 			initializeProviders();
 		}
 		
 		if (providers.size() > 0) {
-			LOG.info("Providers configured. Starting to download...");
-			backgroundHarvestingProcess = new BackgroundHarvestingProcess();
-			backgroundHarvestingProcess.setProviders(providers);
-			backgroundHarvestingProcess.execute();								
+			status = STATUS_ENABLED;
+			if (prefm.getPreference("downloading-process").equals(WDUtilities.APP_YES)) {
+				if (LOG.isInfoEnabled()) {
+					LOG.info("Providers configured and downloading process enabled. Starting to download...");
+				}
+				backgroundHarvestingProcess = new BackgroundHarvestingProcess();
+				backgroundHarvestingProcess.setProviders(providers);
+				backgroundHarvestingProcess.execute();								
+			} else {
+				if (LOG.isInfoEnabled()) {
+					LOG.info("Downloading process disabled by the user...");
+				}
+			}
 		} else {
-			LOG.info("No providers configured. Nothing to do.");
+			status = STATUS_DISABLED;
+			if (LOG.isInfoEnabled()) {
+				LOG.info("No providers configured. Nothing to do.");
+			}
 		}
 	}
 }

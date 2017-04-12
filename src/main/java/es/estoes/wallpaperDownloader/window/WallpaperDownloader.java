@@ -13,6 +13,7 @@ import javax.swing.SwingWorker;
 import javax.swing.ToolTipManager;
 import javax.swing.border.Border;
 import es.estoes.wallpaperDownloader.changer.ChangerDaemon;
+import es.estoes.wallpaperDownloader.changer.LinuxWallpaperChanger;
 import es.estoes.wallpaperDownloader.harvest.Harvester;
 import es.estoes.wallpaperDownloader.item.ComboItem;
 import es.estoes.wallpaperDownloader.util.PreferencesManager;
@@ -80,7 +81,7 @@ public class WallpaperDownloader {
 	public static JLabel lblSpaceWarning;
 	public static JScrollPane scroll;
 	public static JList<ImageIcon> lastWallpapersList;
-	private Harvester harvester;
+	private static Harvester harvester;
 	private ChangerDaemon changer;
 	private JFrame frame;
 	private JTextField searchKeywords;
@@ -134,7 +135,11 @@ public class WallpaperDownloader {
 	private JLabel lblNotifications;
 	private JComboBox<ComboItem> notificationsComboBox;
 	private static JCheckBox startMinimizedCheckBox;
-
+	private static JButton btnPause;
+	private static JButton btnPlay;
+	private static JPanel providersPanel;
+	private static JLabel lblGreenSpot;
+	private static JLabel lblRedSpot;
 	
 	// Getters & Setters
 	public JFrame getFrame() {
@@ -146,11 +151,11 @@ public class WallpaperDownloader {
 	}
 	
 	public Harvester getHarvester() {
-		return harvester;
+		return WallpaperDownloader.harvester;
 	}
 
 	public void setHarvester(Harvester harvester) {
-		this.harvester = harvester;
+		WallpaperDownloader.harvester = harvester;
 	}
 	
 	public JFormattedTextField getDownloadsDirectory() {
@@ -186,7 +191,7 @@ public class WallpaperDownloader {
 				// 1.- Log configuration
 				WDConfigManager.configureLog();
 
-				// 2.- Application configuration
+				// 2.- Application configuratiobtnn
 				WDConfigManager.checkConfig();
 				window = new WallpaperDownloader();
 				window.frame.setVisible(true);
@@ -244,7 +249,7 @@ public class WallpaperDownloader {
 		frame.getContentPane().add(tabbedPane, gbc_tabbedPane);
 		
 		// Providers (tab)
-		JPanel providersPanel = new JPanel();
+		providersPanel = new JPanel();
 		tabbedPane.addTab("Providers", null, providersPanel, null);
 		providersPanel.setLayout(null);
 
@@ -253,11 +258,11 @@ public class WallpaperDownloader {
 		providersPanel.add(wallhavenCheckbox);
 
 		JLabel lblKeywords = new JLabel("Keywords");
-		lblKeywords.setBounds(12, 8, 70, 15);
+		lblKeywords.setBounds(12, 14, 70, 15);
 		providersPanel.add(lblKeywords);
 		
 		searchKeywords = new JTextField();
-		searchKeywords.setBounds(100, 6, 255, 19);
+		searchKeywords.setBounds(100, 13, 255, 19);
 		providersPanel.add(searchKeywords);
 		searchKeywords.setColumns(10);
 
@@ -270,7 +275,7 @@ public class WallpaperDownloader {
 			ImageIcon icon = new ImageIcon(img);
 			JLabel lblKeywordsHelp = new JLabel(icon);
 			lblKeywordsHelp.setToolTipText("Each keyword must be separated by ';'. If it is empty then it will search any wallpaper");
-			lblKeywordsHelp.setBounds(358, 4, 30, 23);
+			lblKeywordsHelp.setBounds(366, 13, 30, 23);
 			providersPanel.add(lblKeywordsHelp);
 		} catch (IOException ex) {
 			JLabel lblKeywordsHelp = new JLabel("(separated by ;) (Empty->All wallpapers)");
@@ -370,6 +375,59 @@ public class WallpaperDownloader {
 		wallpaperFusionCheckbox.setBounds(8, 257, 210, 23);
 		providersPanel.add(wallpaperFusionCheckbox);
 		
+		// TODO: Implementar el botón de pausa y de resume para el proceso de bajada de fondos
+		// 1.- Si no hay proveedores marcados, no deberíamos mostrar ningún botón
+		// 2.- En caso de que haya al menos un proveedor marcado, mostramos botón de pause (porque por defecto, 
+		//     el proceso de bajada se encuentra activo)
+		// 3.- En caso de que se pulse el botón de pausa, paramos el proceso de bajada y mostramos el botón de 
+		//     reanudar
+		// 4.- Acompañar el estado del proceso con un semáforo verde o rojo según corresponda
+		btnPause = new JButton();
+
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/pause_24px_icon.png"));
+			btnPause.setIcon(new ImageIcon(img));
+			btnPause.setToolTipText("Pause downloading process");
+			btnPause.setBounds(431, 6, 34, 33);
+		} catch (IOException ex) {
+			btnPause.setToolTipText("Pause downloading process");
+			btnPause.setBounds(431, 6, 34, 33);
+		}
+
+		btnPlay = new JButton();
+
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/play_24px_icon.png"));
+			btnPlay.setIcon(new ImageIcon(img));
+			btnPlay.setToolTipText("Resume downloading process");
+			btnPlay.setBounds(431, 6, 34, 33);
+		} catch (IOException ex) {
+			btnPlay.setToolTipText("Resume downloading process");
+			btnPlay.setBounds(431, 6, 34, 33);
+		}
+
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/green_spot_24px_icon.png"));
+			ImageIcon icon = new ImageIcon(img);
+			lblGreenSpot = new JLabel(icon);			
+			lblGreenSpot.setToolTipText("Downloading process is enabled");
+			lblGreenSpot.setBounds(523, 15, 20, 18);
+		} catch (IOException ex) {
+			lblGreenSpot = new JLabel("Downloading process is enabled");
+			lblGreenSpot.setBounds(637, 11, 30, 23);
+		}
+
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/red_spot_24px_icon.png"));
+			ImageIcon icon = new ImageIcon(img);
+			lblRedSpot = new JLabel(icon);			
+			lblRedSpot.setToolTipText("Downloading process is disabled");
+			lblRedSpot.setBounds(523, 15, 20, 18);
+		} catch (IOException ex) {
+			lblRedSpot = new JLabel("Downloading process is disabled");
+			lblRedSpot.setBounds(637, 11, 30, 23);
+		}
+
 		// Application Settings (tab)
 		JPanel appSettingsPanel = new JPanel();
 		tabbedPane.addTab("Application Settings", null, appSettingsPanel, null);
@@ -748,7 +806,7 @@ public class WallpaperDownloader {
 		gbc_btnCloseExit.insets = new Insets(0, 0, 0, 5);
 		gbc_btnCloseExit.gridx = 0;
 		gbc_btnCloseExit.gridy = 3;
-		frame.getContentPane().add(btnCloseExit, gbc_btnCloseExit);		
+		frame.getContentPane().add(btnCloseExit, gbc_btnCloseExit);
 		
 		btnApply = new JButton("Apply");
 		GridBagConstraints gbc_btnApply = new GridBagConstraints();
@@ -772,6 +830,23 @@ public class WallpaperDownloader {
 		
 		// Starting harvesting process
 		initializeHarvesting();
+		
+		// TODO: Aquí habría que meter la comprobación para ocultar o mostrar y qué botón mostrar para el new 
+		// feature de resume, pause el proceso de downloading
+		// consultado el atributo status del harvester
+		if (harvester.getStatus() != Harvester.STATUS_DISABLED) {
+			// Checking downloading process
+			PreferencesManager prefm = PreferencesManager.getInstance();
+			if (prefm.getPreference("downloading-process").equals(WDUtilities.APP_NO)) {
+				providersPanel.add(btnPlay);
+				providersPanel.add(lblRedSpot);
+			} else {
+				providersPanel.add(btnPause);
+				providersPanel.add(lblGreenSpot);
+			}
+		} else {
+			providersPanel.add(lblRedSpot);
+		}
 		
 		// Starting automated changer process
 		initializeChanger();
@@ -985,8 +1060,28 @@ public class WallpaperDownloader {
 				changer.stop();
 				changer.start();
 				
+				// TODO: pause start button
+				if (harvester.getStatus() != Harvester.STATUS_DISABLED) {
+					// Checking downloading process
+					if (prefm.getPreference("downloading-process").equals(WDUtilities.APP_NO)) {
+						providersPanel.add(btnPlay);
+						providersPanel.add(lblRedSpot);
+						providersPanel.remove(lblGreenSpot);
+					} else {
+						providersPanel.add(btnPause);
+						providersPanel.add(lblGreenSpot);
+						providersPanel.remove(lblRedSpot);
+					}
+				} else {
+					providersPanel.remove(btnPause);
+					providersPanel.remove(btnPlay);
+					providersPanel.add(lblRedSpot);
+					providersPanel.remove(lblGreenSpot);
+				}
+				providersPanel.repaint();
+				
 				// Information
-				DialogManager info = new DialogManager("Changes applied. Downloading process started.", 2000);
+				DialogManager info = new DialogManager("Changes applied.", 2000);
 				info.openDialog();
 			}
 		});	
@@ -1187,7 +1282,14 @@ public class WallpaperDownloader {
   				// Opens the preview window
   				PreviewWallpaperWindow previewWindow = new PreviewWallpaperWindow(wallpaperSelectedAbsolutePath, null);
   				previewWindow.setVisible(true);
-	    	  }
+  				// There is a bug with KDE (version 5.9) and the preview window is not painted properly
+  				// It is necessary to reshape this window in order to paint all its components
+  				if (WDUtilities.getWallpaperChanger() instanceof LinuxWallpaperChanger) {
+  					if (((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment() == WDUtilities.DE_KDE) {
+  						previewWindow.setSize(1023, 767);  						
+  					}
+  				}
+ 	    	  }
 	      });
 
 	      /**
@@ -1230,9 +1332,70 @@ public class WallpaperDownloader {
 					moveFavoriteWallpapers();
 				}
 	      });
-			
+
+	      /**
+	       * btnPause Action Listener.
+	       */
+	      btnPause.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					pauseDownloadingProcess();
+				}
+	      });
+
+	      /**
+	       * btnPlay Action Listener.
+	       */
+	      btnPlay.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					resumeDownloadingProcess();
+				}
+	      });
+
 	}
 
+	/**
+	 * Pauses downloading process.
+	 */
+	public static void pauseDownloadingProcess() {
+		final PreferencesManager prefm = PreferencesManager.getInstance();
+		
+		// Downloading process is paused
+		prefm.setPreference("downloading-process", WDUtilities.APP_NO);
+		
+		// Stops harvesting process
+		harvester.stop();
+		
+		// Repainting buttons
+		providersPanel.add(btnPlay);
+		providersPanel.remove(btnPause);
+		providersPanel.add(lblRedSpot);
+		providersPanel.remove(lblGreenSpot);
+		providersPanel.repaint();
+	}
+
+	/**
+	 * Resumes downloading process.
+	 */
+	public static void resumeDownloadingProcess() {
+		final PreferencesManager prefm = PreferencesManager.getInstance();
+		
+		// Downloading process is resumed
+		prefm.setPreference("downloading-process", WDUtilities.APP_YES);
+		
+		// Starts harvesting process
+		harvester.start();
+
+		// Repainting buttons
+		providersPanel.add(btnPause);
+		providersPanel.remove(btnPlay);
+		providersPanel.add(lblGreenSpot);
+		providersPanel.remove(lblRedSpot);
+		providersPanel.repaint();
+	}
+
+	/**
+	 * Minimizes application.
+	 */
 	public static void minimizeApplication() {
 
 		final PreferencesManager prefm = PreferencesManager.getInstance();
@@ -1280,22 +1443,39 @@ public class WallpaperDownloader {
 					}
             	}
             });
-            // Exit
-            MenuItem exitItem = new MenuItem("Exit");
-            exitItem.addActionListener(new ActionListener() {
-            	public void actionPerformed(ActionEvent evt) {
-                	// Removing system tray icon
-                	tray.remove(trayIcon);
 
-    				// The application is closed
-    				System.exit(0);		                	
-            	}
-            });
-           
-            //Add components to pop-up menu
             popup.add(maximizeItem);
             popup.add(browseItem);
-            
+
+    		// Pause / Resume
+            MenuItem resumeItem = new MenuItem("Resume");
+            MenuItem pauseItem = new MenuItem("Pause");
+
+            resumeItem.addActionListener(new ActionListener() {
+            	public void actionPerformed(ActionEvent evt) {
+            		resumeDownloadingProcess();
+            		popup.remove(resumeItem);
+            		popup.insert(pauseItem, 2);
+            	}
+            });
+
+            pauseItem.addActionListener(new ActionListener() {
+            	public void actionPerformed(ActionEvent evt) {
+            		pauseDownloadingProcess();
+            		popup.remove(pauseItem);
+            		popup.insert(resumeItem, 2);
+            	}
+            });
+
+            if (harvester.getStatus() != Harvester.STATUS_DISABLED) {
+    			// Checking downloading process
+    			if (prefm.getPreference("downloading-process").equals(WDUtilities.APP_NO)) {
+    	            popup.add(resumeItem);
+    			} else {
+    	            popup.add(pauseItem);
+    			}
+    		}
+
             // Change wallpaper
             if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
 	            MenuItem changeItem = new MenuItem("Change wallpaper randomly");
@@ -1317,10 +1497,22 @@ public class WallpaperDownloader {
 	            	}
 	            });
 	            popup.add(moveItem);
-            	
             }
-            
+    		
             popup.addSeparator();
+
+            // Exit
+            MenuItem exitItem = new MenuItem("Exit");
+            exitItem.addActionListener(new ActionListener() {
+            	public void actionPerformed(ActionEvent evt) {
+                	// Removing system tray icon
+                	tray.remove(trayIcon);
+
+    				// The application is closed
+    				System.exit(0);		                	
+            	}
+            });
+
             popup.add(exitItem);
 
             // Create a pop-up menu components -- END

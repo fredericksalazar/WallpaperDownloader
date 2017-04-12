@@ -85,7 +85,11 @@ public class WDConfigManager {
     			 // Downloads directory
         		 prefm.setPreference("application-downloads-folder", absoluteDownloadsPath.toString());
         		 
-    			 // Providers
+        		 // Downloading process
+        		 // It will be enabled by default
+        		 prefm.setPreference("downloading-process", WDUtilities.APP_YES);
+
+        		 // Providers
         		 // Wallhaven.cc
         		 prefm.setPreference("provider-wallhaven", WDUtilities.APP_NO);
         		 // Initializing resolution
@@ -178,6 +182,12 @@ public class WDConfigManager {
     			 LOG.info("Downloads directory -> " + prefm.getPreference("application-downloads-folder"));
     		 }
     		 
+    		 // Downloading process
+    		 // It will be enabled by default
+			 if (prefm.getPreference("downloading-process").equals(PreferencesManager.DEFAULT_VALUE)) {
+				 prefm.setPreference("downloading-process", WDUtilities.APP_YES);
+			 }
+
     		 // Blacklist directory
 			 if (LOG.isInfoEnabled()) {
 				 LOG.info("Checking blacklist directory...");
