@@ -25,6 +25,7 @@ import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 
+import es.estoes.wallpaperDownloader.changer.LinuxWallpaperChanger;
 import es.estoes.wallpaperDownloader.util.WDUtilities;
 import es.estoes.wallpaperDownloader.util.WallpaperListRenderer;
 
@@ -471,6 +472,13 @@ public class WallpaperManagerWindow extends JFrame {
 		        JFrame wallpaperManagerWindow = (JFrame) SwingUtilities.getRoot(component);
 				PreviewWallpaperWindow previewWindow = new PreviewWallpaperWindow(wallpapersSelectedAbsolutePath.get(0), (WallpaperManagerWindow) wallpaperManagerWindow);
 				previewWindow.setVisible(true);
+  				// There is a bug with KDE (version 5.9) and the preview window is not painted properly
+  				// It is necessary to reshape this window in order to paint all its components
+  				if (WDUtilities.getWallpaperChanger() instanceof LinuxWallpaperChanger) {
+  					if (((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment() == WDUtilities.DE_KDE) {
+  						previewWindow.setSize(1023, 767);  						
+  					}
+  				}
 			}
 		});
 		
@@ -530,6 +538,13 @@ public class WallpaperManagerWindow extends JFrame {
 		        JFrame wallpaperManagerWindow = (JFrame) SwingUtilities.getRoot(component);
 				PreviewWallpaperWindow previewWindow = new PreviewWallpaperWindow(wallpapersSelectedAbsolutePath.get(0), (WallpaperManagerWindow) wallpaperManagerWindow);
 				previewWindow.setVisible(true);
+  				// There is a bug with KDE (version 5.9) and the preview window is not painted properly
+  				// It is necessary to reshape this window in order to paint all its components
+  				if (WDUtilities.getWallpaperChanger() instanceof LinuxWallpaperChanger) {
+  					if (((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment() == WDUtilities.DE_KDE) {
+  						previewWindow.setSize(1023, 767);  						
+  					}
+  				}
 			}
 		});
 		
