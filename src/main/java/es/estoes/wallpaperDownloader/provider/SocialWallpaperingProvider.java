@@ -85,8 +85,8 @@ public class SocialWallpaperingProvider extends Provider {
 							// Obtaining wallpaper's name (string after the last slash)
 							String wallpaperName = wallpaperURL.substring(index + 1);
 							index = wallpaperName.lastIndexOf(WDUtilities.DASH);
-							wallpaperName = WDUtilities.WD_PREFIX + wallpaperName.substring(0, index);
-							String wallpaperNameFavorite = WDUtilities.WD_FAVORITE_PREFIX + wallpaperName.substring(0, index);
+							wallpaperName = WDUtilities.WD_PREFIX + wallpaperName.substring(0, index) + WDUtilities.PERIOD + "jpg";
+							String wallpaperNameFavorite = WDUtilities.WD_FAVORITE_PREFIX + wallpaperName.substring(0, index) + WDUtilities.PERIOD + "jpg";
 							
 							File wallpaper = new File(WDUtilities.getDownloadsPath() + File.separator + wallpaperName);
 							File wallpaperFavorite = new File(WDUtilities.getDownloadsPath() + File.separator + wallpaperNameFavorite);
