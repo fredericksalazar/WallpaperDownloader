@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -12,19 +13,15 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-
 import javax.swing.ImageIcon;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.log4j.Logger;
-
 import es.estoes.wallpaperDownloader.changer.LinuxWallpaperChanger;
 import es.estoes.wallpaperDownloader.changer.WallpaperChanger;
 import es.estoes.wallpaperDownloader.window.DialogManager;
 import es.estoes.wallpaperDownloader.window.WallpaperDownloader;
 import es.estoes.wallpaperDownloader.window.WallpaperManagerWindow;
-
 import org.apache.commons.io.comparator.*;
 
 /**
@@ -477,6 +474,27 @@ public class WDUtilities {
 			Random generator = new Random();
 			int index = generator.nextInt(files.size());
 			return files.get(index);			
+		} else {
+			return null;
+		}
+		
+	}
+
+	/**
+	 * It picks a random image from a directory.
+	 * @param directoryPath directory path to get all the images
+	 * @return
+	 */
+	public static File pickRandomImage(String directoryPath) {
+
+		LOG.info("Getting all the images in " + directoryPath + "...");
+		File directory = new File(directoryPath);
+		FilenameFilter imageFilenameFilter = new ImageFilenameFilter();
+		File[] images = directory.listFiles(imageFilenameFilter);
+		if (images.length > 0) {
+			Random generator = new Random();
+			int index = generator.nextInt(images.length);
+			return images[index];			
 		} else {
 			return null;
 		}

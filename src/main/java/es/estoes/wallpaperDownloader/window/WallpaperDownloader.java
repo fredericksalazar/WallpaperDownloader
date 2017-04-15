@@ -2,6 +2,7 @@ package es.estoes.wallpaperDownloader.window;
 
 import java.awt.EventQueue;
 import javax.imageio.ImageIO;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
@@ -125,8 +126,6 @@ public class WallpaperDownloader {
 	private JTextField icons;
 	private JButton btnIcons;
 	private JComboBox<ComboItem> changerComboBox;
-	private JButton btnChangeChangerDirectory;
-	private JFormattedTextField changerDirectory;
 	private JButton btnChangeMoveDirectory;
 	private JFormattedTextField moveDirectory;
 	private JLabel lblMoveHelp;
@@ -140,6 +139,11 @@ public class WallpaperDownloader {
 	private static JPanel providersPanel;
 	private static JLabel lblGreenSpot;
 	private static JLabel lblRedSpot;
+	private JList<String> listDirectoriesToWatch;
+	private DefaultListModel<String> listDirectoriesModel;
+	private JButton btnAddDirectory;
+	private JButton btnRemoveDirectory;
+	private JPanel appSettingsPanel;
 	
 	// Getters & Setters
 	public JFrame getFrame() {
@@ -166,20 +170,36 @@ public class WallpaperDownloader {
 		this.downloadsDirectory = downloadsDirectory;
 	}
 
-	public JFormattedTextField getChangerDirectory() {
-		return changerDirectory;
-	}
-
-	public void setChangerDirectory(JFormattedTextField changerDirectory) {
-		this.changerDirectory = changerDirectory;
-	}
-
 	public JFormattedTextField getMoveDirectory() {
 		return moveDirectory;
 	}
 
 	public void setMoveDirectory(JFormattedTextField moveDirectory) {
 		this.moveDirectory = moveDirectory;
+	}
+
+	public DefaultListModel<String> getListDirectoriesModel() {
+		return listDirectoriesModel;
+	}
+
+	public void setListDirectoriesModel(DefaultListModel<String> listDirectoriesModel) {
+		this.listDirectoriesModel = listDirectoriesModel;
+	}
+
+	public JButton getBtnRemoveDirectory() {
+		return btnRemoveDirectory;
+	}
+
+	public void setBtnRemoveDirectory(JButton btnRemoveDirectory) {
+		this.btnRemoveDirectory = btnRemoveDirectory;
+	}
+
+	public JPanel getAppSettingsPanel() {
+		return appSettingsPanel;
+	}
+
+	public void setAppSettingsPanel(JPanel appSettingsPanel) {
+		this.appSettingsPanel = appSettingsPanel;
 	}
 
 	/**
@@ -375,17 +395,10 @@ public class WallpaperDownloader {
 		wallpaperFusionCheckbox.setBounds(8, 257, 210, 23);
 		providersPanel.add(wallpaperFusionCheckbox);
 		
-		// TODO: Implementar el botón de pausa y de resume para el proceso de bajada de fondos
-		// 1.- Si no hay proveedores marcados, no deberíamos mostrar ningún botón
-		// 2.- En caso de que haya al menos un proveedor marcado, mostramos botón de pause (porque por defecto, 
-		//     el proceso de bajada se encuentra activo)
-		// 3.- En caso de que se pulse el botón de pausa, paramos el proceso de bajada y mostramos el botón de 
-		//     reanudar
-		// 4.- Acompañar el estado del proceso con un semáforo verde o rojo según corresponda
 		btnPause = new JButton();
 
 		try {
-			Image img = ImageIO.read(getClass().getResource("/images/icons/pause_24px_icon.png"));
+			Image img = ImageIO.read(getClass().getResource("/images/icons/pause_16px_icon.png"));
 			btnPause.setIcon(new ImageIcon(img));
 			btnPause.setToolTipText("Pause downloading process");
 			btnPause.setBounds(431, 6, 34, 33);
@@ -397,7 +410,7 @@ public class WallpaperDownloader {
 		btnPlay = new JButton();
 
 		try {
-			Image img = ImageIO.read(getClass().getResource("/images/icons/play_24px_icon.png"));
+			Image img = ImageIO.read(getClass().getResource("/images/icons/play_16px_icon.png"));
 			btnPlay.setIcon(new ImageIcon(img));
 			btnPlay.setToolTipText("Resume downloading process");
 			btnPlay.setBounds(431, 6, 34, 33);
@@ -429,7 +442,7 @@ public class WallpaperDownloader {
 		}
 
 		// Application Settings (tab)
-		JPanel appSettingsPanel = new JPanel();
+		appSettingsPanel = new JPanel();
 		tabbedPane.addTab("Application Settings", null, appSettingsPanel, null);
 		appSettingsPanel.setLayout(null);
 		
@@ -528,37 +541,83 @@ public class WallpaperDownloader {
 			changerComboBox.setBounds(317, 210, 94, 19);
 			appSettingsPanel.add(changerComboBox);
 			
-			changerDirectory = new JFormattedTextField((Format) null);
-			changerDirectory.setEditable(false);
-			changerDirectory.setColumns(4);
-			changerDirectory.setBounds(144, 237, 405, 19);
-			appSettingsPanel.add(changerDirectory);
-			
 			JLabel lblChangerDirectory = new JLabel("Changer directory");
 			lblChangerDirectory.setBounds(12, 237, 134, 19);
 			appSettingsPanel.add(lblChangerDirectory);
 			
-			btnChangeChangerDirectory = new JButton();
+			
+			btnAddDirectory = new JButton();
 			try {
-				Image img = ImageIO.read(getClass().getResource("/images/icons/change_folder_24px_icon.png"));
-				btnChangeChangerDirectory.setIcon(new ImageIcon(img));
-				btnChangeChangerDirectory.setToolTipText("Change changer directory");
-				btnChangeChangerDirectory.setBounds(561, 230, 34, 33);
+				Image img = ImageIO.read(getClass().getResource("/images/icons/add_16px_icon.png"));
+				btnAddDirectory.setIcon(new ImageIcon(img));
+				btnAddDirectory.setToolTipText("Add directory");
+				btnAddDirectory.setBounds(561, 266, 34, 33);
 			} catch (IOException ex) {
-				btnOpenDownloadsDirectory.setText("Change changer directory");
-				btnChangeChangerDirectory.setBounds(561, 126, 34, 33);
+				btnAddDirectory.setToolTipText("Add directory");
+				btnAddDirectory.setBounds(561, 274, 34, 33);
 			}		
-			appSettingsPanel.add(btnChangeChangerDirectory);
-									
+			
+			btnRemoveDirectory = new JButton();
+			try {
+				Image img = ImageIO.read(getClass().getResource("/images/icons/remove_16px_icon.png"));
+				btnRemoveDirectory.setIcon(new ImageIcon(img));
+				btnRemoveDirectory.setToolTipText("Remove directory");
+				btnRemoveDirectory.setBounds(561, 311, 34, 33);
+			} catch (IOException ex) {
+				btnRemoveDirectory.setToolTipText("Remove directory");
+				btnRemoveDirectory.setBounds(561, 319, 34, 33);
+			}		
+			
+			JScrollPane listDirectoriesScrollPane = new JScrollPane();
+			listDirectoriesScrollPane.setBounds(143, 244, 406, 121);
+			appSettingsPanel.add(listDirectoriesScrollPane);
+			
+			listDirectoriesToWatch = new JList<String>();
+			listDirectoriesScrollPane.setColumnHeaderView(listDirectoriesToWatch);
+			listDirectoriesToWatch.setBackground(UIManager.getColor("Button.background"));
+			listDirectoriesToWatch.setToolTipText("Add all the directories that changer will take into account");
+			//
+			listDirectoriesToWatch.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+			listDirectoriesToWatch.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+			listDirectoriesToWatch.setVisibleRowCount(-1);
+			
+			listDirectoriesScrollPane.setViewportView(listDirectoriesToWatch);
+												
 			/**
-			 * btnChangeChangerDirectory Action Listener.
+			 * btnAddDirectory Action Listener.
 			 */
-			btnChangeChangerDirectory.addActionListener(new ActionListener() {
+			btnAddDirectory.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					PathChangerWindow pathChangerWindow = new PathChangerWindow(window, WDUtilities.CHANGER_DIRECTORY);
 					pathChangerWindow.setVisible(true);
+	  				// There is a bug with KDE (version 5.9) and the preview window is not painted properly
+	  				// It is necessary to reshape this window in order to paint all its components
+	  				if (WDUtilities.getWallpaperChanger() instanceof LinuxWallpaperChanger) {
+	  					if (((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment() == WDUtilities.DE_KDE) {
+	  						pathChangerWindow.setSize(449, 299);  						
+	  					}
+	  				}
 				}
 			});
+
+			/**
+			 * btnAddDirectory Action Listener.
+			 */
+			btnRemoveDirectory.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					PreferencesManager prefm = PreferencesManager.getInstance();
+					String directoryToRemove = listDirectoriesModel.getElementAt(listDirectoriesToWatch.getSelectedIndex());
+					listDirectoriesModel.remove(listDirectoriesToWatch.getSelectedIndex());
+					String changerFoldersProperty = prefm.getPreference("application-changer-folder");
+					String modifiedChangerFoldersProperty = changerFoldersProperty.replace(";" + directoryToRemove, "");
+					prefm.setPreference("application-changer-folder", modifiedChangerFoldersProperty);
+					if (listDirectoriesModel.size() <= 1) {
+						appSettingsPanel.remove(btnRemoveDirectory);
+						appSettingsPanel.repaint();
+					}
+				}
+			});
+
 		}
 
 		// Downloads Directory (tab)
@@ -831,9 +890,7 @@ public class WallpaperDownloader {
 		// Starting harvesting process
 		initializeHarvesting();
 		
-		// TODO: Aquí habría que meter la comprobación para ocultar o mostrar y qué botón mostrar para el new 
-		// feature de resume, pause el proceso de downloading
-		// consultado el atributo status del harvester
+		// Starting pause / resume feature
 		if (harvester.getStatus() != Harvester.STATUS_DISABLED) {
 			// Checking downloading process
 			PreferencesManager prefm = PreferencesManager.getInstance();
@@ -1049,7 +1106,6 @@ public class WallpaperDownloader {
 				}
 				if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
 					prefm.setPreference("application-changer", new Integer(changerComboBox.getSelectedIndex()).toString());
-					prefm.setPreference("application-changer-folder", changerDirectory.getText());
 				}
 
 				// Stopping and starting harvesting process
@@ -1060,7 +1116,7 @@ public class WallpaperDownloader {
 				changer.stop();
 				changer.start();
 				
-				// TODO: pause start button
+				// Resume / pause feature
 				if (harvester.getStatus() != Harvester.STATUS_DISABLED) {
 					// Checking downloading process
 					if (prefm.getPreference("downloading-process").equals(WDUtilities.APP_NO)) {
@@ -1129,6 +1185,13 @@ public class WallpaperDownloader {
 			public void actionPerformed(ActionEvent arg0) {
 				PathChangerWindow pathChangerWindow = new PathChangerWindow(window, WDUtilities.DOWNLOADS_DIRECTORY);
 				pathChangerWindow.setVisible(true);
+  				// There is a bug with KDE (version 5.9) and the preview window is not painted properly
+  				// It is necessary to reshape this window in order to paint all its components
+  				if (WDUtilities.getWallpaperChanger() instanceof LinuxWallpaperChanger) {
+  					if (((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment() == WDUtilities.DE_KDE) {
+  						pathChangerWindow.setSize(449, 299);  						
+  					}
+  				}
 			}
 		});
 		
@@ -1321,6 +1384,13 @@ public class WallpaperDownloader {
 				public void actionPerformed(ActionEvent arg0) {
 					PathChangerWindow pathChangerWindow = new PathChangerWindow(window, WDUtilities.MOVE_DIRECTORY);
 					pathChangerWindow.setVisible(true);
+	  				// There is a bug with KDE (version 5.9) and the preview window is not painted properly
+	  				// It is necessary to reshape this window in order to paint all its components
+	  				if (WDUtilities.getWallpaperChanger() instanceof LinuxWallpaperChanger) {
+	  					if (((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment() == WDUtilities.DE_KDE) {
+	  						pathChangerWindow.setSize(449, 299);  						
+	  					}
+	  				}
 				}
 	      });
 	      
@@ -1727,7 +1797,18 @@ public class WallpaperDownloader {
 			changerComboBox.addItem(new ComboItem("30 min", "4"));
 			changerComboBox.addItem(new ComboItem("60 min", "5"));
 			changerComboBox.setSelectedIndex(new Integer(prefm.getPreference("application-changer")));
-			changerDirectory.setValue(prefm.getPreference("application-changer-folder"));
+			
+			listDirectoriesModel = new DefaultListModel<String>();
+			String changerFoldersProperty = prefm.getPreference("application-changer-folder");
+			String[] changerFolders = changerFoldersProperty.split(";");
+			for (int i = 0; i < changerFolders.length; i ++) {
+				listDirectoriesModel.addElement(changerFolders[i]);
+			}
+			listDirectoriesToWatch.setModel(listDirectoriesModel);
+			appSettingsPanel.add(btnAddDirectory);
+			if (listDirectoriesModel.size() > 1) {
+				appSettingsPanel.add(btnRemoveDirectory);
+			}
 		}
 
 		downloadDirectorySize.setValue(new Integer(prefm.getPreference("application-max-download-folder-size")));

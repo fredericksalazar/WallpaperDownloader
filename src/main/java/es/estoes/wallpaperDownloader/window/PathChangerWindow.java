@@ -134,12 +134,19 @@ public class PathChangerWindow extends JFrame {
 					break;
 				case WDUtilities.CHANGER_DIRECTORY:
 					// Change Changer directory path within application properties
-					prefm.setPreference("application-changer-folder", newPath.getText());
+					String changerFoldersProperty = prefm.getPreference("application-changer-folder");
+					changerFoldersProperty = changerFoldersProperty + ";" + newPath.getText();
+					prefm.setPreference("application-changer-folder", changerFoldersProperty);
 					// Refresh new path in main window
-					mainWindow.getChangerDirectory().setText(newPath.getText());
+					mainWindow.getListDirectoriesModel().addElement(newPath.getText());
+					if (mainWindow.getListDirectoriesModel().size() > 1) {
+						mainWindow.getAppSettingsPanel().add(mainWindow.getBtnRemoveDirectory());
+						mainWindow.getAppSettingsPanel().repaint();
+					}
+
 					// Information
 					if (WDUtilities.getLevelOfNotifications() > 0) {
-						DialogManager info = new DialogManager("Changer directory has been succesfully changed to " + newPath.getText(), 2000);
+						DialogManager info = new DialogManager("Changer directory has been succesfully added: " + newPath.getText(), 2000);
 						info.openDialog();
 					}
 					break;

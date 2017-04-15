@@ -1,6 +1,9 @@
 package es.estoes.wallpaperDownloader.changer;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 import org.apache.log4j.Logger;
 
@@ -48,12 +51,21 @@ public abstract class WallpaperChanger {
 	 */
 	public void setRandomWallpaper() {
 		PreferencesManager prefm = PreferencesManager.getInstance();
-		File randomWallpaper = WDUtilities.pickRandomFile(Boolean.TRUE, prefm.getPreference("application-changer-folder"));
-		this.setWallpaper(randomWallpaper.getAbsolutePath());
-		if (LOG.isInfoEnabled()) {
-			LOG.info("Setting random wallpaper: " + randomWallpaper.getAbsolutePath());
+		List<File> randomWallpapers = new ArrayList<File>();
+		String changerFoldersProperty = prefm.getPreference("application-changer-folder");
+		String[] changerFolders = changerFoldersProperty.split(";");
+		for (int i = 0; i < changerFolders.length; i ++) {
+			File randomWallpaper = WDUtilities.pickRandomImage(changerFolders[i]);
+			randomWallpapers.add(randomWallpaper);
 		}
-		randomWallpaper = null;
+		if (randomWallpapers.size() > 0) {
+			Random generator = new Random();
+			int index = generator.nextInt(randomWallpapers.size());
+			this.setWallpaper(randomWallpapers.get(index).getAbsolutePath());
+			if (LOG.isInfoEnabled()) {
+				LOG.info("Setting random wallpaper: " + randomWallpapers.get(index).getAbsolutePath());
+			}
+		}
 	}
 
 }
