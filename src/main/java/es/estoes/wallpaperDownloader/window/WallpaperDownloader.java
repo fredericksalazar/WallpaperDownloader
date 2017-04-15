@@ -13,6 +13,10 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 import javax.swing.ToolTipManager;
 import javax.swing.border.Border;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
+
 import es.estoes.wallpaperDownloader.changer.ChangerDaemon;
 import es.estoes.wallpaperDownloader.changer.LinuxWallpaperChanger;
 import es.estoes.wallpaperDownloader.harvest.Harvester;
@@ -66,6 +70,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
+import javax.swing.JTextPane;
 
 public class WallpaperDownloader {
 
@@ -824,7 +829,7 @@ public class WallpaperDownloader {
 		txtInfo.setBackground(UIManager.getColor("Button.background"));
 		txtInfo.setText("Please, if you want to open any issue beause you find a bug, you can do it in the official code repository (link above). if you have any suggestions you can send them there too. Thanks and enjoy!");
 		txtInfo.setEditable(false);
-		txtInfo.setBounds(12, 159, 527, 115);
+		txtInfo.setBounds(12, 318, 527, 55);
 		txtInfo.setLineWrap(true);
 		txtInfo.setWrapStyleWord(true);
 		aboutPanel.add(txtInfo);
@@ -858,6 +863,49 @@ public class WallpaperDownloader {
 		btnIcons.setBackground(Color.WHITE);
 		btnIcons.setBounds(223, 106, 456, 25);
 		aboutPanel.add(btnIcons);
+		
+		JLabel lblChangelog = new JLabel("Changelog");
+		lblChangelog.setBounds(12, 153, 91, 15);
+		aboutPanel.add(lblChangelog);
+		
+		JSeparator aboutSeparator3 = new JSeparator();
+		aboutSeparator3.setBounds(11, 308, 531, 2);
+		aboutPanel.add(aboutSeparator3);
+		
+		JScrollPane changelogScrollPane = new JScrollPane();
+		changelogScrollPane.setBounds(12, 175, 527, 123);
+		aboutPanel.add(changelogScrollPane);
+		
+		JTextPane changelogTextPane = new JTextPane();
+		changelogScrollPane.setViewportView(changelogTextPane);
+		
+		StyledDocument doc = changelogTextPane.getStyledDocument();
+
+		//  Define a keyword attribute
+		SimpleAttributeSet keyWord = new SimpleAttributeSet();
+		StyleConstants.setForeground(keyWord, Color.BLUE);
+		StyleConstants.setBold(keyWord, true);
+
+		//  Adding text
+
+		try
+		{
+		    doc.insertString(0, "New features (Version 2.7)\n\n", keyWord );
+		    doc.insertString(doc.getLength(), "- KDE support added.\n", null );
+		    doc.insertString(doc.getLength(), "- Now, user can define several different directories for the automated changer.\n", null );
+		    doc.insertString(doc.getLength(), "- Pause/resume functionality to download wallpapers.\n", null );
+		    doc.insertString(doc.getLength(), "- New option to start the application minimized.\n", null );
+		    doc.insertString(doc.getLength(), "- Changelog added.\n\n", null );
+		    doc.insertString(doc.getLength(), "Bugs fixed (Version 2.7).\n\n", keyWord );
+		    doc.insertString(doc.getLength(), "Social Wallpapering provider now stores the image files with the correct suffix.\n", null );
+		}
+		catch(Exception exception) { 
+			if (LOG.isInfoEnabled()) {
+				LOG.error("Error rendering jTextPane. Error: " + exception.getMessage());
+			}
+		}
+		// Text to the beginning
+		changelogTextPane.setCaretPosition(0);
 		
 		// Global buttons
 		btnCloseExit = new JButton("Close & Exit");
