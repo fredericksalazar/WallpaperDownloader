@@ -70,6 +70,14 @@ New Features:
 
 - Pause/resume functionality to download wallpapers.
 
+- New option to start the application minimized.
+
+- Changelog added
+
+Bugs fixed:
+
+- Social Wallpapering provider now stores the image files with the correct suffix
+
 ## Features (V 2.6) ##
 
 New Features:
