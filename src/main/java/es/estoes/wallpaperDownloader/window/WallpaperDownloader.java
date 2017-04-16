@@ -1489,6 +1489,12 @@ public class WallpaperDownloader {
 		providersPanel.add(lblRedSpot);
 		providersPanel.remove(lblGreenSpot);
 		providersPanel.repaint();
+		
+		// Information
+		if (WDUtilities.getLevelOfNotifications() > 0) {
+			DialogManager info = new DialogManager("Downloading process has been paused", 2000);
+			info.openDialog();
+		}
 	}
 
 	/**
@@ -1509,6 +1515,12 @@ public class WallpaperDownloader {
 		providersPanel.add(lblGreenSpot);
 		providersPanel.remove(lblRedSpot);
 		providersPanel.repaint();
+
+		// Information
+		if (WDUtilities.getLevelOfNotifications() > 0) {
+			DialogManager info = new DialogManager("Downloading process has been resumed", 2000);
+			info.openDialog();
+		}
 	}
 
 	/**
