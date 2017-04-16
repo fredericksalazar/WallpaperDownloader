@@ -309,33 +309,34 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 	 * @return boolean
 	 */
 	private boolean plasmaVersionSupportsChange() {
-		Process process;
-		boolean result = false;
-		try {
-			process = Runtime.getRuntime().exec("plasmashell --version");
-		  
-			BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
-		
-			// Read the output from the command
-			String processOutput = null;
-	    	while ((processOutput = stdInput.readLine()) != null) {
-	    		String[] plasmaVersion = processOutput.split("\\.");
-	    		Integer firstNumberVersion = Integer.valueOf(plasmaVersion[0].substring(plasmaVersion[0].length() - 1));
-	    		Integer secondNumberVersion = Integer.valueOf(plasmaVersion[1]);
-	    		if (firstNumberVersion > 5) {
-	    			result = true;
-	    		} else {
-	    			if (secondNumberVersion > 7) {
-	    				result = true;
-	    			}
-	    		}
-	    	}
-		} catch (Exception exception) {
-			if (LOG.isInfoEnabled()) {
-				LOG.error("Error checking KDE Plasma version: " + exception.getMessage());  
-		  	}
-		}	
-		
-		return result;
+//		Process process;
+//		boolean result = false;
+//		try {
+//			process = Runtime.getRuntime().exec("plasmashell --version");
+//		  
+//			BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+//		
+//			// Read the output from the command
+//			String processOutput = null;
+//	    	while ((processOutput = stdInput.readLine()) != null) {
+//	    		String[] plasmaVersion = processOutput.split("\\.");
+//	    		Integer firstNumberVersion = Integer.valueOf(plasmaVersion[0].substring(plasmaVersion[0].length() - 1));
+//	    		Integer secondNumberVersion = Integer.valueOf(plasmaVersion[1]);
+//	    		if (firstNumberVersion > 5) {
+//	    			result = true;
+//	    		} else {
+//	    			if (secondNumberVersion > 7) {
+//	    				result = true;
+//	    			}
+//	    		}
+//	    	}
+//		} catch (Exception exception) {
+//			if (LOG.isInfoEnabled()) {
+//				LOG.error("Error checking KDE Plasma version: " + exception.getMessage());  
+//		  	}
+//		}	
+//		
+//		return result;
+		return true;
 	}
 }
