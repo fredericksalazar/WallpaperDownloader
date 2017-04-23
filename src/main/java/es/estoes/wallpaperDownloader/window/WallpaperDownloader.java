@@ -891,7 +891,7 @@ public class WallpaperDownloader {
 		try
 		{
 		    doc.insertString(0, "New features (Version 2.7)\n\n", keyWord );
-		    doc.insertString(doc.getLength(), "- KDE support added.\n", null );
+		    doc.insertString(doc.getLength(), "- KDE support added (not available in snap package version).\n", null );
 		    doc.insertString(doc.getLength(), "- Now, user can define several different directories for the automated changer.\n", null );
 		    doc.insertString(doc.getLength(), "- Pause/resume functionality to download wallpapers.\n", null );
 		    doc.insertString(doc.getLength(), "- New option to start the application minimized.\n", null );
