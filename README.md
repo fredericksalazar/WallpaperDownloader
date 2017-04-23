@@ -64,7 +64,7 @@ Install the snap package (please, check the name of the snap package built):
 
 New Features:
 
-- KDE support added.
+- KDE support added (not available in snap package version).
 
 - Now, user can define several different directories for the automated changer.
 
