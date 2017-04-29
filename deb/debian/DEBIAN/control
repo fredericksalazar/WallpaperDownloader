@@ -1,9 +1,11 @@
 Package: wallpaperdownloader
 Version: 2.7
-Section: Utility
+Section: misc
+Priority: optional
 Architecture: all
+Depends: openjdk-8-jre | oracle-java8-installer | openjdk-9-jre | oracle-java9-installer
+Installed-Size: 2199
 Maintainer: Eloy García Almadén <eloy.garcia.pca@gmail.com>
 Description: Download, manage and change your favorite wallpapers from the Internet
  This is a GUI Java-based application for downloading, managing and setting wallpapers from different sources.
-Depends: openjdk-8-jre | oracle-java8-installer | openjdk-9-jre | oracle-java9-installer
 Homepage: https://bitbucket.org/eloy_garcia_pca/wallpaperdownloader
