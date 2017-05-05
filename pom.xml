@@ -41,9 +41,9 @@
 		</dependency>
 		<!-- FileUtils support and more for easier file management -->
 		<dependency>
-			<groupId>org.apache.directory.studio</groupId>
-			<artifactId>org.apache.commons.io</artifactId>
-			<version>2.4</version>
+		    <groupId>commons-io</groupId>
+		    <artifactId>commons-io</artifactId>
+		    <version>2.5</version>
 		</dependency>
 		<!-- JSoup - HTML JQuery styled parsing -->
 		<dependency>
@@ -98,7 +98,6 @@
 				      </manifest>
 				    </archive>
 			      </configuration>
-
 			    </execution>
 			  </executions>
 			</plugin>
