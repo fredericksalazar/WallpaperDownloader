@@ -70,7 +70,20 @@
                            <source>1.8</source>
                            <target>1.8</target>
                    </configuration>
-           </plugin>       	
+           	</plugin>
+            <!-- Plugin to package and include MANIFEST (needed for Debian packaging only) -->
+            <plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-jar-plugin</artifactId>
+        		<version>3.0.2</version>
+		        <configuration>
+		        	<archive>
+				    	<manifest>
+							<mainClass>es.estoes.wallpaperDownloader.Main</mainClass>
+				    	</manifest>		          
+				    </archive>
+		        </configuration>
+      		</plugin>      	
         	<!-- Plugin to include all the libraries in only one executable jar file -->
             <plugin>
 			  <groupId>org.apache.maven.plugins</groupId>
