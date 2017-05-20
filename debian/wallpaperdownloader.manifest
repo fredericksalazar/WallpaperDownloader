@@ -1,0 +1,3 @@
+usr/share/maven-repo/es/estoes/wallpaperDownloader/wallpaperDownloader/debian/wallpaperDownloader-debian.jar:
+ Class-Path: /usr/share/java/log4j-1.2.jar /usr/share/java/slf4j-api.jar /usr/share/java/slf4j-log4j12.jar /usr/share/java/commons-io.jar /usr/share/java/jsoup.jar /usr/share/java/jna.jar
+ Main-class: es.estoes.wallpaperDownloader.Main

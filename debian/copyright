@@ -1,0 +1,25 @@
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: wallpaperDownloader
+Source: http://maven.apache.org
+
+Files: *
+Copyright: 2017, Eloy García Almadén
+License: GPL-2 or GPL-3
+
+Files: debian/*
+Copyright: 2017, Eloy García Almadén <eloy.garcia.pca@gmail.com>
+License: Apache-2.0
+
+License: Apache-2.0
+ On Debian systems, the full text of the Apache-2.0 license
+ can be found in the file '/usr/share/common-licenses/Apache-2.0'
+
+License: GPL-2
+ On Debian systems, the full text of the GPL-2 license
+ can be found in the file '/usr/share/common-licenses/GPL-2'
+
+License: GPL-3
+ On Debian systems, the full text of the GPL-3 license
+ can be found in the file '/usr/share/common-licenses/GPL-3'
+
+

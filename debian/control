@@ -1,0 +1,21 @@
+Source: wallpaperdownloader
+Section: misc
+Priority: optional
+Maintainer: Eloy García Almadén <eloy.garcia.pca@gmail.com>
+Uploaders: Eloy García Almadén <eloy.garcia.pca@gmail.com>
+Build-Depends: debhelper (>= 10), default-jdk, maven-debian-helper (>= 2.1)
+Build-Depends-Indep: libcommons-io-java, libjna-java, libjsoup-java, liblog4j1.2-java (>= 1.2.14),  
+ libslf4j-java, junit (>= 3.8.1) 
+Standards-Version: 3.9.8
+Vcs-Git: https://anonscm.debian.org/git/pkg-java/wallpaperdownloader.git
+Vcs-Browser: https://anonscm.debian.org/cgit/pkg-java/wallpaperdownloader.git
+Homepage: https://bitbucket.org/eloy_garcia_pca/wallpaperdownloader
+
+Package: wallpaperdownloader
+Version: 2.7
+Architecture: all
+Depends: ${misc:Depends}, ${maven:Depends}
+Suggests: ${maven:OptionalDepends}
+Installed-Size: 2199
+Description: Download, manage and change your favorite wallpapers from the Internet
+ WallpaperDownloader is a GUI Java-based application for downloading, managing and setting wallpapers from different sources.
