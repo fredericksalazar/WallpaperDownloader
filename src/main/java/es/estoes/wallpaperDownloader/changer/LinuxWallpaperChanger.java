@@ -61,7 +61,8 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 					System.getenv("GDMSESSION").equals(WDUtilities.GDM_SESSION_GNOME_SHELL) || 
 					System.getenv("GDMSESSION").equals(WDUtilities.GDM_SESSION_GNOME_CLASSIC) ||
 					System.getenv("GDMSESSION").equals(WDUtilities.GDM_SESSION_GNOME_FALLBACK) ||
-					System.getenv("GDMSESSION").equals(WDUtilities.GDM_SESSION_GNOME_XORG)) {
+					System.getenv("GDMSESSION").equals(WDUtilities.GDM_SESSION_GNOME_XORG) ||
+					System.getenv("GDMSESSION").equals(WDUtilities.GDM_SESSION_GNOME_DEFAULT)) {
 					this.setDesktopEnvironment(WDUtilities.DE_GNOME3);	
 				} else {
 					this.setDesktopEnvironment(WDUtilities.DE_GNOME2);
