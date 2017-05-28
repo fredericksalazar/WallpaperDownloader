@@ -7,8 +7,8 @@ Build-Depends: debhelper (>= 10), default-jdk, maven-debian-helper (>= 2.1)
 Build-Depends-Indep: libcommons-io-java, libjna-java, libjsoup-java, liblog4j1.2-java (>= 1.2.14),  
  libslf4j-java, junit (>= 3.8.1) 
 Standards-Version: 3.9.8
-Vcs-Git: https://anonscm.debian.org/git/pkg-java/wallpaperdownloader.git
-Vcs-Browser: https://anonscm.debian.org/cgit/pkg-java/wallpaperdownloader.git
+Vcs-Git: https://eloy_garcia_pca@bitbucket.org/eloy_garcia_pca/wallpaperdownloader.git
+Vcs-Browser: https://bitbucket.org/eloy_garcia_pca/wallpaperdownloader
 Homepage: https://bitbucket.org/eloy_garcia_pca/wallpaperdownloader
 
 Package: wallpaperdownloader
