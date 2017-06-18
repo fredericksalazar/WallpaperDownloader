@@ -583,6 +583,12 @@ public class WDUtilities {
 			case WDUtilities.DE_XFCE:
 				result = Boolean.TRUE;
 				break;
+			case WDUtilities.DE_KDE:
+				result = Boolean.TRUE;
+				break;
+			case WDUtilities.DE_GNOME:
+				result = Boolean.TRUE;
+				break;
 			default:
 				break;
 			}
