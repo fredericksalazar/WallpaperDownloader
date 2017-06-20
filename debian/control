@@ -16,4 +16,5 @@ Architecture: all
 Depends: ${misc:Depends}, ${maven:Depends}
 Suggests: ${maven:OptionalDepends}
 Description: Download, manage and change your favorite wallpapers from the Internet
- WallpaperDownloader is a GUI Java-based application for downloading, managing and setting wallpapers from different sources.
+ WallpaperDownloader is a GUI Java-based application for downloading, managing and setting 
+ wallpapers from different sources.
