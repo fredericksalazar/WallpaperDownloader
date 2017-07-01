@@ -81,9 +81,10 @@
             <plugin>
 			  <groupId>org.apache.maven.plugins</groupId>
 			  <artifactId>maven-assembly-plugin</artifactId>
+			  <version>3.0.0</version>
 			  <executions>
 			    <execution>
-			      <id>create-my-bundle</id>
+			      <id>jar-with-dependencies</id>
 			      <!-- All the libraries will be included within package stage -->
 			      <phase>package</phase>
 			      <goals>
@@ -104,6 +105,24 @@
 				      </manifest>
 				    </archive>
 			      </configuration>
+			    </execution>
+
+			    <execution>
+			      <id>tar-gz</id>
+			      <!-- All the libraries will be included within package stage -->
+			      <phase>package</phase>
+			      <goals>
+			        <goal>single</goal>
+			      </goals>
+				  <configuration>
+				  	<descriptors>
+				  		<descriptor>src/assembly/targz.xml</descriptor>
+				  	</descriptors>
+			        <!-- Final name for the tar.gz file -->
+				    <finalName>wallpaperdownloader-${project.version}</finalName>
+			        <!-- Avoid suffix for the final name -->
+        			<appendAssemblyId>false</appendAssemblyId>
+				  </configuration>
 			    </execution>
 			  </executions>
 			</plugin>

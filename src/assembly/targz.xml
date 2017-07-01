@@ -1,0 +1,31 @@
+<assembly>
+	<id>tar-gz</id>
+	<formats>
+	  <format>tar.gz</format>
+	</formats>
+	<includeBaseDirectory>true</includeBaseDirectory>
+	<fileSets>
+	  <fileSet>
+	    <directory>src</directory>
+	    <outputDirectory>/src</outputDirectory>
+	    <excludes>
+        	<exclude>test/**</exclude>
+        </excludes>
+	  </fileSet>
+	  <fileSet>
+	    <directory>${project.basedir}</directory>
+	    <outputDirectory>/</outputDirectory>
+	    <excludes>
+        	<exclude>aur/**</exclude>
+        	<exclude>deb/**</exclude>
+        	<exclude>debian/**</exclude>
+        	<exclude>src/**</exclude>
+        	<exclude>target/**</exclude>
+        	<exclude>snap/**</exclude>
+        	<exclude>.settings/**</exclude>
+        	<exclude>wallpaperdownloader.jar</exclude>
+        	<exclude>.*</exclude>
+        </excludes>
+	  </fileSet>
+	</fileSets>
+</assembly>
