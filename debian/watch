@@ -1,3 +1,2 @@
 version=3
-opts="mode=git,repack,compression=xz" https://bitbucket.org/eloy_garcia_pca/wallpaperdownloader.git
-refs/tags/([\d\.]+)
+https://bitbucket.org/eloy_garcia_pca/wallpaperdownloader/downloads?tab=tags .*/v?(\d\S+)\.tar\.gz
