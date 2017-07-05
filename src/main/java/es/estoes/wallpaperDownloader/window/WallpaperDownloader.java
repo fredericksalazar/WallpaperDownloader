@@ -78,19 +78,13 @@ import java.text.NumberFormat;
 import javax.swing.JLabel;
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.ToolTip;
 import org.eclipse.swt.widgets.Tray;
-import org.eclipse.swt.widgets.TrayItem;
-
 import javax.swing.JComboBox;
 import java.text.Format;
 import java.util.ArrayList;
@@ -1558,205 +1552,208 @@ public class WallpaperDownloader {
 	 * Minimizes application.
 	 */
 	public static void minimizeApplication() {
-//////////////////////////////////////////////////
-		// Hiding window
-		window.frame.setVisible(false);
-		Display.setAppName("WallpaperDownloader");
-		Display display = new Display ();
-		Shell shell = new Shell (display);
-		InputStream iconInputStream = WallpaperDownloader.class.getResourceAsStream("/images/icons/wd_systemtray_icon.png");
-		org.eclipse.swt.graphics.Image icon = new org.eclipse.swt.graphics.Image(display, iconInputStream);
-		final Tray tray = display.getSystemTray();
-		if (tray == null) {
-			System.out.println ("The system tray is not available");
-		} else {
-			
-			final org.eclipse.swt.widgets.TrayItem item = new org.eclipse.swt.widgets.TrayItem (tray, SWT.NONE);
-			item.setImage(icon);
-			item.setToolTipText("WallpaperDownloader");
-			item.addListener (SWT.Show, event -> System.out.println("show"));
-			item.addListener (SWT.Hide, event -> System.out.println("hide"));
-			item.addListener (SWT.Selection, event -> System.out.println("selection"));
-			item.addListener (SWT.DefaultSelection, new Listener () {          
-	            public void handleEvent (Event e) {
-                	int state = window.frame.getExtendedState();  
-                	state = state & ~Frame.ICONIFIED;  
-                	window.frame.setExtendedState(state);  
-                	window.frame.setVisible(true);
-                	
-                	// Removing system tray icon
-                	tray.dispose();
-                	shell.dispose();
-                	display.dispose();
-	            
-	            }
-			});
-			final Menu menu = new Menu (shell, SWT.POP_UP);
-			for (int i = 0; i < 8; i++) {
-				MenuItem mi = new MenuItem (menu, SWT.PUSH);
-				mi.setText ("Item" + i);
-				mi.addListener (SWT.Selection, event -> System.out.println("selection " + event.widget));
-				if (i == 0) menu.setDefaultItem(mi);
-			}
-			item.addListener (SWT.MenuDetect, event -> menu.setVisible (true));
-		}
-		while (!shell.isDisposed ()) {
-			if (!display.readAndDispatch ()) display.sleep ();
-		}
-		display.dispose ();
-		//////////////////////////////////////////
+		final PreferencesManager prefm = PreferencesManager.getInstance();
 		
-		
-		
-		
-//		final PreferencesManager prefm = PreferencesManager.getInstance();
-//		
-//		// The application is minimized within System Tray
-//        //Check the SystemTray is supported
-//        if (!SystemTray.isSupported() || !WDUtilities.isMinimizable()) {
-//            LOG.error("SystemTray is not supported. Frame is traditionally minimized");
-//            // Frame is traditionally minimized
-//            //window.frame.setState(Frame.ICONIFIED);
-//            window.frame.setState(Frame.ICONIFIED);
-//
-//            return;
-//        } else {
-//            final PopupMenu popup = new PopupMenu();
-//            URL systemTrayIcon = WallpaperDownloader.class.getResource("/images/icons/wd_systemtray_icon.png");
-//            final TrayIcon trayIcon = new TrayIcon(new ImageIcon(systemTrayIcon, "Wallpaper Downloader").getImage(), "Wallpaper Downloader");
-//            final SystemTray tray = SystemTray.getSystemTray();
-//           
-//            // Create a pop-up menu components -- BEGIN
-//            // Maximize
-//            MenuItem maximizeItem = new MenuItem("Maximize");
-//            maximizeItem.addActionListener(new ActionListener() {
-//            	public void actionPerformed(ActionEvent evt) {
-//                	int state = window.frame.getExtendedState();  
-//                	state = state & ~Frame.ICONIFIED;  
-//                	window.frame.setExtendedState(state);  
-//                	window.frame.setVisible(true);
-//                	
-//                	// Removing system tray icon
-//                	tray.remove(trayIcon);
-//            	}
-//            });
-//            // Open downloads directory
-//            MenuItem browseItem = new MenuItem("Open downloaded wallpapers");
-//            browseItem.addActionListener(new ActionListener() {
-//            	public void actionPerformed(ActionEvent evt) {
-//            		File downloadsDirectory = new File(WDUtilities.getDownloadsPath());
-//            		Desktop desktop = Desktop.getDesktop();
-//            		try {
-//						desktop.open(downloadsDirectory);
-//					} catch (IOException e) {
-//						// There was some error trying to open the downloads Directory
-//						LOG.error("Error trying to open the Downloads directory. Error: " + e.getMessage());
-//					}
-//            	}
-//            });
-//
-//            popup.add(maximizeItem);
-//            popup.add(browseItem);
-//
-//    		// Pause / Resume
-//            MenuItem resumeItem = new MenuItem("Resume");
-//            MenuItem pauseItem = new MenuItem("Pause");
-//
-//            resumeItem.addActionListener(new ActionListener() {
-//            	public void actionPerformed(ActionEvent evt) {
-//            		resumeDownloadingProcess();
-//            		popup.remove(resumeItem);
-//            		popup.insert(pauseItem, 2);
-//            	}
-//            });
-//
-//            pauseItem.addActionListener(new ActionListener() {
-//            	public void actionPerformed(ActionEvent evt) {
-//            		pauseDownloadingProcess();
-//            		popup.remove(pauseItem);
-//            		popup.insert(resumeItem, 2);
-//            	}
-//            });
-//
-//            if (harvester.getStatus() != Harvester.STATUS_DISABLED) {
-//    			// Checking downloading process
-//    			if (prefm.getPreference("downloading-process").equals(WDUtilities.APP_NO)) {
-//    	            popup.add(resumeItem);
-//    			} else {
-//    	            popup.add(pauseItem);
-//    			}
-//    		}
-//
-//            // Change wallpaper
-//            if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
-//	            MenuItem changeItem = new MenuItem("Change wallpaper randomly");
-//	            changeItem.addActionListener(new ActionListener() {
-//	            	public void actionPerformed(ActionEvent evt) {
-//	            		WDUtilities.getWallpaperChanger().setRandomWallpaper();
-//	            	}
-//	            });
-//	            popup.add(changeItem);
-//            }
-//
-//            // Move favorite wallpapers
-//    		String moveFavoriteEnable = prefm.getPreference("move-favorite");
-//    		if (moveFavoriteEnable.equals(WDUtilities.APP_YES)) {
-//	            MenuItem moveItem = new MenuItem("Move favorite wallpapers");
-//	            moveItem.addActionListener(new ActionListener() {
-//	            	public void actionPerformed(ActionEvent evt) {
-//	            		moveFavoriteWallpapers();
-//	            	}
-//	            });
-//	            popup.add(moveItem);
-//            }
-//    		
-//            popup.addSeparator();
-//
-//            // Exit
-//            MenuItem exitItem = new MenuItem("Exit");
-//            exitItem.addActionListener(new ActionListener() {
-//            	public void actionPerformed(ActionEvent evt) {
-//                	// Removing system tray icon
-//                	tray.remove(trayIcon);
-//
-//    				// The application is closed
-//    				System.exit(0);		                	
-//            	}
-//            });
-//
-//            popup.add(exitItem);
-//
-//            // Create a pop-up menu components -- END
-//
-//            trayIcon.setPopupMenu(popup);
-//            
-//            // Adding a new event. When the user clicks the left button the application window is restored again in the same
-//            // state
-//            MouseAdapter mouseAdapter = new MouseAdapter() {
-//
-//                @Override
-//                public void mouseClicked(MouseEvent e) {
-//                	int state = window.frame.getExtendedState();  
-//                	state = state & ~Frame.ICONIFIED;  
-//                	window.frame.setExtendedState(state);  
-//                	window.frame.setVisible(true);
-//                	
-//                	// Removing system tray icon
-//                	tray.remove(trayIcon);
-//                }
-//            };
-//            trayIcon.addMouseListener(mouseAdapter);
-//            trayIcon.setImageAutoSize(true);
-//           
-//            try {
-//                tray.add(trayIcon);
-//            } catch (AWTException e) {
-//                LOG.error("TrayIcon could not be added.");
-//            }
-//            
-//            // Hiding window
-//            window.frame.setVisible(false);
-//        }
+		// The application is minimized within System Tray
+        //Check the SystemTray is supported
+        if (!SystemTray.isSupported() || !WDUtilities.isMinimizable()) {
+            LOG.error("SystemTray is not supported. Frame is traditionally minimized");
+            // Frame is traditionally minimized
+            //window.frame.setState(Frame.ICONIFIED);
+            window.frame.setState(Frame.ICONIFIED);
+
+            return;
+        } else {
+        	if (WDUtilities.getWallpaperChanger() instanceof LinuxWallpaperChanger) {
+        		LinuxWallpaperChanger wallpaperChanger = (LinuxWallpaperChanger)WDUtilities.getWallpaperChanger();
+        		if (wallpaperChanger.getDesktopEnvironment().equals(WDUtilities.DE_GNOME3) ||
+        			wallpaperChanger.getDesktopEnvironment().equals(WDUtilities.DE_KDE)) {
+        			// GTK3 integration is going to be used for Plasma 5 and Gmone Shell
+        			// Hiding window
+        			window.frame.setVisible(false);
+        			Display.setAppName("WallpaperDownloader");
+        			Display display = new Display ();
+        			Shell shell = new Shell (display);
+        			InputStream iconInputStream = WallpaperDownloader.class.getResourceAsStream("/images/icons/wd_systemtray_icon.png");
+        			org.eclipse.swt.graphics.Image icon = new org.eclipse.swt.graphics.Image(display, iconInputStream);
+        			final Tray tray = display.getSystemTray();
+        			if (tray == null) {
+        				System.out.println ("The system tray is not available");
+        			} else {
+        				
+        				final org.eclipse.swt.widgets.TrayItem item = new org.eclipse.swt.widgets.TrayItem (tray, SWT.NONE);
+        				item.setImage(icon);
+        				item.setToolTipText("WallpaperDownloader");
+        				item.addListener (SWT.Show, event -> System.out.println("show"));
+        				item.addListener (SWT.Hide, event -> System.out.println("hide"));
+        				item.addListener (SWT.Selection, event -> System.out.println("selection"));
+        				item.addListener (SWT.DefaultSelection, new Listener () {          
+        		            public void handleEvent (Event e) {
+        	                	int state = window.frame.getExtendedState();  
+        	                	state = state & ~Frame.ICONIFIED;  
+        	                	window.frame.setExtendedState(state);  
+        	                	window.frame.setVisible(true);
+        	                	
+        	                	// Removing system tray icon
+        	                	tray.dispose();
+        	                	shell.dispose();
+        	                	display.dispose();
+        		            
+        		            }
+        				});
+        				final Menu menu = new Menu (shell, SWT.POP_UP);
+        				for (int i = 0; i < 8; i++) {
+        					MenuItem mi = new MenuItem (menu, SWT.PUSH);
+        					mi.setText ("Item" + i);
+        					mi.addListener (SWT.Selection, event -> System.out.println("selection " + event.widget));
+        					if (i == 0) menu.setDefaultItem(mi);
+        				}
+        				item.addListener (SWT.MenuDetect, event -> menu.setVisible (true));
+        			}
+        			while (!shell.isDisposed ()) {
+        				if (!display.readAndDispatch ()) display.sleep ();
+        			}
+        			display.dispose ();
+        		} else {
+        			// For the rest of DE, legacy mode will be used
+                    final PopupMenu popup = new PopupMenu();
+                    URL systemTrayIcon = WallpaperDownloader.class.getResource("/images/icons/wd_systemtray_icon.png");
+                    final TrayIcon trayIcon = new TrayIcon(new ImageIcon(systemTrayIcon, "Wallpaper Downloader").getImage(), "Wallpaper Downloader");
+                    final SystemTray tray = SystemTray.getSystemTray();
+                   
+                    // Create a pop-up menu components -- BEGIN
+                    // Maximize
+                    java.awt.MenuItem maximizeItem = new java.awt.MenuItem("Maximize");
+                    maximizeItem.addActionListener(new ActionListener() {
+                    	public void actionPerformed(ActionEvent evt) {
+                        	int state = window.frame.getExtendedState();  
+                        	state = state & ~Frame.ICONIFIED;  
+                        	window.frame.setExtendedState(state);  
+                        	window.frame.setVisible(true);
+                        	
+                        	// Removing system tray icon
+                        	tray.remove(trayIcon);
+                    	}
+                    });
+                    // Open downloads directory
+                    java.awt.MenuItem browseItem = new java.awt.MenuItem("Open downloaded wallpapers");
+                    browseItem.addActionListener(new ActionListener() {
+                    	public void actionPerformed(ActionEvent evt) {
+                    		File downloadsDirectory = new File(WDUtilities.getDownloadsPath());
+                    		Desktop desktop = Desktop.getDesktop();
+                    		try {
+        						desktop.open(downloadsDirectory);
+        					} catch (IOException e) {
+        						// There was some error trying to open the downloads Directory
+        						LOG.error("Error trying to open the Downloads directory. Error: " + e.getMessage());
+        					}
+                    	}
+                    });
+
+                    popup.add(maximizeItem);
+                    popup.add(browseItem);
+
+            		// Pause / Resume
+                    java.awt.MenuItem resumeItem = new java.awt.MenuItem("Resume");
+                    java.awt.MenuItem pauseItem = new java.awt.MenuItem("Pause");
+
+                    resumeItem.addActionListener(new ActionListener() {
+                    	public void actionPerformed(ActionEvent evt) {
+                    		resumeDownloadingProcess();
+                    		popup.remove(resumeItem);
+                    		popup.insert(pauseItem, 2);
+                    	}
+                    });
+
+                    pauseItem.addActionListener(new ActionListener() {
+                    	public void actionPerformed(ActionEvent evt) {
+                    		pauseDownloadingProcess();
+                    		popup.remove(pauseItem);
+                    		popup.insert(resumeItem, 2);
+                    	}
+                    });
+
+                    if (harvester.getStatus() != Harvester.STATUS_DISABLED) {
+            			// Checking downloading process
+            			if (prefm.getPreference("downloading-process").equals(WDUtilities.APP_NO)) {
+            	            popup.add(resumeItem);
+            			} else {
+            	            popup.add(pauseItem);
+            			}
+            		}
+
+                    // Change wallpaper
+                    if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
+                    	java.awt.MenuItem changeItem = new java.awt.MenuItem("Change wallpaper randomly");
+        	            changeItem.addActionListener(new ActionListener() {
+        	            	public void actionPerformed(ActionEvent evt) {
+        	            		WDUtilities.getWallpaperChanger().setRandomWallpaper();
+        	            	}
+        	            });
+        	            popup.add(changeItem);
+                    }
+
+                    // Move favorite wallpapers
+            		String moveFavoriteEnable = prefm.getPreference("move-favorite");
+            		if (moveFavoriteEnable.equals(WDUtilities.APP_YES)) {
+            			java.awt.MenuItem moveItem = new java.awt.MenuItem("Move favorite wallpapers");
+        	            moveItem.addActionListener(new ActionListener() {
+        	            	public void actionPerformed(ActionEvent evt) {
+        	            		moveFavoriteWallpapers();
+        	            	}
+        	            });
+        	            popup.add(moveItem);
+                    }
+            		
+                    popup.addSeparator();
+
+                    // Exit
+                    java.awt.MenuItem exitItem = new java.awt.MenuItem("Exit");
+                    exitItem.addActionListener(new ActionListener() {
+                    	public void actionPerformed(ActionEvent evt) {
+                        	// Removing system tray icon
+                        	tray.remove(trayIcon);
+
+            				// The application is closed
+            				System.exit(0);		                	
+                    	}
+                    });
+
+                    popup.add(exitItem);
+
+                    // Create a pop-up menu components -- END
+
+                    trayIcon.setPopupMenu(popup);
+                    
+                    // Adding a new event. When the user clicks the left button the application window is restored again in the same
+                    // state
+                    MouseAdapter mouseAdapter = new MouseAdapter() {
+
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                        	int state = window.frame.getExtendedState();  
+                        	state = state & ~Frame.ICONIFIED;  
+                        	window.frame.setExtendedState(state);  
+                        	window.frame.setVisible(true);
+                        	
+                        	// Removing system tray icon
+                        	tray.remove(trayIcon);
+                        }
+                    };
+                    trayIcon.addMouseListener(mouseAdapter);
+                    trayIcon.setImageAutoSize(true);
+                   
+                    try {
+                        tray.add(trayIcon);
+                    } catch (AWTException e) {
+                        LOG.error("TrayIcon could not be added.");
+                    }
+                    
+                    // Hiding window
+                    window.frame.setVisible(false);
+        		}
+        	}
+        }
 	}
 	
 	private static void moveFavoriteWallpapers() {
