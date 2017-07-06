@@ -589,6 +589,9 @@ public class WDUtilities {
 			case WDUtilities.DE_GNOME:
 				result = Boolean.TRUE;
 				break;
+			case WDUtilities.DE_GNOME3:
+				result = Boolean.TRUE;
+				break;
 			default:
 				break;
 			}
