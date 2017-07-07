@@ -17,8 +17,11 @@
 package es.estoes.wallpaperDownloader.util;
 
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -662,6 +665,24 @@ public class WDUtilities {
 	public static Integer getLevelOfNotifications() {
 		PreferencesManager prefm = PreferencesManager.getInstance();
 		return new Integer(prefm.getPreference("application-notifications"));
+	}
+
+	/**
+	 * Scales an image.
+	 * @param srcImg original image
+	 * @param width width to scale the image
+	 * @param height height to scale the image
+	 * @return Image scaled image
+	 */
+	public static Image getScaledImage(Image srcImg, int width, int height){
+	    BufferedImage resizedImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+	    Graphics2D g2 = resizedImg.createGraphics();
+
+	    g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+	    g2.drawImage(srcImg, 0, 0, width, height, null);
+	    g2.dispose();
+
+	    return resizedImg;
 	}
 
 }

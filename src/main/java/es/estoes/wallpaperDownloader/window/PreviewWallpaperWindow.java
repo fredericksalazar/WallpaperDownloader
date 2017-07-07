@@ -29,8 +29,6 @@ import javax.swing.JButton;
 import es.estoes.wallpaperDownloader.util.WDUtilities;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -88,20 +86,12 @@ public class PreviewWallpaperWindow extends JFrame {
 		previewPanel.setBounds(12, 0, 992, 693);
 		getContentPane().add(previewPanel);
 
-		// Loading image to preview it
-		BufferedImage bufferedImage = null;
+		// Resizing image
+		ImageIcon imageIcon = new ImageIcon(wallpaperSelectedAbsolutePath);
 		
-		try {
-		    bufferedImage = ImageIO.read(new File(this.getWallpaperToPreview()));
-		} catch (IOException e) {
-		    e.printStackTrace();
-		}
-		
-		// Resizing buffered image
-		Image resizedImage = bufferedImage.getScaledInstance(992, 693, Image.SCALE_SMOOTH);
-		ImageIcon previewImage = new ImageIcon(resizedImage);		
-		
-		JLabel previewLabel = new JLabel("", previewImage, JLabel.CENTER);
+		Image scaledImage = WDUtilities.getScaledImage(imageIcon.getImage(), 992, 693);
+		ImageIcon icon = new ImageIcon(scaledImage);
+		JLabel previewLabel = new JLabel("", icon, JLabel.CENTER);
 		previewPanel.add(previewLabel, BorderLayout.CENTER);		
 
 		btnRemoveWallpaper = new JButton();
@@ -217,5 +207,5 @@ public class PreviewWallpaperWindow extends JFrame {
 		  });	  
 		}
 		
-	}
+	}	
 }
