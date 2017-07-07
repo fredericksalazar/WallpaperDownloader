@@ -32,7 +32,6 @@ import javax.swing.border.Border;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
-
 import es.estoes.wallpaperDownloader.changer.ChangerDaemon;
 import es.estoes.wallpaperDownloader.changer.LinuxWallpaperChanger;
 import es.estoes.wallpaperDownloader.harvest.Harvester;
@@ -56,7 +55,6 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Image;
 import java.awt.Insets;
-//import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.Rectangle;
 import java.awt.SystemTray;
@@ -1572,34 +1570,35 @@ public class WallpaperDownloader {
         			// Hiding window
         			window.frame.setVisible(false);
         			Display.setAppName("WallpaperDownloader");
-        			Display display = new Display ();
-        			Shell shell = new Shell (display);
+        			Display display = new Display();
+        			Shell shell = new Shell(display);
         			InputStream iconInputStream = WallpaperDownloader.class.getResourceAsStream("/images/icons/wd_systemtray_icon.ico");
         			org.eclipse.swt.graphics.Image icon = new org.eclipse.swt.graphics.Image(display, iconInputStream);
         			final Tray tray = display.getSystemTray();
         			if (tray == null) {
         				System.out.println ("The system tray is not available");
         			} else {
+        				// Creating the pop up menu
+        				final Menu menu = new Menu (shell, SWT.POP_UP);
         				
         				final org.eclipse.swt.widgets.TrayItem item = new org.eclipse.swt.widgets.TrayItem (tray, SWT.NONE);
-        				item.setImage(icon);
         				item.setToolTipText("WallpaperDownloader");
         				item.addListener (SWT.DefaultSelection, new Listener () {          
-        		            public void handleEvent (Event e) {
+        		            public void handleEvent (Event e) {        	                	
+        	                	// Removing system tray icon and all stuff related
+        		            	item.dispose();
+        		            	icon.dispose();
+        		            	menu.dispose();
+        	                	tray.dispose();
+        	                	shell.dispose();
+        	                	display.dispose();
+        	                	
         	                	int state = window.frame.getExtendedState();  
         	                	state = state & ~Frame.ICONIFIED;  
         	                	window.frame.setExtendedState(state);  
         	                	window.frame.setVisible(true);
-        	                	
-        	                	// Removing system tray icon
-        	                	tray.dispose();
-        	                	shell.dispose();
-        	                	display.dispose();
-        		            
         		            }
         				});
-        				// Creating the pop up menu
-        				final Menu menu = new Menu (shell, SWT.POP_UP);
         				
         				// Adding options to the menu
         				// Maximize
@@ -1607,18 +1606,20 @@ public class WallpaperDownloader {
         				maximize.setText ("Maximize");
         				maximize.addListener (SWT.Selection, new Listener () {          
         		            public void handleEvent (Event e) {
+        	                	// Removing system tray icon and all stuff related
+        		            	item.dispose();
+        		            	icon.dispose();
+        		            	menu.dispose();
+        	                	tray.dispose();
+        	                	shell.dispose();
+        	                	display.dispose();
+        	                	
         	                	int state = window.frame.getExtendedState();  
         	                	state = state & ~Frame.ICONIFIED;  
         	                	window.frame.setExtendedState(state);  
         	                	window.frame.setVisible(true);
-        	                	
-        	                	// Removing system tray icon
-        	                	tray.dispose();
-        	                	shell.dispose();
-        	                	display.dispose();
         		            }
         				});
-        				menu.setDefaultItem(maximize);
 
         				// Open downloaded wallpapers
         				MenuItem open = new MenuItem (menu, SWT.PUSH);
@@ -1695,7 +1696,10 @@ public class WallpaperDownloader {
     					exit.setText ("Exit");
         				exit.addListener (SWT.Selection, new Listener () {          
         		            public void handleEvent (Event e) {
-        	                	// Removing system tray icon
+        	                	// Removing system tray icon and all stuff related
+        		            	icon.dispose();
+        		            	item.dispose();
+        		            	menu.dispose();
         	                	tray.dispose();
         	                	shell.dispose();
         	                	display.dispose();
@@ -1705,11 +1709,20 @@ public class WallpaperDownloader {
         		            }
         				});
 
-        				item.addListener (SWT.MenuDetect, event -> menu.setVisible (true));
+        			    item.addListener(SWT.MenuDetect, new Listener() {
+        			    	public void handleEvent(Event event) {
+        			    		menu.setVisible(true);
+        			        }
+        			    });
+        			    
+        				item.setImage(icon);
         			}
+        			
         			while (!shell.isDisposed ()) {
         				if (!display.readAndDispatch ()) display.sleep ();
         			}
+        			
+        			icon.dispose();
         			display.dispose ();
         		} else {
         			// For the rest of DE, legacy mode will be used
