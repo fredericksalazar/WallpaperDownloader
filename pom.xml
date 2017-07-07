@@ -59,9 +59,9 @@
 		</dependency>
 		<!-- SWT for GTK interaction and Java, primarly for implementing system tray icon in GNOME and Plasma 5 -->		
 		<dependency>
-			<groupId>org.eclipse.swt.gtk.linux</groupId>
-			<artifactId>x86_64</artifactId>
-			<version>3.3.0-v3346</version>
+			<groupId>org.eclipse.swt</groupId>
+			<artifactId>org.eclipse.swt.gtk.linux.x86_64</artifactId>
+			<version>4.3</version>
 		</dependency>
 	</dependencies>
 
