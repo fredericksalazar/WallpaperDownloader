@@ -65,7 +65,7 @@ public class PreviewWallpaperWindow extends JFrame {
 	 * Constructor
 	 * @param wallpaperSelectedAbsolutePath 
 	 */
-	public PreviewWallpaperWindow(String wallpaperSelectedAbsolutePath, WallpaperManagerWindow wallpaperManagerWindow) {
+	public PreviewWallpaperWindow(String wallpaperSelectedAbsolutePath, Object wallpaperManagerWindow) {
 		// Setting wallpaperToRemove
 		this.setWallpaperToPreview(wallpaperSelectedAbsolutePath);
 		
@@ -116,9 +116,9 @@ public class PreviewWallpaperWindow extends JFrame {
 				List<String> wallpaperToRemoveList = new ArrayList<String>();
 				wallpaperToRemoveList.add(wallpaperToPreview);
 				WDUtilities.removeWallpaper(wallpaperToRemoveList, Boolean.TRUE);
-				if (wallpaperManagerWindow != null) {
-					wallpaperManagerWindow.refreshFavoriteWallpapers();
-					wallpaperManagerWindow.refreshNoFavoriteWallpapers();
+				if ( wallpaperManagerWindow != null && wallpaperManagerWindow instanceof WallpaperManagerWindow) {
+					((WallpaperManagerWindow)wallpaperManagerWindow).refreshFavoriteWallpapers();
+					((WallpaperManagerWindow)wallpaperManagerWindow).refreshNoFavoriteWallpapers();
 				}
 				dispose();
 			}
@@ -144,9 +144,9 @@ public class PreviewWallpaperWindow extends JFrame {
 					List<String> favoriteWallpaperList = new ArrayList<String>();
 					favoriteWallpaperList.add(wallpaperToPreview);
 					WDUtilities.setNoFavorite(favoriteWallpaperList);
-					if (wallpaperManagerWindow != null) {
-						wallpaperManagerWindow.refreshFavoriteWallpapers();
-						wallpaperManagerWindow.refreshNoFavoriteWallpapers();
+					if ( wallpaperManagerWindow != null && wallpaperManagerWindow instanceof WallpaperManagerWindow) {
+						((WallpaperManagerWindow)wallpaperManagerWindow).refreshFavoriteWallpapers();
+						((WallpaperManagerWindow)wallpaperManagerWindow).refreshNoFavoriteWallpapers();
 					}
 					dispose();
 				}
@@ -171,9 +171,9 @@ public class PreviewWallpaperWindow extends JFrame {
 					List<String> noFavoriteWallpaperList = new ArrayList<String>();
 					noFavoriteWallpaperList.add(wallpaperToPreview);
 					WDUtilities.setFavorite(noFavoriteWallpaperList);
-					if (wallpaperManagerWindow != null) {
-						wallpaperManagerWindow.refreshFavoriteWallpapers();
-						wallpaperManagerWindow.refreshNoFavoriteWallpapers();
+					if ( wallpaperManagerWindow != null && wallpaperManagerWindow instanceof WallpaperManagerWindow) {
+						((WallpaperManagerWindow)wallpaperManagerWindow).refreshFavoriteWallpapers();
+						((WallpaperManagerWindow)wallpaperManagerWindow).refreshNoFavoriteWallpapers();
 					}
 					dispose();
 				}

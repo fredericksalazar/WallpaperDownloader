@@ -172,6 +172,7 @@ public class WallpaperDownloader {
 	private JButton btnAddDirectory;
 	private JButton btnRemoveDirectory;
 	private JPanel appSettingsPanel;
+	private JButton btnChooseWallpaper;
 	
 	// Getters & Setters
 	public JFrame getFrame() {
@@ -778,6 +779,11 @@ public class WallpaperDownloader {
 		btnMoveWallpapers.setBackground(Color.WHITE);
 		btnMoveWallpapers.setBounds(12, 276, 197, 25);
 		wallpapersPanel.add(btnMoveWallpapers);
+		
+		btnChooseWallpaper = new JButton("Choose Wallpaper");
+		btnChooseWallpaper.setBackground(Color.WHITE);
+		btnChooseWallpaper.setBounds(12, 313, 197, 25);
+		wallpapersPanel.add(btnChooseWallpaper);
 
 		btnSetWallpaper = new JButton();
 
@@ -1492,6 +1498,15 @@ public class WallpaperDownloader {
 				}
 	      });
 
+			/**
+			 * btnChooseWallpaper Action Listener.
+			 */
+			btnChooseWallpaper.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					ChooseWallpaperWindow wmw = new ChooseWallpaperWindow();
+					wmw.setVisible(true);
+				}
+			});
 	}
 
 	/**
