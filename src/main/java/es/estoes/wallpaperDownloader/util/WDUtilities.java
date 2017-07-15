@@ -38,6 +38,7 @@ import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.log4j.Logger;
 import es.estoes.wallpaperDownloader.changer.LinuxWallpaperChanger;
 import es.estoes.wallpaperDownloader.changer.WallpaperChanger;
+import es.estoes.wallpaperDownloader.window.ChooseWallpaperWindow;
 import es.estoes.wallpaperDownloader.window.DialogManager;
 import es.estoes.wallpaperDownloader.window.WallpaperDownloader;
 import es.estoes.wallpaperDownloader.window.WallpaperManagerWindow;
@@ -211,6 +212,8 @@ public class WDUtilities {
 		if (wallpapersType.equals(WDUtilities.WD_ALL)) {
 			wallpapers = (List<File>) FileUtils.listFiles(downloadDirectory, FileFilterUtils.prefixFileFilter(WDUtilities.WD_FAVORITE_PREFIX), null);
 			wallpapers.addAll((List<File>) FileUtils.listFiles(downloadDirectory, FileFilterUtils.prefixFileFilter(WDUtilities.WD_PREFIX), null));
+			// Adding total number of favorite wallpapers to ChooseWallpaperWindow if it exists
+			ChooseWallpaperWindow.refreshWallpapersTotalNumber(wallpapers.size());				
 		} else {
 			wallpapers = (List<File>) FileUtils.listFiles(downloadDirectory, FileFilterUtils.prefixFileFilter(wallpapersType), null);
 			
@@ -454,11 +457,16 @@ public class WDUtilities {
 		int to = from + numWallpapers;
 		int j = 0;
 		
-		if (sort.equals(SORTING_BY_DATE)) {
+		switch (sort) {
+		case SORTING_BY_DATE:
 			wallpapers = getAllWallpapersSortedByDate(wallpapersType);
-		} else {
+			break;
+		case SORTING_NO_SORTING:
 			List<File> wallpapersList = getAllWallpapers(wallpapersType, WDUtilities.DOWNLOADS_DIRECTORY);
 			wallpapers = wallpapersList.toArray(wallpapers);
+			break;
+		default:
+			break;
 		}
 		
 		int wallpapersLength = wallpapers.length;
