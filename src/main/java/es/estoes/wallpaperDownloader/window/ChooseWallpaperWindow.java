@@ -316,7 +316,7 @@ public class ChooseWallpaperWindow extends JFrame {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void refreshWallpapers() {
-		ImageIcon[] wallpapers = WDUtilities.getImageIconWallpapers(20, Integer.valueOf(lblFirstWallpaper.getText()) - 1, WDUtilities.SORTING_NO_SORTING, WDUtilities.WD_ALL);
+		ImageIcon[] wallpapers = WDUtilities.getImageIconWallpapers(20, Integer.valueOf(lblFirstWallpaper.getText()) - 1, WDUtilities.SORTING_MULTIPLE_DIR, WDUtilities.WD_ALL);
 		wallpapersList = new JList(wallpapers);
 		changePointerJList();
 		wallpapersScrollPanel.setViewportView(wallpapersList);

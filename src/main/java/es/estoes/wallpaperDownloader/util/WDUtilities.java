@@ -73,6 +73,7 @@ public class WDUtilities {
 	public static final String WD_FAVORITE_PREFIX = "fwd-";
 	public static final String SORTING_BY_DATE = "sort_by_date";
 	public static final String SORTING_NO_SORTING = "no_sorting";
+	public static final String SORTING_MULTIPLE_DIR = "multiple_directories";
 	public static final String WD_ALL = "all";
 	public static final int STATUS_CODE_200 = 200;
 	public static final CharSequence SNAP_KEY = "snap";
@@ -100,6 +101,9 @@ public class WDUtilities {
 	public static final String MOVE_DIRECTORY = "move_directory";
 	public static final String PLASMA_SCRIPT = "plasma-changer.sh";
 	public static final String SCRIPT_LOCATION = "/scripts/";
+	public static final String IMG_JPG_SUFFIX = "jpg";
+	public static final String IMG_JEPG_SUFFIX = "jpeg";
+	public static final String IMG_PNG_SUFFIX = "png";
 
 	// Attributes
 	private static String appPath;
@@ -210,22 +214,11 @@ public class WDUtilities {
 		}
 		List<File> wallpapers = new ArrayList<File>();
 		if (wallpapersType.equals(WDUtilities.WD_ALL)) {
-			wallpapers = (List<File>) FileUtils.listFiles(downloadDirectory, FileFilterUtils.prefixFileFilter(WDUtilities.WD_FAVORITE_PREFIX), null);
-			wallpapers.addAll((List<File>) FileUtils.listFiles(downloadDirectory, FileFilterUtils.prefixFileFilter(WDUtilities.WD_PREFIX), null));
-			// Adding total number of favorite wallpapers to ChooseWallpaperWindow if it exists
-			ChooseWallpaperWindow.refreshWallpapersTotalNumber(wallpapers.size());				
+			wallpapers = (List<File>) FileUtils.listFiles(downloadDirectory, FileFilterUtils.suffixFileFilter(WDUtilities.IMG_JEPG_SUFFIX), null);
+			wallpapers.addAll((List<File>) FileUtils.listFiles(downloadDirectory, FileFilterUtils.suffixFileFilter(WDUtilities.IMG_JPG_SUFFIX), null));
+			wallpapers.addAll((List<File>) FileUtils.listFiles(downloadDirectory, FileFilterUtils.suffixFileFilter(WDUtilities.IMG_PNG_SUFFIX), null));
 		} else {
 			wallpapers = (List<File>) FileUtils.listFiles(downloadDirectory, FileFilterUtils.prefixFileFilter(wallpapersType), null);
-			
-			if (wallpapersType.equals(WDUtilities.WD_FAVORITE_PREFIX)) {
-				// Adding total number of favorite wallpapers to WallpaperManagerWindow if it exists
-				WallpaperManagerWindow.refreshFavoriteWallpapersTotalNumber(wallpapers.size());				
-			} else if (wallpapersType.equals(WDUtilities.WD_PREFIX) && WallpaperManagerWindow.lblTotalNoFavoriteWallpapers != null) {
-				// Adding total number of no favorite wallpapers to WallpaperManagerWindow if it exists only if WallpaperManagerWindow has been
-				// instantiated
-				WallpaperManagerWindow.refreshNoFavoriteWallpapersTotalNumber(wallpapers.size());				
-			}
-
 		}
 				
 		return wallpapers;
@@ -445,7 +438,7 @@ public class WDUtilities {
 	}
 	
 /**
- * Get the image icon fo the last numWallpapers wallpapers downloaded.
+ * Get the image icon for the wallpapers.
  * @param numWallpapers number of wallpapers
  * @param from first wallpaper to get
  * @param sort sorting
@@ -454,6 +447,7 @@ public class WDUtilities {
  */
 	public static ImageIcon[] getImageIconWallpapers(int numWallpapers, int from, String sort, String wallpapersType) {
 		File[] wallpapers = {};
+		List<File> wallpapersList = new ArrayList<File>();
 		int to = from + numWallpapers;
 		int j = 0;
 		
@@ -462,8 +456,42 @@ public class WDUtilities {
 			wallpapers = getAllWallpapersSortedByDate(wallpapersType);
 			break;
 		case SORTING_NO_SORTING:
-			List<File> wallpapersList = getAllWallpapers(wallpapersType, WDUtilities.DOWNLOADS_DIRECTORY);
+			wallpapersList = getAllWallpapers(wallpapersType, WDUtilities.DOWNLOADS_DIRECTORY);
 			wallpapers = wallpapersList.toArray(wallpapers);
+			break;
+		case SORTING_MULTIPLE_DIR:
+			// Retrieves all the wallpapers stored on different directories set by the user in the changer
+			// property
+			PreferencesManager prefm = PreferencesManager.getInstance();
+			String changerFoldersProperty = prefm.getPreference("application-changer-folder");
+			String[] changerFolders = changerFoldersProperty.split(";");
+			for (int index = 0; index < changerFolders.length; index ++) {
+				String directory = changerFolders[index];
+				wallpapersList.addAll(getAllWallpapers(wallpapersType, directory));
+			}
+			wallpapers = wallpapersList.toArray(wallpapers);
+			break;
+		default:
+			break;
+		}
+		
+		switch (wallpapersType) {
+		case WDUtilities.WD_ALL:
+			// Adding total number of favorite wallpapers to ChooseWallpaperWindow if it exists
+			ChooseWallpaperWindow.refreshWallpapersTotalNumber(wallpapers.length);				
+			break;
+		case WDUtilities.WD_FAVORITE_PREFIX:
+			// Adding total number of favorite wallpapers to WallpaperManagerWindow if it exists
+			WallpaperManagerWindow.refreshFavoriteWallpapersTotalNumber(wallpapers.length);				
+			break;
+		case WDUtilities.WD_PREFIX:
+			if (WallpaperManagerWindow.lblTotalNoFavoriteWallpapers != null) {
+				// Adding total number of no favorite wallpapers to WallpaperManagerWindow if it exists only if WallpaperManagerWindow has been
+				// instantiated
+				WallpaperManagerWindow.refreshNoFavoriteWallpapersTotalNumber(wallpapers.length);				
+			}
+			// Adding total number of favorite wallpapers to ChooseWallpaperWindow if it exists
+			ChooseWallpaperWindow.refreshWallpapersTotalNumber(wallpapers.length);				
 			break;
 		default:
 			break;
