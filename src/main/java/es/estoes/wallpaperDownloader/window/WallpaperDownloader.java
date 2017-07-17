@@ -1706,6 +1706,52 @@ public class WallpaperDownloader {
             				});
                         }
 
+                		// Manage downloaded wallpapers
+        				MenuItem manage = new MenuItem (menu, SWT.PUSH);
+    					manage.setText ("Manage downloaded wallpapers");
+        				manage.addListener (SWT.Selection, new Listener () {          
+        		            public void handleEvent (Event e) {
+        	                	// Removing system tray icon and all stuff related
+        		            	item.dispose();
+        		            	icon.dispose();
+        		            	menu.dispose();
+        	                	tray.dispose();
+        	                	shell.dispose();
+        	                	display.dispose();
+        	                	
+        	                	int state = window.frame.getExtendedState();  
+        	                	state = state & ~Frame.ICONIFIED;  
+        	                	window.frame.setExtendedState(state);  
+        	                	window.frame.setVisible(true);
+
+                				WallpaperManagerWindow wmw = new WallpaperManagerWindow();
+                				wmw.setVisible(true);
+        		            }
+        				});
+
+                		// Choose wallpaper
+        				MenuItem choose = new MenuItem (menu, SWT.PUSH);
+    					choose.setText ("Choose wallpaper");
+        				choose.addListener (SWT.Selection, new Listener () {          
+        		            public void handleEvent (Event e) {
+        	                	// Removing system tray icon and all stuff related
+        		            	item.dispose();
+        		            	icon.dispose();
+        		            	menu.dispose();
+        	                	tray.dispose();
+        	                	shell.dispose();
+        	                	display.dispose();
+        	                	
+        	                	int state = window.frame.getExtendedState();  
+        	                	state = state & ~Frame.ICONIFIED;  
+        	                	window.frame.setExtendedState(state);  
+        	                	window.frame.setVisible(true);
+
+                				ChooseWallpaperWindow cww = new ChooseWallpaperWindow();
+                				cww.setVisible(true);
+        		            }
+        				});
+
                         // Exit
         				MenuItem exit = new MenuItem (menu, SWT.PUSH);
     					exit.setText ("Exit");
@@ -1829,9 +1875,30 @@ public class WallpaperDownloader {
         	            });
         	            popup.add(moveItem);
                     }
-            		
-                    popup.addSeparator();
 
+            		// Manage downloaded wallpapers
+                    java.awt.MenuItem manageItem = new java.awt.MenuItem("Manage downloaded wallpapers");
+                    manageItem.addActionListener(new ActionListener() {
+                    	public void actionPerformed(ActionEvent evt) {
+            				WallpaperManagerWindow wmw = new WallpaperManagerWindow();
+            				wmw.setVisible(true);                    	
+            			}
+                    });
+                    popup.add(manageItem);
+
+            		// Choose wallpaper
+                    java.awt.MenuItem chooseItem = new java.awt.MenuItem("Choose wallpaper");
+                    chooseItem.addActionListener(new ActionListener() {
+                    	public void actionPerformed(ActionEvent evt) {
+            				ChooseWallpaperWindow cww = new ChooseWallpaperWindow();
+            				cww.setVisible(true);
+            			}
+                    });
+                    popup.add(chooseItem);
+
+                    // Separator
+                    popup.addSeparator();
+                    
                     // Exit
                     java.awt.MenuItem exitItem = new java.awt.MenuItem("Exit");
                     exitItem.addActionListener(new ActionListener() {
