@@ -129,7 +129,16 @@ public class WDConfigManager {
         		 
         		 // WallpaperFusion
         		 prefm.setPreference("provider-wallpaperFusion", WDUtilities.APP_NO);
-        		 
+
+        		 // DualMonitorBackgrounds
+        		 prefm.setPreference("provider-dualMonitorBackgrounds", WDUtilities.APP_NO);
+        		 // Initializing resolution
+        		 // By default, the application will download all kind of resolutions
+        		 prefm.setPreference("provider-dualMonitorBackgrounds-resolution", PreferencesManager.DEFAULT_VALUE);
+        		 // Initializing search type
+        		 // By default, the application will download Date wallpapers
+        		 prefm.setPreference("provider-dualMonitorBackgrounds-search-type", "0");
+
         		 // Initializing timer
         		 // By default, the application will download a new wallpaper every 5 minutes
         		 // 0 -> 5 min
@@ -302,6 +311,17 @@ public class WDConfigManager {
     		 // WallpaperFusion
 			 if (prefm.getPreference("provider-wallpaperFusion").equals(PreferencesManager.DEFAULT_VALUE)) {
 				 prefm.setPreference("provider-wallpaperFusion", WDUtilities.APP_NO);			 
+			 }
+			 
+    		 // DualMonitorBackgrounds
+			 if (prefm.getPreference("provider-dualMonitorBackgrounds").equals(PreferencesManager.DEFAULT_VALUE)) {
+	    		 prefm.setPreference("provider-dualMonitorBackgrounds", WDUtilities.APP_NO);
+	    		 // Initializing resolution
+	    		 // By default, the application will download all kind of resolutions
+	    		 prefm.setPreference("provider-dualMonitorBackgrounds-resolution", PreferencesManager.DEFAULT_VALUE);
+	    		 // Initializing search type
+	    		 // By default, the application will download Date wallpapers
+	    		 prefm.setPreference("provider-dualMonitorBackgrounds-search-type", "0");
 			 }
 			 
     		 // Copying plasma-shell script to default app path if it doesn't exist

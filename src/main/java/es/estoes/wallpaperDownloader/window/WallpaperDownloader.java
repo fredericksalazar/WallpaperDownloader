@@ -125,12 +125,12 @@ public class WallpaperDownloader {
 	private JButton btnMinimize;
 	private JButton btnOpenDownloadsDirectory;
 	private JButton btnClipboard;
-	private JComboBox<ComboItem> searchTypeComboBox;
+	private JComboBox<ComboItem> searchTypeWallhavenComboBox;
 	private JFormattedTextField wallhavenWidthResolution;
 	private NumberFormat integerFormat;
-	private JLabel lblX;
+	private JLabel lblXWallhaven;
 	private JFormattedTextField wallhavenHeigthResolution;
-	private JCheckBox allResolutionsCheckbox;
+	private JCheckBox allResolutionsWallhavenCheckbox;
 	private JComboBox<ComboItem> devianartSearchTypeComboBox;
 	private JComboBox<ComboItem> timerComboBox;
 	private JFormattedTextField downloadDirectorySize;
@@ -173,6 +173,14 @@ public class WallpaperDownloader {
 	private JButton btnRemoveDirectory;
 	private JPanel appSettingsPanel;
 	private JButton btnChooseWallpaper;
+	private JCheckBox dualMonitorCheckbox;
+	private JLabel lblDualMonitorResolution;
+	private JFormattedTextField dualMonitorWidthResolution;
+	private JLabel lblXDualMonitor;
+	private JFormattedTextField dualMonitorHeigthResolution;
+	private JCheckBox allResolutionsDualMonitorCheckbox;
+	private JLabel lblSearchTypeDualMonitor;
+	private JComboBox<ComboItem> searchTypeDualMonitorComboBox;
 	
 	// Getters & Setters
 	public JFrame getFrame() {
@@ -332,9 +340,9 @@ public class WallpaperDownloader {
 			providersPanel.add(lblKeywordsHelp);
 		}
 
-		JLabel lblResolution = new JLabel("Resolution");
-		lblResolution.setBounds(12, 75, 94, 15);
-		providersPanel.add(lblResolution);
+		JLabel lblWallhavenResolution = new JLabel("Resolution");
+		lblWallhavenResolution.setBounds(12, 75, 94, 15);
+		providersPanel.add(lblWallhavenResolution);
 		
 		// Only integers will be allowed
 		integerFormat = NumberFormat.getNumberInstance();
@@ -344,17 +352,17 @@ public class WallpaperDownloader {
 		wallhavenWidthResolution.setBounds(100, 73, 49, 19);
 		providersPanel.add(wallhavenWidthResolution);
 		
-		searchTypeComboBox = new JComboBox<ComboItem>();
-		searchTypeComboBox.setBounds(528, 73, 129, 19);
-		providersPanel.add(searchTypeComboBox);
+		searchTypeWallhavenComboBox = new JComboBox<ComboItem>();
+		searchTypeWallhavenComboBox.setBounds(528, 73, 129, 19);
+		providersPanel.add(searchTypeWallhavenComboBox);
+
+		JLabel lblSearchTypeWallhaven = new JLabel("Search Type");
+		lblSearchTypeWallhaven.setBounds(431, 76, 94, 15);
+		providersPanel.add(lblSearchTypeWallhaven);
 		
-		JLabel lblSearchType = new JLabel("Search Type");
-		lblSearchType.setBounds(431, 76, 94, 15);
-		providersPanel.add(lblSearchType);
-		
-		lblX = new JLabel("x");
-		lblX.setBounds(151, 77, 12, 15);
-		providersPanel.add(lblX);
+		lblXWallhaven = new JLabel("x");
+		lblXWallhaven.setBounds(151, 77, 12, 15);
+		providersPanel.add(lblXWallhaven);
 		
 		integerFormat = NumberFormat.getNumberInstance();
 		integerFormat.setParseIntegerOnly(true);
@@ -363,9 +371,9 @@ public class WallpaperDownloader {
 		wallhavenHeigthResolution.setBounds(161, 73, 49, 19);
 		providersPanel.add(wallhavenHeigthResolution);
 		
-		allResolutionsCheckbox = new JCheckBox("All Resolutions");
-		allResolutionsCheckbox.setBounds(224, 71, 151, 23);
-		providersPanel.add(allResolutionsCheckbox);
+		allResolutionsWallhavenCheckbox = new JCheckBox("All Resolutions");
+		allResolutionsWallhavenCheckbox.setBounds(224, 71, 151, 23);
+		providersPanel.add(allResolutionsWallhavenCheckbox);
 
 		JSeparator separator2 = new JSeparator();
 		separator2.setBounds(8, 103, 531, 2);
@@ -424,6 +432,44 @@ public class WallpaperDownloader {
 		wallpaperFusionCheckbox.setBounds(8, 257, 210, 23);
 		providersPanel.add(wallpaperFusionCheckbox);
 		
+		JSeparator separator6 = new JSeparator();
+		separator6.setBounds(8, 288, 531, 2);
+		providersPanel.add(separator6);
+		
+		dualMonitorCheckbox = new JCheckBox("DualMonitorBackgrounds");
+		dualMonitorCheckbox.setBounds(9, 295, 201, 23);
+		providersPanel.add(dualMonitorCheckbox);
+		
+		lblDualMonitorResolution = new JLabel("Resolution");
+		lblDualMonitorResolution.setBounds(13, 322, 94, 15);
+		providersPanel.add(lblDualMonitorResolution);
+		
+		dualMonitorWidthResolution = new JFormattedTextField((Format) null);
+		dualMonitorWidthResolution.setColumns(4);
+		dualMonitorWidthResolution.setBounds(105, 320, 49, 19);
+		providersPanel.add(dualMonitorWidthResolution);
+		
+		lblXDualMonitor = new JLabel("x");
+		lblXDualMonitor.setBounds(156, 324, 12, 15);
+		providersPanel.add(lblXDualMonitor);
+		
+		dualMonitorHeigthResolution = new JFormattedTextField((Format) null);
+		dualMonitorHeigthResolution.setColumns(4);
+		dualMonitorHeigthResolution.setBounds(166, 320, 49, 19);
+		providersPanel.add(dualMonitorHeigthResolution);
+		
+		allResolutionsDualMonitorCheckbox = new JCheckBox("All Resolutions");
+		allResolutionsDualMonitorCheckbox.setBounds(229, 318, 151, 23);
+		providersPanel.add(allResolutionsDualMonitorCheckbox);
+		
+		lblSearchTypeDualMonitor = new JLabel("Search Type");
+		lblSearchTypeDualMonitor.setBounds(431, 321, 94, 15);
+		providersPanel.add(lblSearchTypeDualMonitor);
+
+		searchTypeDualMonitorComboBox = new JComboBox<ComboItem>();
+		searchTypeDualMonitorComboBox.setBounds(528, 320, 129, 19);
+		providersPanel.add(searchTypeDualMonitorComboBox);
+
 		btnPause = new JButton();
 
 		try {
@@ -1004,9 +1050,9 @@ public class WallpaperDownloader {
 				if (wallhavenCheckbox.isSelected()) {
 					wallhavenWidthResolution.setEnabled(true);
 					wallhavenHeigthResolution.setEnabled(true);
-					searchTypeComboBox.setEnabled(true);
-					allResolutionsCheckbox.setEnabled(true);
-					allResolutionsCheckbox.setSelected(false);
+					searchTypeWallhavenComboBox.setEnabled(true);
+					allResolutionsWallhavenCheckbox.setEnabled(true);
+					allResolutionsWallhavenCheckbox.setSelected(false);
 					String screenResolution = WDUtilities.getResolution();
 					String[] resolution = screenResolution.split("x");
 			        wallhavenWidthResolution.setValue(new Integer(resolution[0]));
@@ -1014,8 +1060,8 @@ public class WallpaperDownloader {
 				} else {
 					wallhavenWidthResolution.setEnabled(false);
 					wallhavenHeigthResolution.setEnabled(false);
-					searchTypeComboBox.setEnabled(false);
-					allResolutionsCheckbox.setEnabled(false);
+					searchTypeWallhavenComboBox.setEnabled(false);
+					allResolutionsWallhavenCheckbox.setEnabled(false);
 				}
 			}
 		});
@@ -1049,12 +1095,12 @@ public class WallpaperDownloader {
 		});
 
 		/**
-		 * allResolutionsCheckbox Action Listener.
+		 * allResolutionsWallhavenCheckbox Action Listener.
 		 */
 		// Clicking event
-		allResolutionsCheckbox.addActionListener(new ActionListener() {
+		allResolutionsWallhavenCheckbox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				if (allResolutionsCheckbox.isSelected()) {
+				if (allResolutionsWallhavenCheckbox.isSelected()) {
 					wallhavenWidthResolution.setValue(new Integer(0));
 					wallhavenHeigthResolution.setValue(new Integer(0));
 					wallhavenWidthResolution.setEnabled(false);
@@ -1069,7 +1115,54 @@ public class WallpaperDownloader {
 				}
 			}
 		});
-		
+
+		/**
+		 * dualMonitorCheckbox Action Listener.
+		 */
+		// Clicking event
+		dualMonitorCheckbox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				if (dualMonitorCheckbox.isSelected()) {
+					dualMonitorWidthResolution.setEnabled(true);
+					dualMonitorHeigthResolution.setEnabled(true);
+					searchTypeDualMonitorComboBox.setEnabled(true);
+					allResolutionsDualMonitorCheckbox.setEnabled(true);
+					allResolutionsDualMonitorCheckbox.setSelected(false);
+					String screenResolution = WDUtilities.getResolution();
+					String[] resolution = screenResolution.split("x");
+					dualMonitorWidthResolution.setValue(new Integer(resolution[0]));
+					dualMonitorHeigthResolution.setValue(new Integer(resolution[1]));
+				} else {
+					dualMonitorWidthResolution.setEnabled(false);
+					dualMonitorHeigthResolution.setEnabled(false);
+					searchTypeDualMonitorComboBox.setEnabled(false);
+					allResolutionsDualMonitorCheckbox.setEnabled(false);
+				}
+			}
+		});
+
+		/**
+		 * allResolutionsDualMonitorCheckbox Action Listener.
+		 */
+		// Clicking event
+		allResolutionsDualMonitorCheckbox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				if (allResolutionsDualMonitorCheckbox.isSelected()) {
+					dualMonitorWidthResolution.setValue(new Integer(0));
+					dualMonitorHeigthResolution.setValue(new Integer(0));
+					dualMonitorWidthResolution.setEnabled(false);
+					dualMonitorHeigthResolution.setEnabled(false);
+				} else {
+					String screenResolution = WDUtilities.getResolution();
+					String[] resolution = screenResolution.split("x");
+					dualMonitorWidthResolution.setValue(new Integer(resolution[0]));
+					dualMonitorHeigthResolution.setValue(new Integer(resolution[1]));
+					dualMonitorWidthResolution.setEnabled(true);
+					dualMonitorHeigthResolution.setEnabled(true);
+				}
+			}
+		});
+
 		/**
 		 * btnCloseExit Action Listener.
 		 */
@@ -1112,12 +1205,12 @@ public class WallpaperDownloader {
 				// Wallhaven.cc
 				if (wallhavenCheckbox.isSelected()) {
 					prefm.setPreference("provider-wallhaven", WDUtilities.APP_YES);
-					if (allResolutionsCheckbox.isSelected()) {
+					if (allResolutionsWallhavenCheckbox.isSelected()) {
 						prefm.setPreference("wallpaper-resolution", PreferencesManager.DEFAULT_VALUE);						
 					} else {
 						prefm.setPreference("wallpaper-resolution", wallhavenWidthResolution.getValue().toString() + "x" + wallhavenHeigthResolution.getValue().toString());						
 					}
-					prefm.setPreference("wallpaper-search-type", new Integer(searchTypeComboBox.getSelectedIndex()).toString());
+					prefm.setPreference("wallpaper-search-type", new Integer(searchTypeWallhavenComboBox.getSelectedIndex()).toString());
 
 				} else {
 					prefm.setPreference("provider-wallhaven", WDUtilities.APP_NO);
@@ -1161,6 +1254,21 @@ public class WallpaperDownloader {
 
 				} else {
 					prefm.setPreference("provider-wallpaperFusion", WDUtilities.APP_NO);
+				}
+
+				// DualMonitorBackgrounds
+				if (dualMonitorCheckbox.isSelected()) {
+					prefm.setPreference("provider-dualMonitorBackgrounds", WDUtilities.APP_YES);
+					if (allResolutionsDualMonitorCheckbox.isSelected()) {
+						prefm.setPreference("provider-dualMonitorBackgrounds-resolution", PreferencesManager.DEFAULT_VALUE);						
+					} else {
+						prefm.setPreference("provider-dualMonitorBackgrounds-resolution", dualMonitorWidthResolution.getValue().toString() + "x" + dualMonitorHeigthResolution.getValue().toString());						
+					}
+					prefm.setPreference("provider-dualMonitorBackgrounds-search-type", new Integer(searchTypeDualMonitorComboBox.getSelectedIndex()).toString());
+				} else {
+					prefm.setPreference("provider-dualMonitorBackgrounds", WDUtilities.APP_NO);
+					prefm.setPreference("provider-dualMonitorBackgrounds-resolution", PreferencesManager.DEFAULT_VALUE);
+					prefm.setPreference("provider-dualMonitorBackgrounds-search-type", "0");
 				}
 
 				// ---------------------------------------------------------------------------
@@ -2009,31 +2117,33 @@ public class WallpaperDownloader {
 			if (!prefm.getPreference("wallpaper-resolution").equals(PreferencesManager.DEFAULT_VALUE)) {
 		        wallhavenWidthResolution.setValue(new Integer(resolution[0]));
 				wallhavenHeigthResolution.setValue(new Integer(resolution[1]));
-				allResolutionsCheckbox.setSelected(false);
+				allResolutionsWallhavenCheckbox.setSelected(false);
+		        wallhavenWidthResolution.setEnabled(true);
+		        wallhavenHeigthResolution.setEnabled(true);
 			} else {
 				wallhavenWidthResolution.setValue(new Integer(0));
 				wallhavenHeigthResolution.setValue(new Integer(0));
-				allResolutionsCheckbox.setSelected(true);
+				allResolutionsWallhavenCheckbox.setSelected(true);
+				wallhavenWidthResolution.setEnabled(false);
+				wallhavenHeigthResolution.setEnabled(false);
 			}
-	        wallhavenWidthResolution.setEnabled(true);
-	        wallhavenHeigthResolution.setEnabled(true);
-			allResolutionsCheckbox.setEnabled(true);
-			searchTypeComboBox.setEnabled(true);
+			allResolutionsWallhavenCheckbox.setEnabled(true);
+			searchTypeWallhavenComboBox.setEnabled(true);
 		} else {
 			wallhavenWidthResolution.setEnabled(false);
 			wallhavenHeigthResolution.setEnabled(false);
-			allResolutionsCheckbox.setEnabled(false);
+			allResolutionsWallhavenCheckbox.setEnabled(false);
 			wallhavenWidthResolution.setValue(new Integer(0));
 			wallhavenHeigthResolution.setValue(new Integer(0));
-			allResolutionsCheckbox.setSelected(true);
-			searchTypeComboBox.setEnabled(false);
+			allResolutionsWallhavenCheckbox.setSelected(true);
+			searchTypeWallhavenComboBox.setEnabled(false);
 		}
-		searchTypeComboBox.addItem(new ComboItem("Relevance", "0")); 
-		searchTypeComboBox.addItem(new ComboItem("Newest", "1")); 
-		searchTypeComboBox.addItem(new ComboItem("Views", "2")); 
-		searchTypeComboBox.addItem(new ComboItem("Favorites", "3")); 
-		searchTypeComboBox.addItem(new ComboItem("Random", "4"));
-		searchTypeComboBox.setSelectedIndex(new Integer(prefm.getPreference("wallpaper-search-type")));
+		searchTypeWallhavenComboBox.addItem(new ComboItem("Relevance", "0")); 
+		searchTypeWallhavenComboBox.addItem(new ComboItem("Newest", "1")); 
+		searchTypeWallhavenComboBox.addItem(new ComboItem("Views", "2")); 
+		searchTypeWallhavenComboBox.addItem(new ComboItem("Favorites", "3")); 
+		searchTypeWallhavenComboBox.addItem(new ComboItem("Random", "4"));
+		searchTypeWallhavenComboBox.setSelectedIndex(new Integer(prefm.getPreference("wallpaper-search-type")));
 		
 		// Devianart
 		String devianartEnable = prefm.getPreference("provider-devianart");
@@ -2073,6 +2183,41 @@ public class WallpaperDownloader {
 		if (wallpaperFusionEnable.equals(WDUtilities.APP_YES)) {
 			wallpaperFusionCheckbox.setSelected(true);
 		}
+
+		// DualMonitorBackground
+		String dualMonitorEnable = prefm.getPreference("provider-dualMonitorBackgrounds");
+		if (dualMonitorEnable.equals(WDUtilities.APP_YES)) {
+			dualMonitorCheckbox.setSelected(true);
+			String[] resolution = prefm.getPreference("provider-dualMonitorBackgrounds-resolution").split("x");
+			if (!prefm.getPreference("provider-dualMonitorBackgrounds-resolution").equals(PreferencesManager.DEFAULT_VALUE)) {
+		        dualMonitorWidthResolution.setValue(new Integer(resolution[0]));
+				dualMonitorHeigthResolution.setValue(new Integer(resolution[1]));
+				allResolutionsDualMonitorCheckbox.setSelected(false);
+		        dualMonitorWidthResolution.setEnabled(true);
+		        dualMonitorHeigthResolution.setEnabled(true);
+			} else {
+				dualMonitorWidthResolution.setValue(new Integer(0));
+				dualMonitorHeigthResolution.setValue(new Integer(0));
+				allResolutionsDualMonitorCheckbox.setSelected(true);
+		        dualMonitorWidthResolution.setEnabled(false);
+		        dualMonitorHeigthResolution.setEnabled(false);
+			}
+			allResolutionsDualMonitorCheckbox.setEnabled(true);
+			searchTypeDualMonitorComboBox.setEnabled(true);
+		} else {
+			dualMonitorWidthResolution.setEnabled(false);
+			dualMonitorHeigthResolution.setEnabled(false);
+			allResolutionsDualMonitorCheckbox.setEnabled(false);
+			dualMonitorWidthResolution.setValue(new Integer(0));
+			dualMonitorHeigthResolution.setValue(new Integer(0));
+			allResolutionsDualMonitorCheckbox.setSelected(true);
+			searchTypeDualMonitorComboBox.setEnabled(false);
+		}
+		searchTypeDualMonitorComboBox.addItem(new ComboItem("Date", "0")); 
+		searchTypeDualMonitorComboBox.addItem(new ComboItem("Rating", "1")); 
+		searchTypeDualMonitorComboBox.addItem(new ComboItem("Popularity", "2")); 
+		searchTypeDualMonitorComboBox.addItem(new ComboItem("Random", "3")); 
+		searchTypeDualMonitorComboBox.setSelectedIndex(new Integer(prefm.getPreference("provider-dualMonitorBackgrounds-search-type")));
 
 		// ---------------------------------------------------------------------
 		// Checking user settings
