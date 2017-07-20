@@ -73,11 +73,7 @@ public abstract class Provider {
 	 * Constructor.
 	 */
 	public Provider () {
-		PreferencesManager prefm = PreferencesManager.getInstance();
 		this.activeIndex = 0;
-		
-		// Obtaining resolution
-		this.resolution = prefm.getPreference("wallpaper-resolution");
 		
 		// Obtaining keywords
 		this.keywordsProperty = "provider-wallhaven-keywords";

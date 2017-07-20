@@ -123,6 +123,16 @@ public class Harvester {
 			}
 			this.providers.add(new WallpaperFusionProvider());	// Factory method
 		}
+		// -----------------------------------------------
+		// DualMonitorBackgrounds
+		// -----------------------------------------------
+		String dualMonitorBackgroundsEnable = prefm.getPreference("provider-dualMonitorBackgrounds");
+		if (dualMonitorBackgroundsEnable.equals(WDUtilities.APP_YES)) {
+			if (LOG.isInfoEnabled()) {
+				LOG.info("DualMonitorBackgrounds provider added");
+			}
+			this.providers.add(new DualMonitorBackgroundsProvider());	// Factory method
+		}
 	}
 	
 	public static Harvester getInstance() {

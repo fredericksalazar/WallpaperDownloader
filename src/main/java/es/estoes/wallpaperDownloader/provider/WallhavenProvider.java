@@ -42,8 +42,12 @@ public class WallhavenProvider extends Provider {
 	 */
 	public WallhavenProvider () {
 		super();
-		PropertiesManager pm = PropertiesManager.getInstance();
 		PreferencesManager prefm = PreferencesManager.getInstance();
+
+		// Obtaining resolution
+		this.resolution = prefm.getPreference("wallpaper-resolution");
+
+		PropertiesManager pm = PropertiesManager.getInstance();
 		this.baseURL = pm.getProperty("provider.wallhaven.baseurl");
 		switch (new Integer(prefm.getPreference("wallpaper-search-type"))) {
 			case 0: this.order = "relevance";

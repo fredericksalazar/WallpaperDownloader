@@ -42,8 +42,12 @@ public class DualMonitorBackgroundsProvider extends Provider {
 	 */
 	public DualMonitorBackgroundsProvider () {
 		super();
-		PropertiesManager pm = PropertiesManager.getInstance();
 		PreferencesManager prefm = PreferencesManager.getInstance();
+
+		// Obtaining resolution
+		this.resolution = prefm.getPreference("provider-dualMonitorBackgrounds-resolution");
+
+		PropertiesManager pm = PropertiesManager.getInstance();
 		this.baseURL = pm.getProperty("provider.dualMonitorBackgrounds.baseurl");
 		switch (new Integer(prefm.getPreference("provider-dualMonitorBackgrounds-search-type"))) {
 			case 0: this.order = WDUtilities.QM + "sortby=date";
@@ -52,7 +56,7 @@ public class DualMonitorBackgroundsProvider extends Provider {
 					break;
 			case 2: this.order = WDUtilities.QM + "sortby=popularity";
 					break;
-			case 3: this.order = "random/";
+			case 3: this.order = "random/" + WDUtilities.QM;
 		}
 	}
 	
@@ -66,9 +70,13 @@ public class DualMonitorBackgroundsProvider extends Provider {
 				
 			}
 			// 1.- Getting HTML document (New method including userAgent and other options)
-			Document doc = Jsoup.connect(completeURL).userAgent("Mozilla").get();
+			Document doc = Jsoup.connect(completeURL).header("Accept-Encoding", "gzip, deflate")
+					.userAgent("Mozilla")
+					.maxBodySize(0)
+					.timeout(600000)
+					.get();
 			// 2.- Getting all thumbnails. They are identified because they have 'lazyload' classed img elements
-			Elements thumbnails = doc.select("img.lazyload");
+			Elements thumbnails = doc.getElementsByClass("thumbnails");
 			// 3.- Getting a wallpaper which is not already stored in the filesystem
 			for (Element thumbnail : thumbnails) {
 				String thumbnailURL = thumbnail.attr("data-src");
@@ -141,22 +149,29 @@ public class DualMonitorBackgroundsProvider extends Provider {
 	}
 		
 	private String composeCompleteURL() {
-		// TODO:!!!
+		String completeUrl = this.baseURL + "index.php";
 		// If activeKeyword is empty, the search operation will be done within the whole repository 
-		String keywordString = "";
-		if (!activeKeyword.equals(PreferencesManager.DEFAULT_VALUE)) {
-			keywordString = "q" + WDUtilities.EQUAL + activeKeyword + WDUtilities.AND;
+		if (activeKeyword.equals(PreferencesManager.DEFAULT_VALUE)) {
+			// Resolution
+			if (!resolution.equals(PreferencesManager.DEFAULT_VALUE)) {
+				String[] userResolution = this.resolution.split("x");
+				String resolutionString = "userwidth" + WDUtilities.EQUAL + userResolution[0] + WDUtilities.AND + 
+						"userheight" + WDUtilities.EQUAL + userResolution[1];
+				completeUrl = completeUrl + WDUtilities.QM + resolutionString;
+			} else {
+				completeUrl = completeUrl + this.order;
+			}
+		} else {
+			completeUrl = completeUrl + "page/search/" + WDUtilities.QM + "words" + WDUtilities.EQUAL + this.activeKeyword;
+			// Resolution
+			if (!resolution.equals(PreferencesManager.DEFAULT_VALUE)) {
+				String[] userResolution = this.resolution.split("x");
+				String resolutionString = "userwidth" + WDUtilities.EQUAL + userResolution[0] + WDUtilities.AND + 
+						"userheight" + WDUtilities.EQUAL + userResolution[1];
+				completeUrl = completeUrl + WDUtilities.AND + resolutionString;
+			}
 		}
-		String resolutionString = "";
-		if (!resolution.equals(PreferencesManager.DEFAULT_VALUE)) {
-			resolutionString = "resolutions" + WDUtilities.EQUAL + resolution + WDUtilities.AND;
-		}
-		if (LOG.isInfoEnabled()) {
-			LOG.info(baseURL + "search" + WDUtilities.QM + keywordString + "categories" + WDUtilities.EQUAL + "111" + WDUtilities.AND + "purity" + WDUtilities.EQUAL + "110" + WDUtilities.AND + resolutionString + 
-					WDUtilities.AND + "order" + WDUtilities.EQUAL + "desc" + WDUtilities.AND + "sorting" + WDUtilities.EQUAL + order);
-		}
-		return this.baseURL + this.order + "search" + WDUtilities.QM + keywordString + "categories" + WDUtilities.EQUAL + "111" +WDUtilities.AND + "purity" + WDUtilities.EQUAL + "110" + WDUtilities.AND + resolutionString + 
-				   WDUtilities.AND + "order" + WDUtilities.EQUAL + "desc" + WDUtilities.AND + "sorting" + WDUtilities.EQUAL + order;
+		return completeUrl;
 	}
 
 }
