@@ -31,14 +31,50 @@ import es.estoes.wallpaperDownloader.window.WallpaperDownloader;
 
 public class DualMonitorBackgroundsProvider extends Provider {
 	
-	// Constants
+	/**
+	 * Constants.
+	 */
 	private static final Logger LOG = Logger.getLogger(DualMonitorBackgroundsProvider.class);
 
-	// Attributes
-	private String order;
-	// Methods
 	/**
-	 * Constructor
+	 * Attributes.
+	 */
+
+	// Sorting
+	private String sorting;
+	
+	// Page
+	private int page;
+
+	// Id for div element which will have all the thumbnails
+	private String thumbnailsDivId;
+	
+	/**
+	 * Getters & Setters.
+	 */
+	
+	/**
+	 * Gets page.
+	 * @return page
+	 */
+	public int getPage() {
+		return this.page;
+	}
+
+	/**
+	 * Sets page.
+	 * @param page page
+	 */
+	public void setPage(int page) {
+		this.page = page;
+	}
+
+	/**
+	 * Methods.
+	 */
+	
+	/**
+	 * Constructor.
 	 */
 	public DualMonitorBackgroundsProvider () {
 		super();
@@ -50,17 +86,30 @@ public class DualMonitorBackgroundsProvider extends Provider {
 		PropertiesManager pm = PropertiesManager.getInstance();
 		this.baseURL = pm.getProperty("provider.dualMonitorBackgrounds.baseurl");
 		switch (new Integer(prefm.getPreference("provider-dualMonitorBackgrounds-search-type"))) {
-			case 0: this.order = WDUtilities.QM + "sortby=date";
-					break;
-			case 1: this.order = WDUtilities.QM +"sortby=rating";
-					break;
-			case 2: this.order = WDUtilities.QM + "sortby=popularity";
-					break;
-			case 3: this.order = "random/" + WDUtilities.QM;
+			case 0: 
+				this.sorting = WDUtilities.QM + "sortby=date";
+				this.thumbnailsDivId = "latest";
+				break;
+			case 1: 
+				this.sorting = WDUtilities.QM +"sortby=rating";
+				this.thumbnailsDivId = "toprated";
+				break;
+			case 2: 
+				this.sorting = WDUtilities.QM + "sortby=popularity";
+				this.thumbnailsDivId = "popular";
+				break;
+			case 3: 
+				this.sorting = "random/" + WDUtilities.QM;
+				this.thumbnailsDivId = "random";
+				break;
 		}
+		
+		// Initial page
+		this.setPage(1);
 	}
 	
 	public void getWallpaper() throws ProviderException {
+		Boolean wallpaperFound = Boolean.FALSE;
 		this.obtainActiveKeyword();
 		String completeURL = this.composeCompleteURL();
 		try {
@@ -69,75 +118,80 @@ public class DualMonitorBackgroundsProvider extends Provider {
 				LOG.info("Downloading wallpaper with keyword -> " + activeKeyword);
 				
 			}
-			// 1.- Getting HTML document (New method including userAgent and other options)
-			Document doc = Jsoup.connect(completeURL).header("Accept-Encoding", "gzip, deflate")
-					.userAgent("Mozilla")
-					.maxBodySize(0)
-					.timeout(600000)
-					.get();
-			// 2.- Getting all thumbnails. They are identified because they have 'lazyload' classed img elements
-			Elements thumbnails = doc.getElementsByClass("thumbnails");
-			// 3.- Getting a wallpaper which is not already stored in the filesystem
-			for (Element thumbnail : thumbnails) {
-				String thumbnailURL = thumbnail.attr("data-src");
-				// Replacing word 'thumb/small' by word 'full'
-				String wallpaperURL = thumbnailURL.replace("thumb/small", "full");
-				// Replacing word 'th-' by word 'wallhaven-'
-				wallpaperURL = wallpaperURL.replace("th-", "wallhaven-");
-				int index = wallpaperURL.lastIndexOf(WDUtilities.URL_SLASH);
-				// Obtaining wallpaper's name (string after the last slash)
-				String wallpaperName = WDUtilities.WD_PREFIX + wallpaperURL.substring(index + 1);
-				String wallpaperNameFavorite = WDUtilities.WD_FAVORITE_PREFIX + wallpaperURL.substring(index + 1);
-				File wallpaper = new File(WDUtilities.getDownloadsPath() + File.separator + wallpaperName);
-				File wallpaperFavorite = new File(WDUtilities.getDownloadsPath() + File.separator + wallpaperNameFavorite);
-				if (!wallpaper.exists() && !wallpaperFavorite.exists() && !WDUtilities.isWallpaperBlacklisted(wallpaperName) && !WDUtilities.isWallpaperBlacklisted(wallpaperNameFavorite)) {
-					// Storing the image. It is necessary to download the remote file
-					// First try: JPG format will be used
-					boolean isWallpaperSuccessfullyStored = storeRemoteFile(wallpaper, wallpaperURL);
-					if (!isWallpaperSuccessfullyStored) {
-						// Second try: PNG format will be used
-						wallpaperURL = wallpaperURL.replace("jpg", "png");
-						if (LOG.isInfoEnabled()) {
-							LOG.info("JPG format wasn't found. Trying PNG format...");
-						}
-						wallpaperName = wallpaperName.replace("jpg", "png");
-						wallpaperNameFavorite = wallpaperNameFavorite.replace("jpg", "png");
-						wallpaper = new File(WDUtilities.getDownloadsPath() + File.separator + wallpaperName);
-						wallpaperFavorite = new File(WDUtilities.getDownloadsPath() + File.separator + wallpaperNameFavorite);
-						if (!wallpaper.exists() && !wallpaperFavorite.exists() && !WDUtilities.isWallpaperBlacklisted(wallpaperName) && !WDUtilities.isWallpaperBlacklisted(wallpaperNameFavorite)) {
-							isWallpaperSuccessfullyStored = storeRemoteFile(wallpaper, wallpaperURL);
-							if (!isWallpaperSuccessfullyStored) {
-								if (LOG.isInfoEnabled()) {
-									LOG.info("Error trying to store wallpaper " + wallpaperURL + ". Skipping...");
-								}
-							} else {
-								if (LOG.isInfoEnabled()) {
-									LOG.info("Wallpaper " + wallpaper.getName() + " successfully stored");
-									LOG.info("Refreshing space occupied progress bar...");
-								}
-								WallpaperDownloader.refreshProgressBar();
-								WallpaperDownloader.refreshJScrollPane();
-								// Exit the process because one wallpaper was downloaded successfully
-								break;
-							}							
-						} else {
-							if (LOG.isInfoEnabled()) {
-								LOG.info("Wallpaper " + wallpaper.getName() + " is already stored. Skipping...");
+	
+			while (!wallpaperFound) {
+				// 1.- Getting HTML document (New method including userAgent and other options)
+				Document doc = Jsoup.connect(completeURL).header("Accept-Encoding", "gzip, deflate")
+						.userAgent("Mozilla")
+						.maxBodySize(0)
+						.timeout(600000)
+						.get();
+				// 2.- Getting all thumbnails
+				Elements thumbnails = doc.select("div#" + this.thumbnailsDivId + " a");
+				if (!thumbnails.isEmpty()) {
+					// 3.- Getting a wallpaper which is not already stored in the filesystem
+					for (Element thumbnail : thumbnails) {
+						String thumbnailText = thumbnail.text().trim();
+						String thumbnailTitle = thumbnail.attr("title").trim();
+						String thumbnailURL = "";
+						if (thumbnailText.equals(thumbnailTitle)) {
+							if (thumbnail.attr("href").contains(".php")) {
+								thumbnailURL = this.baseURL + thumbnail.attr("href").substring(1);
 							}
 						}
-					} else {
-						if (LOG.isInfoEnabled()) {
-							LOG.info("Wallpaper " + wallpaper.getName() + " successfully stored");
-							LOG.info("Refreshing space occupied progress bar...");
-						}
-						WallpaperDownloader.refreshProgressBar();
-						WallpaperDownloader.refreshJScrollPane();
-						// Exit the process because one wallpaper was downloaded successfully
-						break;
+						
+						if (!thumbnailURL.isEmpty()) {
+							// Retrieves the entire document for this link
+							Document wallpaperDoc = Jsoup.connect(thumbnailURL).userAgent("Mozilla").get();
+							// Retrieves the source for the full image
+							Elements imageDiv = wallpaperDoc.select("div#SingleImageContainer a");
+							// The first a element is the main one
+							String wallpaperURL = this.baseURL + imageDiv.get(0).attr("href").substring(1);
+							int index = wallpaperURL.lastIndexOf(WDUtilities.URL_SLASH);
+							// Obtaining wallpaper's name (string after the last slash)
+							String wallpaperName = WDUtilities.WD_PREFIX + wallpaperURL.substring(index + 1);
+							String wallpaperNameFavorite = WDUtilities.WD_FAVORITE_PREFIX + wallpaperURL.substring(index + 1);
+							File wallpaper = new File(WDUtilities.getDownloadsPath() + File.separator + wallpaperName);
+							File wallpaperFavorite = new File(WDUtilities.getDownloadsPath() + File.separator + wallpaperNameFavorite);
+							if (!wallpaper.exists() && !wallpaperFavorite.exists() && !WDUtilities.isWallpaperBlacklisted(wallpaperName) && !WDUtilities.isWallpaperBlacklisted(wallpaperNameFavorite)) {
+								// Storing the image. It is necessary to download the remote file
+								boolean isWallpaperSuccessfullyStored = storeRemoteFile(wallpaper, wallpaperURL);
+								if (!isWallpaperSuccessfullyStored) {
+									if (LOG.isInfoEnabled()) {
+										LOG.info("Error trying to store wallpaper " + wallpaperURL + ". Skipping...");							
+									}
+								} else {
+									if (LOG.isInfoEnabled()) {
+										LOG.info("Wallpaper " + wallpaper.getName() + " successfully stored");
+										LOG.info("Refreshing space occupied progress bar...");
+									}
+									WallpaperDownloader.refreshProgressBar();
+									WallpaperDownloader.refreshJScrollPane();
+									wallpaperFound = Boolean.TRUE;
+									// Exit the process because one wallpaper was downloaded successfully
+									break;
+								}							
+							} else {
+								if (LOG.isInfoEnabled()) {
+									LOG.info("Wallpaper " + wallpaper.getName() + " is already stored or blacklisted. Skipping...");
+								}
+							}
+						}				
 					}
-				} else {
+					if (!wallpaperFound) {
+						// If no wallpaper is found in this page, the offset is incremented
+						if (LOG.isInfoEnabled()) {
+							LOG.info("No more wallpapers found in page " + this.getPage() + ". Starting to search in page " + this.getPage() + 1);
+						}
+						this.setPage(this.getPage() + 1);
+						completeURL = composeCompleteURL();
+					}					
+				}  else {
+					wallpaperFound = Boolean.TRUE;
+					// Reseting offset
+					this.setPage(1);
 					if (LOG.isInfoEnabled()) {
-						LOG.info("Wallpaper " + wallpaper.getName() + " is already stored or blacklisted. Skipping...");
+						LOG.info("No more wallpapers found. Skipping...");
 					}
 				}
 			}
@@ -149,9 +203,10 @@ public class DualMonitorBackgroundsProvider extends Provider {
 	}
 		
 	private String composeCompleteURL() {
-		String completeUrl = this.baseURL + "index.php";
+		String completeUrl = this.baseURL;
 		// If activeKeyword is empty, the search operation will be done within the whole repository 
 		if (activeKeyword.equals(PreferencesManager.DEFAULT_VALUE)) {
+			completeUrl = completeUrl + "index.php";
 			// Resolution
 			if (!resolution.equals(PreferencesManager.DEFAULT_VALUE)) {
 				String[] userResolution = this.resolution.split("x");
@@ -159,19 +214,27 @@ public class DualMonitorBackgroundsProvider extends Provider {
 						"userheight" + WDUtilities.EQUAL + userResolution[1];
 				completeUrl = completeUrl + WDUtilities.QM + resolutionString;
 			} else {
-				completeUrl = completeUrl + this.order;
+				completeUrl = completeUrl + this.sorting;
 			}
+			// Adding page
+			completeUrl = completeUrl + WDUtilities.AND + "latestImagesPage" + WDUtilities.EQUAL + this.getPage();
 		} else {
-			completeUrl = completeUrl + "page/search/" + WDUtilities.QM + "words" + WDUtilities.EQUAL + this.activeKeyword;
+			this.activeKeyword = this.activeKeyword.replace("\"", "");
+			this.activeKeyword = this.activeKeyword.replace(" ", "+AND+");
+				// http://www.dualmonitorbackgrounds.com/page/search/marvel/2/?userwidth=3200&userheight=1200
+				// http://www.dualmonitorbackgrounds.com/page/search/star+AND+wars/2
+			completeUrl = completeUrl + "/page/search/" + this.activeKeyword + WDUtilities.URL_SLASH + this.getPage();
 			// Resolution
 			if (!resolution.equals(PreferencesManager.DEFAULT_VALUE)) {
 				String[] userResolution = this.resolution.split("x");
 				String resolutionString = "userwidth" + WDUtilities.EQUAL + userResolution[0] + WDUtilities.AND + 
 						"userheight" + WDUtilities.EQUAL + userResolution[1];
-				completeUrl = completeUrl + WDUtilities.AND + resolutionString;
+				completeUrl = completeUrl + WDUtilities.URL_SLASH + WDUtilities.QM + resolutionString;
 			}
+			// Id for div element which contains all thumbnails
+			this.thumbnailsDivId = "albumsSearch";
 		}
+		LOG.info("Searching in " + completeUrl);
 		return completeUrl;
 	}
-
 }
