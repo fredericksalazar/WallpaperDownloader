@@ -35,7 +35,7 @@ public class SocialWallpaperingProvider extends Provider {
 	private static final Logger LOG = Logger.getLogger(SocialWallpaperingProvider.class);
 
 	// Attributes
-	private String page;
+	private int page;
 	
 	// Getters & Setters
 	
@@ -43,7 +43,7 @@ public class SocialWallpaperingProvider extends Provider {
 	 * Gets page.
 	 * @return page
 	 */
-	public String getPage() {
+	public int getPage() {
 		return this.page;
 	}
 
@@ -51,7 +51,7 @@ public class SocialWallpaperingProvider extends Provider {
 	 * Sets page.
 	 * @param page page
 	 */
-	public void setPage(String page) {
+	public void setPage(int page) {
 		this.page = page;
 	}
 
@@ -65,7 +65,7 @@ public class SocialWallpaperingProvider extends Provider {
 		this.baseURL = pm.getProperty("provider.socialWallpapering.baseurl");
 		
 		// Initial page
-		this.setPage("1");
+		this.setPage(1);
 	}
 	
 	public void getWallpaper() throws ProviderException {
@@ -134,13 +134,16 @@ public class SocialWallpaperingProvider extends Provider {
 					}
 					if (!wallpaperFound) {
 						// If no wallpaper is found in this page, the offset is incremented
+						if (LOG.isInfoEnabled()) {
+							LOG.info("No more wallpapers found in page " + this.getPage() + ". Starting to search in page " + this.getPage() + 1);
+						}
 						this.setPage(this.getPage() + 1);
 						completeURL = composeCompleteURL();
 					}
 				} else {
 					wallpaperFound = Boolean.TRUE;
 					// Reseting offset
-					this.setPage("1");
+					this.setPage(1);
 					if (LOG.isInfoEnabled()) {
 						LOG.info("No more wallpapers found. Skipping...");
 					}
