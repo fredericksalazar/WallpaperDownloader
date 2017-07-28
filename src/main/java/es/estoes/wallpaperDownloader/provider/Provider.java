@@ -16,6 +16,10 @@
 
 package es.estoes.wallpaperDownloader.provider;
 
+import java.awt.AlphaComposite;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -26,6 +30,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+
+import javax.imageio.ImageIO;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import es.estoes.wallpaperDownloader.exception.ProviderException;
@@ -192,4 +199,93 @@ public abstract class Provider {
 			}
 		}		
 	}
+
+	/**
+	 * Stores and resizes a remote file.
+	 * @param wallpaper File for the wallpaper
+	 * @param wallpaperURL remote URL of the wallpaper
+	 * @param width resized width
+	 * @param height resized height
+	 * @return boolean
+	 */
+	protected boolean storeAndResizeRemoteFile(File wallpaper, String wallpaperURL, int width, int height) {
+	    
+		boolean success = false;
+		OutputStream out = null;
+		String wallpaperName = wallpaper.getName();
+		String wallpaperImageFormat = wallpaperName.substring(wallpaperName.lastIndexOf(".") + 1);
+		String priginalWallpaperFullPath = wallpaper.getPath() + "-tmp";
+		File originalWallpaper = new File(priginalWallpaperFullPath);
+		
+		try {
+	        URL url = new URL(wallpaperURL);
+	        HttpURLConnection httpcon = (HttpURLConnection) url.openConnection();
+	        httpcon.addRequestProperty("User-Agent", "Mozilla/4.0");
+	        InputStream in = httpcon.getInputStream();
+	        	 
+	        out = new BufferedOutputStream(new FileOutputStream(priginalWallpaperFullPath));
+	        	 
+	        for (int b; (b = in.read()) != -1;) {
+	            out.write(b);
+	        }
+	        out.close();
+	        in.close();
+
+        	// Now the image is resized if it is needed
+	        BufferedImage originalImage = ImageIO.read(originalWallpaper);
+	        int originalImageHeight = originalImage.getHeight();
+	        int originalImageWidth = originalImage.getWidth();
+	        if (originalImageHeight != height || originalImageWidth != width) {
+		        int type = originalImage.getType() == 0? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
+				
+				BufferedImage resizedImage = new BufferedImage(width, height, type);
+				Graphics2D g = resizedImage.createGraphics();
+				g.drawImage(originalImage, 0, 0, width, height, null);
+				g.dispose();
+				g.setComposite(AlphaComposite.Src);
+
+				g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+				RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+				g.setRenderingHint(RenderingHints.KEY_RENDERING,
+				RenderingHints.VALUE_RENDER_QUALITY);
+				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+
+				// Storing resized wallpaper
+				ImageIO.write(resizedImage, wallpaperImageFormat, wallpaper);	
+	        } else {
+	        	FileUtils.copyFile(originalWallpaper, wallpaper);
+	        }
+	        
+			// Removing temp file
+			FileUtils.forceDelete(originalWallpaper);
+
+	        success = true;
+		    return true;
+		} catch (Exception exception) {
+			if (LOG.isInfoEnabled()) {
+		    	LOG.error("There was an error reading " + wallpaperURL + " image. Error: " + exception.getMessage());
+			}
+	    	return false;
+		} finally {
+			if (out!=null) {
+			    try {
+					out.flush();
+				    out.close();
+				    if (!success) {
+				    	if (wallpaper.exists()) {
+				    		FileUtils.forceDelete(wallpaper);
+				    	}
+				    	return false;
+				    }
+				} catch (IOException e) {
+					if (LOG.isInfoEnabled()) {
+						LOG.error("IOException. Error: " + e.getMessage());
+					}
+			    	return false;
+				}
+			}
+		}		
+	}
+
 }

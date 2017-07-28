@@ -155,7 +155,16 @@ public class DualMonitorBackgroundsProvider extends Provider {
 							File wallpaperFavorite = new File(WDUtilities.getDownloadsPath() + File.separator + wallpaperNameFavorite);
 							if (!wallpaper.exists() && !wallpaperFavorite.exists() && !WDUtilities.isWallpaperBlacklisted(wallpaperName) && !WDUtilities.isWallpaperBlacklisted(wallpaperNameFavorite)) {
 								// Storing the image. It is necessary to download the remote file
-								boolean isWallpaperSuccessfullyStored = storeRemoteFile(wallpaper, wallpaperURL);
+								// The image will be resized if it is needed
+								boolean isWallpaperSuccessfullyStored = false;
+								if (resolution.equals(PreferencesManager.DEFAULT_VALUE)) {
+									isWallpaperSuccessfullyStored = storeRemoteFile(wallpaper, wallpaperURL);
+								} else {
+									String[] userResolution = this.resolution.split("x");
+									isWallpaperSuccessfullyStored = storeAndResizeRemoteFile(wallpaper, wallpaperURL, 
+											Integer.valueOf(userResolution[0]), 
+											Integer.valueOf(userResolution[1]));
+								}
 								if (!isWallpaperSuccessfullyStored) {
 									if (LOG.isInfoEnabled()) {
 										LOG.info("Error trying to store wallpaper " + wallpaperURL + ". Skipping...");							
