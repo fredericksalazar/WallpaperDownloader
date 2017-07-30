@@ -88,14 +88,7 @@ public class WDUtilities {
 	public static final String DE_MATE = "MATE";
 	public static final String DE_XFCE = "XFCE";
 	public static final String DE_UNKNOWN = "UNKNOWN";
-	public static final Object GDM_SESSION_GNOME = "gnome";
-	public static final String GDM_SESSION_GNOME_SHELL = "gnome-shell";
-	public static final String GDM_SESSION_GNOME_CLASSIC = "gnome-classic";
-	public static final String GDM_SESSION_GNOME_FALLBACK = "gnome-fallback";
-	public static final String GDM_SESSION_GNOME_XORG = "gnome-xorg";
-	public static final String GDM_SESSION_GNOME_DEFAULT = "default";
 	public static final String DE_GNOME3 = "GNOME3";
-	public static final String DE_GNOME2 = "GNOME2";
 	public static final String DOWNLOADS_DIRECTORY = "downloads_directory";
 	public static final String CHANGER_DIRECTORY = "changer_directory";
 	public static final String MOVE_DIRECTORY = "move_directory";
