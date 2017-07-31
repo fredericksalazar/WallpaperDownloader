@@ -26,7 +26,7 @@ yaourt -S wallpaperdownloader
 - Download and install [java](https://java.com/en/download/).
 - Download and store wallpaperdownloaded.jar from [wallpaperdownloader repository](https://bitbucket.org/eloy_garcia_pca/wallpaperdownloader/src)
 - Go to the directory where you stored the file and double click on it. (If you are using Linux, you can exceute it via terminal. Open a terminal, cd to the directoy where you 
-stored it and execute it using *java -jar wallpaperdownloader.jar*)
+stored it and execute it using *java -Dsun.java2d.xrender=f -Xmx256m -Xms128m -jar wallpaperdownloader.jar*)
 
 #### Linux with Snap package tool installed ####
 This application is packaged using [snapcraft tool](http://snapcraft.io/) and it is published in Canonical's snap [store](https://uappexplorer.com/app/wallpaperdownloader.egarcia).
