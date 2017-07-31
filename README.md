@@ -8,7 +8,7 @@ This is the Wiki related to Wallpaper Downloader Project. It gathers all the imp
 This is a JAVA software project developed for downloading wallpapers from different sources. It is a crossed-platform standalone application.
 
 ## Current Version ##
-2.7
+2.8
 
 ## Installation ##
 You can install wallpaperdownloader using different ways.
@@ -59,6 +59,22 @@ Build the package:
 Install the snap package (please, check the name of the snap package built):
 
     sudo snap install <wallpaperdownloader*.snap>
+
+## Features (V 2.8) ##
+
+New Features:
+
+- GNOME  Shell and KDE Plasma icon tray support added.
+
+- New provider implemented (DualBackgroundMonitors).
+
+- New window to choose the wallpaper to be set from all the sources defined.
+
+Bugs fixed:
+
+- Social Wallpapering provider now paginates correctly.
+
+- Thumbails preview re-implemented (much more better performance).
 
 ## Features (V 2.7) ##
 
