@@ -96,36 +96,6 @@ public class ChooseWallpaperWindow extends JFrame {
 		
 		wallpapersList = new JList<Object>();
 		wallpapersScrollPanel.setViewportView(wallpapersList);
-		
-		btnSetDskWallpaper = new JButton();
-
-		try {
-			Image img = ImageIO.read(getClass().getResource("/images/icons/desktop_24px_icon.png"));
-			btnSetDskWallpaper.setIcon(new ImageIcon(img));
-			btnSetDskWallpaper.setToolTipText("Set selected wallpaper");
-			btnSetDskWallpaper.setBounds(713, 182, 34, 33);
-		} catch (IOException ex) {
-			btnSetDskWallpaper.setText("Set wallpaper");
-			btnSetDskWallpaper.setBounds(713, 182, 34, 33);
-		}
-		// This button only will be available for those desktops which support setting wallpapers directly
-//		if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
-			getContentPane().add(btnSetDskWallpaper);			
-
-//		}
-		
-		btnPreviewWallpaper = new JButton();
-
-		try {
-			Image img = ImageIO.read(getClass().getResource("/images/icons/view_24px_icon.png"));
-			btnPreviewWallpaper.setIcon(new ImageIcon(img));
-			btnPreviewWallpaper.setToolTipText("Preview wallpaper");
-			btnPreviewWallpaper.setBounds(712, 262, 34, 33);
-		} catch (IOException ex) {
-			btnPreviewWallpaper.setText("Preview wallpaper");
-			btnPreviewWallpaper.setBounds(712, 161, 34, 33);
-		}
-		getContentPane().add(btnPreviewWallpaper);
 
 		btnRemoveWallpaper = new JButton();
 		
@@ -133,12 +103,42 @@ public class ChooseWallpaperWindow extends JFrame {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/delete_24px_icon.png"));
 			btnRemoveWallpaper.setIcon(new ImageIcon(img));
 			btnRemoveWallpaper.setToolTipText("Delete selected wallpaper");
-			btnRemoveWallpaper.setBounds(712, 222, 34, 33);
+			btnRemoveWallpaper.setBounds(713, 182, 34, 33);
 		} catch (IOException ex) {
 			btnRemoveWallpaper.setText("Delete");
-			btnRemoveWallpaper.setBounds(1064, 120, 34, 33);
+			btnRemoveWallpaper.setBounds(713, 182, 34, 33);
+
 		}
 		getContentPane().add(btnRemoveWallpaper);
+
+		btnPreviewWallpaper = new JButton();
+
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/view_24px_icon.png"));
+			btnPreviewWallpaper.setIcon(new ImageIcon(img));
+			btnPreviewWallpaper.setToolTipText("Preview wallpaper");
+			btnPreviewWallpaper.setBounds(712, 222, 34, 33);
+		} catch (IOException ex) {
+			btnPreviewWallpaper.setText("Preview wallpaper");
+			btnPreviewWallpaper.setBounds(1064, 120, 34, 33);
+		}
+		getContentPane().add(btnPreviewWallpaper);
+
+		btnSetDskWallpaper = new JButton();
+
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/desktop_24px_icon.png"));
+			btnSetDskWallpaper.setIcon(new ImageIcon(img));
+			btnSetDskWallpaper.setToolTipText("Set selected wallpaper");
+			btnSetDskWallpaper.setBounds(712, 262, 34, 33);
+		} catch (IOException ex) {
+			btnSetDskWallpaper.setText("Set wallpaper");
+			btnSetDskWallpaper.setBounds(712, 161, 34, 33);
+		}
+		// This button only will be available for those desktops which support setting wallpapers directly
+		if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
+			getContentPane().add(btnSetDskWallpaper);			
+		}
 		
 		btnClose = new JButton("Close");
 		btnClose.setBounds(630, 561, 116, 25);
