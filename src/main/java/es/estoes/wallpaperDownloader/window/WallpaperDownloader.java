@@ -965,7 +965,17 @@ public class WallpaperDownloader {
 
 		try
 		{
-		    doc.insertString(0, "New features (Version 2.7)\n\n", keyWord );
+			// Version 2.8
+		    doc.insertString(0, "New features (Version 2.8)\n\n", keyWord );
+		    doc.insertString(doc.getLength(), "- GNOME  Shell and KDE Plasma icon tray support added.\n", null );
+		    doc.insertString(doc.getLength(), "- New provider implemented (DualBackgroundMonitors).\n", null );
+		    doc.insertString(doc.getLength(), "- New window to choose the wallpaper to be set from all the sources defined.\n\n", null );
+		    doc.insertString(doc.getLength(), "Bugs fixed (Version 2.8).\n\n", keyWord );
+		    doc.insertString(doc.getLength(), "- Social Wallpapering provider now paginates correctly.\n", null );
+		    doc.insertString(doc.getLength(), "- Thumbails preview re-implemented (much more better performance).\n\n", null );
+
+		    // Version 2.7
+		    doc.insertString(doc.getLength(), "New features (Version 2.7)\n\n", keyWord );
 		    doc.insertString(doc.getLength(), "- KDE support added (not available in snap package version).\n", null );
 		    doc.insertString(doc.getLength(), "- Now, user can define several different directories for the automated changer.\n", null );
 		    doc.insertString(doc.getLength(), "- Pause/resume functionality to download wallpapers.\n", null );
