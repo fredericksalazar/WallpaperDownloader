@@ -88,6 +88,8 @@ import java.text.Format;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
@@ -255,6 +257,18 @@ public class WallpaperDownloader {
 				window.frame.setTitle(pm.getProperty("app.name") + " V" + pm.getProperty("app.version"));
 				// Minimize the application if start minimized feature is enable
 				if (startMinimizedCheckBox.isSelected()) {
+					try {
+						// Sleeps during 1 second in order to avoid problems in GNOME 3 minimization
+						if (WDUtilities.getWallpaperChanger() instanceof LinuxWallpaperChanger) {
+							if (((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment().equals(WDUtilities.DE_GNOME3)) {
+								TimeUnit.SECONDS.sleep(1);								
+							}
+						}
+					} catch (InterruptedException exception) {
+						if (LOG.isInfoEnabled()) {
+							LOG.error("Error sleeping for 3 seconds. Message: " + exception.getMessage());
+						}
+					}
 					minimizeApplication();
 				}
 
