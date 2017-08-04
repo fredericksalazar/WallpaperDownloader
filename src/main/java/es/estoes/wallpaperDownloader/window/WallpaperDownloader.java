@@ -105,7 +105,6 @@ public class WallpaperDownloader {
 	private static final PropertiesManager pm = PropertiesManager.getInstance();
 	
 	// Attributes
-	
 	// diskSpacePB will be an attribute representing disk space occupied within the downloads directory
 	// It is static because it will be able to be accessed from any point within the application's code
 	public static JProgressBar diskSpacePB = new JProgressBar();
@@ -260,7 +259,8 @@ public class WallpaperDownloader {
 					try {
 						// Sleeps during 1 second in order to avoid problems in GNOME 3 minimization
 						if (WDUtilities.getWallpaperChanger() instanceof LinuxWallpaperChanger) {
-							if (((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment().equals(WDUtilities.DE_GNOME3)) {
+							if (((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment().equals(WDUtilities.DE_GNOME3)
+								|| ((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment().equals(WDUtilities.DE_KDE)) {
 								TimeUnit.SECONDS.sleep(1);								
 							}
 						}
@@ -1033,14 +1033,17 @@ public class WallpaperDownloader {
 		
 		// Setting up listeners
 		initializeListeners();
-		
+				
+		// Starting automated changer process
+		initializeChanger();
+
 		// Starting harvesting process
 		initializeHarvesting();
 		
 		// Starting pause / resume feature
+		PreferencesManager prefm = PreferencesManager.getInstance();		
 		if (harvester.getStatus() != Harvester.STATUS_DISABLED) {
 			// Checking downloading process
-			PreferencesManager prefm = PreferencesManager.getInstance();
 			if (prefm.getPreference("downloading-process").equals(WDUtilities.APP_NO)) {
 				providersPanel.add(btnPlay);
 				providersPanel.add(lblRedSpot);
@@ -1051,10 +1054,13 @@ public class WallpaperDownloader {
 		} else {
 			providersPanel.add(lblRedSpot);
 		}
-		
-		// Starting automated changer process
-		initializeChanger();
-		
+
+		// If there is no Internet connection, harvesting process is paused
+		// and reconnectionNeeded is set to true
+//		if (!WDUtilities.checkConnectivity() && 
+//			(harvester.getStatus() != Harvester.STATUS_DISABLED && !prefm.getPreference("downloading-process").equals(WDUtilities.APP_NO))) {
+//				pauseDownloadingProcess();
+//		}
 	}
 
 	/**

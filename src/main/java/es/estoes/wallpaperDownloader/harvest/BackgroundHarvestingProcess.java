@@ -25,6 +25,7 @@ import org.apache.log4j.Logger;
 import es.estoes.wallpaperDownloader.exception.ProviderException;
 import es.estoes.wallpaperDownloader.provider.Provider;
 import es.estoes.wallpaperDownloader.util.PreferencesManager;
+import es.estoes.wallpaperDownloader.util.WDUtilities;
 
 /**
 * This class implements SwingWorker abstract class. It is used to execute a independent 
@@ -76,19 +77,29 @@ public class BackgroundHarvestingProcess extends SwingWorker<Void, Void> {
 		// the list
 		// 3.- Starting again with the next provider
 		while (providers.size()>0) {
-			Provider provider = providers.removeFirst(); 
-			provider.obtainKeywords();
-			try {
-				while (!provider.getAreKeywordsDone()) {
-					provider.getWallpaper();
-					Thread.sleep(timer);
-				}				
-			} catch (ProviderException pe) {
-				// Do nothing
+			// First, Internet connection is tested
+			if (WDUtilities.checkConnectivity()) {
+				// If there is connectivity, then the process must go on
+				Provider provider = providers.removeFirst(); 
+				provider.obtainKeywords();
+				try {
+					while (!provider.getAreKeywordsDone()) {
+						provider.getWallpaper();
+						Thread.sleep(timer);
+					}				
+				} catch (ProviderException pe) {
+					// Do nothing
+				}
+				providers.addLast(provider);					
+			} else {
+				// If there is no connectivity, wait for 60 seconds and try again
+				if(LOG.isInfoEnabled()) {
+					LOG.error("No connection to Internet. Harvesting process will try to download more wallpapers in 60 seconds. Please wait...");
+				}
+				Thread.sleep(Long.valueOf(60000));
+				
 			}
-			providers.addLast(provider);					
 		}
-		
 		return null;
 	}
 

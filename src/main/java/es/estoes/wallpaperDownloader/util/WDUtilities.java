@@ -713,4 +713,32 @@ public class WDUtilities {
 	    return resizedImg;
 	}
 
+	/**
+	 * Checks Internet connectivity.
+	 * @return boolean
+	 */
+	public static boolean checkConnectivity() {
+		boolean result = false;
+		try {
+			String pingCommand = "/bin/ping -c 3 www.google.com";
+			if (WDUtilities.getOperatingSystem().equals(OS_WINDOWS) ||
+				WDUtilities.getOperatingSystem().equals(OS_WINDOWS_7) ||
+				WDUtilities.getOperatingSystem().equals(OS_WINDOWS_10)) {
+				pingCommand = "ping -n 3 www.google.com";
+			}
+			Process process = java.lang.Runtime.getRuntime().exec(pingCommand);
+			if (process.waitFor() == 0) {
+				result = true;
+			} else {
+	            if (LOG.isInfoEnabled()) {
+            	LOG.error("Internet connection is down.");
+            }
+			}
+		} catch (Exception exception) {
+			if (LOG.isInfoEnabled()) {
+				LOG.error("Error executing ping command. Message: " + exception.getMessage());
+			}
+		}
+		return result;
+	}
 }
