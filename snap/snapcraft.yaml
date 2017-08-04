@@ -8,7 +8,8 @@ confinement: strict
 apps:
   wallpaperdownloader:
     command: wallpaperdownloader.sh
-    plugs: [x11, unity7, network-bind, home, gsettings]
+    # network-observe plug will be needed to run ping command from the snap
+    plugs: [x11, unity7, network-bind, network-observe, home, gsettings]
 
 parts:
   # Pulls the code from the original source (master branch)
