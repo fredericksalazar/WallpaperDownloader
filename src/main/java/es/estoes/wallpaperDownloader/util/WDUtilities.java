@@ -726,7 +726,7 @@ public class WDUtilities {
 				WDUtilities.getOperatingSystem().equals(OS_WINDOWS_10)) {
 				pingCommand = "ping -n 3 www.google.com";
 			} else if (WDUtilities.isSnapPackage()) {
-				pingCommand = "/bin/curl -I www.google.com";				
+				pingCommand = "/usr/bin/curl -I www.google.com";				
 			}
 			Process process = java.lang.Runtime.getRuntime().exec(pingCommand);
 			if (process.waitFor() == 0) {
