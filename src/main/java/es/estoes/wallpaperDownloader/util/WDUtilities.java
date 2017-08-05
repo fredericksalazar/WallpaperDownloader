@@ -720,13 +720,13 @@ public class WDUtilities {
 	public static boolean checkConnectivity() {
 		boolean result = false;
 		try {
-			String pingCommand = "/bin/ping -c 3 www.google.com";
+			String pingCommand = "ping -c 3 www.google.com";
 			if (WDUtilities.getOperatingSystem().equals(OS_WINDOWS) ||
 				WDUtilities.getOperatingSystem().equals(OS_WINDOWS_7) ||
 				WDUtilities.getOperatingSystem().equals(OS_WINDOWS_10)) {
 				pingCommand = "ping -n 3 www.google.com";
 			} else if (WDUtilities.isSnapPackage()) {
-				pingCommand = "/usr/bin/curl -I www.google.com";				
+				pingCommand = "curl -I www.google.com";				
 			}
 			Process process = java.lang.Runtime.getRuntime().exec(pingCommand);
 			if (process.waitFor() == 0) {
