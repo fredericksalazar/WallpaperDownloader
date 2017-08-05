@@ -24,6 +24,11 @@ parts:
     stage-packages:
       # mate-desktop-common is necessary to have MATE gsettings schemas available for the application
       - mate-desktop-common
+      # Due to ping command has setuid bit, command line invocation from a snap causes permission denied error.
+      # It is necessary for the user execute sudo snap connect wallpaperdownloader:network-observe 
+      # In order to make the use of the application more transparent for the user, curl will be used
+      # instead of pin to check Internet connectivity
+      - curl
     after: [desktop-gtk3]
 
   # It will copy wallpaperdownloader script into /bin/
