@@ -261,7 +261,7 @@ public class WallpaperDownloader {
 						if (WDUtilities.getWallpaperChanger() instanceof LinuxWallpaperChanger) {
 							if (((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment().equals(WDUtilities.DE_GNOME3)
 								|| ((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment().equals(WDUtilities.DE_KDE)) {
-								TimeUnit.SECONDS.sleep(1);								
+								TimeUnit.SECONDS.sleep(2);								
 							}
 						}
 					} catch (InterruptedException exception) {
