@@ -24,6 +24,7 @@
         	<exclude>snap/**</exclude>
         	<exclude>.settings/**</exclude>
         	<exclude>wallpaperdownloader.jar</exclude>
+        	<exclude>*.tar.gz</exclude>
         	<exclude>.*</exclude>
         </excludes>
 	  </fileSet>
