@@ -1,5 +1,0 @@
-
-es.estoes.wallpaperDownloader wallpaperDownloader jar s/.*/debian/ * *
-junit junit jar s/3\..*/3.x/ * *
-org.jsoup jsoup jar s/.*/debian/ * *
-log4j log4j * s/1\.2\..*/1.2.x/ * *
