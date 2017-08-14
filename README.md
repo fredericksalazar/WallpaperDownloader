@@ -40,9 +40,26 @@ application to open some links in your browser.
 
     sudo apt install snapd-xdg-open
 
+**Caveats**
+Snap package fully supports **GNOME Shell**, **Unity** and **MATE** desktop environments. If you are using **KDE Plasma 5 (version 5.8 or greater)** or **XFCE** and your distro of choice is **Ubuntu**, then installation via official PPA is recommended.
+
+#### Ubuntu and derivatives via PPA ####
+There is an official **PPA repository** for installing WallpaperDownloader in Ubuntu (16.04 and greater) and derivates natively. It is the preferred method for enabling all the features of the application and it is recommended for **KDE Plasma 5** and **XFCE** users. First, open a terminal and type:
+
+    sudo add-apt-repository ppa:eloy-garcia-pca/wallpaperdownloader
+
+Hit enter. Then type:
+
+    sudo apt update
+
+Hit enter. Then type:
+
+    sudo apt install wallpaperdownloader
+
+Hit enter.
+
 ## How to build the snap package and install it ##
-If you wish, you can build the snap package and install it form the source code. It is necessary to have snapd and snapcraft installed on your system. If you are running Ubuntu, you 
-will have snapd installed by default. If you want to install snapcraft on Ubuntu:
+If you wish, you can build the snap package and install it form the source code. It is necessary to have snapd and snapcraft installed on your system. If you are running Ubuntu, you will have snapd installed by default. If you want to install snapcraft on Ubuntu:
 
     sudo apt install snapcraft
 
@@ -75,6 +92,8 @@ Bugs fixed:
 - Social Wallpapering provider now paginates correctly.
 
 - Thumbails preview re-implemented (much more better performance).
+
+- Implemented a daemon which checks Internet connectivity and starts the harvesting process when detects it.
 
 ## Features (V 2.7) ##
 
