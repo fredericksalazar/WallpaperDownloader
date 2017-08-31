@@ -48,7 +48,8 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 		if (LOG.isInfoEnabled()) {
 			LOG.info("Checking XDG_CURRENT_DESKTOP environment variable. Value = " + System.getenv("XDG_CURRENT_DESKTOP"));
 		}
-		switch (System.getenv("XDG_CURRENT_DESKTOP")) {
+		String currentDesktop = System.getenv("XDG_CURRENT_DESKTOP");
+		switch (currentDesktop) {
 			case WDUtilities.DE_UNITY:
 				this.setDesktopEnvironment(WDUtilities.DE_UNITY);
 				break;
@@ -65,10 +66,14 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 				this.setDesktopEnvironment(WDUtilities.DE_XFCE);
 				break;
 			default:
-				this.setDesktopEnvironment(WDUtilities.DE_UNKNOWN);
+				if (currentDesktop.contains(WDUtilities.DE_GNOME) || 
+					currentDesktop.contains(WDUtilities.DE_GNOME.toLowerCase())) {
+					this.setDesktopEnvironment(WDUtilities.DE_GNOME3);
+				} else {
+					this.setDesktopEnvironment(WDUtilities.DE_UNKNOWN);					
+				}
 				break;
 		}
-		
 		if (LOG.isInfoEnabled()) {
 			LOG.info("Desktop environment detected: " + this.getDesktopEnvironment());
 		}
