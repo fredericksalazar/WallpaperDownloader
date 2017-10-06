@@ -81,7 +81,7 @@ public class DualMonitorBackgroundsProvider extends Provider {
 		PreferencesManager prefm = PreferencesManager.getInstance();
 
 		// Obtaining resolution
-		this.resolution = prefm.getPreference("provider-dualMonitorBackgrounds-resolution");
+		this.resolution = prefm.getPreference("wallpaper-resolution");
 
 		PropertiesManager pm = PropertiesManager.getInstance();
 		this.baseURL = pm.getProperty("provider.dualMonitorBackgrounds.baseurl");
