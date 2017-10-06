@@ -1280,9 +1280,17 @@ public class WallpaperDownloader {
 					prefm.setPreference("provider-wallhaven-keywords", PreferencesManager.DEFAULT_VALUE);
 				}
 				
+				// Resolution
+				if (allResolutionsCheckbox.isSelected()) {
+					prefm.setPreference("wallpaper-resolution", PreferencesManager.DEFAULT_VALUE);						
+				} else {
+					prefm.setPreference("wallpaper-resolution", widthResolution.getValue().toString() + "x" + heigthResolution.getValue().toString());
+				}
+				
 				// Wallhaven.cc
 				if (wallhavenCheckbox.isSelected()) {
 					prefm.setPreference("provider-wallhaven", WDUtilities.APP_YES);
+					// TODO: Remove
 					if (allResolutionsWallhavenCheckbox.isSelected()) {
 						prefm.setPreference("wallpaper-resolution", PreferencesManager.DEFAULT_VALUE);						
 					} else {
@@ -1337,6 +1345,7 @@ public class WallpaperDownloader {
 				// DualMonitorBackgrounds
 				if (dualMonitorCheckbox.isSelected()) {
 					prefm.setPreference("provider-dualMonitorBackgrounds", WDUtilities.APP_YES);
+					// TODO: Remove
 					if (allResolutionsDualMonitorCheckbox.isSelected()) {
 						prefm.setPreference("provider-dualMonitorBackgrounds-resolution", PreferencesManager.DEFAULT_VALUE);						
 					} else {
