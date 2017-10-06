@@ -249,7 +249,7 @@ public class WallpaperDownloader {
 				// 1.- Log configuration
 				WDConfigManager.configureLog();
 
-				// 2.- Application configuratiobtnn
+				// 2.- Application configuration
 				WDConfigManager.checkConfig();
 				window = new WallpaperDownloader();
 				window.frame.setVisible(true);
@@ -257,11 +257,11 @@ public class WallpaperDownloader {
 				// Minimize the application if start minimized feature is enable
 				if (startMinimizedCheckBox.isSelected()) {
 					try {
-						// Sleeps during 1 second in order to avoid problems in GNOME 3 minimization
+						// Sleeps during 3 seconds in order to avoid problems in GNOME 3 minimization
 						if (WDUtilities.getWallpaperChanger() instanceof LinuxWallpaperChanger) {
 							if (((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment().equals(WDUtilities.DE_GNOME3)
 								|| ((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment().equals(WDUtilities.DE_KDE)) {
-								TimeUnit.SECONDS.sleep(2);								
+								TimeUnit.SECONDS.sleep(3);								
 							}
 						}
 					} catch (InterruptedException exception) {
