@@ -106,6 +106,12 @@ public class WDConfigManager {
         		 prefm.setPreference("downloading-process", WDUtilities.APP_YES);
 
         		 // Providers
+        		 // Resolution
+        		 // By default, native resolution will be stored
+    			 String screenResolution = WDUtilities.getResolution();
+    			 String[] screenResolutionString = screenResolution.split("x");
+    			 prefm.setPreference("wallpaper-resolution", screenResolutionString[0] + "x" + screenResolutionString[1]);
+        		 
         		 // Wallhaven.cc
         		 prefm.setPreference("provider-wallhaven", WDUtilities.APP_NO);
         		 // Initializing resolution
@@ -206,7 +212,16 @@ public class WDConfigManager {
     			 }
     			 LOG.info("Downloads directory -> " + prefm.getPreference("application-downloads-folder"));
     		 }
-    		 
+
+    		 // Resolution
+    		 // By default, if no resolution was defined by the user before, native
+    		 // resolution will be stored
+    		 if (prefm.getPreference("wallpaper-resolution").equals(PreferencesManager.DEFAULT_VALUE)) {
+    			 String screenResolution = WDUtilities.getResolution();
+    			 String[] screenResolutionString = screenResolution.split("x");
+    			 prefm.setPreference("wallpaper-resolution", screenResolutionString[0] + "x" + screenResolutionString[1]);
+    		 }
+
     		 // Downloading process
     		 // It will be enabled by default
 			 if (prefm.getPreference("downloading-process").equals(PreferencesManager.DEFAULT_VALUE)) {
