@@ -90,7 +90,34 @@ public class WallhavenProvider extends Provider {
 				if (!wallpaper.exists() && !wallpaperFavorite.exists() && !WDUtilities.isWallpaperBlacklisted(wallpaperName) && !WDUtilities.isWallpaperBlacklisted(wallpaperNameFavorite)) {
 					// Storing the image. It is necessary to download the remote file
 					// First try: JPG format will be used
-					boolean isWallpaperSuccessfullyStored = storeRemoteFile(wallpaper, wallpaperURL);
+					boolean isWallpaperSuccessfullyStored = false;
+					// Checking download policy
+					// 0 -> Download any wallpaper and keep the original resolution
+					// 1 -> Download any wallpaper and resize it (if it is bigger) to the resolution defined
+					// 2 -> Download only wallpapers with the resolution set by the user
+					switch (this.downloadPolicy) {
+					case "0":
+						isWallpaperSuccessfullyStored = storeRemoteFile(wallpaper, wallpaperURL);
+						break;
+					case "1":
+						String[] userResolution = this.resolution.split("x");
+						isWallpaperSuccessfullyStored = storeAndResizeRemoteFile(wallpaper, wallpaperURL, 
+								Integer.valueOf(userResolution[0]), 
+								Integer.valueOf(userResolution[1]));
+						break;
+					case "2":
+						String remoteImageResolution = getRemoteImageResolution(wallpaperURL);
+					    if (this.resolution.equals(remoteImageResolution)) {
+					    	// Wallpaper resolution fits the one set by the user
+							isWallpaperSuccessfullyStored = storeRemoteFile(wallpaper, wallpaperURL);
+					    } else {
+					    	isWallpaperSuccessfullyStored = false;
+					    }
+						break;
+					default:
+						break;
+					}
+					
 					if (!isWallpaperSuccessfullyStored) {
 						// Second try: PNG format will be used
 						wallpaperURL = wallpaperURL.replace("jpg", "png");
@@ -102,7 +129,33 @@ public class WallhavenProvider extends Provider {
 						wallpaper = new File(WDUtilities.getDownloadsPath() + File.separator + wallpaperName);
 						wallpaperFavorite = new File(WDUtilities.getDownloadsPath() + File.separator + wallpaperNameFavorite);
 						if (!wallpaper.exists() && !wallpaperFavorite.exists() && !WDUtilities.isWallpaperBlacklisted(wallpaperName) && !WDUtilities.isWallpaperBlacklisted(wallpaperNameFavorite)) {
-							isWallpaperSuccessfullyStored = storeRemoteFile(wallpaper, wallpaperURL);
+							// Checking download policy
+							// 0 -> Download any wallpaper and keep the original resolution
+							// 1 -> Download any wallpaper and resize it (if it is bigger) to the resolution defined
+							// 2 -> Download only wallpapers with the resolution set by the user
+							switch (this.downloadPolicy) {
+							case "0":
+								isWallpaperSuccessfullyStored = storeRemoteFile(wallpaper, wallpaperURL);
+								break;
+							case "1":
+								String[] userResolution = this.resolution.split("x");
+								isWallpaperSuccessfullyStored = storeAndResizeRemoteFile(wallpaper, wallpaperURL, 
+										Integer.valueOf(userResolution[0]), 
+										Integer.valueOf(userResolution[1]));
+								break;
+							case "2":
+								String remoteImageResolution = getRemoteImageResolution(wallpaperURL);
+							    if (this.resolution.equals(remoteImageResolution)) {
+							    	// Wallpaper resolution fits the one set by the user
+									isWallpaperSuccessfullyStored = storeRemoteFile(wallpaper, wallpaperURL);
+							    } else {
+							    	isWallpaperSuccessfullyStored = false;
+							    }
+								break;
+							default:
+								break;
+							}
+							
 							if (!isWallpaperSuccessfullyStored) {
 								if (LOG.isInfoEnabled()) {
 									LOG.info("Error trying to store wallpaper " + wallpaperURL + ". Skipping...");
@@ -151,16 +204,27 @@ public class WallhavenProvider extends Provider {
 		if (!activeKeyword.equals(PreferencesManager.DEFAULT_VALUE)) {
 			keywordString = "q" + WDUtilities.EQUAL + activeKeyword + WDUtilities.AND;
 		}
+		
+		// Resolution
 		String resolutionString = "";
-		if (!resolution.equals(PreferencesManager.DEFAULT_VALUE)) {
+		// 0 -> Download any wallpaper and keep the original resolution
+		// 1 -> Download any wallpaper and resize it (if it is bigger) to the resolution defined
+		// 2 -> Download only wallpapers with the resolution set by the user
+		switch (this.downloadPolicy) {
+		case "2":
 			resolutionString = "resolutions" + WDUtilities.EQUAL + resolution + WDUtilities.AND;
+			break;
+		default:
+			break;
 		}
+
 		if (LOG.isInfoEnabled()) {
 			LOG.info(baseURL + "search" + WDUtilities.QM + keywordString + "categories" + WDUtilities.EQUAL + "111" + WDUtilities.AND + "purity" + WDUtilities.EQUAL + "110" + WDUtilities.AND + resolutionString + 
-					WDUtilities.AND + "order" + WDUtilities.EQUAL + "desc" + WDUtilities.AND + "sorting" + WDUtilities.EQUAL + order);
+					"order" + WDUtilities.EQUAL + "desc" + WDUtilities.AND + "sorting" + WDUtilities.EQUAL + order);
 		}
+
 		return baseURL + "search" + WDUtilities.QM + keywordString + "categories" + WDUtilities.EQUAL + "111" +WDUtilities.AND + "purity" + WDUtilities.EQUAL + "110" + WDUtilities.AND + resolutionString + 
-				   WDUtilities.AND + "order" + WDUtilities.EQUAL + "desc" + WDUtilities.AND + "sorting" + WDUtilities.EQUAL + order;
+				   "order" + WDUtilities.EQUAL + "desc" + WDUtilities.AND + "sorting" + WDUtilities.EQUAL + order;
 	}
 
 }

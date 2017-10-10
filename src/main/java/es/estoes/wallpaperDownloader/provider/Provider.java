@@ -30,9 +30,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
-
 import javax.imageio.ImageIO;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import es.estoes.wallpaperDownloader.exception.ProviderException;
@@ -296,6 +294,20 @@ public abstract class Provider {
 				}
 			}
 		}		
+	}
+
+	/**
+	 * Gets the remote image resolution.
+	 * @param wallpaperURL wallpaper URL
+	 * @return String resolution
+	 * @throws IOException
+	 */
+	protected String getRemoteImageResolution(String wallpaperURL) throws IOException {
+		URL imageURL = new URL(wallpaperURL);
+	    HttpURLConnection httpcon = (HttpURLConnection) imageURL.openConnection();
+	    httpcon.addRequestProperty("User-Agent", "Mozilla/4.0");
+	    BufferedImage image = ImageIO.read(httpcon.getInputStream());
+		return image.getWidth() + "x" + image.getHeight();
 	}
 
 }
