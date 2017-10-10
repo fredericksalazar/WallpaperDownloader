@@ -229,7 +229,6 @@ public class WDConfigManager {
 			 if (prefm.getPreference("download-policy").equals(PreferencesManager.DEFAULT_VALUE)) {
 				 prefm.setPreference("download-policy", "0");
 			 }
-			 prefm.setPreference("download-policy", "0");
 
     		 // Downloading process
     		 // It will be enabled by default
