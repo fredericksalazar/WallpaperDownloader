@@ -335,7 +335,7 @@ public class WallpaperDownloader {
 		searchKeywords.setColumns(10);
 
 		JSeparator separator1 = new JSeparator();
-		separator1.setBounds(12, 104, 531, 2);
+		separator1.setBounds(12, 104, 610, 2);
 		providersPanel.add(separator1);
 		
 		try {
@@ -367,7 +367,7 @@ public class WallpaperDownloader {
 		integerFormat.setParseIntegerOnly(true);
 
 		JSeparator separator2 = new JSeparator();
-		separator2.setBounds(13, 135, 531, 2);
+		separator2.setBounds(13, 135, 610, 2);
 		providersPanel.add(separator2);
 		
 		devianartCheckbox = new JCheckBox("Devianart");
@@ -383,7 +383,7 @@ public class WallpaperDownloader {
 		providersPanel.add(devianartSearchTypeComboBox);
 		
 		JSeparator separator3 = new JSeparator();
-		separator3.setBounds(12, 164, 531, 2);
+		separator3.setBounds(12, 164, 610, 2);
 		providersPanel.add(separator3);
 		
 		bingCheckbox = new JCheckBox("Bing daily wallpaper");
@@ -391,7 +391,7 @@ public class WallpaperDownloader {
 		providersPanel.add(bingCheckbox);
 		
 		JSeparator separator4 = new JSeparator();
-		separator4.setBounds(13, 193, 531, 2);
+		separator4.setBounds(13, 193, 610, 2);
 		providersPanel.add(separator4);
 		
 		socialWallpaperingCheckbox = new JCheckBox("Social Wallpapering");
@@ -407,7 +407,7 @@ public class WallpaperDownloader {
 			ImageIcon icon = new ImageIcon(img);
 			JLabel lblIgnoreKeywordsSocialWallpaperingHelp = new JLabel(icon);
 			lblIgnoreKeywordsSocialWallpaperingHelp.setToolTipText("Social Wallpapering only allows the download of reviewed wallpapers. Those found using keywords and not reviewed won't be downloaded");
-			lblIgnoreKeywordsSocialWallpaperingHelp.setBounds(365, 195, 30, 23);
+			lblIgnoreKeywordsSocialWallpaperingHelp.setBounds(365, 196, 30, 23);
 			providersPanel.add(lblIgnoreKeywordsSocialWallpaperingHelp);
 		} catch (IOException ex) {
 			JLabel lblIgnoreKeywordsSocialWallpaperingHelp = new JLabel("Ignore keywords");
@@ -416,7 +416,7 @@ public class WallpaperDownloader {
 		}
 
 		JSeparator separator5 = new JSeparator();
-		separator5.setBounds(14, 221, 531, 2);
+		separator5.setBounds(14, 221, 610, 2);
 		providersPanel.add(separator5);
 		
 		wallpaperFusionCheckbox = new JCheckBox("WallpaperFusion");
@@ -424,7 +424,7 @@ public class WallpaperDownloader {
 		providersPanel.add(wallpaperFusionCheckbox);
 		
 		JSeparator separator6 = new JSeparator();
-		separator6.setBounds(14, 252, 531, 2);
+		separator6.setBounds(14, 252, 610, 2);
 		providersPanel.add(separator6);
 		
 		dualMonitorCheckbox = new JCheckBox("DualMonitorBackgrounds");
@@ -470,7 +470,7 @@ public class WallpaperDownloader {
 		providersPanel.add(lblDownloadPolicy);
 		
 		downloadPolicyComboBox = new JComboBox<ComboItem>();
-		downloadPolicyComboBox.setBounds(159, 70, 384, 24);
+		downloadPolicyComboBox.setBounds(159, 70, 463, 24);
 		providersPanel.add(downloadPolicyComboBox);
 		
 		btnResetResolution = new JButton("Reset");
@@ -552,7 +552,7 @@ public class WallpaperDownloader {
 		appSettingsPanel.add(downloadDirectorySize);
 		
 		JSeparator settingsSeparator1 = new JSeparator();
-		settingsSeparator1.setBounds(12, 62, 531, 2);
+		settingsSeparator1.setBounds(12, 62, 631, 2);
 		appSettingsPanel.add(settingsSeparator1);
 		
 		moveFavoriteCheckBox = new JCheckBox("Move favorite wallpapers");
@@ -2128,7 +2128,7 @@ public class WallpaperDownloader {
 
         // Download policy
         downloadPolicyComboBox.addItem(new ComboItem("Any wallpaper and keep the original resolution", "0"));
-        downloadPolicyComboBox.addItem(new ComboItem("Any wallpaper and resize it to the resolution defined", "1"));
+        downloadPolicyComboBox.addItem(new ComboItem("Any wallpaper and resize it (if bigger) to the resolution defined", "1"));
         downloadPolicyComboBox.addItem(new ComboItem("Only wallpapers with the resolution set by the user", "2"));
         downloadPolicyComboBox.setSelectedIndex(new Integer(prefm.getPreference("download-policy")));
         
