@@ -1192,7 +1192,16 @@ public class WallpaperDownloader {
 		        widthResolution.setValue(new Integer(resolution[0]));
 				heigthResolution.setValue(new Integer(resolution[1]));
 			}
+		});
 		
+		/**
+		 * downloadPolicyComboBox Action Listener.
+		 */
+		// Clicking event
+		downloadPolicyComboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				prefm.setPreference("download-policy", new Integer(downloadPolicyComboBox.getSelectedIndex()).toString());
+			}
 		});
 
 		/**
@@ -2118,6 +2127,7 @@ public class WallpaperDownloader {
         downloadPolicyComboBox.addItem(new ComboItem("Any wallpaper and keep the original resolution", "0"));
         downloadPolicyComboBox.addItem(new ComboItem("Any wallpaper and resize it to the resolution defined", "1"));
         downloadPolicyComboBox.addItem(new ComboItem("Only wallpapers with the resolution set by the user", "2"));
+        downloadPolicyComboBox.setSelectedIndex(new Integer(prefm.getPreference("download-policy")));
         
 		// Wallhaven.cc
 		String wallhavenEnable = prefm.getPreference("provider-wallhaven");

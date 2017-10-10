@@ -112,6 +112,9 @@ public class WDConfigManager {
     			 String[] screenResolutionString = screenResolution.split("x");
     			 prefm.setPreference("wallpaper-resolution", screenResolutionString[0] + "x" + screenResolutionString[1]);
         		 
+    			 // Download policy
+    			 prefm.setPreference("download-policy", "0");
+    			 
         		 // Wallhaven.cc
         		 prefm.setPreference("provider-wallhaven", WDUtilities.APP_NO);
         		 // Initializing resolution
@@ -222,12 +225,18 @@ public class WDConfigManager {
     			 prefm.setPreference("wallpaper-resolution", screenResolutionString[0] + "x" + screenResolutionString[1]);
     		 }
 
+			 // Download policy
+			 if (prefm.getPreference("download-policy").equals(PreferencesManager.DEFAULT_VALUE)) {
+				 prefm.setPreference("download-policy", "0");
+			 }
+			 prefm.setPreference("download-policy", "0");
+
     		 // Downloading process
     		 // It will be enabled by default
 			 if (prefm.getPreference("downloading-process").equals(PreferencesManager.DEFAULT_VALUE)) {
 				 prefm.setPreference("downloading-process", WDUtilities.APP_YES);
 			 }
-
+			 
     		 // Blacklist directory
 			 if (LOG.isInfoEnabled()) {
 				 LOG.info("Checking blacklist directory...");
