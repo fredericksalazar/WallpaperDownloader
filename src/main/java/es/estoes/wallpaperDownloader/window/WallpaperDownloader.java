@@ -126,6 +126,7 @@ public class WallpaperDownloader {
 	private JButton btnMinimize;
 	private JButton btnOpenDownloadsDirectory;
 	private JButton btnClipboard;
+	private JComboBox<ComboItem> downloadPolicyComboBox;
 	private JComboBox<ComboItem> searchTypeWallhavenComboBox;
 	private JFormattedTextField widthResolution;
 	private JLabel lblX;
@@ -321,7 +322,7 @@ public class WallpaperDownloader {
 		providersPanel.setLayout(null);
 
 		wallhavenCheckbox = new JCheckBox("Wallhaven.cc");
-		wallhavenCheckbox.setBounds(13, 88, 129, 23);
+		wallhavenCheckbox.setBounds(13, 109, 129, 23);
 		providersPanel.add(wallhavenCheckbox);
 
 		JLabel lblKeywords = new JLabel("Keywords");
@@ -334,7 +335,7 @@ public class WallpaperDownloader {
 		searchKeywords.setColumns(10);
 
 		JSeparator separator1 = new JSeparator();
-		separator1.setBounds(12, 85, 531, 2);
+		separator1.setBounds(12, 104, 531, 2);
 		providersPanel.add(separator1);
 		
 		try {
@@ -355,50 +356,50 @@ public class WallpaperDownloader {
 		integerFormat.setParseIntegerOnly(true);
 		
 		searchTypeWallhavenComboBox = new JComboBox<ComboItem>();
-		searchTypeWallhavenComboBox.setBounds(321, 90, 149, 19);
+		searchTypeWallhavenComboBox.setBounds(321, 111, 149, 19);
 		providersPanel.add(searchTypeWallhavenComboBox);
 
 		JLabel lblSearchTypeWallhaven = new JLabel("Search Type");
-		lblSearchTypeWallhaven.setBounds(224, 93, 94, 15);
+		lblSearchTypeWallhaven.setBounds(224, 114, 94, 15);
 		providersPanel.add(lblSearchTypeWallhaven);
 		
 		integerFormat = NumberFormat.getNumberInstance();
 		integerFormat.setParseIntegerOnly(true);
 
 		JSeparator separator2 = new JSeparator();
-		separator2.setBounds(13, 114, 531, 2);
+		separator2.setBounds(13, 135, 531, 2);
 		providersPanel.add(separator2);
 		
 		devianartCheckbox = new JCheckBox("Devianart");
-		devianartCheckbox.setBounds(13, 117, 129, 23);
+		devianartCheckbox.setBounds(13, 138, 129, 23);
 		providersPanel.add(devianartCheckbox);
 		
 		JLabel lblDevianartSearchType = new JLabel("Search Type");
-		lblDevianartSearchType.setBounds(224, 121, 94, 15);
+		lblDevianartSearchType.setBounds(224, 142, 94, 15);
 		providersPanel.add(lblDevianartSearchType);
 
 		devianartSearchTypeComboBox = new JComboBox<ComboItem>();
-		devianartSearchTypeComboBox.setBounds(321, 119, 150, 19);
+		devianartSearchTypeComboBox.setBounds(321, 140, 150, 19);
 		providersPanel.add(devianartSearchTypeComboBox);
 		
 		JSeparator separator3 = new JSeparator();
-		separator3.setBounds(12, 143, 531, 2);
+		separator3.setBounds(12, 164, 531, 2);
 		providersPanel.add(separator3);
 		
 		bingCheckbox = new JCheckBox("Bing daily wallpaper");
-		bingCheckbox.setBounds(13, 146, 249, 23);
+		bingCheckbox.setBounds(13, 167, 249, 23);
 		providersPanel.add(bingCheckbox);
 		
 		JSeparator separator4 = new JSeparator();
-		separator4.setBounds(13, 172, 531, 2);
+		separator4.setBounds(13, 193, 531, 2);
 		providersPanel.add(separator4);
 		
 		socialWallpaperingCheckbox = new JCheckBox("Social Wallpapering");
-		socialWallpaperingCheckbox.setBounds(13, 175, 194, 23);
+		socialWallpaperingCheckbox.setBounds(13, 196, 194, 23);
 		providersPanel.add(socialWallpaperingCheckbox);
 		
 		socialWallpaperingIgnoreKeywordsCheckbox = new JCheckBox("Ignore keywords");
-		socialWallpaperingIgnoreKeywordsCheckbox.setBounds(221, 175, 143, 23);
+		socialWallpaperingIgnoreKeywordsCheckbox.setBounds(221, 196, 143, 23);
 		providersPanel.add(socialWallpaperingIgnoreKeywordsCheckbox);
 		
 		try {
@@ -406,7 +407,7 @@ public class WallpaperDownloader {
 			ImageIcon icon = new ImageIcon(img);
 			JLabel lblIgnoreKeywordsSocialWallpaperingHelp = new JLabel(icon);
 			lblIgnoreKeywordsSocialWallpaperingHelp.setToolTipText("Social Wallpapering only allows the download of reviewed wallpapers. Those found using keywords and not reviewed won't be downloaded");
-			lblIgnoreKeywordsSocialWallpaperingHelp.setBounds(365, 174, 30, 23);
+			lblIgnoreKeywordsSocialWallpaperingHelp.setBounds(365, 195, 30, 23);
 			providersPanel.add(lblIgnoreKeywordsSocialWallpaperingHelp);
 		} catch (IOException ex) {
 			JLabel lblIgnoreKeywordsSocialWallpaperingHelp = new JLabel("Ignore keywords");
@@ -415,27 +416,27 @@ public class WallpaperDownloader {
 		}
 
 		JSeparator separator5 = new JSeparator();
-		separator5.setBounds(14, 200, 531, 2);
+		separator5.setBounds(14, 221, 531, 2);
 		providersPanel.add(separator5);
 		
 		wallpaperFusionCheckbox = new JCheckBox("WallpaperFusion");
-		wallpaperFusionCheckbox.setBounds(13, 205, 210, 23);
+		wallpaperFusionCheckbox.setBounds(13, 226, 210, 23);
 		providersPanel.add(wallpaperFusionCheckbox);
 		
 		JSeparator separator6 = new JSeparator();
-		separator6.setBounds(14, 231, 531, 2);
+		separator6.setBounds(14, 252, 531, 2);
 		providersPanel.add(separator6);
 		
 		dualMonitorCheckbox = new JCheckBox("DualMonitorBackgrounds");
-		dualMonitorCheckbox.setBounds(14, 233, 201, 23);
+		dualMonitorCheckbox.setBounds(14, 254, 201, 23);
 		providersPanel.add(dualMonitorCheckbox);
 		
 		lblSearchTypeDualMonitor = new JLabel("Search Type");
-		lblSearchTypeDualMonitor.setBounds(227, 236, 94, 15);
+		lblSearchTypeDualMonitor.setBounds(227, 258, 94, 15);
 		providersPanel.add(lblSearchTypeDualMonitor);
 
 		searchTypeDualMonitorComboBox = new JComboBox<ComboItem>();
-		searchTypeDualMonitorComboBox.setBounds(324, 235, 149, 19);
+		searchTypeDualMonitorComboBox.setBounds(324, 256, 149, 19);
 		providersPanel.add(searchTypeDualMonitorComboBox);
 		
 		JLabel lblResolution = new JLabel("Resolution");
@@ -463,6 +464,14 @@ public class WallpaperDownloader {
 		});
 		btnChangeResolution.setBounds(224, 38, 131, 25);
 		providersPanel.add(btnChangeResolution);
+		
+		JLabel lblDownloadPolicy = new JLabel("Download policy");
+		lblDownloadPolicy.setBounds(13, 74, 149, 15);
+		providersPanel.add(lblDownloadPolicy);
+		
+		downloadPolicyComboBox = new JComboBox<ComboItem>();
+		downloadPolicyComboBox.setBounds(159, 70, 384, 24);
+		providersPanel.add(downloadPolicyComboBox);
 		
 		btnResetResolution = new JButton("Reset");
 		btnResetResolution.addActionListener(new ActionListener() {
@@ -1153,7 +1162,16 @@ public class WallpaperDownloader {
 		// Clicking event
 		btnApplyResolution.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				prefm.setPreference("wallpaper-resolution", widthResolution.getValue().toString() + "x" + heigthResolution.getValue().toString());
+				String width = widthResolution.getValue().toString();
+				String heigth = heigthResolution.getValue().toString();
+				
+				// Sanitizing width and heigth
+				width = width.replace(".", "");
+				width = width.replace(",", "");
+				heigth = heigth.replace(".", "");
+				heigth = heigth.replace(",", "");
+				
+				prefm.setPreference("wallpaper-resolution", width + "x" + heigth);
 				widthResolution.setEnabled(false);
 				heigthResolution.setEnabled(false);
 				providersPanel.remove(btnApplyResolution);
@@ -2095,7 +2113,12 @@ public class WallpaperDownloader {
         widthResolution.setEnabled(false);
 		heigthResolution.setValue(new Integer(resolution[1]));
         heigthResolution.setEnabled(false);
-		
+
+        // Download policy
+        downloadPolicyComboBox.addItem(new ComboItem("Any wallpaper and keep the original resolution", "0"));
+        downloadPolicyComboBox.addItem(new ComboItem("Any wallpaper and resize it to the resolution defined", "1"));
+        downloadPolicyComboBox.addItem(new ComboItem("Only wallpapers with the resolution set by the user", "2"));
+        
 		// Wallhaven.cc
 		String wallhavenEnable = prefm.getPreference("provider-wallhaven");
 		if (wallhavenEnable.equals(WDUtilities.APP_YES)) {
