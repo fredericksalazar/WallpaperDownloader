@@ -1164,14 +1164,17 @@ public class WallpaperDownloader {
 			public void actionPerformed(ActionEvent evt) {
 				String width = widthResolution.getValue().toString();
 				String heigth = heigthResolution.getValue().toString();
-				
+
 				// Sanitizing width and heigth
 				width = width.replace(".", "");
 				width = width.replace(",", "");
 				heigth = heigth.replace(".", "");
 				heigth = heigth.replace(",", "");
+
+				if (!width.isEmpty() && !heigth.isEmpty()) {
+					prefm.setPreference("wallpaper-resolution", width + "x" + heigth);
+				}
 				
-				prefm.setPreference("wallpaper-resolution", width + "x" + heigth);
 				widthResolution.setEnabled(false);
 				heigthResolution.setEnabled(false);
 				providersPanel.remove(btnApplyResolution);
