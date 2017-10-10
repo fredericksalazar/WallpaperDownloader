@@ -16,13 +16,8 @@
 
 package es.estoes.wallpaperDownloader.provider;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
-
-import javax.imageio.ImageIO;
-
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -173,9 +168,7 @@ public class DualMonitorBackgroundsProvider extends Provider {
 											Integer.valueOf(userResolution[1]));
 									break;
 								case "2":
-									URL imageURL = new URL(wallpaperURL);
-								    BufferedImage image = ImageIO.read(imageURL);
-								    String remoteImageResolution = image.getWidth() + "x" + image.getHeight();
+									String remoteImageResolution = getRemoteImageResolution(wallpaperURL);
 								    if (this.resolution.equals(remoteImageResolution)) {
 								    	// Wallpaper resolution fits the one set by the user
 										isWallpaperSuccessfullyStored = storeRemoteFile(wallpaper, wallpaperURL);
@@ -238,8 +231,9 @@ public class DualMonitorBackgroundsProvider extends Provider {
 		String completeUrl = this.baseURL;
 		// If activeKeyword is empty, the search operation will be done within the whole repository 
 		if (activeKeyword.equals(PreferencesManager.DEFAULT_VALUE)) {
-			completeUrl = completeUrl + "index.php";
-			
+			if (this.thumbnailsDivId != "random") {
+				completeUrl = completeUrl + "index.php";
+			}
 			// Resolution
 			// 0 -> Download any wallpaper and keep the original resolution
 			// 1 -> Download any wallpaper and resize it (if it is bigger) to the resolution defined
