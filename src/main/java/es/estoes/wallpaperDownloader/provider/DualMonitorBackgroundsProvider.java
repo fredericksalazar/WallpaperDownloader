@@ -16,8 +16,13 @@
 
 package es.estoes.wallpaperDownloader.provider;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+
+import javax.imageio.ImageIO;
+
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -152,16 +157,36 @@ public class DualMonitorBackgroundsProvider extends Provider {
 							File wallpaperFavorite = new File(WDUtilities.getDownloadsPath() + File.separator + wallpaperNameFavorite);
 							if (!wallpaper.exists() && !wallpaperFavorite.exists() && !WDUtilities.isWallpaperBlacklisted(wallpaperName) && !WDUtilities.isWallpaperBlacklisted(wallpaperNameFavorite)) {
 								// Storing the image. It is necessary to download the remote file
-								// The image will be resized if it is needed
 								boolean isWallpaperSuccessfullyStored = false;
-								if (resolution.equals(PreferencesManager.DEFAULT_VALUE)) {
+								// Checking download policy
+								// 0 -> Download any wallpaper and keep the original resolution
+								// 1 -> Download any wallpaper and resize it (if it is bigger) to the resolution defined
+								// 2 -> Download only wallpapers with the resolution set by the user
+								switch (this.downloadPolicy) {
+								case "0":
 									isWallpaperSuccessfullyStored = storeRemoteFile(wallpaper, wallpaperURL);
-								} else {
+									break;
+								case "1":
 									String[] userResolution = this.resolution.split("x");
 									isWallpaperSuccessfullyStored = storeAndResizeRemoteFile(wallpaper, wallpaperURL, 
 											Integer.valueOf(userResolution[0]), 
 											Integer.valueOf(userResolution[1]));
+									break;
+								case "2":
+									URL imageURL = new URL(wallpaperURL);
+								    BufferedImage image = ImageIO.read(imageURL);
+								    String remoteImageResolution = image.getWidth() + "x" + image.getHeight();
+								    if (this.resolution.equals(remoteImageResolution)) {
+								    	// Wallpaper resolution fits the one set by the user
+										isWallpaperSuccessfullyStored = storeRemoteFile(wallpaper, wallpaperURL);
+								    } else {
+								    	isWallpaperSuccessfullyStored = false;
+								    }
+									break;
+								default:
+									break;
 								}
+								
 								if (!isWallpaperSuccessfullyStored) {
 									if (LOG.isInfoEnabled()) {
 										LOG.info("Error trying to store wallpaper " + wallpaperURL + ". Skipping...");							
@@ -176,7 +201,8 @@ public class DualMonitorBackgroundsProvider extends Provider {
 									wallpaperFound = Boolean.TRUE;
 									// Exit the process because one wallpaper was downloaded successfully
 									break;
-								}							
+								}
+								
 							} else {
 								if (LOG.isInfoEnabled()) {
 									LOG.info("Wallpaper " + wallpaper.getName() + " is already stored or blacklisted. Skipping...");
@@ -213,15 +239,28 @@ public class DualMonitorBackgroundsProvider extends Provider {
 		// If activeKeyword is empty, the search operation will be done within the whole repository 
 		if (activeKeyword.equals(PreferencesManager.DEFAULT_VALUE)) {
 			completeUrl = completeUrl + "index.php";
+			
 			// Resolution
-			if (!resolution.equals(PreferencesManager.DEFAULT_VALUE)) {
+			// 0 -> Download any wallpaper and keep the original resolution
+			// 1 -> Download any wallpaper and resize it (if it is bigger) to the resolution defined
+			// 2 -> Download only wallpapers with the resolution set by the user
+			switch (this.downloadPolicy) {
+			case "0":
+				completeUrl = completeUrl + this.sorting;
+				break;
+			case "1":
+				completeUrl = completeUrl + this.sorting;
+				break;
+			case "2":
 				String[] userResolution = this.resolution.split("x");
 				String resolutionString = "userwidth" + WDUtilities.EQUAL + userResolution[0] + WDUtilities.AND + 
 						"userheight" + WDUtilities.EQUAL + userResolution[1];
 				completeUrl = completeUrl + WDUtilities.QM + resolutionString;
-			} else {
-				completeUrl = completeUrl + this.sorting;
+				break;
+			default:
+				break;
 			}
+			
 			// Adding page
 			completeUrl = completeUrl + WDUtilities.AND + "latestImagesPage" + WDUtilities.EQUAL + this.getPage();
 		} else {
@@ -230,13 +269,22 @@ public class DualMonitorBackgroundsProvider extends Provider {
 				// http://www.dualmonitorbackgrounds.com/page/search/marvel/2/?userwidth=3200&userheight=1200
 				// http://www.dualmonitorbackgrounds.com/page/search/star+AND+wars/2
 			completeUrl = completeUrl + "/page/search/" + this.activeKeyword + WDUtilities.URL_SLASH + this.getPage();
+
 			// Resolution
-			if (!resolution.equals(PreferencesManager.DEFAULT_VALUE)) {
+			// 0 -> Download any wallpaper and keep the original resolution
+			// 1 -> Download any wallpaper and resize it (if it is bigger) to the resolution defined
+			// 2 -> Download only wallpapers with the resolution set by the user
+			switch (this.downloadPolicy) {
+			case "2":
 				String[] userResolution = this.resolution.split("x");
 				String resolutionString = "userwidth" + WDUtilities.EQUAL + userResolution[0] + WDUtilities.AND + 
 						"userheight" + WDUtilities.EQUAL + userResolution[1];
 				completeUrl = completeUrl + WDUtilities.URL_SLASH + WDUtilities.QM + resolutionString;
+				break;
+			default:
+				break;
 			}
+			
 			// Id for div element which contains all thumbnails
 			this.thumbnailsDivId = "albumsSearch";
 		}
