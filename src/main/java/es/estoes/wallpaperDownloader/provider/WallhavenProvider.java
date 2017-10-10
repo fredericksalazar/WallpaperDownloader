@@ -44,9 +44,6 @@ public class WallhavenProvider extends Provider {
 		super();
 		PreferencesManager prefm = PreferencesManager.getInstance();
 
-		// Obtaining resolution
-		this.resolution = prefm.getPreference("wallpaper-resolution");
-
 		PropertiesManager pm = PropertiesManager.getInstance();
 		this.baseURL = pm.getProperty("provider.wallhaven.baseurl");
 		switch (new Integer(prefm.getPreference("wallpaper-search-type"))) {

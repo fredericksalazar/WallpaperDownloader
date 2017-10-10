@@ -53,6 +53,7 @@ public abstract class Provider {
 	protected String baseURL;
 	protected String keywordsProperty;
 	protected String resolution;
+	protected String downloadPolicy;
 	
 	// Getters & Setters
 	/**
@@ -76,10 +77,19 @@ public abstract class Provider {
 	 * Constructor.
 	 */
 	public Provider () {
+		PreferencesManager prefm = PreferencesManager.getInstance();
+
+		// Obtaining resolution
+		this.resolution = prefm.getPreference("wallpaper-resolution");
+
+		// Obtaining download policy
+		this.downloadPolicy = prefm.getPreference("download-policy");
+
 		this.activeIndex = 0;
 		
 		// Obtaining keywords
 		this.keywordsProperty = "provider-wallhaven-keywords";
+		
 	}
 	
 	/**
