@@ -988,8 +988,19 @@ public class WallpaperDownloader {
 
 		try
 		{
+			// Version 2.9
+		    doc.insertString(0, "New features (Version 2.9)\n\n", keyWord );
+		    doc.insertString(doc.getLength(), "- Providers tab gets a new design.\n", null );
+		    doc.insertString(doc.getLength(), "- User can set a global preferred resolution for wallpapers.\n", null );
+		    doc.insertString(doc.getLength(), "- Download policy implemented which will affect all the providers.\n", null );
+		    doc.insertString(doc.getLength(), "- User can set the time to minimize the application when starts minimized.\n\n", null );
+		    doc.insertString(doc.getLength(), "Bugs fixed (Version 2.9).\n\n", keyWord );
+		    doc.insertString(doc.getLength(), "- Wallpapers from Social Wallpapering provider are now retrieved correctly.\n", null );
+		    doc.insertString(doc.getLength(), "- Search type in DevianArt provider now works correctly.\n", null );
+		    doc.insertString(doc.getLength(), "- Wallpapers from Bing provider are now retrieved correctly when the original resolution doesn't match the one defined by the user.\n\n", null );
+			
 			// Version 2.8
-		    doc.insertString(0, "New features (Version 2.8)\n\n", keyWord );
+		    doc.insertString(doc.getLength(), "New features (Version 2.8)\n\n", keyWord );
 		    doc.insertString(doc.getLength(), "- GNOME  Shell and KDE Plasma icon tray support added.\n", null );
 		    doc.insertString(doc.getLength(), "- New provider implemented (DualBackgroundMonitors).\n", null );
 		    doc.insertString(doc.getLength(), "- New window to choose the wallpaper to be set from all the sources defined.\n\n", null );
