@@ -163,6 +163,7 @@ public class WallpaperDownloader {
 	private JLabel lblNotifications;
 	private JComboBox<ComboItem> notificationsComboBox;
 	private static JCheckBox startMinimizedCheckBox;
+	private JComboBox<ComboItem> timeToMinimizeComboBox;
 	private static JButton btnPause;
 	private static JButton btnPlay;
 	private static JPanel providersPanel;
@@ -258,7 +259,8 @@ public class WallpaperDownloader {
 						if (WDUtilities.getWallpaperChanger() instanceof LinuxWallpaperChanger) {
 							if (((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment().equals(WDUtilities.DE_GNOME3)
 								|| ((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment().equals(WDUtilities.DE_KDE)) {
-								TimeUnit.SECONDS.sleep(3);								
+								PreferencesManager prefm = PreferencesManager.getInstance(); 
+								TimeUnit.SECONDS.sleep(new Long(prefm.getPreference("time-to-minimize")));								
 							}
 						}
 					} catch (InterruptedException exception) {
@@ -604,16 +606,24 @@ public class WallpaperDownloader {
 		appSettingsPanel.add(lblNotifications);
 		
 		notificationsComboBox = new JComboBox<ComboItem>();
-		notificationsComboBox.setBounds(317, 143, 134, 19);
+		notificationsComboBox.setBounds(317, 140, 134, 23);
 		appSettingsPanel.add(notificationsComboBox);
 
 		startMinimizedCheckBox = new JCheckBox("Start minimized");
-		startMinimizedCheckBox.setBounds(12, 173, 249, 23);
+		startMinimizedCheckBox.setBounds(12, 173, 179, 23);
 		appSettingsPanel.add(startMinimizedCheckBox);
 		
 		JSeparator settingsSeparator3 = new JSeparator();
 		settingsSeparator3.setBounds(12, 168, 531, 2);
 		appSettingsPanel.add(settingsSeparator3);
+		
+		JLabel lblTimeToMinimize = new JLabel("Time to minimize");
+		lblTimeToMinimize.setBounds(194, 175, 126, 19);
+		appSettingsPanel.add(lblTimeToMinimize);
+		
+		timeToMinimizeComboBox = new JComboBox<ComboItem>();
+		timeToMinimizeComboBox.setBounds(317, 173, 56, 24);
+		appSettingsPanel.add(timeToMinimizeComboBox);
 		
 		// Only those desktop environment programmed to be changeable will display this option
 		if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
@@ -1212,6 +1222,34 @@ public class WallpaperDownloader {
 		});
 
 		/**
+		 * startMinimizedCheckBox Action Listener.
+		 */
+		// Clicking event
+		startMinimizedCheckBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				if (startMinimizedCheckBox.isSelected()) {
+					prefm.setPreference("start-minimized", WDUtilities.APP_YES);
+					timeToMinimizeComboBox.setEnabled(true);
+				} else {
+					prefm.setPreference("start-minimized", WDUtilities.APP_NO);
+					timeToMinimizeComboBox.setEnabled(false);
+				}
+				prefm.setPreference("download-policy", new Integer(downloadPolicyComboBox.getSelectedIndex()).toString());
+			}
+		});
+
+		/**
+		 * timeToMinimizeComboBox Action Listener.
+		 */
+		// Clicking event
+		timeToMinimizeComboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				Integer timeToMinimize = new Integer(timeToMinimizeComboBox.getSelectedIndex()) + 1;
+				prefm.setPreference("time-to-minimize", timeToMinimize.toString());
+			}
+		});
+
+		/**
 		 * btnApply Action Listener.
 		 */
 		// Clicking event
@@ -1298,11 +1336,6 @@ public class WallpaperDownloader {
 					prefm.setPreference("move-favorite-folder", PreferencesManager.DEFAULT_VALUE);
 				}
 				prefm.setPreference("application-notifications", new Integer(notificationsComboBox.getSelectedIndex()).toString());
-				if (startMinimizedCheckBox.isSelected()) {
-					prefm.setPreference("start-minimized", WDUtilities.APP_YES);
-				} else {
-					prefm.setPreference("start-minimized", WDUtilities.APP_NO);
-				}
 				if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
 					prefm.setPreference("application-changer", new Integer(changerComboBox.getSelectedIndex()).toString());
 				}
@@ -2255,9 +2288,24 @@ public class WallpaperDownloader {
 		String startMinimizedEnable = prefm.getPreference("start-minimized");
 		if (startMinimizedEnable.equals(WDUtilities.APP_YES)) {
 			startMinimizedCheckBox.setSelected(true);
+			timeToMinimizeComboBox.setEnabled(true);
 		} else {
 			startMinimizedCheckBox.setSelected(false);
+			timeToMinimizeComboBox.setEnabled(false);
 		}
+		
+		// Time to minimize
+		timeToMinimizeComboBox.addItem(new ComboItem("1s", "1"));
+		timeToMinimizeComboBox.addItem(new ComboItem("2s", "2"));
+		timeToMinimizeComboBox.addItem(new ComboItem("3s", "3"));
+		timeToMinimizeComboBox.addItem(new ComboItem("4s", "4"));
+		timeToMinimizeComboBox.addItem(new ComboItem("5s", "5"));
+		timeToMinimizeComboBox.addItem(new ComboItem("6s", "6"));
+		timeToMinimizeComboBox.addItem(new ComboItem("7s", "7"));
+		timeToMinimizeComboBox.addItem(new ComboItem("8s", "8"));
+		timeToMinimizeComboBox.addItem(new ComboItem("9s", "9"));
+		timeToMinimizeComboBox.addItem(new ComboItem("10s", "10"));
+		timeToMinimizeComboBox.setSelectedIndex((new Integer(prefm.getPreference("time-to-minimize")) - 1));
 
 		// Changer
 		if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {

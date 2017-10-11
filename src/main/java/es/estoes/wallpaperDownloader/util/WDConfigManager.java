@@ -166,6 +166,9 @@ public class WDConfigManager {
         		 // Initializing start minimize feature
         		 prefm.setPreference("start-minimized", PreferencesManager.DEFAULT_VALUE);
 
+        		 // Initializing time to minimize feature
+        		 prefm.setPreference("time-to-minimize", "3");
+
         		 // Initializing changer timer
         		 // By default, changer is off
         		 // 0 -> Off
@@ -300,6 +303,11 @@ public class WDConfigManager {
     		 // Start minimize feature
 			 if (prefm.getPreference("start-minimized").equals(PreferencesManager.DEFAULT_VALUE)) {
 	    		 prefm.setPreference("start-minimized", PreferencesManager.DEFAULT_VALUE);
+			 }
+
+    		 // Time to minimize feature
+			 if (prefm.getPreference("time-to-minimize").equals(PreferencesManager.DEFAULT_VALUE)) {
+	    		 prefm.setPreference("time-to-minimize", "3");
 			 }
 
 			 // Changer timer
