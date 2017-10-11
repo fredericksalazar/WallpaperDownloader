@@ -1181,6 +1181,8 @@ public class WallpaperDownloader {
 				providersPanel.remove(btnResetResolution);
 				providersPanel.add(btnChangeResolution);
 				providersPanel.repaint();
+				// Restarting downloading process
+				restartDownloadingProcess();
 			}
 		});
 
@@ -1204,6 +1206,8 @@ public class WallpaperDownloader {
 		downloadPolicyComboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				prefm.setPreference("download-policy", new Integer(downloadPolicyComboBox.getSelectedIndex()).toString());
+				// Restarting downloading process
+				restartDownloadingProcess();
 			}
 		});
 
@@ -1676,6 +1680,17 @@ public class WallpaperDownloader {
 		if (WDUtilities.getLevelOfNotifications() > 0) {
 			DialogManager info = new DialogManager("Downloading process has been resumed", 2000);
 			info.openDialog();
+		}
+	}
+	
+	/**
+	 * Restarts downloading process.
+	 */
+	public static void restartDownloadingProcess() {
+		final PreferencesManager prefm = PreferencesManager.getInstance();
+		if (prefm.getPreference("downloading-process").equals(WDUtilities.APP_YES)) {
+			pauseDownloadingProcess();
+			resumeDownloadingProcess();
 		}
 	}
 
