@@ -132,31 +132,35 @@ public class WallpaperFusionProvider extends Provider {
 						File wallpaper = new File(WDUtilities.getDownloadsPath() + File.separator + wallpaperName);
 						File wallpaperFavorite = new File(WDUtilities.getDownloadsPath() + File.separator + wallpaperNameFavorite);
 						if (!wallpaper.exists() && !wallpaperFavorite.exists() && !WDUtilities.isWallpaperBlacklisted(wallpaperName) && !WDUtilities.isWallpaperBlacklisted(wallpaperNameFavorite)) {
-							boolean isWallpaperSuccessfullyStored = storeRemoteFile(wallpaper, wallpaperURL);
-							if (!isWallpaperSuccessfullyStored) {
-								// We try to store the wallpaper with the original resolution
+							// Storing the image. It is necessary to download the remote file
+							boolean isWallpaperSuccessfullyStored = false;
+							String[] userResolution = this.resolution.split("x");
+							// Checking download policy
+							// 0 -> Download any wallpaper and keep the original resolution
+							// 1 -> Download any wallpaper and resize it (if it is bigger) to the resolution defined
+							// 2 -> Download only wallpapers with the resolution set by the user
+							switch (this.downloadPolicy) {
+							case "0":
 								wallpaperURL = WF_DOWNLOAD_URL + wallpaperId + WDUtilities.URL_SLASH + WF_ORIGINAL_PARAMETERS;
+								isWallpaperSuccessfullyStored = storeRemoteFile(wallpaper, wallpaperURL);
+								break;
+							case "1":
+								wallpaperURL = WF_DOWNLOAD_URL + wallpaperId + WDUtilities.URL_SLASH + WF_ORIGINAL_PARAMETERS;
+								isWallpaperSuccessfullyStored = storeAndResizeRemoteFile(wallpaper, wallpaperURL, 
+										Integer.valueOf(userResolution[0]), 
+										Integer.valueOf(userResolution[1]));
+								break;
+							case "2":
+								wallpaperURL = WF_DOWNLOAD_URL + wallpaperId + WDUtilities.URL_SLASH + "?W=" + Integer.valueOf(userResolution[0]) + "&H=" + Integer.valueOf(userResolution[1]);
+								isWallpaperSuccessfullyStored = storeRemoteFile(wallpaper, wallpaperURL);
+								break;
+							default:
+								break;
+							}
+
+							if (!isWallpaperSuccessfullyStored) {
 								if (LOG.isInfoEnabled()) {
-									LOG.info("No wallpaper found using user's resolution. Storing wallpaper with original resolution...");
-								}
-								if (!wallpaper.exists() && !wallpaperFavorite.exists() && !WDUtilities.isWallpaperBlacklisted(wallpaperName) && !WDUtilities.isWallpaperBlacklisted(wallpaperNameFavorite)) {
-									isWallpaperSuccessfullyStored = storeRemoteFile(wallpaper, wallpaperURL);
-									if (!isWallpaperSuccessfullyStored) {
-										if (LOG.isInfoEnabled()) {
-											LOG.info("Error trying to store wallpaper " + wallpaperURL + ". Skipping...");							
-										}
-									} else {
-										if (LOG.isInfoEnabled()) {
-											LOG.info("Wallpaper " + wallpaper.getName() + " successfully stored");
-											LOG.info("Refreshing space occupied progress bar...");
-										}
-										WallpaperDownloader.refreshProgressBar();
-										WallpaperDownloader.refreshJScrollPane();
-										// Exit the process because one wallpaper was downloaded successfully
-										break;
-									}							
-								} else {
-									LOG.info("Wallpaper " + wallpaper.getName() + " is already stored. Skipping...");
+									LOG.info("Error trying to store wallpaper " + wallpaperURL + ". Skipping...");							
 								}
 							} else {
 								LOG.info("Wallpaper " + wallpaper.getName() + " successfully stored");
