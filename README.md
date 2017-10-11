@@ -8,7 +8,7 @@ This is the Wiki related to Wallpaper Downloader Project. It gathers all the imp
 This is a JAVA software project developed for downloading wallpapers from different sources. It is a crossed-platform standalone application.
 
 ## Current Version ##
-2.8
+2.9
 
 ## Installation ##
 You can install wallpaperdownloader using different ways.
@@ -76,6 +76,27 @@ Build the package:
 Install the snap package (please, check the name of the snap package built):
 
     sudo snap install <wallpaperdownloader*.snap>
+
+
+## Features (V 2.9) ##
+
+New Features:
+
+- Providers tab gets a new design.
+
+- User can set a global preferred resolution for wallpapers.
+
+- Download policy implemented which will affect all the providers.
+
+- User can set the time to minimize the application when starts minimized.
+
+Bugs fixed:
+
+- Wallpapers from Social Wallpapering provider are now retrieved correctly.
+
+- Search type in DevianArt provider now works correctly.
+
+- Wallpapers from Bing provider are now retrieved correctly when the original resolution doesn't match the one defined by the user.
 
 ## Features (V 2.8) ##
 
