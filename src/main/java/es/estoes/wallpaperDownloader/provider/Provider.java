@@ -242,7 +242,7 @@ public abstract class Provider {
 	        BufferedImage originalImage = ImageIO.read(originalWallpaper);
 	        int originalImageHeight = originalImage.getHeight();
 	        int originalImageWidth = originalImage.getWidth();
-	        if (originalImageHeight != height || originalImageWidth != width) {
+	        if (originalImageHeight > height && originalImageWidth > width) {
 		        int type = originalImage.getType() == 0? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
 				
 				BufferedImage resizedImage = new BufferedImage(width, height, type);
