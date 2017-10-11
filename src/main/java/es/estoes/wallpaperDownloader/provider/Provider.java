@@ -169,17 +169,16 @@ public abstract class Provider {
 		try {
 	        URL url = new URL(wallpaperURL);
 	        HttpURLConnection httpcon = (HttpURLConnection) url.openConnection();
-	        httpcon.addRequestProperty("User-Agent", "Mozilla/4.0");
+	        httpcon.addRequestProperty("User-Agent", "Mozilla/5.0");
 	        InputStream in = httpcon.getInputStream();
-	        	 
 	        out = new BufferedOutputStream(new FileOutputStream(wallpaper.getAbsolutePath()));
 	        	 
-	        	        for (int b; (b = in.read()) != -1;) {
-	        	            out.write(b);
-	        	        }
-	        	        out.close();
-	        	        in.close();
-
+	        for (int b; (b = in.read()) != -1;) {
+	            out.write(b);
+	        }
+	        out.close();
+	        in.close();
+	        
         	success = true;
 		    return true;
 		} catch (Exception exception) {
@@ -228,7 +227,7 @@ public abstract class Provider {
 		try {
 	        URL url = new URL(wallpaperURL);
 	        HttpURLConnection httpcon = (HttpURLConnection) url.openConnection();
-	        httpcon.addRequestProperty("User-Agent", "Mozilla/4.0");
+	        httpcon.addRequestProperty("User-Agent", "Mozilla/5.0");
 	        InputStream in = httpcon.getInputStream();
 	        	 
 	        out = new BufferedOutputStream(new FileOutputStream(priginalWallpaperFullPath));
@@ -305,7 +304,7 @@ public abstract class Provider {
 	protected String getRemoteImageResolution(String wallpaperURL) throws IOException {
 		URL imageURL = new URL(wallpaperURL);
 	    HttpURLConnection httpcon = (HttpURLConnection) imageURL.openConnection();
-	    httpcon.addRequestProperty("User-Agent", "Mozilla/4.0");
+	    httpcon.addRequestProperty("User-Agent", "Mozilla/5.0");
 	    BufferedImage image = ImageIO.read(httpcon.getInputStream());
 		return image.getWidth() + "x" + image.getHeight();
 	}
