@@ -84,14 +84,20 @@ public class DevianartProvider extends Provider {
 		// Order
 		switch (new Integer(prefm.getPreference("wallpaper-devianart-search-type"))) {
 			// Newest
-			case 0: this.setOrder("5");
-					break;
+			case 0:
+				baseURL = baseURL + "newest" + WDUtilities.URL_SLASH;
+				this.setOrder("5");
+				break;
 			// What's hot
-			case 1: this.setOrder("67108864");
-					break;
+			case 1:
+				baseURL = baseURL + "whats-hot" + WDUtilities.URL_SLASH;
+				this.setOrder("67108864");
+				break;
 			// Popular
-			case 2: this.setOrder("9");
-					break;
+			case 2:
+				baseURL = baseURL + "popular-all-time" + WDUtilities.URL_SLASH;
+				this.setOrder("9");
+				break;
 		}
 		
 		// Offset
@@ -134,8 +140,34 @@ public class DevianartProvider extends Provider {
 						File wallpaperFavorite = new File(WDUtilities.getDownloadsPath() + File.separator + wallpaperNameFavorite);
 						if (!wallpaper.exists() && !wallpaperFavorite.exists() && !WDUtilities.isWallpaperBlacklisted(wallpaperName) && !WDUtilities.isWallpaperBlacklisted(wallpaperNameFavorite)) {
 							// Storing the image. It is necessary to download the remote file
-							// First try: JPG format will be used
-							boolean isWallpaperSuccessfullyStored = storeRemoteFile(wallpaper, wallpaperURL);
+							boolean isWallpaperSuccessfullyStored = false;
+							// Checking download policy
+							// 0 -> Download any wallpaper and keep the original resolution
+							// 1 -> Download any wallpaper and resize it (if it is bigger) to the resolution defined
+							// 2 -> Download only wallpapers with the resolution set by the user
+							switch (this.downloadPolicy) {
+							case "0":
+								isWallpaperSuccessfullyStored = storeRemoteFile(wallpaper, wallpaperURL);
+								break;
+							case "1":
+								String[] userResolution = this.resolution.split("x");
+								isWallpaperSuccessfullyStored = storeAndResizeRemoteFile(wallpaper, wallpaperURL, 
+										Integer.valueOf(userResolution[0]), 
+										Integer.valueOf(userResolution[1]));
+								break;
+							case "2":
+								String remoteImageResolution = getRemoteImageResolution(wallpaperURL);
+							    if (this.resolution.equals(remoteImageResolution)) {
+							    	// Wallpaper resolution fits the one set by the user
+									isWallpaperSuccessfullyStored = storeRemoteFile(wallpaper, wallpaperURL);
+							    } else {
+							    	isWallpaperSuccessfullyStored = false;
+							    }
+								break;
+							default:
+								break;
+							}
+							
 							if (!isWallpaperSuccessfullyStored) {
 								if (LOG.isInfoEnabled()) {
 									LOG.info("Error trying to store wallpaper " + wallpaperURL + ". Skipping...");
