@@ -997,7 +997,8 @@ public class WallpaperDownloader {
 		    doc.insertString(doc.getLength(), "Bugs fixed (Version 2.9).\n\n", keyWord );
 		    doc.insertString(doc.getLength(), "- Wallpapers from Social Wallpapering provider are now retrieved correctly.\n", null );
 		    doc.insertString(doc.getLength(), "- Search type in DevianArt provider now works correctly.\n", null );
-		    doc.insertString(doc.getLength(), "- Wallpapers from Bing provider are now retrieved correctly when the original resolution doesn't match the one defined by the user.\n\n", null );
+		    doc.insertString(doc.getLength(), "- Wallpapers from Bing provider are now retrieved correctly when the original resolution doesn't match the one defined by the user.\n", null );
+		    doc.insertString(doc.getLength(), "- WallpaperDownloader can be minimized again in Windows systems.\n\n", null );
 			
 			// Version 2.8
 		    doc.insertString(doc.getLength(), "New features (Version 2.8)\n\n", keyWord );
