@@ -98,6 +98,8 @@ Bugs fixed:
 
 - Wallpapers from Bing provider are now retrieved correctly when the original resolution doesn't match the one defined by the user.
 
+- WallpaperDownloader can be minimized again in Windows systems.
+
 ## Features (V 2.8) ##
 
 New Features:
