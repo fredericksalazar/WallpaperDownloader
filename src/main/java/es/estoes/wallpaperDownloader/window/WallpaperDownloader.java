@@ -67,6 +67,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
+import java.awt.event.WindowStateListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -122,8 +125,6 @@ public class WallpaperDownloader {
 	private JCheckBox wallpaperFusionCheckbox;
 	private JButton btnChangeResolution;
 	private JButton btnApply;
-	private JButton btnCloseExit;
-	private JButton btnMinimize;
 	private JButton btnOpenDownloadsDirectory;
 	private JButton btnClipboard;
 	private JComboBox<ComboItem> downloadPolicyComboBox;
@@ -250,6 +251,7 @@ public class WallpaperDownloader {
 				// 2.- Application configuration
 				WDConfigManager.checkConfig();
 				window = new WallpaperDownloader();
+				window.frame.setExtendedState(Frame.NORMAL);
 				window.frame.setVisible(true);
 				window.frame.setTitle(pm.getProperty("app.name") + " V" + pm.getProperty("app.version"));
 				// Minimize the application if start minimized feature is enable
@@ -270,6 +272,30 @@ public class WallpaperDownloader {
 					}
 					minimizeApplication();
 				}
+				
+				// Adding a listener for knowing when the main window changes its state
+				window.frame.addWindowStateListener(new WindowStateListener() {
+					@Override
+					public void windowStateChanged(WindowEvent windowEvent) {
+						   // The user has minimized the window
+						if (window.frame.getExtendedState() == Frame.NORMAL){
+							minimizeApplication();
+						}
+					}					
+				});
+				
+				// Adding a listener to know when the main window loses or gains focus
+				window.frame.addWindowFocusListener(new WindowFocusListener() {
+					@Override
+					public void windowGainedFocus(WindowEvent arg0) {
+						// Nothing to do here
+					}
+
+					@Override
+					public void windowLostFocus(WindowEvent arg0) {
+						window.frame.setExtendedState(Frame.NORMAL);
+					}
+				});
 
 			}
 		});
@@ -944,10 +970,10 @@ public class WallpaperDownloader {
 			public void setBorder(Border border) {
 			}
 		};
-		icons.setText("Dave Gandy from");
+		icons.setText("Jaime Álvarez; Dave Gandy from");
 		icons.setEditable(false);
 		icons.setColumns(10);
-		icons.setBounds(108, 109, 114, 19);
+		icons.setBounds(108, 109, 219, 19);
 		aboutPanel.add(icons);
 		
 		btnIcons = new JButton("<HTML><FONT color=\"#000099\"><U>http://www.flaticon.com/</U></FONT></HTML>");
@@ -959,7 +985,7 @@ public class WallpaperDownloader {
 		btnIcons.setHorizontalAlignment(SwingConstants.LEFT);
 		btnIcons.setBorderPainted(false);
 		btnIcons.setBackground(Color.WHITE);
-		btnIcons.setBounds(223, 106, 456, 25);
+		btnIcons.setBounds(326, 106, 229, 25);
 		aboutPanel.add(btnIcons);
 		
 		JLabel lblChangelog = new JLabel("Changelog");
@@ -1027,27 +1053,12 @@ public class WallpaperDownloader {
 		// Text to the beginning
 		changelogTextPane.setCaretPosition(0);
 		
-		// Global buttons
-		btnCloseExit = new JButton("Close & Exit");
-		GridBagConstraints gbc_btnCloseExit = new GridBagConstraints();
-		gbc_btnCloseExit.insets = new Insets(0, 0, 0, 5);
-		gbc_btnCloseExit.gridx = 0;
-		gbc_btnCloseExit.gridy = 3;
-		frame.getContentPane().add(btnCloseExit, gbc_btnCloseExit);
-		
 		btnApply = new JButton("Apply");
 		GridBagConstraints gbc_btnApply = new GridBagConstraints();
 		gbc_btnApply.insets = new Insets(0, 0, 0, 5);
 		gbc_btnApply.gridx = 2;
 		gbc_btnApply.gridy = 3;
 		frame.getContentPane().add(btnApply, gbc_btnApply);
-		
-		btnMinimize = new JButton("Minimize");
-		btnMinimize.setBackground(Color.WHITE);
-		GridBagConstraints gbc_btnMinimize = new GridBagConstraints();
-		gbc_btnMinimize.gridx = 3;
-		gbc_btnMinimize.gridy = 3;
-		frame.getContentPane().add(btnMinimize, gbc_btnMinimize);
 		
 		// Setting up configuration
 		initializeGUI();
@@ -1139,28 +1150,6 @@ public class WallpaperDownloader {
 					searchTypeDualMonitorComboBox.setEnabled(false);
 				}
 			}
-		});
-
-		/**
-		 * btnCloseExit Action Listener.
-		 */
-		// Clicking event
-		btnCloseExit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
-				// The application is closed
-				System.exit(0);
-			}
-		});
-
-		/**
-		 * btnMinimize Action Listener.
-		 */
-		// Clicking event
-		btnMinimize.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
-				minimizeApplication();
-			}
-		
 		});
 
 		/**
@@ -1744,15 +1733,12 @@ public class WallpaperDownloader {
 	 */
 	public static void minimizeApplication() {
 		final PreferencesManager prefm = PreferencesManager.getInstance();
-		
+		window.frame.setExtendedState(Frame.ICONIFIED);
 		// The application is minimized within System Tray
         //Check the SystemTray is supported
         if (!SystemTray.isSupported() || !WDUtilities.isMinimizable()) {
             LOG.error("SystemTray is not supported. Frame is traditionally minimized");
             // Frame is traditionally minimized
-            //window.frame.setState(Frame.ICONIFIED);
-            window.frame.setState(Frame.ICONIFIED);
-
             return;
         } else {
         	if (WDUtilities.getOperatingSystem().equals(WDUtilities.OS_WINDOWS) || 
@@ -1771,15 +1757,14 @@ public class WallpaperDownloader {
                 java.awt.MenuItem maximizeItem = new java.awt.MenuItem("Maximize");
                 maximizeItem.addActionListener(new ActionListener() {
                 	public void actionPerformed(ActionEvent evt) {
-                    	int state = window.frame.getExtendedState();  
-                    	state = state & ~Frame.ICONIFIED;  
-                    	window.frame.setExtendedState(state);  
+                    	window.frame.setExtendedState(Frame.NORMAL);  
                     	window.frame.setVisible(true);
                     	
                     	// Removing system tray icon
                     	tray.remove(trayIcon);
                 	}
                 });
+
                 // Open downloads directory
                 java.awt.MenuItem browseItem = new java.awt.MenuItem("Open downloaded wallpapers");
                 browseItem.addActionListener(new ActionListener() {
@@ -1897,9 +1882,7 @@ public class WallpaperDownloader {
 
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                    	int state = window.frame.getExtendedState();  
-                    	state = state & ~Frame.ICONIFIED;  
-                    	window.frame.setExtendedState(state);  
+                    	window.frame.setExtendedState(Frame.NORMAL);  
                     	window.frame.setVisible(true);
                     	
                     	// Removing system tray icon
@@ -1924,7 +1907,7 @@ public class WallpaperDownloader {
     			Display.setAppName("WallpaperDownloader");
     			Display display = new Display();
     			Shell shell = new Shell(display);
-    			InputStream iconInputStream = WallpaperDownloader.class.getResourceAsStream("/images/icons/wd_systemtray_icon.ico");
+    			InputStream iconInputStream = WallpaperDownloader.class.getResourceAsStream("/images/icons/wd_systemtray_icon.png");
     			org.eclipse.swt.graphics.Image icon = new org.eclipse.swt.graphics.Image(display, iconInputStream);
     			final Tray tray = display.getSystemTray();
     			if (tray == null) {
@@ -1945,9 +1928,7 @@ public class WallpaperDownloader {
     	                	shell.dispose();
     	                	display.dispose();
     	                	
-    	                	int state = window.frame.getExtendedState();  
-    	                	state = state & ~Frame.ICONIFIED;  
-    	                	window.frame.setExtendedState(state);  
+                        	window.frame.setExtendedState(Frame.NORMAL);  
     	                	window.frame.setVisible(true);
     		            }
     				});
@@ -1966,9 +1947,7 @@ public class WallpaperDownloader {
     	                	shell.dispose();
     	                	display.dispose();
     	                	
-    	                	int state = window.frame.getExtendedState();  
-    	                	state = state & ~Frame.ICONIFIED;  
-    	                	window.frame.setExtendedState(state);  
+                        	window.frame.setExtendedState(Frame.NORMAL);  
     	                	window.frame.setVisible(true);
     		            }
     				});
