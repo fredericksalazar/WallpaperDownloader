@@ -283,23 +283,26 @@ public class WallpaperDownloader {
 				window.frame.addWindowStateListener(new WindowStateListener() {
 					@Override
 					public void windowStateChanged(WindowEvent windowEvent) {
-						// Check if commands comes from system tray
-						if (fromSystemTray) {
-							fromSystemTray = false;
-						} else {
-							// If command doesn't come from system tray, then it is necessary to capture the
-							// minimize order
-							if (window.frame.getExtendedState() == Frame.NORMAL){
-								// The user has minimized the window
-								try {
-									TimeUnit.MILLISECONDS.sleep(100);
-								} catch (InterruptedException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}								
-								minimizeApplication();
+						if (!isOldSystemTray()) {
+							// Check if commands comes from system tray
+							if (fromSystemTray) {
+								fromSystemTray = false;
 							} else {
-								window.frame.setExtendedState(Frame.NORMAL);
+								// If command doesn't come from system tray, then it is necessary to capture the
+								// minimize order
+								if (window.frame.getExtendedState() == Frame.NORMAL){
+									// The user has minimized the window
+									try {
+										TimeUnit.MILLISECONDS.sleep(100);
+									} catch (InterruptedException exception) {
+										if (LOG.isInfoEnabled()) {
+											LOG.error("Error going to sleep: " + exception.getMessage());
+										}
+									}								
+									minimizeApplication();
+								} else {
+									window.frame.setExtendedState(Frame.NORMAL);
+								}
 							}
 						}
 					}					
@@ -314,7 +317,9 @@ public class WallpaperDownloader {
 
 					@Override
 					public void windowLostFocus(WindowEvent arg0) {
-						window.frame.setExtendedState(Frame.NORMAL);
+						if (!isOldSystemTray()) {
+							window.frame.setExtendedState(Frame.NORMAL);							
+						}
 					}
 				});
 
@@ -1762,11 +1767,7 @@ public class WallpaperDownloader {
             // Frame is traditionally minimized
             return;
         } else {
-        	if (WDUtilities.getOperatingSystem().equals(WDUtilities.OS_WINDOWS) || 
-        		WDUtilities.getOperatingSystem().equals(WDUtilities.OS_WINDOWS_7) ||	
-        		WDUtilities.getOperatingSystem().equals(WDUtilities.OS_WINDOWS_10) ||	
-        		(WDUtilities.getWallpaperChanger() instanceof LinuxWallpaperChanger && !((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment().equals(WDUtilities.DE_GNOME3) && !((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment().equals(WDUtilities.DE_KDE))) {
-
+        	if (isOldSystemTray()) {
     			// For the rest of DE and Windows, legacy mode will be used
                 final PopupMenu popup = new PopupMenu();
                 URL systemTrayIcon = WallpaperDownloader.class.getResource("/images/icons/wd_systemtray_icon.png");
@@ -2428,5 +2429,23 @@ public class WallpaperDownloader {
     	    public void mouseDragged(MouseEvent e) {
     	    }
 	  });		
+	}
+	
+	/**
+	 * Is an old system tray?.
+	 * If OS is Windows or Desktop Environment is MATE, XFCE or Unity, then it is
+	 * considered an old system tray
+	 * @return boolean
+	 */
+	private static boolean isOldSystemTray() {
+		boolean oldSystemTray = false;
+		if (WDUtilities.getOperatingSystem().equals(WDUtilities.OS_WINDOWS) || 
+        		WDUtilities.getOperatingSystem().equals(WDUtilities.OS_WINDOWS_7) ||	
+        		WDUtilities.getOperatingSystem().equals(WDUtilities.OS_WINDOWS_10) ||	
+        		(WDUtilities.getWallpaperChanger() instanceof LinuxWallpaperChanger && !((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment().equals(WDUtilities.DE_GNOME3) && !((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment().equals(WDUtilities.DE_KDE))) {
+
+			oldSystemTray = true;
+		}
+		return oldSystemTray;
 	}
 }
