@@ -109,6 +109,7 @@ public class WallpaperDownloader {
 	// Attributes
 	// diskSpacePB will be an attribute representing disk space occupied within the downloads directory
 	// It is static because it will be able to be accessed from any point within the application's code
+	public static boolean fromSystemTray;
 	public static JProgressBar diskSpacePB = new JProgressBar();
 	public static JLabel lblSpaceWarning;
 	public static JScrollPane scroll;
@@ -251,9 +252,14 @@ public class WallpaperDownloader {
 				// 2.- Application configuration
 				WDConfigManager.checkConfig();
 				window = new WallpaperDownloader();
+				window.frame.setBackground(new Color(255, 255, 255));
 				window.frame.setExtendedState(Frame.NORMAL);
 				window.frame.setVisible(true);
 				window.frame.setTitle(pm.getProperty("app.name") + " V" + pm.getProperty("app.version"));
+				
+				// Command comes from system tray
+				fromSystemTray = false;
+				
 				// Minimize the application if start minimized feature is enable
 				if (startMinimizedCheckBox.isSelected()) {
 					try {
@@ -277,9 +283,24 @@ public class WallpaperDownloader {
 				window.frame.addWindowStateListener(new WindowStateListener() {
 					@Override
 					public void windowStateChanged(WindowEvent windowEvent) {
-						   // The user has minimized the window
-						if (window.frame.getExtendedState() == Frame.NORMAL){
-							minimizeApplication();
+						// Check if commands comes from system tray
+						if (fromSystemTray) {
+							fromSystemTray = false;
+						} else {
+							// If command doesn't come from system tray, then it is necessary to capture the
+							// minimize order
+							if (window.frame.getExtendedState() == Frame.NORMAL){
+								// The user has minimized the window
+								try {
+									TimeUnit.MILLISECONDS.sleep(100);
+								} catch (InterruptedException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}								
+								minimizeApplication();
+							} else {
+								window.frame.setExtendedState(Frame.NORMAL);
+							}
 						}
 					}					
 				});
@@ -1757,7 +1778,8 @@ public class WallpaperDownloader {
                 java.awt.MenuItem maximizeItem = new java.awt.MenuItem("Maximize");
                 maximizeItem.addActionListener(new ActionListener() {
                 	public void actionPerformed(ActionEvent evt) {
-                    	window.frame.setExtendedState(Frame.NORMAL);  
+                    	
+                		// window.frame.setExtendedState(Frame.NORMAL) will be set in the WindowsListener
                     	window.frame.setVisible(true);
                     	
                     	// Removing system tray icon
@@ -1882,9 +1904,7 @@ public class WallpaperDownloader {
 
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                    	window.frame.setExtendedState(Frame.NORMAL);  
-                    	window.frame.setVisible(true);
-                    	
+                    	// window.frame.setExtendedState(Frame.NORMAL) will be set in the WindowsListener                    	window.frame.setVisible(true);
                     	// Removing system tray icon
                     	tray.remove(trayIcon);
                     }
@@ -1927,8 +1947,8 @@ public class WallpaperDownloader {
     	                	tray.dispose();
     	                	shell.dispose();
     	                	display.dispose();
-    	                	
-                        	window.frame.setExtendedState(Frame.NORMAL);  
+
+    	                	// window.frame.setExtendedState(Frame.NORMAL) will be set in the WindowsListener
     	                	window.frame.setVisible(true);
     		            }
     				});
@@ -1947,7 +1967,7 @@ public class WallpaperDownloader {
     	                	shell.dispose();
     	                	display.dispose();
     	                	
-                        	window.frame.setExtendedState(Frame.NORMAL);  
+    	                	// window.frame.setExtendedState(Frame.NORMAL) will be set in the WindowsListener
     	                	window.frame.setVisible(true);
     		            }
     				});
@@ -2035,9 +2055,8 @@ public class WallpaperDownloader {
     	                	shell.dispose();
     	                	display.dispose();
     	                	
-    	                	int state = window.frame.getExtendedState();  
-    	                	state = state & ~Frame.ICONIFIED;  
-    	                	window.frame.setExtendedState(state);  
+    	                	fromSystemTray = true;
+    	                	window.frame.setExtendedState(Frame.NORMAL); 
     	                	window.frame.setVisible(true);
 
             				WallpaperManagerWindow wmw = new WallpaperManagerWindow();
@@ -2058,9 +2077,8 @@ public class WallpaperDownloader {
     	                	shell.dispose();
     	                	display.dispose();
     	                	
-    	                	int state = window.frame.getExtendedState();  
-    	                	state = state & ~Frame.ICONIFIED;  
-    	                	window.frame.setExtendedState(state);  
+    	                	fromSystemTray = true;
+    	                	window.frame.setExtendedState(Frame.NORMAL);
     	                	window.frame.setVisible(true);
 
             				ChooseWallpaperWindow cww = new ChooseWallpaperWindow();
