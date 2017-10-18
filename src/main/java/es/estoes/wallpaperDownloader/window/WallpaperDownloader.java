@@ -126,6 +126,7 @@ public class WallpaperDownloader {
 	private JCheckBox wallpaperFusionCheckbox;
 	private JButton btnChangeResolution;
 	private JButton btnApply;
+	private JButton btnMinimize;
 	private JButton btnOpenDownloadsDirectory;
 	private JButton btnClipboard;
 	private JComboBox<ComboItem> downloadPolicyComboBox;
@@ -1085,6 +1086,17 @@ public class WallpaperDownloader {
 		gbc_btnApply.gridx = 2;
 		gbc_btnApply.gridy = 3;
 		frame.getContentPane().add(btnApply, gbc_btnApply);
+
+		// Minimize button will only be available on OS with an
+		// old system tray
+		btnMinimize = new JButton("Minimize");
+		btnMinimize.setBackground(Color.WHITE);
+		GridBagConstraints gbc_btnMinimize = new GridBagConstraints();
+		gbc_btnMinimize.gridx = 3;
+		gbc_btnMinimize.gridy = 3;
+		if (isOldSystemTray()) {
+			frame.getContentPane().add(btnMinimize, gbc_btnMinimize);
+		}
 		
 		// Setting up configuration
 		initializeGUI();
@@ -1178,6 +1190,17 @@ public class WallpaperDownloader {
 			}
 		});
 
+		/**
+		 * btnMinimize Action Listener.
+		 */
+		// Clicking event
+		btnMinimize.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				minimizeApplication();
+			}
+		
+		});
+		
 		/**
 		 * btnChangeResolution Action Listener.
 		 */
@@ -1759,16 +1782,16 @@ public class WallpaperDownloader {
 	 */
 	public static void minimizeApplication() {
 		final PreferencesManager prefm = PreferencesManager.getInstance();
-		window.frame.setExtendedState(Frame.ICONIFIED);
 		// The application is minimized within System Tray
         //Check the SystemTray is supported
         if (!SystemTray.isSupported() || !WDUtilities.isMinimizable()) {
             LOG.error("SystemTray is not supported. Frame is traditionally minimized");
             // Frame is traditionally minimized
+            window.frame.setExtendedState(Frame.ICONIFIED);
             return;
         } else {
         	if (isOldSystemTray()) {
-    			// For the rest of DE and Windows, legacy mode will be used
+    			// For OS and DE which have an old system tray, legacy mode will be used
                 final PopupMenu popup = new PopupMenu();
                 URL systemTrayIcon = WallpaperDownloader.class.getResource("/images/icons/wd_systemtray_icon.png");
                 final TrayIcon trayIcon = new TrayIcon(new ImageIcon(systemTrayIcon, "Wallpaper Downloader").getImage(), "Wallpaper Downloader");
@@ -1779,15 +1802,15 @@ public class WallpaperDownloader {
                 java.awt.MenuItem maximizeItem = new java.awt.MenuItem("Maximize");
                 maximizeItem.addActionListener(new ActionListener() {
                 	public void actionPerformed(ActionEvent evt) {
-                    	
-                		// window.frame.setExtendedState(Frame.NORMAL) will be set in the WindowsListener
+                    	int state = window.frame.getExtendedState();  
+                    	state = state & ~Frame.ICONIFIED;  
+                    	window.frame.setExtendedState(state);  
                     	window.frame.setVisible(true);
                     	
                     	// Removing system tray icon
                     	tray.remove(trayIcon);
                 	}
                 });
-
                 // Open downloads directory
                 java.awt.MenuItem browseItem = new java.awt.MenuItem("Open downloaded wallpapers");
                 browseItem.addActionListener(new ActionListener() {
@@ -1905,7 +1928,11 @@ public class WallpaperDownloader {
 
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                    	// window.frame.setExtendedState(Frame.NORMAL) will be set in the WindowsListener                    	window.frame.setVisible(true);
+                    	int state = window.frame.getExtendedState();  
+                    	state = state & ~Frame.ICONIFIED;  
+                    	window.frame.setExtendedState(state);  
+                    	window.frame.setVisible(true);
+                    	
                     	// Removing system tray icon
                     	tray.remove(trayIcon);
                     }
@@ -1920,9 +1947,11 @@ public class WallpaperDownloader {
                 }
                 
                 // Hiding window
-                window.frame.setVisible(false);
+                window.frame.setVisible(false);        		
         	} else {
     			// GTK3 integration is going to be used for Plasma 5 and Gmone Shell
+        		// Changing state
+        		window.frame.setExtendedState(Frame.ICONIFIED);
     			// Hiding window
     			window.frame.setVisible(false);
     			Display.setAppName("WallpaperDownloader");
