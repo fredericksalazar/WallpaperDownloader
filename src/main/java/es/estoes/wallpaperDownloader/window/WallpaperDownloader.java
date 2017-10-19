@@ -362,6 +362,7 @@ public class WallpaperDownloader {
 		frame.setLocation(x, y);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.setBorder(null);
 		GridBagConstraints gbc_tabbedPane = new GridBagConstraints();
 		gbc_tabbedPane.gridheight = 3;
 		gbc_tabbedPane.fill = GridBagConstraints.BOTH;
@@ -373,6 +374,7 @@ public class WallpaperDownloader {
 		
 		// Providers (tab)
 		providersPanel = new JPanel();
+		providersPanel.setBorder(null);
 		tabbedPane.addTab("Providers", null, providersPanel, null);
 		providersPanel.setLayout(null);
 
@@ -586,6 +588,7 @@ public class WallpaperDownloader {
 
 		// Application Settings (tab)
 		appSettingsPanel = new JPanel();
+		appSettingsPanel.setBorder(null);
 		tabbedPane.addTab("Application Settings", null, appSettingsPanel, null);
 		appSettingsPanel.setLayout(null);
 		
@@ -773,6 +776,7 @@ public class WallpaperDownloader {
 
 		// Downloads Directory (tab)
 		miscPanel = new JPanel();
+		miscPanel.setBorder(null);
 		tabbedPane.addTab("Downloads Directory", null, miscPanel, null);
 		miscPanel.setLayout(null);
 		
@@ -841,6 +845,7 @@ public class WallpaperDownloader {
 		
 		// Wallpapers (tab)
 		wallpapersPanel = new JPanel();
+		wallpapersPanel.setBorder(null);
 		tabbedPane.addTab("Wallpapers", null, wallpapersPanel, null);
 		wallpapersPanel.setLayout(null);
 
@@ -926,6 +931,7 @@ public class WallpaperDownloader {
 
 		// About (tab)
 		aboutPanel = new JPanel();
+		aboutPanel.setBorder(null);
 		tabbedPane.addTab("About", null, aboutPanel, null);
 		aboutPanel.setLayout(null);
 		
