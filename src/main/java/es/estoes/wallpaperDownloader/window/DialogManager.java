@@ -16,6 +16,7 @@
 
 package es.estoes.wallpaperDownloader.window;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -51,6 +52,7 @@ public class DialogManager {
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		Dimension screenSize = toolkit.getScreenSize();
 		dialog.setTitle(TITLE);
+		dialog.setBackground(new Color(255, 255, 255));
 		dialog.setModal(true);	
 		dialog.setContentPane(optionPane);	
 		dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);

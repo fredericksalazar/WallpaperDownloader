@@ -17,6 +17,7 @@
 package es.estoes.wallpaperDownloader.window;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -72,6 +73,7 @@ public class PreviewWallpaperWindow extends JFrame {
 		// DISPOSE_ON_CLOSE for closing only this frame instead of the entire application
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setTitle("Wallpaper Preview");
+		setBackground(new Color(255, 255, 255));
 		setBounds(100, 100, 1024, 768);
 		getContentPane().setLayout(null);
 		

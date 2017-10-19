@@ -485,15 +485,15 @@ public class WallpaperDownloader {
 		providersPanel.add(separator6);
 		
 		dualMonitorCheckbox = new JCheckBox("DualMonitorBackgrounds");
-		dualMonitorCheckbox.setBounds(14, 254, 201, 23);
+		dualMonitorCheckbox.setBounds(14, 257, 201, 23);
 		providersPanel.add(dualMonitorCheckbox);
 		
 		lblSearchTypeDualMonitor = new JLabel("Search Type");
-		lblSearchTypeDualMonitor.setBounds(227, 258, 94, 15);
+		lblSearchTypeDualMonitor.setBounds(227, 261, 94, 15);
 		providersPanel.add(lblSearchTypeDualMonitor);
 
 		searchTypeDualMonitorComboBox = new JComboBox<ComboItem>();
-		searchTypeDualMonitorComboBox.setBounds(324, 256, 149, 19);
+		searchTypeDualMonitorComboBox.setBounds(324, 259, 149, 19);
 		providersPanel.add(searchTypeDualMonitorComboBox);
 		
 		JLabel lblResolution = new JLabel("Resolution");
@@ -795,7 +795,7 @@ public class WallpaperDownloader {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/open_folder_24px_icon.png"));
 			btnOpenDownloadsDirectory.setIcon(new ImageIcon(img));
 			btnOpenDownloadsDirectory.setToolTipText("Open downloads directory");
-			btnOpenDownloadsDirectory.setBounds(588, 8, 34, 33);
+			btnOpenDownloadsDirectory.setBounds(12, 39, 34, 33);
 		} catch (IOException ex) {
 			btnOpenDownloadsDirectory.setText("Open");
 			btnOpenDownloadsDirectory.setBounds(589, 11, 72, 25);
@@ -807,23 +807,33 @@ public class WallpaperDownloader {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/clipboard_24px_icon.png"));
 			btnClipboard.setIcon(new ImageIcon(img));
 			btnClipboard.setToolTipText("Copy downloads directory path into the Clipboard");
-			btnClipboard.setBounds(630, 8, 34, 33);
+			btnClipboard.setBounds(54, 39, 34, 33);
 		} catch (IOException ex) {
 			btnClipboard.setText("Clipboard");
 			btnClipboard.setBounds(630, 8, 34, 33);
 		}
 		miscPanel.add(btnClipboard);
 		
-		btnChangeDownloadsDirectory = new JButton("Change Downloads Directory");
-		btnChangeDownloadsDirectory.setBounds(12, 90, 259, 25);
+		btnChangeDownloadsDirectory = new JButton();
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/change_folder_24px_icon.png"));
+			btnChangeDownloadsDirectory.setIcon(new ImageIcon(img));
+			btnChangeDownloadsDirectory.setToolTipText("Change Downloads Directory");
+			btnChangeDownloadsDirectory.setBounds(588, 11, 34, 33);
+		} catch (IOException ex) {
+			btnChangeDownloadsDirectory.setText("Change Downloads Directory");
+			btnChangeDownloadsDirectory.setBounds(12, 186, 259, 25);
+		}	
+
+		
 		miscPanel.add(btnChangeDownloadsDirectory);
 		
 		//JProgressBar diskSpacePB = new JProgressBar();
-		diskSpacePB.setBounds(174, 56, 405, 18);
+		diskSpacePB.setBounds(174, 101, 405, 18);
 		miscPanel.add(diskSpacePB);
 		
 		JLabel lblDiskSpace = new JLabel("Downloads dir space:");
-		lblDiskSpace.setBounds(12, 55, 160, 19);
+		lblDiskSpace.setBounds(12, 100, 160, 19);
 		miscPanel.add(lblDiskSpace);
 		
 		try {
@@ -831,8 +841,12 @@ public class WallpaperDownloader {
 			ImageIcon icon = new ImageIcon(img);
 			lblSpaceWarning = new JLabel(icon);
 			lblSpaceWarning.setToolTipText("Directory full. Wallpapers (execpt favorite ones) will be removed randomly in order to download more.");
-			lblSpaceWarning.setBounds(588, 53, 30, 23);
+			lblSpaceWarning.setBounds(588, 98, 30, 23);
 			miscPanel.add(lblSpaceWarning);
+			
+			JSeparator separator7 = new JSeparator();
+			separator7.setBounds(12, 83, 610, 2);
+			miscPanel.add(separator7);
 			// At first, the label won't be visible
 			lblSpaceWarning.setVisible(false);
 		} catch (IOException ex) {

@@ -16,6 +16,7 @@
 
 package es.estoes.wallpaperDownloader.window;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -72,6 +73,7 @@ public class ChooseWallpaperWindow extends JFrame {
 		// DISPOSE_ON_CLOSE for closing only this frame instead of the entire application
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setTitle("Choose wallpaper");
+		setBackground(new Color(255, 255, 255));
 		setBounds(100, 100, 774, 621);
 		getContentPane().setLayout(null);
 		

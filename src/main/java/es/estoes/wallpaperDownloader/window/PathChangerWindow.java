@@ -16,6 +16,7 @@
 
 package es.estoes.wallpaperDownloader.window;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
@@ -50,6 +51,7 @@ public class PathChangerWindow extends JFrame {
 	public PathChangerWindow(final WallpaperDownloader mainWindow, String whatToChange) {
 		// DISPOSE_ON_CLOSE for closing only this frame instead of the entire application
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBackground(new Color(255, 255, 255));
 		switch (whatToChange) {
 		case WDUtilities.DOWNLOADS_DIRECTORY:
 			setTitle("Change Downloads Directory Path");
