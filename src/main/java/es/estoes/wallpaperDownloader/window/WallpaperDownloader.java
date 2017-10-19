@@ -514,32 +514,48 @@ public class WallpaperDownloader {
 		heigthResolution.setBounds(159, 42, 49, 19);
 		providersPanel.add(heigthResolution);
 		
-		btnChangeResolution = new JButton("Change Res.");
-		btnChangeResolution.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		});
-		btnChangeResolution.setBounds(224, 38, 131, 25);
+		btnChangeResolution = new JButton();
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/edit_16px_icon.png"));
+			btnChangeResolution.setIcon(new ImageIcon(img));
+			btnChangeResolution.setToolTipText("Change Resolution");
+			btnChangeResolution.setBounds(214, 35, 34, 33);
+		} catch (IOException ex) {
+			btnChangeResolution.setText("Change Res.");
+			btnChangeResolution.setBounds(224, 38, 131, 25);
+		}
 		providersPanel.add(btnChangeResolution);
 		
 		JLabel lblDownloadPolicy = new JLabel("Download policy");
-		lblDownloadPolicy.setBounds(13, 74, 149, 15);
+		lblDownloadPolicy.setBounds(13, 76, 149, 15);
 		providersPanel.add(lblDownloadPolicy);
 		
 		downloadPolicyComboBox = new JComboBox<ComboItem>();
-		downloadPolicyComboBox.setBounds(159, 70, 463, 24);
+		downloadPolicyComboBox.setBounds(159, 72, 463, 24);
 		providersPanel.add(downloadPolicyComboBox);
 		
-		btnResetResolution = new JButton("Reset");
-		btnResetResolution.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnResetResolution.setBounds(357, 38, 72, 25);
-		
-		btnApplyResolution = new JButton("Apply");
-		btnApplyResolution.setBounds(224, 38, 131, 25);
+		btnResetResolution = new JButton();
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/reset_16px_icon.png"));
+			btnResetResolution.setIcon(new ImageIcon(img));
+			btnResetResolution.setToolTipText("Reset Resolution");
+			btnResetResolution.setBounds(250, 35, 34, 33);
+		} catch (IOException ex) {
+			btnResetResolution.setText("Reset");
+			btnResetResolution.setBounds(357, 38, 72, 25);
+		}
 
+		btnApplyResolution = new JButton();
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/accept_16px_icon.png"));
+			btnApplyResolution.setIcon(new ImageIcon(img));
+			btnApplyResolution.setToolTipText("Save changes");
+			btnApplyResolution.setBounds(214, 35, 34, 33);
+		} catch (IOException ex) {
+			btnApplyResolution.setText("Apply");
+			btnApplyResolution.setBounds(224, 38, 131, 25);
+		}
+				
 		btnPause = new JButton();
 
 		try {
