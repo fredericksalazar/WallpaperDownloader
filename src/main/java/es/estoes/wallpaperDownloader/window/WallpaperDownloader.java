@@ -872,7 +872,7 @@ public class WallpaperDownloader {
 		scroll.setBounds(12, 36, 652, 105);
 		wallpapersPanel.add(scroll);
 		
-		btnManageWallpapers = new JButton("Manage All Wallpapers");
+		btnManageWallpapers = new JButton("Wallpapers downloaded");
 		btnManageWallpapers.setBackground(Color.WHITE);
 		btnManageWallpapers.setBounds(12, 239, 197, 25);
 		wallpapersPanel.add(btnManageWallpapers);
@@ -1611,7 +1611,7 @@ public class WallpaperDownloader {
 					    	  if (WDUtilities.isSnapPackage()) {
 						          process = Runtime.getRuntime().exec("/usr/local/bin/xdg-open " + pm.getProperty("repository.icons"));
 					    	  } else {
-						          process = Runtime.getRuntime().exec("xdg-open " + pm.getProperty("repository.code"));
+						          process = Runtime.getRuntime().exec("xdg-open " + pm.getProperty("repository.icons"));
 					    	  }
 					          process.waitFor();
 					          process.destroy();
