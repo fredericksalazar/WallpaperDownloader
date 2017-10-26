@@ -183,6 +183,8 @@ public class WallpaperDownloader {
 	private JComboBox<ComboItem> searchTypeDualMonitorComboBox;
 	private JButton btnApplyResolution;
 	private JButton btnResetResolution;
+	private JButton btnChangeKeywords;
+	private JButton btnApplyKeywords;
 	
 	// Getters & Setters
 	public JFrame getFrame() {
@@ -387,7 +389,7 @@ public class WallpaperDownloader {
 		providersPanel.add(lblKeywords);
 		
 		searchKeywords = new JTextField();
-		searchKeywords.setBounds(100, 13, 255, 19);
+		searchKeywords.setBounds(100, 13, 295, 19);
 		providersPanel.add(searchKeywords);
 		searchKeywords.setColumns(10);
 
@@ -400,7 +402,7 @@ public class WallpaperDownloader {
 			ImageIcon icon = new ImageIcon(img);
 			JLabel lblKeywordsHelp = new JLabel(icon);
 			lblKeywordsHelp.setToolTipText("Each keyword must be separated by ';'. If it is empty then it will search any wallpaper");
-			lblKeywordsHelp.setBounds(366, 12, 30, 23);
+			lblKeywordsHelp.setBounds(398, 11, 30, 23);
 			providersPanel.add(lblKeywordsHelp);
 		} catch (IOException ex) {
 			JLabel lblKeywordsHelp = new JLabel("(separated by ;) (Empty->All wallpapers)");
@@ -557,24 +559,22 @@ public class WallpaperDownloader {
 		}
 				
 		btnPause = new JButton();
-
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/pause_16px_icon.png"));
 			btnPause.setIcon(new ImageIcon(img));
 			btnPause.setToolTipText("Pause downloading process");
-			btnPause.setBounds(431, 6, 34, 33);
+			btnPause.setBounds(552, 6, 34, 33);
 		} catch (IOException ex) {
 			btnPause.setToolTipText("Pause downloading process");
 			btnPause.setBounds(431, 6, 34, 33);
 		}
 
 		btnPlay = new JButton();
-
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/play_16px_icon.png"));
 			btnPlay.setIcon(new ImageIcon(img));
 			btnPlay.setToolTipText("Resume downloading process");
-			btnPlay.setBounds(431, 6, 34, 33);
+			btnPlay.setBounds(552, 6, 34, 33);
 		} catch (IOException ex) {
 			btnPlay.setToolTipText("Resume downloading process");
 			btnPlay.setBounds(431, 6, 34, 33);
@@ -585,10 +585,10 @@ public class WallpaperDownloader {
 			ImageIcon icon = new ImageIcon(img);
 			lblGreenSpot = new JLabel(icon);			
 			lblGreenSpot.setToolTipText("Downloading process is enabled");
-			lblGreenSpot.setBounds(523, 15, 20, 18);
+			lblGreenSpot.setBounds(599, 15, 20, 18);
 		} catch (IOException ex) {
 			lblGreenSpot = new JLabel("Downloading process is enabled");
-			lblGreenSpot.setBounds(637, 11, 30, 23);
+			lblGreenSpot.setBounds(599, 15, 30, 23);
 		}
 
 		try {
@@ -596,10 +596,33 @@ public class WallpaperDownloader {
 			ImageIcon icon = new ImageIcon(img);
 			lblRedSpot = new JLabel(icon);			
 			lblRedSpot.setToolTipText("Downloading process is disabled");
-			lblRedSpot.setBounds(523, 15, 20, 18);
+			lblRedSpot.setBounds(599, 15, 20, 18);
 		} catch (IOException ex) {
 			lblRedSpot = new JLabel("Downloading process is disabled");
-			lblRedSpot.setBounds(637, 11, 30, 23);
+			lblRedSpot.setBounds(599, 15, 30, 23);
+		}
+
+		btnChangeKeywords = new JButton();
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/edit_16px_icon.png"));
+			btnChangeKeywords.setIcon(new ImageIcon(img));
+			btnChangeKeywords.setToolTipText("Change Resolution");
+			btnChangeKeywords.setBounds(436, 6, 34, 33);
+		} catch (IOException ex) {
+			btnChangeKeywords.setText("Change Keyw.");
+			btnChangeKeywords.setBounds(436, 6, 131, 25);
+		}
+		providersPanel.add(btnChangeKeywords);
+
+		btnApplyKeywords = new JButton();
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/accept_16px_icon.png"));
+			btnApplyKeywords.setIcon(new ImageIcon(img));
+			btnApplyKeywords.setToolTipText("Save changes");
+			btnApplyKeywords.setBounds(436, 6, 34, 33);
+		} catch (IOException ex) {
+			btnApplyKeywords.setText("Apply");
+			btnApplyKeywords.setBounds(436, 6, 131, 25);
 		}
 
 		// Application Settings (tab)
@@ -1302,6 +1325,40 @@ public class WallpaperDownloader {
 		downloadPolicyComboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				prefm.setPreference("download-policy", new Integer(downloadPolicyComboBox.getSelectedIndex()).toString());
+				// Restarting downloading process
+				restartDownloadingProcess();
+			}
+		});
+
+		/**
+		 * btnChangeKeywords Action Listener.
+		 */
+		// Clicking event
+		btnChangeKeywords.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				searchKeywords.setEnabled(true);
+				providersPanel.remove(btnChangeKeywords);
+				providersPanel.add(btnApplyKeywords);
+				providersPanel.repaint();
+			}
+		});
+
+		/**
+		 * btnApplyKeywords Action Listener.
+		 */
+		// Clicking event
+		btnApplyKeywords.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				if (!searchKeywords.getText().isEmpty()) {
+					prefm.setPreference("provider-wallhaven-keywords", searchKeywords.getText());					
+				} else {
+					prefm.setPreference("provider-wallhaven-keywords", PreferencesManager.DEFAULT_VALUE);
+				}
+				
+				searchKeywords.setEnabled(false);
+				providersPanel.remove(btnApplyKeywords);
+				providersPanel.add(btnChangeKeywords);
+				providersPanel.repaint();
 				// Restarting downloading process
 				restartDownloadingProcess();
 			}
@@ -2241,6 +2298,7 @@ public class WallpaperDownloader {
 		} else {
 			searchKeywords.setText("");
 		}
+		searchKeywords.setEnabled(false);
 
 		// Resolution
 		String[] resolution = prefm.getPreference("wallpaper-resolution").split("x");
