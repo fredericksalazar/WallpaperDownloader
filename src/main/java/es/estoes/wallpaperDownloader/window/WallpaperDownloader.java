@@ -1170,19 +1170,7 @@ public class WallpaperDownloader {
 		initializeHarvesting();
 		
 		// Starting pause / resume feature
-		PreferencesManager prefm = PreferencesManager.getInstance();		
-		if (harvester.getStatus() != Harvester.STATUS_DISABLED) {
-			// Checking downloading process
-			if (prefm.getPreference("downloading-process").equals(WDUtilities.APP_NO)) {
-				providersPanel.add(btnPlay);
-				providersPanel.add(lblRedSpot);
-			} else {
-				providersPanel.add(btnPause);
-				providersPanel.add(lblGreenSpot);
-			}
-		} else {
-			providersPanel.add(lblRedSpot);
-		}
+		pauseResumeRepaint();
 	}
 
 	/**
@@ -1201,9 +1189,30 @@ public class WallpaperDownloader {
 			public void actionPerformed(ActionEvent evt) {
 				if (wallhavenCheckbox.isSelected()) {
 					searchTypeWallhavenComboBox.setEnabled(true);
+					prefm.setPreference("provider-wallhaven", WDUtilities.APP_YES);
 				} else {
 					searchTypeWallhavenComboBox.setEnabled(false);
+					prefm.setPreference("provider-wallhaven", WDUtilities.APP_NO);
 				}
+
+				// Restarting harvesting process if it is needed
+				harvester.stop();
+				harvester.start();
+				
+				// Repaint pause/resume buttons
+				pauseResumeRepaint();
+			}
+		});
+
+		/**
+		 * searchTypeWallhavenComboBox Action Listener.
+		 */
+		// Clicking event
+		searchTypeWallhavenComboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				prefm.setPreference("wallpaper-search-type", new Integer(searchTypeWallhavenComboBox.getSelectedIndex()).toString());
+				// Restarting downloading process
+				restartDownloadingProcess();
 			}
 		});
 
@@ -1215,9 +1224,30 @@ public class WallpaperDownloader {
 			public void actionPerformed(ActionEvent evt) {
 				if (devianartCheckbox.isSelected()) {
 					devianartSearchTypeComboBox.setEnabled(true);
+					prefm.setPreference("provider-devianart", WDUtilities.APP_YES);
 				} else {
 					devianartSearchTypeComboBox.setEnabled(false);
+					prefm.setPreference("provider-devianart", WDUtilities.APP_NO);
 				}
+
+				// Restarting harvesting process if it is needed
+				harvester.stop();
+				harvester.start();
+				
+				// Repaint pause/resume buttons
+				pauseResumeRepaint();
+			}
+		});
+
+		/**
+		 * devianartSearchTypeComboBox Action Listener.
+		 */
+		// Clicking event
+		devianartSearchTypeComboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				prefm.setPreference("wallpaper-devianart-search-type", new Integer(devianartSearchTypeComboBox.getSelectedIndex()).toString());
+				// Restarting downloading process
+				restartDownloadingProcess();
 			}
 		});
 
@@ -2571,4 +2601,27 @@ public class WallpaperDownloader {
 		}
 		return oldSystemTray;
 	}
+	
+	private void pauseResumeRepaint() {
+		PreferencesManager prefm = PreferencesManager.getInstance();		
+		if (harvester.getStatus() != Harvester.STATUS_DISABLED) {
+			// Checking downloading process
+			if (prefm.getPreference("downloading-process").equals(WDUtilities.APP_NO)) {
+				providersPanel.add(btnPlay);
+				providersPanel.add(lblRedSpot);
+				providersPanel.remove(lblGreenSpot);
+			} else {
+				providersPanel.add(btnPause);
+				providersPanel.add(lblGreenSpot);
+				providersPanel.remove(lblRedSpot);
+			}
+		} else {
+			providersPanel.remove(btnPause);
+			providersPanel.remove(btnPlay);
+			providersPanel.add(lblRedSpot);
+			providersPanel.remove(lblGreenSpot);
+		}
+		providersPanel.repaint();
+	}
+
 }
