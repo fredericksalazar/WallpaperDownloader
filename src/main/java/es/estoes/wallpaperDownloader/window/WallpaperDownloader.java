@@ -1252,6 +1252,27 @@ public class WallpaperDownloader {
 		});
 
 		/**
+		 * bingCheckbox Action Listener.
+		 */
+		// Clicking event
+		bingCheckbox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				if (bingCheckbox.isSelected()) {
+					prefm.setPreference("provider-bing", WDUtilities.APP_YES);
+				} else {
+					prefm.setPreference("provider-bing", WDUtilities.APP_NO);
+				}
+
+				// Restarting harvesting process if it is needed
+				harvester.stop();
+				harvester.start();
+				
+				// Repaint pause/resume buttons
+				pauseResumeRepaint();
+			}
+		});
+
+		/**
 		 * socialWallpaperingCheckbox Action Listener.
 		 */
 		// Clicking event
