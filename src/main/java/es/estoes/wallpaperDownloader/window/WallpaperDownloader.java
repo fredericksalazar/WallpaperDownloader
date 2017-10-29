@@ -1279,13 +1279,40 @@ public class WallpaperDownloader {
 		socialWallpaperingCheckbox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				if (socialWallpaperingCheckbox.isSelected()) {
+					prefm.setPreference("provider-socialWallpapering", WDUtilities.APP_YES);
 					socialWallpaperingIgnoreKeywordsCheckbox.setEnabled(true);
 				} else {
+					prefm.setPreference("provider-socialWallpapering", WDUtilities.APP_NO);
 					socialWallpaperingIgnoreKeywordsCheckbox.setEnabled(false);
 				}
+
+				// Restarting harvesting process if it is needed
+				harvester.stop();
+				harvester.start();
+				
+				// Repaint pause/resume buttons
+				pauseResumeRepaint();
 			}
 		});
-		
+
+		/**
+		 * socialWallpaperingIgnoreKeywordsCheckbox Action Listener.
+		 */
+		// Clicking event
+		socialWallpaperingIgnoreKeywordsCheckbox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				if (socialWallpaperingIgnoreKeywordsCheckbox.isSelected()) {
+					prefm.setPreference("provider-socialWallpapering-ignore-keywords", WDUtilities.APP_YES);
+				} else {
+					prefm.setPreference("provider-socialWallpapering-ignore-keywords", WDUtilities.APP_NO);
+				}
+
+				// Restarting harvesting process if it is needed
+				harvester.stop();
+				harvester.start();
+
+			}
+		});
 		/**
 		 * dualMonitorCheckbox Action Listener.
 		 */
@@ -1293,10 +1320,33 @@ public class WallpaperDownloader {
 		dualMonitorCheckbox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				if (dualMonitorCheckbox.isSelected()) {
+					prefm.setPreference("provider-dualMonitorBackgrounds", WDUtilities.APP_YES);
 					searchTypeDualMonitorComboBox.setEnabled(true);
 				} else {
+					prefm.setPreference("provider-dualMonitorBackgrounds", WDUtilities.APP_NO);
 					searchTypeDualMonitorComboBox.setEnabled(false);
 				}
+				
+				// Restarting harvesting process if it is needed
+				harvester.stop();
+				harvester.start();
+				
+				// Repaint pause/resume buttons
+				pauseResumeRepaint();
+
+			
+			}
+		});
+
+		/**
+		 * searchTypeDualMonitorComboBox Action Listener.
+		 */
+		// Clicking event
+		searchTypeDualMonitorComboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				prefm.setPreference("provider-dualMonitorBackgrounds-search-type", new Integer(searchTypeDualMonitorComboBox.getSelectedIndex()).toString());
+				// Restarting downloading process
+				restartDownloadingProcess();
 			}
 		});
 
