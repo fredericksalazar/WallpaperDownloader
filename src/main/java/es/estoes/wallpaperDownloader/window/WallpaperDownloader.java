@@ -1313,6 +1313,28 @@ public class WallpaperDownloader {
 
 			}
 		});
+
+		/**
+		 * wallpaperFusionCheckbox Action Listener.
+		 */
+		// Clicking event
+		wallpaperFusionCheckbox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				if (wallpaperFusionCheckbox.isSelected()) {
+					prefm.setPreference("provider-wallpaperFusion", WDUtilities.APP_YES);
+				} else {
+					prefm.setPreference("provider-wallpaperFusion", WDUtilities.APP_NO);
+				}
+
+				// Restarting harvesting process if it is needed
+				harvester.stop();
+				harvester.start();
+				
+				// Repaint pause/resume buttons
+				pauseResumeRepaint();
+			}
+		});
+		
 		/**
 		 * dualMonitorCheckbox Action Listener.
 		 */
