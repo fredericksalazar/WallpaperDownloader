@@ -1488,6 +1488,18 @@ public class WallpaperDownloader {
 		});
 
 		/**
+		 * timerComboBox Action Listener.
+		 */
+		// Clicking event
+		timerComboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				prefm.setPreference("application-timer", new Integer(timerComboBox.getSelectedIndex()).toString());
+				// Restarting downloading process
+				restartDownloadingProcess();
+			}
+		});
+
+		/**
 		 * startMinimizedCheckBox Action Listener.
 		 */
 		// Clicking event
