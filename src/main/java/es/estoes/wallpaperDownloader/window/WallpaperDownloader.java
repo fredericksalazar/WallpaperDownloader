@@ -137,6 +137,8 @@ public class WallpaperDownloader {
 	private NumberFormat integerFormat;
 	private JComboBox<ComboItem> devianartSearchTypeComboBox;
 	private JComboBox<ComboItem> timerComboBox;
+	private JButton btnChangeSize;
+	private JButton btnApplySize;
 	private JFormattedTextField downloadDirectorySize;
 	private JPanel miscPanel;
 	private JPanel wallpapersPanel;
@@ -632,20 +634,20 @@ public class WallpaperDownloader {
 		appSettingsPanel.setLayout(null);
 		
 		JLabel lblTimer = new JLabel("WallpaperDownloader will download a new wallpaper every");
-		lblTimer.setBounds(12, 12, 439, 19);
+		lblTimer.setBounds(12, 7, 439, 19);
 		appSettingsPanel.add(lblTimer);
 		
 		timerComboBox = new JComboBox<ComboItem>();
-		timerComboBox.setBounds(455, 12, 94, 19);
+		timerComboBox.setBounds(453, 6, 96, 23);
 		appSettingsPanel.add(timerComboBox);
 		
 		JLabel lblDownloadDirectorySize = new JLabel("Maximun size for download directory (MB)");
-		lblDownloadDirectorySize.setBounds(12, 36, 304, 19);
+		lblDownloadDirectorySize.setBounds(12, 34, 304, 19);
 		appSettingsPanel.add(lblDownloadDirectorySize);
 		
 		downloadDirectorySize = new JFormattedTextField(integerFormat);
 		downloadDirectorySize.setColumns(4);
-		downloadDirectorySize.setBounds(317, 37, 49, 19);
+		downloadDirectorySize.setBounds(313, 33, 56, 23);
 		appSettingsPanel.add(downloadDirectorySize);
 		
 		JSeparator settingsSeparator1 = new JSeparator();
@@ -719,6 +721,29 @@ public class WallpaperDownloader {
 		timeToMinimizeComboBox = new JComboBox<ComboItem>();
 		timeToMinimizeComboBox.setBounds(317, 173, 56, 24);
 		appSettingsPanel.add(timeToMinimizeComboBox);
+		
+		btnChangeSize = new JButton();
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/edit_16px_icon.png"));
+			btnChangeSize.setIcon(new ImageIcon(img));
+			btnChangeSize.setToolTipText("Change Size");
+			btnChangeSize.setBounds(376, 26, 34, 33);
+		} catch (IOException ex) {
+			btnChangeSize.setText("Change Size");
+			btnChangeSize.setBounds(376, 26, 131, 25);
+		}
+		appSettingsPanel.add(btnChangeSize);
+		
+		btnApplySize = new JButton();
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/accept_16px_icon.png"));
+			btnApplySize.setIcon(new ImageIcon(img));
+			btnApplySize.setToolTipText("Save size");
+			btnApplySize.setBounds(376, 26, 34, 33);
+		} catch (IOException ex) {
+			btnApplySize.setText("Apply");
+			btnApplySize.setBounds(376, 26, 131, 25);
+		}
 		
 		// Only those desktop environment programmed to be changeable will display this option
 		if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
@@ -1482,6 +1507,39 @@ public class WallpaperDownloader {
 				providersPanel.remove(btnApplyKeywords);
 				providersPanel.add(btnChangeKeywords);
 				providersPanel.repaint();
+				// Restarting downloading process
+				restartDownloadingProcess();
+			}
+		});
+
+		/**
+		 * btnChangeSize Action Listener.
+		 */
+		// Clicking event
+		btnChangeSize.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				downloadDirectorySize.setEnabled(true);
+				appSettingsPanel.remove(btnChangeSize);
+				appSettingsPanel.add(btnApplySize);
+				appSettingsPanel.repaint();
+			}
+		});
+
+		/**
+		 * btnApplySize Action Listener.
+		 */
+		// Clicking event
+		btnApplySize.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				prefm.setPreference("application-max-download-folder-size", downloadDirectorySize.getValue().toString());
+				downloadDirectorySize.setEnabled(false);
+				appSettingsPanel.remove(btnApplySize);
+				appSettingsPanel.add(btnChangeSize);
+				appSettingsPanel.repaint();
+
+				// Refreshing Disk Space Progress Bar
+				refreshProgressBar();
+				
 				// Restarting downloading process
 				restartDownloadingProcess();
 			}
@@ -2598,7 +2656,10 @@ public class WallpaperDownloader {
 			}
 		}
 
+		// Directory size
 		downloadDirectorySize.setValue(new Integer(prefm.getPreference("application-max-download-folder-size")));
+		downloadDirectorySize.setEnabled(false);
+		
 		// ---------------------------------------------------------------------
 		// Checking Miscelanea
 		// ---------------------------------------------------------------------
@@ -2728,5 +2789,4 @@ public class WallpaperDownloader {
 		}
 		providersPanel.repaint();
 	}
-
 }
