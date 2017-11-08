@@ -1602,6 +1602,16 @@ public class WallpaperDownloader {
 		});
 
 		/**
+		 * notificationsComboBox Action Listener.
+		 */
+		// Clicking event
+		notificationsComboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				prefm.setPreference("application-notifications", new Integer(notificationsComboBox.getSelectedIndex()).toString());
+			}
+		});
+
+		/**
 		 * btnApply Action Listener.
 		 */
 		// Clicking event
