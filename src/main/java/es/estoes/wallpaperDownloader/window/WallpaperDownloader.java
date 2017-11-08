@@ -1586,6 +1586,22 @@ public class WallpaperDownloader {
 		});
 
 		/**
+		 * moveFavoriteCheckBox Action Listener.
+		 */
+		// Clicking event
+		moveFavoriteCheckBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				if (moveFavoriteCheckBox.isSelected()) {
+					prefm.setPreference("move-favorite", WDUtilities.APP_YES);
+					prefm.setPreference("move-favorite-folder", moveDirectory.getText());
+				} else {
+					prefm.setPreference("move-favorite", WDUtilities.APP_NO);
+					prefm.setPreference("move-favorite-folder", PreferencesManager.DEFAULT_VALUE);
+				}
+			}
+		});
+
+		/**
 		 * btnApply Action Listener.
 		 */
 		// Clicking event
