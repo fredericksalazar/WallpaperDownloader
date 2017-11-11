@@ -1612,6 +1612,22 @@ public class WallpaperDownloader {
 		});
 
 		/**
+		 * changerComboBox Action Listener.
+		 */
+		// Clicking event
+		changerComboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
+					prefm.setPreference("application-changer", new Integer(changerComboBox.getSelectedIndex()).toString());
+				}
+				
+				//Stoping and starting changer process
+				changer.stop();
+				changer.start();
+			}
+		});
+		
+		/**
 		 * btnApply Action Listener.
 		 */
 		// Clicking event
