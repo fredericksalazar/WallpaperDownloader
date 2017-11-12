@@ -882,7 +882,7 @@ public class WallpaperDownloader {
 		downloadsDirectory = new JFormattedTextField((Format) null);
 		downloadsDirectory.setEditable(false);
 		downloadsDirectory.setColumns(4);
-		downloadsDirectory.setBounds(174, 18, 405, 19);
+		downloadsDirectory.setBounds(174, 15, 405, 23);
 		miscPanel.add(downloadsDirectory);
 		
 		btnOpenDownloadsDirectory = new JButton();
@@ -914,7 +914,7 @@ public class WallpaperDownloader {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/change_folder_24px_icon.png"));
 			btnChangeDownloadsDirectory.setIcon(new ImageIcon(img));
 			btnChangeDownloadsDirectory.setToolTipText("Change Downloads Directory");
-			btnChangeDownloadsDirectory.setBounds(588, 11, 34, 33);
+			btnChangeDownloadsDirectory.setBounds(588, 10, 34, 33);
 		} catch (IOException ex) {
 			btnChangeDownloadsDirectory.setText("Change Downloads Directory");
 			btnChangeDownloadsDirectory.setBounds(12, 186, 259, 25);
