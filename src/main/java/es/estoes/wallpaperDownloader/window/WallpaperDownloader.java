@@ -348,7 +348,11 @@ public class WallpaperDownloader {
 		
 		// Configuring frames
 		frame = new JFrame();
-		frame.setBounds(100, 100, 694, 496);
+		frame.setBounds(100, 100, 694, 445);
+		// If the system tray is old, then windows must be bigger in order to paint Minimize button
+		if (isOldSystemTray()) {
+			frame.setBounds(100, 100, 694, 484);
+		}
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{116, 386, 73, 96, 0};
@@ -1162,13 +1166,15 @@ public class WallpaperDownloader {
 		}
 		// Text to the beginning
 		changelogTextPane.setCaretPosition(0);
-		
+										
 		// Minimize button will only be available on OS with an
 		// old system tray
 		btnMinimize = new JButton("Minimize");
 		btnMinimize.setBackground(Color.WHITE);
 		GridBagConstraints gbc_btnMinimize = new GridBagConstraints();
-		gbc_btnMinimize.gridx = 3;
+		gbc_btnMinimize.insets = new Insets(0, 0, 0, 5);
+		gbc_btnMinimize.anchor = GridBagConstraints.NORTH;
+		gbc_btnMinimize.gridx = 0;
 		gbc_btnMinimize.gridy = 3;
 		if (isOldSystemTray()) {
 			frame.getContentPane().add(btnMinimize, gbc_btnMinimize);
