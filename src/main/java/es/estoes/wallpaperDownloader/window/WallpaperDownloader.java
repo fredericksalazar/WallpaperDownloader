@@ -705,7 +705,7 @@ public class WallpaperDownloader {
 		moveDirectory = new JFormattedTextField((Format) null);
 		moveDirectory.setEditable(false);
 		moveDirectory.setColumns(4);
-		moveDirectory.setBounds(144, 103, 405, 19);
+		moveDirectory.setBounds(144, 101, 405, 23);
 		appSettingsPanel.add(moveDirectory);
 		
 		btnChangeMoveDirectory = new JButton();

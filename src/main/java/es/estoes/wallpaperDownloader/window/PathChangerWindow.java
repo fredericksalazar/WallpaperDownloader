@@ -76,7 +76,7 @@ public class PathChangerWindow extends JFrame {
 		setLocation(x, y);
 		
 		newPath = new JTextField();
-		newPath.setBounds(12, 36, 298, 19);
+		newPath.setBounds(12, 36, 298, 25);
 		getContentPane().add(newPath);
 		newPath.setColumns(10);
 		switch (whatToChange) {
@@ -128,7 +128,7 @@ public class PathChangerWindow extends JFrame {
 			    }
 			}
 		});
-		btnSelectPath.setBounds(317, 33, 117, 25);
+		btnSelectPath.setBounds(317, 35, 117, 25);
 		getContentPane().add(btnSelectPath);
 		
 		JButton btnApplyPathChange = new JButton("Apply");
