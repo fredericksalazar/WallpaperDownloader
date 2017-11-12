@@ -26,6 +26,7 @@ import javax.swing.JList;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.ToolTipManager;
 import javax.swing.border.Border;
@@ -97,6 +98,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.JTextPane;
 
 public class WallpaperDownloader {
@@ -257,6 +259,23 @@ public class WallpaperDownloader {
 				// 2.- Application configuration
 				WDConfigManager.checkConfig();
 				window = new WallpaperDownloader();
+				
+				// 3.- System Look & Feel
+                try {
+                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedLookAndFeelException e) {
+                    e.printStackTrace();
+                }
+
+                SwingUtilities.updateComponentTreeUI(window.frame);
+				
+				// 4,. Configuring main frame
 				window.frame.setBackground(new Color(255, 255, 255));
 				window.frame.setExtendedState(Frame.NORMAL);
 				window.frame.setVisible(true);
@@ -399,7 +418,7 @@ public class WallpaperDownloader {
 		providersPanel.add(lblKeywords);
 		
 		searchKeywords = new JTextField();
-		searchKeywords.setBounds(100, 13, 295, 19);
+		searchKeywords.setBounds(100, 13, 295, 23);
 		providersPanel.add(searchKeywords);
 		searchKeywords.setColumns(10);
 
@@ -412,7 +431,7 @@ public class WallpaperDownloader {
 			ImageIcon icon = new ImageIcon(img);
 			JLabel lblKeywordsHelp = new JLabel(icon);
 			lblKeywordsHelp.setToolTipText("Each keyword must be separated by ';'. If it is empty then it will search any wallpaper");
-			lblKeywordsHelp.setBounds(398, 11, 30, 23);
+			lblKeywordsHelp.setBounds(398, 13, 30, 23);
 			providersPanel.add(lblKeywordsHelp);
 		} catch (IOException ex) {
 			JLabel lblKeywordsHelp = new JLabel("(separated by ;) (Empty->All wallpapers)");
@@ -514,7 +533,7 @@ public class WallpaperDownloader {
 		
 		widthResolution = new JFormattedTextField((Format) null);
 		widthResolution.setColumns(4);
-		widthResolution.setBounds(100, 42, 49, 19);
+		widthResolution.setBounds(100, 42, 49, 23);
 		providersPanel.add(widthResolution);
 		
 		lblX = new JLabel("x");
@@ -523,7 +542,7 @@ public class WallpaperDownloader {
 		
 		heigthResolution = new JFormattedTextField((Format) null);
 		heigthResolution.setColumns(4);
-		heigthResolution.setBounds(159, 42, 49, 19);
+		heigthResolution.setBounds(159, 42, 49, 23);
 		providersPanel.add(heigthResolution);
 		
 		btnChangeResolution = new JButton();
@@ -531,10 +550,10 @@ public class WallpaperDownloader {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/edit_16px_icon.png"));
 			btnChangeResolution.setIcon(new ImageIcon(img));
 			btnChangeResolution.setToolTipText("Change Resolution");
-			btnChangeResolution.setBounds(214, 35, 34, 33);
+			btnChangeResolution.setBounds(214, 37, 34, 33);
 		} catch (IOException ex) {
 			btnChangeResolution.setText("Change Res.");
-			btnChangeResolution.setBounds(224, 38, 131, 25);
+			btnChangeResolution.setBounds(224, 37, 131, 25);
 		}
 		providersPanel.add(btnChangeResolution);
 		
@@ -551,10 +570,10 @@ public class WallpaperDownloader {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/reset_16px_icon.png"));
 			btnResetResolution.setIcon(new ImageIcon(img));
 			btnResetResolution.setToolTipText("Reset Resolution");
-			btnResetResolution.setBounds(250, 35, 34, 33);
+			btnResetResolution.setBounds(250, 37, 34, 33);
 		} catch (IOException ex) {
 			btnResetResolution.setText("Reset");
-			btnResetResolution.setBounds(357, 38, 72, 25);
+			btnResetResolution.setBounds(357, 37, 72, 25);
 		}
 
 		btnApplyResolution = new JButton();
@@ -562,10 +581,10 @@ public class WallpaperDownloader {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/accept_16px_icon.png"));
 			btnApplyResolution.setIcon(new ImageIcon(img));
 			btnApplyResolution.setToolTipText("Save changes");
-			btnApplyResolution.setBounds(214, 35, 34, 33);
+			btnApplyResolution.setBounds(214, 37, 34, 33);
 		} catch (IOException ex) {
 			btnApplyResolution.setText("Apply");
-			btnApplyResolution.setBounds(224, 38, 131, 25);
+			btnApplyResolution.setBounds(224, 37, 131, 25);
 		}
 				
 		btnPause = new JButton();
@@ -573,10 +592,10 @@ public class WallpaperDownloader {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/pause_16px_icon.png"));
 			btnPause.setIcon(new ImageIcon(img));
 			btnPause.setToolTipText("Pause downloading process");
-			btnPause.setBounds(552, 6, 34, 33);
+			btnPause.setBounds(552, 8, 34, 33);
 		} catch (IOException ex) {
 			btnPause.setToolTipText("Pause downloading process");
-			btnPause.setBounds(431, 6, 34, 33);
+			btnPause.setBounds(431, 8, 34, 33);
 		}
 
 		btnPlay = new JButton();
@@ -584,10 +603,10 @@ public class WallpaperDownloader {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/play_16px_icon.png"));
 			btnPlay.setIcon(new ImageIcon(img));
 			btnPlay.setToolTipText("Resume downloading process");
-			btnPlay.setBounds(552, 6, 34, 33);
+			btnPlay.setBounds(552, 8, 34, 33);
 		} catch (IOException ex) {
 			btnPlay.setToolTipText("Resume downloading process");
-			btnPlay.setBounds(431, 6, 34, 33);
+			btnPlay.setBounds(431, 8, 34, 33);
 		}
 
 		try {
@@ -595,10 +614,10 @@ public class WallpaperDownloader {
 			ImageIcon icon = new ImageIcon(img);
 			lblGreenSpot = new JLabel(icon);			
 			lblGreenSpot.setToolTipText("Downloading process is enabled");
-			lblGreenSpot.setBounds(599, 15, 20, 18);
+			lblGreenSpot.setBounds(599, 16, 20, 18);
 		} catch (IOException ex) {
 			lblGreenSpot = new JLabel("Downloading process is enabled");
-			lblGreenSpot.setBounds(599, 15, 30, 23);
+			lblGreenSpot.setBounds(599, 16, 30, 23);
 		}
 
 		try {
@@ -606,10 +625,10 @@ public class WallpaperDownloader {
 			ImageIcon icon = new ImageIcon(img);
 			lblRedSpot = new JLabel(icon);			
 			lblRedSpot.setToolTipText("Downloading process is disabled");
-			lblRedSpot.setBounds(599, 15, 20, 18);
+			lblRedSpot.setBounds(599, 16, 20, 18);
 		} catch (IOException ex) {
 			lblRedSpot = new JLabel("Downloading process is disabled");
-			lblRedSpot.setBounds(599, 15, 30, 23);
+			lblRedSpot.setBounds(599, 16, 30, 23);
 		}
 
 		btnChangeKeywords = new JButton();
@@ -617,10 +636,10 @@ public class WallpaperDownloader {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/edit_16px_icon.png"));
 			btnChangeKeywords.setIcon(new ImageIcon(img));
 			btnChangeKeywords.setToolTipText("Change Resolution");
-			btnChangeKeywords.setBounds(436, 6, 34, 33);
+			btnChangeKeywords.setBounds(436, 8, 34, 33);
 		} catch (IOException ex) {
 			btnChangeKeywords.setText("Change Keyw.");
-			btnChangeKeywords.setBounds(436, 6, 131, 25);
+			btnChangeKeywords.setBounds(436, 8, 131, 25);
 		}
 		providersPanel.add(btnChangeKeywords);
 
@@ -629,10 +648,10 @@ public class WallpaperDownloader {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/accept_16px_icon.png"));
 			btnApplyKeywords.setIcon(new ImageIcon(img));
 			btnApplyKeywords.setToolTipText("Save changes");
-			btnApplyKeywords.setBounds(436, 6, 34, 33);
+			btnApplyKeywords.setBounds(436, 8, 34, 33);
 		} catch (IOException ex) {
 			btnApplyKeywords.setText("Apply");
-			btnApplyKeywords.setBounds(436, 6, 131, 25);
+			btnApplyKeywords.setBounds(436, 8, 131, 25);
 		}
 
 		// Application Settings (tab)
@@ -950,7 +969,7 @@ public class WallpaperDownloader {
 		
 		btnManageWallpapers = new JButton("Wallpapers downloaded");
 		btnManageWallpapers.setBackground(Color.WHITE);
-		btnManageWallpapers.setBounds(12, 239, 197, 25);
+		btnManageWallpapers.setBounds(12, 239, 214, 25);
 		wallpapersPanel.add(btnManageWallpapers);
 		
 		btnRemoveWallpaper = new JButton();
@@ -994,12 +1013,12 @@ public class WallpaperDownloader {
 		
 		btnMoveWallpapers = new JButton("Move Fav. Wallpapers");
 		btnMoveWallpapers.setBackground(Color.WHITE);
-		btnMoveWallpapers.setBounds(12, 276, 197, 25);
+		btnMoveWallpapers.setBounds(12, 276, 214, 25);
 		wallpapersPanel.add(btnMoveWallpapers);
 		
 		btnChooseWallpaper = new JButton("Choose Wallpaper");
 		btnChooseWallpaper.setBackground(Color.WHITE);
-		btnChooseWallpaper.setBounds(12, 313, 197, 25);
+		btnChooseWallpaper.setBounds(12, 313, 214, 25);
 		wallpapersPanel.add(btnChooseWallpaper);
 
 		btnSetWallpaper = new JButton();
@@ -1041,7 +1060,7 @@ public class WallpaperDownloader {
 		version.setColumns(10);
 		
 		aboutSeparator1 = new JSeparator();
-		aboutSeparator1.setBounds(11, 43, 531, 2);
+		aboutSeparator1.setBounds(11, 43, 597, 2);
 		aboutPanel.add(aboutSeparator1);
 		
 		lblDeveloper = new JLabel("Developer");
@@ -1055,16 +1074,16 @@ public class WallpaperDownloader {
 			}
 		};
 		developer.setEditable(false);
-		developer.setBounds(108, 56, 405, 19);
+		developer.setBounds(153, 56, 405, 19);
 		aboutPanel.add(developer);
 		developer.setColumns(10);
 		
 		lblSourceCode = new JLabel("Source code");
-		lblSourceCode.setBounds(12, 84, 95, 15);
+		lblSourceCode.setBounds(12, 84, 108, 15);
 		aboutPanel.add(lblSourceCode);
 		
 		btnRepository = new JButton("New button");
-		btnRepository.setBounds(92, 80, 456, 25);
+		btnRepository.setBounds(137, 80, 456, 25);
 		btnRepository.setText("<HTML><FONT color=\"#000099\"><U>" + pm.getProperty("repository.code") + "</U></FONT></HTML>");
 		btnRepository.setHorizontalAlignment(SwingConstants.LEFT);
 		btnRepository.setBorderPainted(false);
@@ -1082,7 +1101,7 @@ public class WallpaperDownloader {
 		aboutPanel.add(txtInfo);
 		
 		aboutSeparator2 = new JSeparator();
-		aboutSeparator2.setBounds(12, 143, 531, 2);
+		aboutSeparator2.setBounds(12, 138, 597, 7);
 		aboutPanel.add(aboutSeparator2);
 		
 		JLabel lblIcons = new JLabel("Icons");
@@ -1096,7 +1115,7 @@ public class WallpaperDownloader {
 		icons.setText("Jaime Álvarez; Dave Gandy from");
 		icons.setEditable(false);
 		icons.setColumns(10);
-		icons.setBounds(108, 109, 219, 19);
+		icons.setBounds(153, 109, 219, 19);
 		aboutPanel.add(icons);
 		
 		btnIcons = new JButton("<HTML><FONT color=\"#000099\"><U>http://www.flaticon.com/</U></FONT></HTML>");
@@ -1108,7 +1127,7 @@ public class WallpaperDownloader {
 		btnIcons.setHorizontalAlignment(SwingConstants.LEFT);
 		btnIcons.setBorderPainted(false);
 		btnIcons.setBackground(Color.WHITE);
-		btnIcons.setBounds(326, 106, 229, 25);
+		btnIcons.setBounds(381, 106, 229, 25);
 		aboutPanel.add(btnIcons);
 		
 		JLabel lblChangelog = new JLabel("Changelog");
