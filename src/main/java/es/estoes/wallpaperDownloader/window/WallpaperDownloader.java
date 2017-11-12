@@ -100,6 +100,7 @@ import javax.swing.JTextArea;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.JTextPane;
+import javax.swing.Icon;
 
 public class WallpaperDownloader {
 
@@ -189,6 +190,7 @@ public class WallpaperDownloader {
 	private JButton btnResetResolution;
 	private JButton btnChangeKeywords;
 	private JButton btnApplyKeywords;
+	private JLabel lblSystemTrayHelp;
 	
 	// Getters & Setters
 	public JFrame getFrame() {
@@ -762,8 +764,28 @@ public class WallpaperDownloader {
 		appSettingsPanel.add(btnChangeSize);
 		
 		stIconCheckBox = new JCheckBox("System tray icon");
-		stIconCheckBox.setBounds(417, 173, 179, 23);
+		stIconCheckBox.setBounds(417, 173, 154, 23);
 		appSettingsPanel.add(stIconCheckBox);
+		
+		lblSystemTrayHelp = new JLabel((Icon) null);
+		lblSystemTrayHelp.setToolTipText("Enable this option to have an extra button within Wallpapers tab to move all your favorite wallpapers to another location");
+		appSettingsPanel.add(lblSystemTrayHelp);
+
+		
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/help_24px_icon.png"));
+			ImageIcon icon = new ImageIcon(img);
+			lblSystemTrayHelp = new JLabel(icon);
+			lblSystemTrayHelp.setToolTipText("KDE and GNOME users can experiment some crashes using system tray icon. Nevertheless, it will enable a lot of useful quick actions");
+			lblSystemTrayHelp.setBounds(566, 173, 30, 23);
+			appSettingsPanel.add(lblSystemTrayHelp);
+		} catch (IOException ex) {
+			lblSystemTrayHelp = new JLabel("System Tray Icon Help");
+			lblSystemTrayHelp.setBounds(566, 173, 30, 23);
+			appSettingsPanel.add(lblSystemTrayHelp);
+		}
+
+		
 		
 		btnApplySize = new JButton();
 		try {
