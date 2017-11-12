@@ -166,6 +166,9 @@ public class WDConfigManager {
         		 // Initializing start minimize feature
         		 prefm.setPreference("start-minimized", PreferencesManager.DEFAULT_VALUE);
 
+        		 // System tray icon
+        		 prefm.setPreference("system-tray-icon", WDUtilities.APP_YES);
+
         		 // Initializing time to minimize feature
         		 prefm.setPreference("time-to-minimize", "3");
 
@@ -308,6 +311,11 @@ public class WDConfigManager {
     		 // Time to minimize feature
 			 if (prefm.getPreference("time-to-minimize").equals(PreferencesManager.DEFAULT_VALUE)) {
 	    		 prefm.setPreference("time-to-minimize", "3");
+			 }
+
+    		 // System tray icon
+			 if (prefm.getPreference("system-tray-icon").equals(PreferencesManager.DEFAULT_VALUE)) {
+				 prefm.setPreference("system-tray-icon", WDUtilities.APP_YES);
 			 }
 
 			 // Changer timer

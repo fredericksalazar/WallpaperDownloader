@@ -168,6 +168,7 @@ public class WallpaperDownloader {
 	private JComboBox<ComboItem> notificationsComboBox;
 	private static JCheckBox startMinimizedCheckBox;
 	private JComboBox<ComboItem> timeToMinimizeComboBox;
+	private JCheckBox stIconCheckBox;
 	private static JButton btnPause;
 	private static JButton btnPlay;
 	private static JPanel providersPanel;
@@ -287,7 +288,9 @@ public class WallpaperDownloader {
 				window.frame.addWindowStateListener(new WindowStateListener() {
 					@Override
 					public void windowStateChanged(WindowEvent windowEvent) {
-						if (!isOldSystemTray()) {
+						final PreferencesManager prefm = PreferencesManager.getInstance();
+						String systemTrayIconEnable = prefm.getPreference("system-tray-icon");
+						if (!isOldSystemTray() && systemTrayIconEnable.equals(WDUtilities.APP_YES)) {
 							// Check if commands comes from system tray
 							if (fromSystemTray) {
 								fromSystemTray = false;
@@ -321,7 +324,9 @@ public class WallpaperDownloader {
 
 					@Override
 					public void windowLostFocus(WindowEvent arg0) {
-						if (!isOldSystemTray()) {
+						final PreferencesManager prefm = PreferencesManager.getInstance();
+						String systemTrayIconEnable = prefm.getPreference("system-tray-icon");
+						if (!isOldSystemTray() && systemTrayIconEnable.equals(WDUtilities.APP_YES)) {
 							window.frame.setExtendedState(Frame.NORMAL);							
 						}
 					}
@@ -698,7 +703,7 @@ public class WallpaperDownloader {
 		appSettingsPanel.add(btnChangeMoveDirectory);
 
 		JSeparator settingsSeparator2 = new JSeparator();
-		settingsSeparator2.setBounds(12, 134, 531, 2);
+		settingsSeparator2.setBounds(12, 134, 631, 2);
 		appSettingsPanel.add(settingsSeparator2);
 		
 		lblNotifications = new JLabel("Please, select the level of notifications");
@@ -714,7 +719,7 @@ public class WallpaperDownloader {
 		appSettingsPanel.add(startMinimizedCheckBox);
 		
 		JSeparator settingsSeparator3 = new JSeparator();
-		settingsSeparator3.setBounds(12, 168, 531, 2);
+		settingsSeparator3.setBounds(12, 168, 631, 2);
 		appSettingsPanel.add(settingsSeparator3);
 		
 		JLabel lblTimeToMinimize = new JLabel("Time to minimize");
@@ -737,6 +742,10 @@ public class WallpaperDownloader {
 		}
 		appSettingsPanel.add(btnChangeSize);
 		
+		stIconCheckBox = new JCheckBox("System tray icon");
+		stIconCheckBox.setBounds(417, 173, 179, 23);
+		appSettingsPanel.add(stIconCheckBox);
+		
 		btnApplySize = new JButton();
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/accept_16px_icon.png"));
@@ -752,7 +761,7 @@ public class WallpaperDownloader {
 		if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
 
 			JSeparator settingsSeparator4 = new JSeparator();
-			settingsSeparator4.setBounds(12, 199, 531, 2);
+			settingsSeparator4.setBounds(12, 199, 631, 2);
 			appSettingsPanel.add(settingsSeparator4);		
 			JLabel lblChanger = new JLabel("Change wallpaper automatically every");
 			lblChanger.setBounds(12, 208, 304, 19);
@@ -1584,6 +1593,20 @@ public class WallpaperDownloader {
 		});
 
 		/**
+		 * stIconCheckBox Action Listener.
+		 */
+		// Clicking event
+		stIconCheckBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				if (stIconCheckBox.isSelected()) {
+					prefm.setPreference("system-tray-icon", WDUtilities.APP_YES);
+				} else {
+					prefm.setPreference("system-tray-icon", WDUtilities.APP_NO);
+				}
+			}
+		});
+
+		/**
 		 * moveFavoriteCheckBox Action Listener.
 		 */
 		// Clicking event
@@ -1984,8 +2007,9 @@ public class WallpaperDownloader {
 	public static void minimizeApplication() {
 		final PreferencesManager prefm = PreferencesManager.getInstance();
 		// The application is minimized within System Tray
-        //Check the SystemTray is supported
-        if (!SystemTray.isSupported() || !WDUtilities.isMinimizable()) {
+        // Check the SystemTray is supported or user has selected no system tray icon
+		String systemTrayIconEnable = prefm.getPreference("system-tray-icon");
+        if (!SystemTray.isSupported() || !WDUtilities.isMinimizable() || systemTrayIconEnable.equals(WDUtilities.APP_NO)) {
             LOG.error("SystemTray is not supported. Frame is traditionally minimized");
             // Frame is traditionally minimized
             window.frame.setExtendedState(Frame.ICONIFIED);
@@ -2547,6 +2571,14 @@ public class WallpaperDownloader {
 		timeToMinimizeComboBox.addItem(new ComboItem("9s", "9"));
 		timeToMinimizeComboBox.addItem(new ComboItem("10s", "10"));
 		timeToMinimizeComboBox.setSelectedIndex((new Integer(prefm.getPreference("time-to-minimize")) - 1));
+
+		// System tray icon
+		String systemTrayIconEnable = prefm.getPreference("system-tray-icon");
+		if (systemTrayIconEnable.equals(WDUtilities.APP_YES)) {
+			stIconCheckBox.setSelected(true);
+		} else {
+			stIconCheckBox.setSelected(false);
+		}
 
 		// Changer
 		if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
