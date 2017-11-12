@@ -125,7 +125,6 @@ public class WallpaperDownloader {
 	private JCheckBox socialWallpaperingIgnoreKeywordsCheckbox;
 	private JCheckBox wallpaperFusionCheckbox;
 	private JButton btnChangeResolution;
-	private JButton btnApply;
 	private JButton btnMinimize;
 	private JButton btnOpenDownloadsDirectory;
 	private JButton btnClipboard;
@@ -1164,13 +1163,6 @@ public class WallpaperDownloader {
 		// Text to the beginning
 		changelogTextPane.setCaretPosition(0);
 		
-		btnApply = new JButton("Apply");
-		GridBagConstraints gbc_btnApply = new GridBagConstraints();
-		gbc_btnApply.insets = new Insets(0, 0, 0, 5);
-		gbc_btnApply.gridx = 2;
-		gbc_btnApply.gridy = 3;
-		frame.getContentPane().add(btnApply, gbc_btnApply);
-
 		// Minimize button will only be available on OS with an
 		// old system tray
 		btnMinimize = new JButton("Minimize");
@@ -1626,131 +1618,6 @@ public class WallpaperDownloader {
 				changer.start();
 			}
 		});
-		
-		/**
-		 * btnApply Action Listener.
-		 */
-		// Clicking event
-		btnApply.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
-				// Storing user settings
-				// ---------------------------------------------------------------------------
-				// Providers
-				// ---------------------------------------------------------------------------
-				// Search keywords
-				if (!searchKeywords.getText().isEmpty()) {
-					prefm.setPreference("provider-wallhaven-keywords", searchKeywords.getText());					
-				} else {
-					prefm.setPreference("provider-wallhaven-keywords", PreferencesManager.DEFAULT_VALUE);
-				}
-								
-				// Wallhaven.cc
-				if (wallhavenCheckbox.isSelected()) {
-					prefm.setPreference("provider-wallhaven", WDUtilities.APP_YES);
-					prefm.setPreference("wallpaper-search-type", new Integer(searchTypeWallhavenComboBox.getSelectedIndex()).toString());
-
-				} else {
-					prefm.setPreference("provider-wallhaven", WDUtilities.APP_NO);
-					prefm.setPreference("wallpaper-search-type", "3");
-				}
-
-				// Devianart
-				if (devianartCheckbox.isSelected()) {
-					prefm.setPreference("provider-devianart", WDUtilities.APP_YES);
-					prefm.setPreference("wallpaper-devianart-search-type", new Integer(devianartSearchTypeComboBox.getSelectedIndex()).toString());
-
-				} else {
-					prefm.setPreference("provider-devianart", WDUtilities.APP_NO);
-					prefm.setPreference("wallpaper-devianart-search-type", "0");
-				}
-
-				// Bing
-				if (bingCheckbox.isSelected()) {
-					prefm.setPreference("provider-bing", WDUtilities.APP_YES);
-
-				} else {
-					prefm.setPreference("provider-bing", WDUtilities.APP_NO);
-				}
-
-				// Social Wallpapering
-				if (socialWallpaperingCheckbox.isSelected()) {
-					prefm.setPreference("provider-socialWallpapering", WDUtilities.APP_YES);
-				} else {
-					prefm.setPreference("provider-socialWallpapering", WDUtilities.APP_NO);
-				}
-				if (socialWallpaperingIgnoreKeywordsCheckbox.isSelected()) {
-					prefm.setPreference("provider-socialWallpapering-ignore-keywords", WDUtilities.APP_YES);
-				} else {
-					prefm.setPreference("provider-socialWallpapering-ignore-keywords", WDUtilities.APP_NO);
-				}
-				
-				// WallpaperFusion
-				if (wallpaperFusionCheckbox.isSelected()) {
-					prefm.setPreference("provider-wallpaperFusion", WDUtilities.APP_YES);
-
-				} else {
-					prefm.setPreference("provider-wallpaperFusion", WDUtilities.APP_NO);
-				}
-
-				// DualMonitorBackgrounds
-				if (dualMonitorCheckbox.isSelected()) {
-					prefm.setPreference("provider-dualMonitorBackgrounds", WDUtilities.APP_YES);
-					prefm.setPreference("provider-dualMonitorBackgrounds-search-type", new Integer(searchTypeDualMonitorComboBox.getSelectedIndex()).toString());
-				} else {
-					prefm.setPreference("provider-dualMonitorBackgrounds", WDUtilities.APP_NO);
-					prefm.setPreference("provider-dualMonitorBackgrounds-search-type", "0");
-				}
-
-				// ---------------------------------------------------------------------------
-				// User settings
-				// ---------------------------------------------------------------------------
-				prefm.setPreference("application-timer", new Integer(timerComboBox.getSelectedIndex()).toString());
-				prefm.setPreference("application-max-download-folder-size", downloadDirectorySize.getValue().toString());
-				if (moveFavoriteCheckBox.isSelected()) {
-					prefm.setPreference("move-favorite", WDUtilities.APP_YES);
-					prefm.setPreference("move-favorite-folder", moveDirectory.getText());
-				} else {
-					prefm.setPreference("move-favorite", WDUtilities.APP_NO);
-					prefm.setPreference("move-favorite-folder", PreferencesManager.DEFAULT_VALUE);
-				}
-				prefm.setPreference("application-notifications", new Integer(notificationsComboBox.getSelectedIndex()).toString());
-				if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
-					prefm.setPreference("application-changer", new Integer(changerComboBox.getSelectedIndex()).toString());
-				}
-
-				// Stopping and starting harvesting process
-				harvester.stop();
-				harvester.start();
-				
-				//Stoping and starting changer process
-				changer.stop();
-				changer.start();
-				
-				// Resume / pause feature
-				if (harvester.getStatus() != Harvester.STATUS_DISABLED) {
-					// Checking downloading process
-					if (prefm.getPreference("downloading-process").equals(WDUtilities.APP_NO)) {
-						providersPanel.add(btnPlay);
-						providersPanel.add(lblRedSpot);
-						providersPanel.remove(lblGreenSpot);
-					} else {
-						providersPanel.add(btnPause);
-						providersPanel.add(lblGreenSpot);
-						providersPanel.remove(lblRedSpot);
-					}
-				} else {
-					providersPanel.remove(btnPause);
-					providersPanel.remove(btnPlay);
-					providersPanel.add(lblRedSpot);
-					providersPanel.remove(lblGreenSpot);
-				}
-				providersPanel.repaint();
-				
-				// Information
-				DialogManager info = new DialogManager("Changes applied.", 2000);
-				info.openDialog();
-			}
-		});	
 		
 		/**
 		 * btnOpenDownloadsDirectory Action Listener.
