@@ -1155,7 +1155,7 @@ public class WallpaperDownloader {
 		aboutPanel.add(btnIcons);
 		
 		JLabel lblChangelog = new JLabel("Changelog");
-		lblChangelog.setBounds(12, 153, 91, 15);
+		lblChangelog.setBounds(12, 147, 91, 20);
 		aboutPanel.add(lblChangelog);
 		
 		JSeparator aboutSeparator3 = new JSeparator();
