@@ -57,7 +57,6 @@ public class ChooseWallpaperWindow extends JFrame {
 	private JButton btnRemoveWallpaper;
 	private JButton btnPreviewWallpaper;
 	private JButton btnSetDskWallpaper;
-	private JButton btnClose;
 	private JScrollPane wallpapersScrollPanel;
 	private JList<Object> wallpapersList;
 	private JButton btnBackWallpapers;
@@ -74,7 +73,7 @@ public class ChooseWallpaperWindow extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setTitle("Choose wallpaper");
 		setBackground(new Color(255, 255, 255));
-		setBounds(100, 100, 774, 621);
+		setBounds(100, 100, 774, 546);
 		getContentPane().setLayout(null);
 		
 		// Centering window
@@ -142,10 +141,6 @@ public class ChooseWallpaperWindow extends JFrame {
 			getContentPane().add(btnSetDskWallpaper);			
 		}
 		
-		btnClose = new JButton("Close");
-		btnClose.setBounds(630, 561, 116, 25);
-		getContentPane().add(btnClose);
-		
 		lblFirstWallpaper = new JLabel("1");
 		lblFirstWallpaper.setBounds(331, 470, 34, 15);
 		getContentPane().add(lblFirstWallpaper);
@@ -199,14 +194,6 @@ public class ChooseWallpaperWindow extends JFrame {
 	}
 	
 	private void initializeListeners() {
-		/**
-		 * btnClose
-		 */
-		btnClose.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				dispose();
-			}
-		});
 		
 		/**
 		 * btnForwardFavoriteWallpapers

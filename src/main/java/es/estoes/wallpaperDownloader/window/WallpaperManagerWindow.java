@@ -65,7 +65,6 @@ public class WallpaperManagerWindow extends JFrame {
 	private JButton btnSetFavoriteWallpaper;
 	private JButton btnPreviewFavoriteWallpaper;
 	private JButton btnSetDskFavoriteWallpaper;
-	private JButton btnClose;
 	private JScrollPane noFavoriteScrollPanel;
 	private JList<Object> noFavoriteWallpapersList;
 	private JScrollPane favoriteScrollPanel;
@@ -242,10 +241,6 @@ public class WallpaperManagerWindow extends JFrame {
 
 		}
 		
-		btnClose = new JButton("Close");
-		btnClose.setBounds(630, 561, 116, 25);
-		getContentPane().add(btnClose);
-		
 		lblFirstFavoriteWallpaper = new JLabel("1");
 		lblFirstFavoriteWallpaper.setBounds(331, 255, 34, 15);
 		getContentPane().add(lblFirstFavoriteWallpaper);
@@ -344,14 +339,6 @@ public class WallpaperManagerWindow extends JFrame {
 	}
 	
 	private void initializeListeners() {
-		/**
-		 * btnClose
-		 */
-		btnClose.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				dispose();
-			}
-		});
 		
 		/**
 		 * btnForwardFavoriteWallpapers
