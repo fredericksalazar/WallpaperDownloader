@@ -265,9 +265,12 @@ public class WallpaperDownloader {
 				
 				// 3.- System Look & Feel
                 try {
-                	//TODO:
-                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-//                	UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+                	String systemLookAndFeel = UIManager.getSystemLookAndFeelClassName();
+                	if (systemLookAndFeel.equals("javax.swing.plaf.metal.MetalLookAndFeel") || WDUtilities.isSnapPackage()) {
+                		UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");                		
+                	} else {
+                		UIManager.setLookAndFeel(systemLookAndFeel);                		
+                	}
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 } catch (InstantiationException e) {
