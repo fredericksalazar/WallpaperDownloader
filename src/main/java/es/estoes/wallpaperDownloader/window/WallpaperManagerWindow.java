@@ -41,6 +41,7 @@ import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import javax.swing.border.EmptyBorder;
 
 import es.estoes.wallpaperDownloader.changer.LinuxWallpaperChanger;
 import es.estoes.wallpaperDownloader.util.WDUtilities;
@@ -118,10 +119,14 @@ public class WallpaperManagerWindow extends JFrame {
 		
 		noFavoriteScrollPanel = new JScrollPane();
 		noFavoriteScrollPanel.setBounds(12, 337, 688, 212);
+		noFavoriteScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+		noFavoriteScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
 		getContentPane().add(noFavoriteScrollPanel);
 		
 		noFavoriteWallpapersList = new JList<Object>();
 		noFavoriteWallpapersList.setBounds(12, 337, 688, 212);
+
 		getContentPane().add(noFavoriteWallpapersList);
 		
 		btnRemoveNoFavoriteWallpaper = new JButton();
@@ -612,7 +617,12 @@ public class WallpaperManagerWindow extends JFrame {
 		favoriteWallpapersList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		// JList horizontal orientation
 		favoriteWallpapersList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-		// Only 1 row to display
+		favoriteWallpapersList.setFixedCellHeight(103);
+		favoriteWallpapersList.setFixedCellWidth(130);
+		favoriteWallpapersList.setBorder(new EmptyBorder(1, 15, 1, 15));
+		favoriteWallpapersList.setSelectionBackground(Color.cyan);
+		
+		// Only 2 rows to display
 		favoriteWallpapersList.setVisibleRowCount(2);
 		// Using a custom render to render every element within JList
 		favoriteWallpapersList.setCellRenderer(new WallpaperListRenderer(WallpaperListRenderer.WITH_TEXT));		
@@ -628,7 +638,12 @@ public class WallpaperManagerWindow extends JFrame {
 		noFavoriteWallpapersList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		// JList horizontal orientation
 		noFavoriteWallpapersList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-		// Only 1 row to display
+		noFavoriteWallpapersList.setFixedCellHeight(103);
+		noFavoriteWallpapersList.setFixedCellWidth(130);
+		noFavoriteWallpapersList.setBorder(new EmptyBorder(1, 15, 1, 15));
+		noFavoriteWallpapersList.setSelectionBackground(Color.cyan);
+
+		// Only 2 rows to display
 		noFavoriteWallpapersList.setVisibleRowCount(2);
 		// Using a custom render to render every element within JList
 		noFavoriteWallpapersList.setCellRenderer(new WallpaperListRenderer(WallpaperListRenderer.WITH_TEXT));		

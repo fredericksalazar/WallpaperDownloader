@@ -101,6 +101,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.JTextPane;
 import javax.swing.Icon;
+import java.awt.Font;
 
 public class WallpaperDownloader {
 
@@ -264,7 +265,9 @@ public class WallpaperDownloader {
 				
 				// 3.- System Look & Feel
                 try {
+                	//TODO:
                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//                	UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 } catch (InstantiationException e) {
@@ -420,7 +423,8 @@ public class WallpaperDownloader {
 		providersPanel.add(lblKeywords);
 		
 		searchKeywords = new JTextField();
-		searchKeywords.setBounds(100, 10, 295, 26);
+		searchKeywords.setFont(new Font("Dialog", Font.PLAIN, 11));
+		searchKeywords.setBounds(100, 8, 295, 27);
 		providersPanel.add(searchKeywords);
 		searchKeywords.setColumns(10);
 
@@ -987,6 +991,8 @@ public class WallpaperDownloader {
         scroll = new JScrollPane();
         scroll.setPreferredSize(new Dimension(300, 400));
 		scroll.setBounds(12, 36, 652, 105);
+		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		wallpapersPanel.add(scroll);
 		
 		btnManageWallpapers = new JButton("Wallpapers downloaded");
@@ -2706,6 +2712,10 @@ public class WallpaperDownloader {
 	public static void refreshJScrollPane() {
 		ImageIcon[] wallpapers = WDUtilities.getImageIconWallpapers(5, 0, WDUtilities.SORTING_BY_DATE, WDUtilities.WD_PREFIX);
 		lastWallpapersList = new JList(wallpapers);
+		lastWallpapersList.setFixedCellHeight(100);
+		lastWallpapersList.setFixedCellWidth(128);
+		lastWallpapersList.setSelectionBackground(Color.cyan);
+
 		changePointerJList();
 		scroll.setViewportView(lastWallpapersList);
 		// JList single selection
