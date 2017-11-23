@@ -1189,8 +1189,21 @@ public class WallpaperDownloader {
 
 		try
 		{
+			// Version 3.0
+		    doc.insertString(0, "New features (Version 3.0)\n\n", keyWord );
+		    doc.insertString(doc.getLength(), "- New look and feel. System look and feel will be inherited if it is available or Nimbus if not.\n", null );
+		    doc.insertString(doc.getLength(), "- New icon and system tray icon. Thanks to Jaime Álvarez Fernández!.\n", null );
+		    doc.insertString(doc.getLength(), "- Close buttons have been removed.\n", null );
+		    doc.insertString(doc.getLength(), "- Apply button has been removed. Now, all the changes in the GUI will be inmediately saved and applied.\n", null );
+		    doc.insertString(doc.getLength(), "- System tray icon enable/disable functionality implemented.\n", null );
+		    doc.insertString(doc.getLength(), "- Buttons to edit and save some fields have been implemented.\n", null );
+		    doc.insertString(doc.getLength(), "- Minimize button has been removed for KDE and GNOME desktop environments.\n\n", null );
+		    doc.insertString(doc.getLength(), "Bugs fixed (Version 3.0).\n\n", keyWord );
+		    doc.insertString(doc.getLength(), "- Scrolls and jlists have been polished.\n", null );
+		    doc.insertString(doc.getLength(), "- Fixed http URL for flaticon website.\n", null );
+			
 			// Version 2.9
-		    doc.insertString(0, "New features (Version 2.9)\n\n", keyWord );
+		    doc.insertString(doc.getLength(), "New features (Version 2.9)\n\n", keyWord );
 		    doc.insertString(doc.getLength(), "- Providers tab gets a new design.\n", null );
 		    doc.insertString(doc.getLength(), "- User can set a global preferred resolution for wallpapers.\n", null );
 		    doc.insertString(doc.getLength(), "- Download policy implemented which will affect all the providers.\n", null );
