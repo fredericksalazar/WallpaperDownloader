@@ -1075,7 +1075,7 @@ public class WallpaperDownloader {
 		tabbedPane.addTab("About", null, aboutPanel, null);
 		aboutPanel.setLayout(null);
 		
-		JLabel lblVersion = new JLabel("Version");
+		JLabel lblVersion = new JLabel("Version:");
 		lblVersion.setBounds(12, 16, 70, 15);
 		aboutPanel.add(lblVersion);
 		
@@ -1088,14 +1088,16 @@ public class WallpaperDownloader {
 		version.setHorizontalAlignment(SwingConstants.CENTER);
 		version.setEditable(false);
 		version.setBounds(73, 15, 35, 19);
-		aboutPanel.add(version);
 		version.setColumns(10);
+		version.setOpaque(false);
+		version.setBackground(new Color(0, 0, 0, 0));
+		aboutPanel.add(version);
 		
 		aboutSeparator1 = new JSeparator();
-		aboutSeparator1.setBounds(11, 43, 597, 2);
+		aboutSeparator1.setBounds(11, 43, 610, 2);
 		aboutPanel.add(aboutSeparator1);
 		
-		lblDeveloper = new JLabel("Developer");
+		lblDeveloper = new JLabel("Developer:");
 		lblDeveloper.setBounds(12, 57, 95, 15);
 		aboutPanel.add(lblDeveloper);
 		
@@ -1107,36 +1109,39 @@ public class WallpaperDownloader {
 		};
 		developer.setEditable(false);
 		developer.setBounds(145, 56, 405, 19);
-		aboutPanel.add(developer);
 		developer.setColumns(10);
+		developer.setOpaque(false);
+		developer.setBackground(new Color(0, 0, 0, 0));
+		aboutPanel.add(developer);
 		
-		lblSourceCode = new JLabel("Source code");
+		lblSourceCode = new JLabel("Source code:");
 		lblSourceCode.setBounds(12, 84, 108, 15);
 		aboutPanel.add(lblSourceCode);
 		
 		btnRepository = new JButton("New button");
-		btnRepository.setBounds(143, 80, 483, 25);
+		btnRepository.setBounds(134, 80, 483, 25);
 		btnRepository.setText("<HTML><FONT color=\"#000099\"><U>" + pm.getProperty("repository.code") + "</U></FONT></HTML>");
 		btnRepository.setHorizontalAlignment(SwingConstants.LEFT);
-		btnRepository.setBorderPainted(false);
 		btnRepository.setOpaque(false);
-		btnRepository.setBackground(Color.WHITE);
+		btnRepository.setContentAreaFilled(false);
+		btnRepository.setBorderPainted(false);
 		aboutPanel.add(btnRepository);
 		
 		JTextArea txtInfo = new JTextArea();
-		txtInfo.setBackground(UIManager.getColor("Button.background"));
+		txtInfo.setLineWrap(true);
 		txtInfo.setText("Please, if you want to open any issue beause you find a bug, you can do it in the official code repository (link above). if you have any suggestions you can send them there too. Thanks and enjoy!");
 		txtInfo.setEditable(false);
-		txtInfo.setBounds(12, 318, 527, 55);
-		txtInfo.setLineWrap(true);
+		txtInfo.setBounds(12, 318, 610, 55);
 		txtInfo.setWrapStyleWord(true);
+		txtInfo.setOpaque(false);
+		txtInfo.setBackground(new Color(0, 0, 0, 0));
 		aboutPanel.add(txtInfo);
 		
 		aboutSeparator2 = new JSeparator();
-		aboutSeparator2.setBounds(12, 138, 597, 7);
+		aboutSeparator2.setBounds(12, 138, 610, 7);
 		aboutPanel.add(aboutSeparator2);
 		
-		JLabel lblIcons = new JLabel("Icons");
+		JLabel lblIcons = new JLabel("Icons:");
 		lblIcons.setBounds(12, 111, 95, 15);
 		aboutPanel.add(lblIcons);
 		
@@ -1149,6 +1154,8 @@ public class WallpaperDownloader {
 		icons.setEditable(false);
 		icons.setColumns(10);
 		icons.setBounds(145, 109, 219, 19);
+		icons.setOpaque(false);
+		icons.setBackground(new Color(0, 0, 0, 0));
 		aboutPanel.add(icons);
 		
 		btnIcons = new JButton("<HTML><FONT color=\"#000099\"><U>http://www.flaticon.com/</U></FONT></HTML>");
@@ -1156,10 +1163,10 @@ public class WallpaperDownloader {
 			public void actionPerformed(ActionEvent arg0) {
 			}
 		});
-		btnIcons.setOpaque(false);
 		btnIcons.setHorizontalAlignment(SwingConstants.LEFT);
+		btnIcons.setOpaque(false);
+		btnIcons.setContentAreaFilled(false);
 		btnIcons.setBorderPainted(false);
-		btnIcons.setBackground(Color.WHITE);
 		btnIcons.setBounds(381, 106, 229, 25);
 		aboutPanel.add(btnIcons);
 		
@@ -1168,11 +1175,11 @@ public class WallpaperDownloader {
 		aboutPanel.add(lblChangelog);
 		
 		JSeparator aboutSeparator3 = new JSeparator();
-		aboutSeparator3.setBounds(11, 308, 531, 2);
+		aboutSeparator3.setBounds(11, 308, 610, 2);
 		aboutPanel.add(aboutSeparator3);
 		
 		JScrollPane changelogScrollPane = new JScrollPane();
-		changelogScrollPane.setBounds(12, 175, 527, 123);
+		changelogScrollPane.setBounds(12, 175, 610, 123);
 		aboutPanel.add(changelogScrollPane);
 		
 		JTextPane changelogTextPane = new JTextPane();
