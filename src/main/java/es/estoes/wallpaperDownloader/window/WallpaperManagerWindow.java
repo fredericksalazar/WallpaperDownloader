@@ -107,6 +107,8 @@ public class WallpaperManagerWindow extends JFrame {
 		
 		favoriteScrollPanel = new JScrollPane();
 		favoriteScrollPanel.setBounds(12, 33, 688, 212);
+		favoriteScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+		favoriteScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		getContentPane().add(favoriteScrollPanel);
 		
 		favoriteWallpapersList = new JList<Object>();
@@ -120,7 +122,6 @@ public class WallpaperManagerWindow extends JFrame {
 		noFavoriteScrollPanel.setBounds(12, 337, 688, 212);
 		noFavoriteScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 		noFavoriteScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
 		getContentPane().add(noFavoriteScrollPanel);
 		
 		noFavoriteWallpapersList = new JList<Object>();

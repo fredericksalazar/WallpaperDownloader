@@ -41,6 +41,7 @@ import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import javax.swing.border.EmptyBorder;
 
 import es.estoes.wallpaperDownloader.changer.LinuxWallpaperChanger;
 import es.estoes.wallpaperDownloader.util.WDUtilities;
@@ -93,6 +94,8 @@ public class ChooseWallpaperWindow extends JFrame {
 		
 		wallpapersScrollPanel = new JScrollPane();
 		wallpapersScrollPanel.setBounds(12, 33, 688, 420);
+		wallpapersScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+		wallpapersScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		getContentPane().add(wallpapersScrollPanel);
 		
 		wallpapersList = new JList<Object>();
@@ -313,6 +316,10 @@ public class ChooseWallpaperWindow extends JFrame {
 		wallpapersList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		// JList horizontal orientation
 		wallpapersList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+		wallpapersList.setFixedCellHeight(103);
+		wallpapersList.setFixedCellWidth(130);
+		wallpapersList.setBorder(new EmptyBorder(1, 15, 1, 15));
+		wallpapersList.setSelectionBackground(Color.cyan);
 		// Only 4 row to display
 		wallpapersList.setVisibleRowCount(4);
 		// Using a custom render to render every element within JList
