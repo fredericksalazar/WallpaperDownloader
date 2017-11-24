@@ -97,7 +97,7 @@ public class WallpaperManagerWindow extends JFrame {
 		int y = (screenSize.height - getHeight()) / 2;
 		setLocation(x, y);
 		
-		JLabel lblFavoriteWallpapers = new JLabel("Favorite Wallpapers");
+		JLabel lblFavoriteWallpapers = new JLabel("Favorite Wallpapers:");
 		lblFavoriteWallpapers.setBounds(12, 12, 151, 15);
 		getContentPane().add(lblFavoriteWallpapers);
 		
@@ -114,7 +114,7 @@ public class WallpaperManagerWindow extends JFrame {
 		favoriteWallpapersList = new JList<Object>();
 		favoriteScrollPanel.setViewportView(favoriteWallpapersList);
 		
-		JLabel lblNoFavorite = new JLabel("No Favorite Wallpapers");
+		JLabel lblNoFavorite = new JLabel("No Favorite Wallpapers:");
 		lblNoFavorite.setBounds(12, 310, 178, 15);
 		getContentPane().add(lblNoFavorite);
 		

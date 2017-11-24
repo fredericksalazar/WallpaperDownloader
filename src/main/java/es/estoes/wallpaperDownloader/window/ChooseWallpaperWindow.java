@@ -84,7 +84,7 @@ public class ChooseWallpaperWindow extends JFrame {
 		int y = (screenSize.height - getHeight()) / 2;
 		setLocation(x, y);
 		
-		JLabel lblWallpapers = new JLabel("Wallpapers");
+		JLabel lblWallpapers = new JLabel("Wallpapers:");
 		lblWallpapers.setBounds(12, 12, 151, 15);
 		getContentPane().add(lblWallpapers);
 		
