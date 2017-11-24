@@ -96,7 +96,6 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
-import javax.swing.JTextArea;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.JTextPane;
@@ -1127,16 +1126,6 @@ public class WallpaperDownloader {
 		btnRepository.setBorderPainted(false);
 		aboutPanel.add(btnRepository);
 		
-		JTextArea txtInfo = new JTextArea();
-		txtInfo.setLineWrap(true);
-		txtInfo.setText("Please, if you want to open any issue beause you find a bug, you can do it in the official code repository (link above). if you have any suggestions you can send them there too. Thanks and enjoy!");
-		txtInfo.setEditable(false);
-		txtInfo.setBounds(12, 318, 610, 55);
-		txtInfo.setWrapStyleWord(true);
-		txtInfo.setOpaque(false);
-		txtInfo.setBackground(new Color(0, 0, 0, 0));
-		aboutPanel.add(txtInfo);
-		
 		aboutSeparator2 = new JSeparator();
 		aboutSeparator2.setBounds(12, 138, 610, 7);
 		aboutPanel.add(aboutSeparator2);
@@ -1174,12 +1163,8 @@ public class WallpaperDownloader {
 		lblChangelog.setBounds(12, 147, 91, 20);
 		aboutPanel.add(lblChangelog);
 		
-		JSeparator aboutSeparator3 = new JSeparator();
-		aboutSeparator3.setBounds(11, 308, 610, 2);
-		aboutPanel.add(aboutSeparator3);
-		
 		JScrollPane changelogScrollPane = new JScrollPane();
-		changelogScrollPane.setBounds(12, 175, 610, 123);
+		changelogScrollPane.setBounds(12, 175, 610, 183);
 		aboutPanel.add(changelogScrollPane);
 		
 		JTextPane changelogTextPane = new JTextPane();
