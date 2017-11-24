@@ -1122,11 +1122,11 @@ public class WallpaperDownloader {
 		aboutPanel.add(developer);
 		
 		lblSourceCode = new JLabel("Source code:");
-		lblSourceCode.setBounds(12, 84, 108, 15);
+		lblSourceCode.setBounds(12, 338, 108, 15);
 		aboutPanel.add(lblSourceCode);
 		
 		btnRepository = new JButton("New button");
-		btnRepository.setBounds(134, 80, 483, 25);
+		btnRepository.setBounds(134, 334, 483, 25);
 		btnRepository.setText("<HTML><FONT color=\"#000099\"><U>" + pm.getProperty("repository.code") + "</U></FONT></HTML>");
 		btnRepository.setHorizontalAlignment(SwingConstants.LEFT);
 		btnRepository.setOpaque(false);
@@ -1135,11 +1135,11 @@ public class WallpaperDownloader {
 		aboutPanel.add(btnRepository);
 		
 		aboutSeparator2 = new JSeparator();
-		aboutSeparator2.setBounds(12, 138, 610, 7);
+		aboutSeparator2.setBounds(12, 108, 610, 7);
 		aboutPanel.add(aboutSeparator2);
 		
 		JLabel lblIcons = new JLabel("Icons:");
-		lblIcons.setBounds(12, 111, 95, 15);
+		lblIcons.setBounds(12, 81, 95, 15);
 		aboutPanel.add(lblIcons);
 		
 		icons = new JTextField() {
@@ -1150,7 +1150,7 @@ public class WallpaperDownloader {
 		icons.setText(" Jaime Álvarez; Dave Gandy from");
 		icons.setEditable(false);
 		icons.setColumns(10);
-		icons.setBounds(145, 109, 219, 19);
+		icons.setBounds(145, 79, 219, 19);
 		icons.setOpaque(false);
 		icons.setBackground(new Color(0, 0, 0, 0));
 		aboutPanel.add(icons);
@@ -1164,15 +1164,15 @@ public class WallpaperDownloader {
 		btnIcons.setOpaque(false);
 		btnIcons.setContentAreaFilled(false);
 		btnIcons.setBorderPainted(false);
-		btnIcons.setBounds(381, 106, 229, 25);
+		btnIcons.setBounds(381, 76, 229, 25);
 		aboutPanel.add(btnIcons);
 		
 		JLabel lblChangelog = new JLabel("Changelog");
-		lblChangelog.setBounds(12, 147, 91, 20);
+		lblChangelog.setBounds(12, 117, 91, 20);
 		aboutPanel.add(lblChangelog);
 		
 		JScrollPane changelogScrollPane = new JScrollPane();
-		changelogScrollPane.setBounds(12, 175, 610, 183);
+		changelogScrollPane.setBounds(11, 144, 610, 183);
 		aboutPanel.add(changelogScrollPane);
 		
 		JTextPane changelogTextPane = new JTextPane();
