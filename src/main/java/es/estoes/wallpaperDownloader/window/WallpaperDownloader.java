@@ -167,6 +167,7 @@ public class WallpaperDownloader {
 	private JLabel lblMoveHelp;
 	private JCheckBox moveFavoriteCheckBox;
 	private JButton btnMoveWallpapers;
+	private JButton btnRandomWallpaper;
 	private JLabel lblNotifications;
 	private JComboBox<ComboItem> notificationsComboBox;
 	private static JCheckBox startMinimizedCheckBox;
@@ -999,7 +1000,7 @@ public class WallpaperDownloader {
 		
 		btnManageWallpapers = new JButton("Wallpapers downloaded");
 		btnManageWallpapers.setBackground(Color.WHITE);
-		btnManageWallpapers.setBounds(12, 239, 214, 25);
+		btnManageWallpapers.setBounds(12, 211, 214, 25);
 		wallpapersPanel.add(btnManageWallpapers);
 		
 		btnRemoveWallpaper = new JButton();
@@ -1043,13 +1044,20 @@ public class WallpaperDownloader {
 		
 		btnMoveWallpapers = new JButton("Move Fav. Wallpapers");
 		btnMoveWallpapers.setBackground(Color.WHITE);
-		btnMoveWallpapers.setBounds(12, 276, 214, 25);
+		btnMoveWallpapers.setBounds(12, 248, 214, 25);
 		wallpapersPanel.add(btnMoveWallpapers);
 		
 		btnChooseWallpaper = new JButton("Choose Wallpaper");
 		btnChooseWallpaper.setBackground(Color.WHITE);
-		btnChooseWallpaper.setBounds(12, 313, 214, 25);
+		btnChooseWallpaper.setBounds(12, 285, 214, 25);
 		wallpapersPanel.add(btnChooseWallpaper);
+		
+        if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
+    		btnRandomWallpaper = new JButton("Random wallpaper");
+    		btnRandomWallpaper.setBackground(Color.WHITE);
+    		btnRandomWallpaper.setBounds(12, 323, 214, 25);
+    		wallpapersPanel.add(btnRandomWallpaper);
+        }
 
 		btnSetWallpaper = new JButton();
 
@@ -1993,6 +2001,17 @@ public class WallpaperDownloader {
 					wmw.setVisible(true);
 				}
 			});
+			
+		      /**
+		       * btnRandomWallpaper Action Listener.
+		       */
+		      // Clicking event
+			btnRandomWallpaper.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					WDUtilities.getWallpaperChanger().setRandomWallpaper();
+				}
+			});
+			
 	}
 
 	/**
