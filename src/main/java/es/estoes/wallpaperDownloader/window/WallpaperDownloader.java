@@ -92,6 +92,8 @@ import java.text.Format;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
@@ -108,6 +110,7 @@ public class WallpaperDownloader {
 	protected static final Logger LOG = Logger.getLogger(WallpaperDownloader.class);
 	protected static WallpaperDownloader window;
 	private static final PropertiesManager pm = PropertiesManager.getInstance();
+	private static ResourceBundle i18nBundle;
 	
 	// Attributes
 	// diskSpacePB will be an attribute representing disk space occupied within the downloads directory
@@ -256,10 +259,14 @@ public class WallpaperDownloader {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				// 1.- Log configuration
+				// Resource bundle for i18n
+				Locale locale = Locale.getDefault();
+				i18nBundle = ResourceBundle.getBundle("I18n", locale);
+				
+				// Log configuration
 				WDConfigManager.configureLog();
 
-				// 2.- Application configuration
+				// Application configuration
 				WDConfigManager.checkConfig();
 				window = new WallpaperDownloader();
 				
@@ -271,14 +278,14 @@ public class WallpaperDownloader {
                 	} else {
                 		UIManager.setLookAndFeel(systemLookAndFeel);                		
                 	}
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (UnsupportedLookAndFeelException e) {
-                    e.printStackTrace();
+                } catch (ClassNotFoundException exception) {
+                    exception.printStackTrace();
+                } catch (InstantiationException exception) {
+                    exception.printStackTrace();
+                } catch (IllegalAccessException exception) {
+                    exception.printStackTrace();
+                } catch (UnsupportedLookAndFeelException exception) {
+                    exception.printStackTrace();
                 }
 
                 SwingUtilities.updateComponentTreeUI(window.frame);
@@ -414,14 +421,14 @@ public class WallpaperDownloader {
 		// Providers (tab)
 		providersPanel = new JPanel();
 		providersPanel.setBorder(null);
-		tabbedPane.addTab("Providers", null, providersPanel, null);
+		tabbedPane.addTab(i18nBundle.getString("providers.title"), null, providersPanel, null);
 		providersPanel.setLayout(null);
 
-		wallhavenCheckbox = new JCheckBox("Wallhaven.cc");
+		wallhavenCheckbox = new JCheckBox(i18nBundle.getString("providers.wallhaven.title"));
 		wallhavenCheckbox.setBounds(13, 109, 129, 23);
 		providersPanel.add(wallhavenCheckbox);
 
-		JLabel lblKeywords = new JLabel("Keywords");
+		JLabel lblKeywords = new JLabel(i18nBundle.getString("providers.keywords"));
 		lblKeywords.setBounds(12, 14, 70, 15);
 		providersPanel.add(lblKeywords);
 		
@@ -439,7 +446,7 @@ public class WallpaperDownloader {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/help_24px_icon.png"));
 			ImageIcon icon = new ImageIcon(img);
 			JLabel lblKeywordsHelp = new JLabel(icon);
-			lblKeywordsHelp.setToolTipText("Each keyword must be separated by ';'. If it is empty then it will search any wallpaper");
+			lblKeywordsHelp.setToolTipText(i18nBundle.getString("providers.keywords.help"));
 			lblKeywordsHelp.setBounds(398, 12, 30, 23);
 			providersPanel.add(lblKeywordsHelp);
 		} catch (IOException ex) {
@@ -455,8 +462,7 @@ public class WallpaperDownloader {
 		searchTypeWallhavenComboBox = new JComboBox<ComboItem>();
 		searchTypeWallhavenComboBox.setBounds(321, 111, 149, 19);
 		providersPanel.add(searchTypeWallhavenComboBox);
-
-		JLabel lblSearchTypeWallhaven = new JLabel("Search Type");
+		JLabel lblSearchTypeWallhaven = new JLabel(i18nBundle.getString("providers.wallhaven.search.type"));
 		lblSearchTypeWallhaven.setBounds(224, 114, 94, 15);
 		providersPanel.add(lblSearchTypeWallhaven);
 		
