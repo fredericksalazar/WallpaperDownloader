@@ -100,6 +100,8 @@ public class WDConfigManager {
         		 // Initializing user configuration file
     			 // Downloads directory
         		 prefm.setPreference("application-downloads-folder", absoluteDownloadsPath.toString());
+        		 // First time downloads directory (this is done for detecting snap package)
+        		 prefm.setPreference("application-first-time-downloads-folder", absoluteDownloadsPath.toString());
         		 
         		 // Downloading process
         		 // It will be enabled by default
@@ -220,6 +222,11 @@ public class WDConfigManager {
         			 absoluteDownloadsPath = absoluteDownloadsPath.resolve(prefm.getPreference("application-downloads-folder"));
     			 }
     			 LOG.info("Downloads directory -> " + prefm.getPreference("application-downloads-folder"));
+    		 }
+
+    		 // First time downloads directory (this is done for detecting snap package)
+    		 if (prefm.getPreference("application-first-time-downloads-folder").equals(PreferencesManager.DEFAULT_VALUE)) {
+    			 prefm.setPreference("application-first-time-downloads-folder", absoluteDownloadsPath.toString());
     		 }
 
     		 // Resolution

@@ -1206,6 +1206,7 @@ public class WallpaperDownloader {
 		    doc.insertString(doc.getLength(), "- Minimize button has been removed for KDE and GNOME desktop environments.\n\n", null );
 		    doc.insertString(doc.getLength(), "Bugs fixed (Version 3.0).\n\n", keyWord );
 		    doc.insertString(doc.getLength(), "- Scrolls and jlists have been polished.\n", null );
+		    doc.insertString(doc.getLength(), "- Snap detection has been improved and some problems related to the daemon which checks Internet connectivity in the snap package have been fixed.\n", null );
 		    doc.insertString(doc.getLength(), "- Fixed http URL for flaticon website.\n", null );
 			
 			// Version 2.9

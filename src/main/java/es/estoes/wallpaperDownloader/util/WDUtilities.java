@@ -583,7 +583,7 @@ public class WDUtilities {
 	public static boolean isSnapPackage() {
 		boolean result = Boolean.FALSE;
 		PreferencesManager prefm = PreferencesManager.getInstance();
-		String downloadsDirectoryString = prefm.getPreference("application-downloads-folder");
+		String downloadsDirectoryString = prefm.getPreference("application-first-time-downloads-folder");
 		if (downloadsDirectoryString.contains(WDUtilities.SNAP_KEY)) {
 			result = Boolean.TRUE;
 		}
