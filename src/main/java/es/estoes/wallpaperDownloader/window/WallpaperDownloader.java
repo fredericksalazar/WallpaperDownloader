@@ -473,11 +473,11 @@ public class WallpaperDownloader {
 		separator2.setBounds(13, 135, 610, 2);
 		providersPanel.add(separator2);
 		
-		devianartCheckbox = new JCheckBox("Devianart");
+		devianartCheckbox = new JCheckBox(i18nBundle.getString("providers.devianart.title"));
 		devianartCheckbox.setBounds(13, 138, 129, 23);
 		providersPanel.add(devianartCheckbox);
 		
-		JLabel lblDevianartSearchType = new JLabel("Search Type");
+		JLabel lblDevianartSearchType = new JLabel(i18nBundle.getString("providers.wallhaven.search.type"));
 		lblDevianartSearchType.setBounds(224, 142, 94, 15);
 		providersPanel.add(lblDevianartSearchType);
 
@@ -489,7 +489,7 @@ public class WallpaperDownloader {
 		separator3.setBounds(12, 164, 610, 2);
 		providersPanel.add(separator3);
 		
-		bingCheckbox = new JCheckBox("Bing daily wallpaper");
+		bingCheckbox = new JCheckBox(i18nBundle.getString("providers.bing.title"));
 		bingCheckbox.setBounds(13, 167, 249, 23);
 		providersPanel.add(bingCheckbox);
 		
@@ -497,11 +497,11 @@ public class WallpaperDownloader {
 		separator4.setBounds(13, 193, 610, 2);
 		providersPanel.add(separator4);
 		
-		socialWallpaperingCheckbox = new JCheckBox("Social Wallpapering");
+		socialWallpaperingCheckbox = new JCheckBox(i18nBundle.getString("providers.social.wallpapering.title"));
 		socialWallpaperingCheckbox.setBounds(13, 196, 194, 23);
 		providersPanel.add(socialWallpaperingCheckbox);
 		
-		socialWallpaperingIgnoreKeywordsCheckbox = new JCheckBox("Ignore keywords");
+		socialWallpaperingIgnoreKeywordsCheckbox = new JCheckBox(i18nBundle.getString("providers.social.wallpapering.ignore"));
 		socialWallpaperingIgnoreKeywordsCheckbox.setBounds(221, 196, 143, 23);
 		providersPanel.add(socialWallpaperingIgnoreKeywordsCheckbox);
 		
@@ -509,7 +509,7 @@ public class WallpaperDownloader {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/help_24px_icon.png"));
 			ImageIcon icon = new ImageIcon(img);
 			JLabel lblIgnoreKeywordsSocialWallpaperingHelp = new JLabel(icon);
-			lblIgnoreKeywordsSocialWallpaperingHelp.setToolTipText("Social Wallpapering only allows the download of reviewed wallpapers. Those found using keywords and not reviewed won't be downloaded");
+			lblIgnoreKeywordsSocialWallpaperingHelp.setToolTipText(i18nBundle.getString("providers.social.wallpapering.help"));
 			lblIgnoreKeywordsSocialWallpaperingHelp.setBounds(365, 196, 30, 23);
 			providersPanel.add(lblIgnoreKeywordsSocialWallpaperingHelp);
 		} catch (IOException ex) {
@@ -522,7 +522,7 @@ public class WallpaperDownloader {
 		separator5.setBounds(14, 221, 610, 2);
 		providersPanel.add(separator5);
 		
-		wallpaperFusionCheckbox = new JCheckBox("WallpaperFusion");
+		wallpaperFusionCheckbox = new JCheckBox(i18nBundle.getString("providers.wallpaperfusion.title"));
 		wallpaperFusionCheckbox.setBounds(13, 226, 210, 23);
 		providersPanel.add(wallpaperFusionCheckbox);
 		
@@ -530,11 +530,11 @@ public class WallpaperDownloader {
 		separator6.setBounds(14, 252, 610, 2);
 		providersPanel.add(separator6);
 		
-		dualMonitorCheckbox = new JCheckBox("DualMonitorBackgrounds");
+		dualMonitorCheckbox = new JCheckBox(i18nBundle.getString("providers.dual.monitor.backgrounds.title"));
 		dualMonitorCheckbox.setBounds(14, 257, 201, 23);
 		providersPanel.add(dualMonitorCheckbox);
 		
-		lblSearchTypeDualMonitor = new JLabel("Search Type");
+		lblSearchTypeDualMonitor = new JLabel(i18nBundle.getString("providers.wallhaven.search.type"));
 		lblSearchTypeDualMonitor.setBounds(227, 261, 94, 15);
 		providersPanel.add(lblSearchTypeDualMonitor);
 
@@ -542,7 +542,7 @@ public class WallpaperDownloader {
 		searchTypeDualMonitorComboBox.setBounds(324, 259, 149, 19);
 		providersPanel.add(searchTypeDualMonitorComboBox);
 		
-		JLabel lblResolution = new JLabel("Resolution");
+		JLabel lblResolution = new JLabel(i18nBundle.getString("providers.resolution"));
 		lblResolution.setBounds(13, 44, 94, 15);
 		providersPanel.add(lblResolution);
 		
@@ -564,7 +564,7 @@ public class WallpaperDownloader {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/edit_16px_icon.png"));
 			btnChangeResolution.setIcon(new ImageIcon(img));
-			btnChangeResolution.setToolTipText("Change Resolution");
+			btnChangeResolution.setToolTipText(i18nBundle.getString("providers.change.resolution"));
 			btnChangeResolution.setBounds(214, 38, 34, 33);
 		} catch (IOException ex) {
 			btnChangeResolution.setText("Change Res.");
@@ -572,7 +572,7 @@ public class WallpaperDownloader {
 		}
 		providersPanel.add(btnChangeResolution);
 		
-		JLabel lblDownloadPolicy = new JLabel("Download policy");
+		JLabel lblDownloadPolicy = new JLabel(i18nBundle.getString("providers.download.policy"));
 		lblDownloadPolicy.setBounds(13, 76, 149, 15);
 		providersPanel.add(lblDownloadPolicy);
 		
@@ -584,7 +584,7 @@ public class WallpaperDownloader {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/reset_16px_icon.png"));
 			btnResetResolution.setIcon(new ImageIcon(img));
-			btnResetResolution.setToolTipText("Reset Resolution");
+			btnResetResolution.setToolTipText(i18nBundle.getString("providers.reset.resolution"));
 			btnResetResolution.setBounds(250, 38, 34, 33);
 		} catch (IOException ex) {
 			btnResetResolution.setText("Reset");
@@ -595,7 +595,7 @@ public class WallpaperDownloader {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/accept_16px_icon.png"));
 			btnApplyResolution.setIcon(new ImageIcon(img));
-			btnApplyResolution.setToolTipText("Save changes");
+			btnApplyResolution.setToolTipText(i18nBundle.getString("providers.save.changes"));
 			btnApplyResolution.setBounds(214, 38, 34, 33);
 		} catch (IOException ex) {
 			btnApplyResolution.setText("Apply");
@@ -606,10 +606,10 @@ public class WallpaperDownloader {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/pause_16px_icon.png"));
 			btnPause.setIcon(new ImageIcon(img));
-			btnPause.setToolTipText("Pause downloading process");
+			btnPause.setToolTipText(i18nBundle.getString("providers.pause"));
 			btnPause.setBounds(552, 6, 34, 33);
 		} catch (IOException ex) {
-			btnPause.setToolTipText("Pause downloading process");
+			btnPause.setToolTipText(i18nBundle.getString("providers.pause"));
 			btnPause.setBounds(431, 6, 34, 33);
 		}
 
@@ -617,13 +617,13 @@ public class WallpaperDownloader {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/play_16px_icon.png"));
 			btnPlay.setIcon(new ImageIcon(img));
-			btnPlay.setToolTipText("Resume downloading process");
+			btnPlay.setToolTipText(i18nBundle.getString("providers.resume"));
 			btnPlay.setBounds(552, 6, 34, 33);
 		} catch (IOException ex) {
-			btnPlay.setToolTipText("Resume downloading process");
+			btnPlay.setToolTipText(i18nBundle.getString("providers.resume"));
 			btnPlay.setBounds(431, 6, 34, 33);
 		}
-
+// TODO:
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/green_spot_24px_icon.png"));
 			ImageIcon icon = new ImageIcon(img);
