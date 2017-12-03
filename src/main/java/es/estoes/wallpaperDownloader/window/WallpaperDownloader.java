@@ -714,7 +714,6 @@ public class WallpaperDownloader {
 		JLabel lblMoveFavoriteDirectory = new JLabel(i18nBundle.getString("application.settings.move.directory"));
 		lblMoveFavoriteDirectory.setBounds(12, 103, 134, 19);
 		appSettingsPanel.add(lblMoveFavoriteDirectory);
-		// TODO:
 		moveDirectory = new JFormattedTextField((Format) null);
 		moveDirectory.setEditable(false);
 		moveDirectory.setColumns(4);
@@ -729,7 +728,7 @@ public class WallpaperDownloader {
 			btnChangeMoveDirectory.setToolTipText(i18nBundle.getString("application.settings.move.button.help"));
 			btnChangeMoveDirectory.setBounds(561, 95, 34, 33);
 		} catch (IOException ex) {
-			btnChangeMoveDirectory.setText("Change directory where you want to move your favorite wallpapers");
+			btnChangeMoveDirectory.setText(i18nBundle.getString("application.settings.move.button.help"));
 			btnChangeMoveDirectory.setBounds(561, 107, 34, 33);
 		}	
 		appSettingsPanel.add(btnChangeMoveDirectory);
@@ -738,7 +737,7 @@ public class WallpaperDownloader {
 		settingsSeparator2.setBounds(12, 134, 631, 2);
 		appSettingsPanel.add(settingsSeparator2);
 		
-		lblNotifications = new JLabel("Please, select the level of notifications");
+		lblNotifications = new JLabel(i18nBundle.getString("application.settings.notifications"));
 		lblNotifications.setBounds(12, 143, 304, 19);
 		appSettingsPanel.add(lblNotifications);
 		
@@ -746,7 +745,7 @@ public class WallpaperDownloader {
 		notificationsComboBox.setBounds(317, 140, 134, 23);
 		appSettingsPanel.add(notificationsComboBox);
 
-		startMinimizedCheckBox = new JCheckBox("Start minimized");
+		startMinimizedCheckBox = new JCheckBox(i18nBundle.getString("application.settings.start.minimized"));
 		startMinimizedCheckBox.setBounds(12, 173, 179, 23);
 		appSettingsPanel.add(startMinimizedCheckBox);
 		
@@ -754,7 +753,7 @@ public class WallpaperDownloader {
 		settingsSeparator3.setBounds(12, 168, 631, 2);
 		appSettingsPanel.add(settingsSeparator3);
 		
-		JLabel lblTimeToMinimize = new JLabel("Time to minimize");
+		JLabel lblTimeToMinimize = new JLabel(i18nBundle.getString("application.settings.time.minimize"));
 		lblTimeToMinimize.setBounds(194, 175, 126, 19);
 		appSettingsPanel.add(lblTimeToMinimize);
 		
@@ -766,49 +765,43 @@ public class WallpaperDownloader {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/edit_16px_icon.png"));
 			btnChangeSize.setIcon(new ImageIcon(img));
-			btnChangeSize.setToolTipText("Change Size");
+			btnChangeSize.setToolTipText(i18nBundle.getString("application.settings.change.size"));
 			btnChangeSize.setBounds(376, 26, 34, 33);
 		} catch (IOException ex) {
-			btnChangeSize.setText("Change Size");
+			btnChangeSize.setText(i18nBundle.getString("application.settings.change.size"));
 			btnChangeSize.setBounds(376, 26, 131, 25);
 		}
 		appSettingsPanel.add(btnChangeSize);
 		
-		stIconCheckBox = new JCheckBox("System tray icon");
+		stIconCheckBox = new JCheckBox(i18nBundle.getString("application.settings.system.tray.icon"));
 		stIconCheckBox.setBounds(417, 173, 154, 23);
 		appSettingsPanel.add(stIconCheckBox);
 		
 		lblSystemTrayHelp = new JLabel((Icon) null);
-		lblSystemTrayHelp.setToolTipText("Enable this option to have an extra button within Wallpapers tab to move all your favorite wallpapers to another location");
-		appSettingsPanel.add(lblSystemTrayHelp);
-
-		
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/help_24px_icon.png"));
 			ImageIcon icon = new ImageIcon(img);
 			lblSystemTrayHelp = new JLabel(icon);
-			lblSystemTrayHelp.setToolTipText("KDE and GNOME users can experiment some crashes using system tray icon. Nevertheless, it will enable a lot of useful quick actions");
+			lblSystemTrayHelp.setToolTipText(i18nBundle.getString("application.settings.system.tray.icon.help"));
 			lblSystemTrayHelp.setBounds(566, 173, 30, 23);
 			appSettingsPanel.add(lblSystemTrayHelp);
 		} catch (IOException ex) {
-			lblSystemTrayHelp = new JLabel("System Tray Icon Help");
+			lblSystemTrayHelp = new JLabel(i18nBundle.getString("application.settings.system.tray.icon.help"));
 			lblSystemTrayHelp.setBounds(566, 173, 30, 23);
 			appSettingsPanel.add(lblSystemTrayHelp);
 		}
-
-		
 		
 		btnApplySize = new JButton();
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/accept_16px_icon.png"));
 			btnApplySize.setIcon(new ImageIcon(img));
-			btnApplySize.setToolTipText("Save size");
+			btnApplySize.setToolTipText(i18nBundle.getString("providers.save.changes"));
 			btnApplySize.setBounds(376, 26, 34, 33);
 		} catch (IOException ex) {
-			btnApplySize.setText("Apply");
+			btnApplySize.setText(i18nBundle.getString("providers.save.changes"));
 			btnApplySize.setBounds(376, 26, 131, 25);
 		}
-		
+// TODO:		
 		// Only those desktop environment programmed to be changeable will display this option
 		if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
 
