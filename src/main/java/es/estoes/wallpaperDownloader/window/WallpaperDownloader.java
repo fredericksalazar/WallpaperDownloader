@@ -513,7 +513,7 @@ public class WallpaperDownloader {
 			lblIgnoreKeywordsSocialWallpaperingHelp.setBounds(365, 196, 30, 23);
 			providersPanel.add(lblIgnoreKeywordsSocialWallpaperingHelp);
 		} catch (IOException ex) {
-			JLabel lblIgnoreKeywordsSocialWallpaperingHelp = new JLabel("Ignore keywords");
+			JLabel lblIgnoreKeywordsSocialWallpaperingHelp = new JLabel(i18nBundle.getString("providers.social.wallpapering.ignore"));
 			lblIgnoreKeywordsSocialWallpaperingHelp.setBounds(366, 212, 30, 23);
 			providersPanel.add(lblIgnoreKeywordsSocialWallpaperingHelp);
 		}
@@ -623,15 +623,14 @@ public class WallpaperDownloader {
 			btnPlay.setToolTipText(i18nBundle.getString("providers.resume"));
 			btnPlay.setBounds(431, 6, 34, 33);
 		}
-// TODO:
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/green_spot_24px_icon.png"));
 			ImageIcon icon = new ImageIcon(img);
 			lblGreenSpot = new JLabel(icon);			
-			lblGreenSpot.setToolTipText("Downloading process is enabled");
+			lblGreenSpot.setToolTipText(i18nBundle.getString("providers.downloading.process.enabled"));
 			lblGreenSpot.setBounds(599, 16, 20, 18);
 		} catch (IOException ex) {
-			lblGreenSpot = new JLabel("Downloading process is enabled");
+			lblGreenSpot = new JLabel(i18nBundle.getString("providers.downloading.process.enabled"));
 			lblGreenSpot.setBounds(599, 16, 30, 23);
 		}
 
@@ -639,10 +638,10 @@ public class WallpaperDownloader {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/red_spot_24px_icon.png"));
 			ImageIcon icon = new ImageIcon(img);
 			lblRedSpot = new JLabel(icon);			
-			lblRedSpot.setToolTipText("Downloading process is disabled");
+			lblRedSpot.setToolTipText(i18nBundle.getString("providers.downloading.process.disabled"));
 			lblRedSpot.setBounds(599, 16, 20, 18);
 		} catch (IOException ex) {
-			lblRedSpot = new JLabel("Downloading process is disabled");
+			lblRedSpot = new JLabel(i18nBundle.getString("providers.downloading.process.disabled"));
 			lblRedSpot.setBounds(599, 16, 30, 23);
 		}
 
@@ -650,10 +649,10 @@ public class WallpaperDownloader {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/edit_16px_icon.png"));
 			btnChangeKeywords.setIcon(new ImageIcon(img));
-			btnChangeKeywords.setToolTipText("Change Resolution");
+			btnChangeKeywords.setToolTipText(i18nBundle.getString("providers.change.keywords"));
 			btnChangeKeywords.setBounds(436, 6, 34, 33);
 		} catch (IOException ex) {
-			btnChangeKeywords.setText("Change Keyw.");
+			btnChangeKeywords.setText(i18nBundle.getString("providers.change.keywords"));
 			btnChangeKeywords.setBounds(436, 6, 131, 25);
 		}
 		providersPanel.add(btnChangeKeywords);
@@ -662,28 +661,27 @@ public class WallpaperDownloader {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/accept_16px_icon.png"));
 			btnApplyKeywords.setIcon(new ImageIcon(img));
-			btnApplyKeywords.setToolTipText("Save changes");
+			btnApplyKeywords.setToolTipText(i18nBundle.getString("providers.save.changes"));
 			btnApplyKeywords.setBounds(436, 6, 34, 33);
 		} catch (IOException ex) {
-			btnApplyKeywords.setText("Apply");
+			btnApplyKeywords.setText(i18nBundle.getString("providers.save.changes"));
 			btnApplyKeywords.setBounds(436, 6, 131, 25);
 		}
 
 		// Application Settings (tab)
 		appSettingsPanel = new JPanel();
 		appSettingsPanel.setBorder(null);
-		tabbedPane.addTab("Application Settings", null, appSettingsPanel, null);
+		tabbedPane.addTab(i18nBundle.getString("application.settings.title"), null, appSettingsPanel, null);
 		appSettingsPanel.setLayout(null);
 		
-		JLabel lblTimer = new JLabel("WallpaperDownloader will download a new wallpaper every");
+		JLabel lblTimer = new JLabel(i18nBundle.getString("application.settings.downloading.time"));
 		lblTimer.setBounds(12, 7, 439, 19);
 		appSettingsPanel.add(lblTimer);
 		
 		timerComboBox = new JComboBox<ComboItem>();
 		timerComboBox.setBounds(453, 6, 96, 23);
 		appSettingsPanel.add(timerComboBox);
-		
-		JLabel lblDownloadDirectorySize = new JLabel("Maximun size for download directory (MB)");
+		JLabel lblDownloadDirectorySize = new JLabel(i18nBundle.getString("application.settings.maximun.size"));
 		lblDownloadDirectorySize.setBounds(12, 34, 304, 19);
 		appSettingsPanel.add(lblDownloadDirectorySize);
 		
@@ -696,7 +694,7 @@ public class WallpaperDownloader {
 		settingsSeparator1.setBounds(12, 62, 631, 2);
 		appSettingsPanel.add(settingsSeparator1);
 		
-		moveFavoriteCheckBox = new JCheckBox("Move favorite wallpapers");
+		moveFavoriteCheckBox = new JCheckBox(i18nBundle.getString("application.settings.move"));
 		moveFavoriteCheckBox.setBounds(12, 72, 226, 23);
 		appSettingsPanel.add(moveFavoriteCheckBox);
 
@@ -704,19 +702,19 @@ public class WallpaperDownloader {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/help_24px_icon.png"));
 			ImageIcon icon = new ImageIcon(img);
 			lblMoveHelp = new JLabel(icon);
-			lblMoveHelp.setToolTipText("Enable this option to have an extra button within Wallpapers tab to move all your favorite wallpapers to another location");
+			lblMoveHelp.setToolTipText(i18nBundle.getString("application.settings.move.help"));
 			lblMoveHelp.setBounds(244, 72, 30, 23);
 			appSettingsPanel.add(lblMoveHelp);
 		} catch (IOException ex) {
-			JLabel lblMoveHelp = new JLabel("Move favorite wallpapers to another directory");
+			JLabel lblMoveHelp = new JLabel(i18nBundle.getString("application.settings.move.help"));
 			lblMoveHelp.setBounds(213, 85, 30, 23);
 			appSettingsPanel.add(lblMoveHelp);
 		}
 		
-		JLabel lblMoveFavoriteDirectory = new JLabel("Directory ");
+		JLabel lblMoveFavoriteDirectory = new JLabel(i18nBundle.getString("application.settings.move.directory"));
 		lblMoveFavoriteDirectory.setBounds(12, 103, 134, 19);
 		appSettingsPanel.add(lblMoveFavoriteDirectory);
-		
+		// TODO:
 		moveDirectory = new JFormattedTextField((Format) null);
 		moveDirectory.setEditable(false);
 		moveDirectory.setColumns(4);
@@ -728,7 +726,7 @@ public class WallpaperDownloader {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/change_folder_24px_icon.png"));
 			btnChangeMoveDirectory.setIcon(new ImageIcon(img));
-			btnChangeMoveDirectory.setToolTipText("Change directory where you want to move your favorite wallpapers");
+			btnChangeMoveDirectory.setToolTipText(i18nBundle.getString("application.settings.move.button.help"));
 			btnChangeMoveDirectory.setBounds(561, 95, 34, 33);
 		} catch (IOException ex) {
 			btnChangeMoveDirectory.setText("Change directory where you want to move your favorite wallpapers");
