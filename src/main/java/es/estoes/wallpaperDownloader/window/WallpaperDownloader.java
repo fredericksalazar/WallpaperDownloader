@@ -758,7 +758,7 @@ public class WallpaperDownloader {
 		appSettingsPanel.add(lblTimeToMinimize);
 		
 		timeToMinimizeComboBox = new JComboBox<ComboItem>();
-		timeToMinimizeComboBox.setBounds(317, 173, 56, 24);
+		timeToMinimizeComboBox.setBounds(317, 173, 95, 24);
 		appSettingsPanel.add(timeToMinimizeComboBox);
 		
 		btnChangeSize = new JButton();
@@ -774,7 +774,7 @@ public class WallpaperDownloader {
 		appSettingsPanel.add(btnChangeSize);
 		
 		stIconCheckBox = new JCheckBox(i18nBundle.getString("application.settings.system.tray.icon"));
-		stIconCheckBox.setBounds(417, 173, 154, 23);
+		stIconCheckBox.setBounds(435, 173, 144, 23);
 		appSettingsPanel.add(stIconCheckBox);
 		
 		lblSystemTrayHelp = new JLabel((Icon) null);
@@ -783,7 +783,7 @@ public class WallpaperDownloader {
 			ImageIcon icon = new ImageIcon(img);
 			lblSystemTrayHelp = new JLabel(icon);
 			lblSystemTrayHelp.setToolTipText(i18nBundle.getString("application.settings.system.tray.icon.help"));
-			lblSystemTrayHelp.setBounds(566, 173, 30, 23);
+			lblSystemTrayHelp.setBounds(574, 173, 30, 23);
 			appSettingsPanel.add(lblSystemTrayHelp);
 		} catch (IOException ex) {
 			lblSystemTrayHelp = new JLabel(i18nBundle.getString("application.settings.system.tray.icon.help"));
@@ -801,22 +801,21 @@ public class WallpaperDownloader {
 			btnApplySize.setText(i18nBundle.getString("providers.save.changes"));
 			btnApplySize.setBounds(376, 26, 131, 25);
 		}
-// TODO:		
 		// Only those desktop environment programmed to be changeable will display this option
 		if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
 
 			JSeparator settingsSeparator4 = new JSeparator();
 			settingsSeparator4.setBounds(12, 199, 631, 2);
 			appSettingsPanel.add(settingsSeparator4);		
-			JLabel lblChanger = new JLabel("Change wallpaper automatically every");
+			JLabel lblChanger = new JLabel(i18nBundle.getString("application.settings.change.every"));
 			lblChanger.setBounds(12, 208, 304, 19);
 			appSettingsPanel.add(lblChanger);
 			
 			changerComboBox = new JComboBox<ComboItem>();
 			changerComboBox.setBounds(317, 210, 94, 19);
 			appSettingsPanel.add(changerComboBox);
-			
-			JLabel lblChangerDirectory = new JLabel("Changer directory");
+
+			JLabel lblChangerDirectory = new JLabel(i18nBundle.getString("application.settings.change.directory"));
 			lblChangerDirectory.setBounds(12, 237, 134, 19);
 			appSettingsPanel.add(lblChangerDirectory);
 			
@@ -825,10 +824,10 @@ public class WallpaperDownloader {
 			try {
 				Image img = ImageIO.read(getClass().getResource("/images/icons/add_16px_icon.png"));
 				btnAddDirectory.setIcon(new ImageIcon(img));
-				btnAddDirectory.setToolTipText("Add directory");
+				btnAddDirectory.setToolTipText(i18nBundle.getString("application.settings.change.add.directory"));
 				btnAddDirectory.setBounds(561, 266, 34, 33);
 			} catch (IOException ex) {
-				btnAddDirectory.setToolTipText("Add directory");
+				btnAddDirectory.setToolTipText(i18nBundle.getString("application.settings.change.add.directory"));
 				btnAddDirectory.setBounds(561, 274, 34, 33);
 			}		
 			
@@ -836,10 +835,10 @@ public class WallpaperDownloader {
 			try {
 				Image img = ImageIO.read(getClass().getResource("/images/icons/remove_16px_icon.png"));
 				btnRemoveDirectory.setIcon(new ImageIcon(img));
-				btnRemoveDirectory.setToolTipText("Remove directory");
+				btnRemoveDirectory.setToolTipText(i18nBundle.getString("application.settings.change.remove.directory"));
 				btnRemoveDirectory.setBounds(561, 311, 34, 33);
 			} catch (IOException ex) {
-				btnRemoveDirectory.setToolTipText("Remove directory");
+				btnRemoveDirectory.setToolTipText(i18nBundle.getString("application.settings.change.remove.directory"));
 				btnRemoveDirectory.setBounds(561, 319, 34, 33);
 			}		
 			
@@ -850,7 +849,7 @@ public class WallpaperDownloader {
 			listDirectoriesToWatch = new JList<String>();
 			listDirectoriesScrollPane.setColumnHeaderView(listDirectoriesToWatch);
 			listDirectoriesToWatch.setBackground(UIManager.getColor("Button.background"));
-			listDirectoriesToWatch.setToolTipText("Add all the directories that changer will take into account");
+			listDirectoriesToWatch.setToolTipText(i18nBundle.getString("application.settings.change.directory.help"));
 			//
 			listDirectoriesToWatch.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 			listDirectoriesToWatch.setLayoutOrientation(JList.HORIZONTAL_WRAP);
@@ -898,10 +897,10 @@ public class WallpaperDownloader {
 		// Downloads Directory (tab)
 		miscPanel = new JPanel();
 		miscPanel.setBorder(null);
-		tabbedPane.addTab("Downloads Directory", null, miscPanel, null);
+		tabbedPane.addTab(i18nBundle.getString("downloads.directory.title"), null, miscPanel, null);
 		miscPanel.setLayout(null);
 		
-		JLabel lblDownloadsDirectory = new JLabel("Downloads Directory:");
+		JLabel lblDownloadsDirectory = new JLabel(i18nBundle.getString("downloads.directory.title"));
 		lblDownloadsDirectory.setBounds(12, 16, 160, 19);
 		miscPanel.add(lblDownloadsDirectory);
 		
@@ -915,7 +914,7 @@ public class WallpaperDownloader {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/open_folder_24px_icon.png"));
 			btnOpenDownloadsDirectory.setIcon(new ImageIcon(img));
-			btnOpenDownloadsDirectory.setToolTipText("Open downloads directory");
+			btnOpenDownloadsDirectory.setToolTipText(i18nBundle.getString("downloads.directory.open"));
 			btnOpenDownloadsDirectory.setBounds(12, 39, 34, 33);
 		} catch (IOException ex) {
 			btnOpenDownloadsDirectory.setText("Open");
@@ -927,7 +926,7 @@ public class WallpaperDownloader {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/clipboard_24px_icon.png"));
 			btnClipboard.setIcon(new ImageIcon(img));
-			btnClipboard.setToolTipText("Copy downloads directory path into the Clipboard");
+			btnClipboard.setToolTipText(i18nBundle.getString("downloads.directory.copy.clipboard"));
 			btnClipboard.setBounds(54, 39, 34, 33);
 		} catch (IOException ex) {
 			btnClipboard.setText("Clipboard");
@@ -939,7 +938,7 @@ public class WallpaperDownloader {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/change_folder_24px_icon.png"));
 			btnChangeDownloadsDirectory.setIcon(new ImageIcon(img));
-			btnChangeDownloadsDirectory.setToolTipText("Change Downloads Directory");
+			btnChangeDownloadsDirectory.setToolTipText(i18nBundle.getString("downloads.directory.change"));
 			btnChangeDownloadsDirectory.setBounds(588, 10, 34, 33);
 		} catch (IOException ex) {
 			btnChangeDownloadsDirectory.setText("Change Downloads Directory");
@@ -953,7 +952,7 @@ public class WallpaperDownloader {
 		diskSpacePB.setBounds(174, 101, 405, 18);
 		miscPanel.add(diskSpacePB);
 		
-		JLabel lblDiskSpace = new JLabel("Downloads dir space:");
+		JLabel lblDiskSpace = new JLabel(i18nBundle.getString("downloads.directory.space"));
 		lblDiskSpace.setBounds(12, 100, 160, 19);
 		miscPanel.add(lblDiskSpace);
 		
@@ -961,7 +960,7 @@ public class WallpaperDownloader {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/warning_24px_icon.png"));
 			ImageIcon icon = new ImageIcon(img);
 			lblSpaceWarning = new JLabel(icon);
-			lblSpaceWarning.setToolTipText("Directory full. Wallpapers (execpt favorite ones) will be removed randomly in order to download more.");
+			lblSpaceWarning.setToolTipText(i18nBundle.getString("downloads.directory.full"));
 			lblSpaceWarning.setBounds(588, 98, 30, 23);
 			miscPanel.add(lblSpaceWarning);
 			
@@ -977,7 +976,7 @@ public class WallpaperDownloader {
 			// At first, the label won't be visible
 			lblSpaceWarning.setVisible(false);
 		}
-		
+// TODO:		
 		// Wallpapers (tab)
 		wallpapersPanel = new JPanel();
 		wallpapersPanel.setBorder(null);
