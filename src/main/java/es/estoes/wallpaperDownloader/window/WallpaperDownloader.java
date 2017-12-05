@@ -976,14 +976,14 @@ public class WallpaperDownloader {
 			// At first, the label won't be visible
 			lblSpaceWarning.setVisible(false);
 		}
-// TODO:		
+
 		// Wallpapers (tab)
 		wallpapersPanel = new JPanel();
 		wallpapersPanel.setBorder(null);
-		tabbedPane.addTab("Wallpapers", null, wallpapersPanel, null);
+		tabbedPane.addTab(i18nBundle.getString("wallpapers.title"), null, wallpapersPanel, null);
 		wallpapersPanel.setLayout(null);
 
-		JLabel lblLastWallpapers = new JLabel("Last 5 wallpapers downloaded");
+		JLabel lblLastWallpapers = new JLabel(i18nBundle.getString("wallpapers.last.five"));
 		lblLastWallpapers.setBounds(12, 12, 238, 15);
 		wallpapersPanel.add(lblLastWallpapers);
 		
@@ -994,7 +994,7 @@ public class WallpaperDownloader {
 		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		wallpapersPanel.add(scroll);
 		
-		btnManageWallpapers = new JButton("Wallpapers downloaded");
+		btnManageWallpapers = new JButton(i18nBundle.getString("wallpapers.downloaded"));
 		btnManageWallpapers.setBackground(Color.WHITE);
 		btnManageWallpapers.setBounds(12, 211, 214, 25);
 		wallpapersPanel.add(btnManageWallpapers);
@@ -1004,7 +1004,7 @@ public class WallpaperDownloader {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/delete_24px_icon.png"));
 			btnRemoveWallpaper.setIcon(new ImageIcon(img));
-			btnRemoveWallpaper.setToolTipText("Delete selected wallpaper");
+			btnRemoveWallpaper.setToolTipText(i18nBundle.getString("wallpapers.delete"));
 			btnRemoveWallpaper.setBounds(12, 149, 34, 33);
 		} catch (IOException ex) {
 			btnRemoveWallpaper.setText("Delete");
@@ -1017,7 +1017,7 @@ public class WallpaperDownloader {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/favourite_24px_icon.png"));
 			btnSetFavoriteWallpaper.setIcon(new ImageIcon(img));
-			btnSetFavoriteWallpaper.setToolTipText("Set selected wallpaper as favorite");
+			btnSetFavoriteWallpaper.setToolTipText(i18nBundle.getString("wallpapers.favorite"));
 			btnSetFavoriteWallpaper.setBounds(53, 149, 34, 33);
 		} catch (IOException ex) {
 			btnSetFavoriteWallpaper.setText("Set as favaourite");
@@ -1030,7 +1030,7 @@ public class WallpaperDownloader {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/view_24px_icon.png"));
 			btnPreviewWallpaper.setIcon(new ImageIcon(img));
-			btnPreviewWallpaper.setToolTipText("Preview wallpaper");
+			btnPreviewWallpaper.setToolTipText(i18nBundle.getString("wallpapers.preview"));
 			btnPreviewWallpaper.setBounds(95, 149, 34, 33);
 		} catch (IOException ex) {
 			btnPreviewWallpaper.setText("Preview wallpaper");
@@ -1038,18 +1038,18 @@ public class WallpaperDownloader {
 		}
 		wallpapersPanel.add(btnPreviewWallpaper);
 		
-		btnMoveWallpapers = new JButton("Move Fav. Wallpapers");
+		btnMoveWallpapers = new JButton(i18nBundle.getString("wallpapers.move"));
 		btnMoveWallpapers.setBackground(Color.WHITE);
 		btnMoveWallpapers.setBounds(12, 248, 214, 25);
 		wallpapersPanel.add(btnMoveWallpapers);
 		
-		btnChooseWallpaper = new JButton("Choose Wallpaper");
+		btnChooseWallpaper = new JButton(i18nBundle.getString("wallpapers.choose"));
 		btnChooseWallpaper.setBackground(Color.WHITE);
 		btnChooseWallpaper.setBounds(12, 285, 214, 25);
 		wallpapersPanel.add(btnChooseWallpaper);
 		
         if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
-    		btnRandomWallpaper = new JButton("Random wallpaper");
+    		btnRandomWallpaper = new JButton(i18nBundle.getString("wallpapers.random"));
     		btnRandomWallpaper.setBackground(Color.WHITE);
     		btnRandomWallpaper.setBounds(12, 323, 214, 25);
     		wallpapersPanel.add(btnRandomWallpaper);
@@ -1060,7 +1060,7 @@ public class WallpaperDownloader {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/desktop_24px_icon.png"));
 			btnSetWallpaper.setIcon(new ImageIcon(img));
-			btnSetWallpaper.setToolTipText("Set selected wallpaper");
+			btnSetWallpaper.setToolTipText(i18nBundle.getString("wallpapers.set"));
 			btnSetWallpaper.setBounds(137, 149, 34, 33);
 		} catch (IOException ex) {
 			btnSetWallpaper.setText("Set wallpaper");
@@ -1075,10 +1075,10 @@ public class WallpaperDownloader {
 		// About (tab)
 		aboutPanel = new JPanel();
 		aboutPanel.setBorder(null);
-		tabbedPane.addTab("About", null, aboutPanel, null);
+		tabbedPane.addTab(i18nBundle.getString("about.title"), null, aboutPanel, null);
 		aboutPanel.setLayout(null);
 		
-		JLabel lblVersion = new JLabel("Version:");
+		JLabel lblVersion = new JLabel(i18nBundle.getString("about.version"));
 		lblVersion.setBounds(12, 16, 70, 15);
 		aboutPanel.add(lblVersion);
 		
@@ -1100,7 +1100,7 @@ public class WallpaperDownloader {
 		aboutSeparator1.setBounds(11, 43, 610, 2);
 		aboutPanel.add(aboutSeparator1);
 		
-		lblDeveloper = new JLabel("Developer:");
+		lblDeveloper = new JLabel(i18nBundle.getString("about.developer"));
 		lblDeveloper.setBounds(12, 57, 95, 15);
 		aboutPanel.add(lblDeveloper);
 		
@@ -1117,7 +1117,7 @@ public class WallpaperDownloader {
 		developer.setBackground(new Color(0, 0, 0, 0));
 		aboutPanel.add(developer);
 		
-		lblSourceCode = new JLabel("Source code:");
+		lblSourceCode = new JLabel(i18nBundle.getString("about.source.code"));
 		lblSourceCode.setBounds(12, 338, 108, 15);
 		aboutPanel.add(lblSourceCode);
 		
@@ -1134,7 +1134,7 @@ public class WallpaperDownloader {
 		aboutSeparator2.setBounds(12, 108, 610, 7);
 		aboutPanel.add(aboutSeparator2);
 		
-		JLabel lblIcons = new JLabel("Icons:");
+		JLabel lblIcons = new JLabel(i18nBundle.getString("about.icons"));
 		lblIcons.setBounds(12, 81, 95, 15);
 		aboutPanel.add(lblIcons);
 		
@@ -1143,7 +1143,7 @@ public class WallpaperDownloader {
 			}
 		};
 		icons.setHorizontalAlignment(SwingConstants.LEFT);
-		icons.setText(" Jaime Álvarez; Dave Gandy from");
+		icons.setText(" Jaime Álvarez; Dave Gandy");
 		icons.setEditable(false);
 		icons.setColumns(10);
 		icons.setBounds(145, 79, 219, 19);
@@ -1163,7 +1163,7 @@ public class WallpaperDownloader {
 		btnIcons.setBounds(381, 76, 229, 25);
 		aboutPanel.add(btnIcons);
 		
-		JLabel lblChangelog = new JLabel("Changelog");
+		JLabel lblChangelog = new JLabel(i18nBundle.getString("about.changelog"));
 		lblChangelog.setBounds(12, 117, 91, 20);
 		aboutPanel.add(lblChangelog);
 		
@@ -1186,49 +1186,28 @@ public class WallpaperDownloader {
 		try
 		{
 			// Version 3.0
-		    doc.insertString(0, "New features (Version 3.0)\n\n", keyWord );
-		    doc.insertString(doc.getLength(), "- New look and feel. System look and feel will be inherited if it is available or Nimbus if not.\n", null );
-		    doc.insertString(doc.getLength(), "- New icon and system tray icon. Thanks to Jaime Álvarez Fernández!.\n", null );
-		    doc.insertString(doc.getLength(), "- Close buttons have been removed.\n", null );
-		    doc.insertString(doc.getLength(), "- Apply button has been removed. Now, all the changes in the GUI will be inmediately saved and applied.\n", null );
-		    doc.insertString(doc.getLength(), "- System tray icon enable/disable functionality implemented.\n", null );
-		    doc.insertString(doc.getLength(), "- Buttons to edit and save some fields have been implemented.\n", null );
-		    doc.insertString(doc.getLength(), "- Minimize button has been removed for KDE and GNOME desktop environments.\n\n", null );
-		    doc.insertString(doc.getLength(), "Bugs fixed (Version 3.0).\n\n", keyWord );
-		    doc.insertString(doc.getLength(), "- Scrolls and jlists have been polished.\n", null );
-		    doc.insertString(doc.getLength(), "- Snap detection has been improved and some problems related to the daemon which checks Internet connectivity in the snap package have been fixed.\n", null );
-		    doc.insertString(doc.getLength(), "- Fixed http URL for flaticon website.\n", null );
+		    doc.insertString(0, i18nBundle.getString("about.changelog.features.3.0.title"), keyWord );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.features.3.0.text"), null );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.3.0.title"), keyWord );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.3.0.text"), null );
 			
 			// Version 2.9
-		    doc.insertString(doc.getLength(), "New features (Version 2.9)\n\n", keyWord );
-		    doc.insertString(doc.getLength(), "- Providers tab gets a new design.\n", null );
-		    doc.insertString(doc.getLength(), "- User can set a global preferred resolution for wallpapers.\n", null );
-		    doc.insertString(doc.getLength(), "- Download policy implemented which will affect all the providers.\n", null );
-		    doc.insertString(doc.getLength(), "- User can set the time to minimize the application when starts minimized.\n\n", null );
-		    doc.insertString(doc.getLength(), "Bugs fixed (Version 2.9).\n\n", keyWord );
-		    doc.insertString(doc.getLength(), "- Wallpapers from Social Wallpapering provider are now retrieved correctly.\n", null );
-		    doc.insertString(doc.getLength(), "- Search type in DevianArt provider now works correctly.\n", null );
-		    doc.insertString(doc.getLength(), "- Wallpapers from Bing provider are now retrieved correctly when the original resolution doesn't match the one defined by the user.\n", null );
-		    doc.insertString(doc.getLength(), "- WallpaperDownloader can be minimized again in Windows systems.\n\n", null );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.features.2.9.title"), keyWord );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.features.2.9.text"), null );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.2.9.title"), keyWord );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.2.9.text"), null );
 			
 			// Version 2.8
-		    doc.insertString(doc.getLength(), "New features (Version 2.8)\n\n", keyWord );
-		    doc.insertString(doc.getLength(), "- GNOME  Shell and KDE Plasma icon tray support added.\n", null );
-		    doc.insertString(doc.getLength(), "- New provider implemented (DualBackgroundMonitors).\n", null );
-		    doc.insertString(doc.getLength(), "- New window to choose the wallpaper to be set from all the sources defined.\n\n", null );
-		    doc.insertString(doc.getLength(), "Bugs fixed (Version 2.8).\n\n", keyWord );
-		    doc.insertString(doc.getLength(), "- Social Wallpapering provider now paginates correctly.\n", null );
-		    doc.insertString(doc.getLength(), "- Thumbails preview re-implemented (much more better performance).\n\n", null );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.features.2.8.title"), keyWord );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.features.2.8.text"), null );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.2.8.title"), keyWord );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.2.8.text"), null );
 
 		    // Version 2.7
-		    doc.insertString(doc.getLength(), "New features (Version 2.7)\n\n", keyWord );
-		    doc.insertString(doc.getLength(), "- KDE support added (not available in snap package version).\n", null );
-		    doc.insertString(doc.getLength(), "- Now, user can define several different directories for the automated changer.\n", null );
-		    doc.insertString(doc.getLength(), "- Pause/resume functionality to download wallpapers.\n", null );
-		    doc.insertString(doc.getLength(), "- New option to start the application minimized.\n", null );
-		    doc.insertString(doc.getLength(), "- Changelog added.\n\n", null );
-		    doc.insertString(doc.getLength(), "Bugs fixed (Version 2.7).\n\n", keyWord );
-		    doc.insertString(doc.getLength(), "Social Wallpapering provider now stores the image files with the correct suffix.\n", null );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.features.2.7.title"), keyWord );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.features.2.7.text"), null );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.2.7.title"), keyWord );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.2.7.text"), null );
 		}
 		catch(Exception exception) { 
 			if (LOG.isInfoEnabled()) {
@@ -1240,7 +1219,7 @@ public class WallpaperDownloader {
 										
 		// Minimize button will only be available on OS with an
 		// old system tray
-		btnMinimize = new JButton("Minimize");
+		btnMinimize = new JButton(i18nBundle.getString("global.minimize"));
 		btnMinimize.setBackground(Color.WHITE);
 		GridBagConstraints gbc_btnMinimize = new GridBagConstraints();
 		gbc_btnMinimize.insets = new Insets(0, 0, 0, 5);
@@ -1740,12 +1719,12 @@ public class WallpaperDownloader {
 				clipboard.setContents(data, data);
 				// Information
 				if (WDUtilities.getLevelOfNotifications() > 1) {
-					DialogManager info = new DialogManager("The downloads directory path was copied to the clipboard", 2000);
+					DialogManager info = new DialogManager(i18nBundle.getString("messages.downloaded.path.copied"), 2000);
 					info.openDialog();
 				}
 			}
 		});
-		
+		// TODO:
 		/**
 		 * btnChangeDownloadsDirectory Action Listener.
 		 */
