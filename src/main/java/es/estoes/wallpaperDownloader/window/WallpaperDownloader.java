@@ -1724,7 +1724,7 @@ public class WallpaperDownloader {
 				}
 			}
 		});
-		// TODO:
+
 		/**
 		 * btnChangeDownloadsDirectory Action Listener.
 		 */
@@ -2011,7 +2011,7 @@ public class WallpaperDownloader {
 		
 		// Information
 		if (WDUtilities.getLevelOfNotifications() > 0) {
-			DialogManager info = new DialogManager("Downloading process has been paused", 2000);
+			DialogManager info = new DialogManager(i18nBundle.getString("messages.downloading.process.paused"), 2000);
 			info.openDialog();
 		}
 	}
@@ -2037,7 +2037,7 @@ public class WallpaperDownloader {
 
 		// Information
 		if (WDUtilities.getLevelOfNotifications() > 0) {
-			DialogManager info = new DialogManager("Downloading process has been resumed", 2000);
+			DialogManager info = new DialogManager(i18nBundle.getString("messages.downloading.process.resumed"), 2000);
 			info.openDialog();
 		}
 	}
@@ -2076,7 +2076,7 @@ public class WallpaperDownloader {
                
                 // Create a pop-up menu components -- BEGIN
                 // Maximize
-                java.awt.MenuItem maximizeItem = new java.awt.MenuItem("Maximize");
+                java.awt.MenuItem maximizeItem = new java.awt.MenuItem(i18nBundle.getString("system.tray.maximize"));
                 maximizeItem.addActionListener(new ActionListener() {
                 	public void actionPerformed(ActionEvent evt) {
                     	int state = window.frame.getExtendedState();  
@@ -2089,7 +2089,7 @@ public class WallpaperDownloader {
                 	}
                 });
                 // Open downloads directory
-                java.awt.MenuItem browseItem = new java.awt.MenuItem("Open downloaded wallpapers");
+                java.awt.MenuItem browseItem = new java.awt.MenuItem(i18nBundle.getString("system.tray.open"));
                 browseItem.addActionListener(new ActionListener() {
                 	public void actionPerformed(ActionEvent evt) {
                 		File downloadsDirectory = new File(WDUtilities.getDownloadsPath());
@@ -2107,8 +2107,8 @@ public class WallpaperDownloader {
                 popup.add(browseItem);
 
         		// Pause / Resume
-                java.awt.MenuItem resumeItem = new java.awt.MenuItem("Resume");
-                java.awt.MenuItem pauseItem = new java.awt.MenuItem("Pause");
+                java.awt.MenuItem resumeItem = new java.awt.MenuItem(i18nBundle.getString("system.tray.resume"));
+                java.awt.MenuItem pauseItem = new java.awt.MenuItem(i18nBundle.getString("system.tray.pause"));
 
                 resumeItem.addActionListener(new ActionListener() {
                 	public void actionPerformed(ActionEvent evt) {
@@ -2137,7 +2137,7 @@ public class WallpaperDownloader {
 
                 // Change wallpaper
                 if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
-                	java.awt.MenuItem changeItem = new java.awt.MenuItem("Change wallpaper randomly");
+                	java.awt.MenuItem changeItem = new java.awt.MenuItem(i18nBundle.getString("system.tray.change"));
     	            changeItem.addActionListener(new ActionListener() {
     	            	public void actionPerformed(ActionEvent evt) {
     	            		WDUtilities.getWallpaperChanger().setRandomWallpaper();
@@ -2149,7 +2149,7 @@ public class WallpaperDownloader {
                 // Move favorite wallpapers
         		String moveFavoriteEnable = prefm.getPreference("move-favorite");
         		if (moveFavoriteEnable.equals(WDUtilities.APP_YES)) {
-        			java.awt.MenuItem moveItem = new java.awt.MenuItem("Move favorite wallpapers");
+        			java.awt.MenuItem moveItem = new java.awt.MenuItem(i18nBundle.getString("system.tray.move"));
     	            moveItem.addActionListener(new ActionListener() {
     	            	public void actionPerformed(ActionEvent evt) {
     	            		moveFavoriteWallpapers();
@@ -2159,7 +2159,7 @@ public class WallpaperDownloader {
                 }
 
         		// Manage downloaded wallpapers
-                java.awt.MenuItem manageItem = new java.awt.MenuItem("Manage downloaded wallpapers");
+                java.awt.MenuItem manageItem = new java.awt.MenuItem(i18nBundle.getString("system.tray.manage"));
                 manageItem.addActionListener(new ActionListener() {
                 	public void actionPerformed(ActionEvent evt) {
         				WallpaperManagerWindow wmw = new WallpaperManagerWindow();
@@ -2169,7 +2169,7 @@ public class WallpaperDownloader {
                 popup.add(manageItem);
 
         		// Choose wallpaper
-                java.awt.MenuItem chooseItem = new java.awt.MenuItem("Choose wallpaper");
+                java.awt.MenuItem chooseItem = new java.awt.MenuItem(i18nBundle.getString("system.tray.choose"));
                 chooseItem.addActionListener(new ActionListener() {
                 	public void actionPerformed(ActionEvent evt) {
         				ChooseWallpaperWindow cww = new ChooseWallpaperWindow();
@@ -2182,7 +2182,7 @@ public class WallpaperDownloader {
                 popup.addSeparator();
                 
                 // Exit
-                java.awt.MenuItem exitItem = new java.awt.MenuItem("Exit");
+                java.awt.MenuItem exitItem = new java.awt.MenuItem(i18nBundle.getString("system.tray.exit"));
                 exitItem.addActionListener(new ActionListener() {
                 	public void actionPerformed(ActionEvent evt) {
                     	// Removing system tray icon
@@ -2263,7 +2263,7 @@ public class WallpaperDownloader {
     				// Adding options to the menu
     				// Maximize
     				MenuItem maximize = new MenuItem (menu, SWT.PUSH);
-    				maximize.setText ("Maximize");
+    				maximize.setText (i18nBundle.getString("system.tray.maximize"));
     				maximize.addListener (SWT.Selection, new Listener () {          
     		            public void handleEvent (Event e) {
     	                	// Removing system tray icon and all stuff related
@@ -2281,7 +2281,7 @@ public class WallpaperDownloader {
 
     				// Open downloaded wallpapers
     				MenuItem open = new MenuItem (menu, SWT.PUSH);
-    				open.setText ("Open downloaded wallpapers");
+    				open.setText (i18nBundle.getString("system.tray.open"));
     				open.addListener (SWT.Selection, new Listener () {          
     		            public void handleEvent (Event e) {
                     		File downloadsDirectory = new File(WDUtilities.getDownloadsPath());
@@ -2299,7 +2299,7 @@ public class WallpaperDownloader {
     				MenuItem resume = new MenuItem (menu, SWT.PUSH);
     				MenuItem pause = new MenuItem (menu, SWT.PUSH);
 
-    				resume.setText ("Resume");
+    				resume.setText (i18nBundle.getString("system.tray.resume"));
     				resume.addListener (SWT.Selection, new Listener () {          
     		            public void handleEvent (Event e) {
                     		resumeDownloadingProcess();
@@ -2308,8 +2308,8 @@ public class WallpaperDownloader {
     		            }
     				});
 
-					pause.setText ("Pause");
-    				pause.addListener (SWT.Selection, new Listener () {          
+					pause.setText (i18nBundle.getString("system.tray.pause")); 
+					pause.addListener (SWT.Selection, new Listener () {          
     		            public void handleEvent (Event e) {
                     		pauseDownloadingProcess();
                     		pause.setEnabled(false);;
@@ -2329,7 +2329,7 @@ public class WallpaperDownloader {
                     // Change wallpaper
                     if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
         				MenuItem change = new MenuItem (menu, SWT.PUSH);
-    					change.setText ("Change wallpaper randomly");
+    					change.setText (i18nBundle.getString("system.tray.change"));
         				change.addListener (SWT.Selection, new Listener () {          
         		            public void handleEvent (Event e) {
         	            		WDUtilities.getWallpaperChanger().setRandomWallpaper();
@@ -2341,7 +2341,7 @@ public class WallpaperDownloader {
     				String moveFavoriteEnable = prefm.getPreference("move-favorite");
             		if (moveFavoriteEnable.equals(WDUtilities.APP_YES)) {
         				MenuItem move = new MenuItem (menu, SWT.PUSH);
-    					move.setText ("Move favorite wallpapers");
+    					move.setText (i18nBundle.getString("system.tray.move"));
         				move.addListener (SWT.Selection, new Listener () {          
         		            public void handleEvent (Event e) {
         	            		moveFavoriteWallpapers();
@@ -2351,7 +2351,7 @@ public class WallpaperDownloader {
 
             		// Manage downloaded wallpapers
     				MenuItem manage = new MenuItem (menu, SWT.PUSH);
-					manage.setText ("Manage downloaded wallpapers");
+					manage.setText (i18nBundle.getString("system.tray.manage"));
     				manage.addListener (SWT.Selection, new Listener () {          
     		            public void handleEvent (Event e) {
     	                	// Removing system tray icon and all stuff related
@@ -2373,7 +2373,7 @@ public class WallpaperDownloader {
 
             		// Choose wallpaper
     				MenuItem choose = new MenuItem (menu, SWT.PUSH);
-					choose.setText ("Choose wallpaper");
+					choose.setText (i18nBundle.getString("system.tray.choose"));
     				choose.addListener (SWT.Selection, new Listener () {          
     		            public void handleEvent (Event e) {
     	                	// Removing system tray icon and all stuff related
@@ -2395,7 +2395,7 @@ public class WallpaperDownloader {
 
                     // Exit
     				MenuItem exit = new MenuItem (menu, SWT.PUSH);
-					exit.setText ("Exit");
+					exit.setText (i18nBundle.getString("system.tray.exit"));
     				exit.addListener (SWT.Selection, new Listener () {          
     		            public void handleEvent (Event e) {
     	                	// Removing system tray icon and all stuff related
@@ -2436,7 +2436,7 @@ public class WallpaperDownloader {
 		
 		// Dialog for please wait. It has to be executed on a SwingWorker (another Thread) in 
 		// order to not block the entire execution of the application
-		final DialogManager pleaseWaitDialog = new DialogManager("Please wait...");
+		final DialogManager pleaseWaitDialog = new DialogManager(i18nBundle.getString("messages.wait"));
 
 	    SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
 	        @Override
@@ -2460,7 +2460,7 @@ public class WallpaperDownloader {
 		
 		// Information
 		if (WDUtilities.getLevelOfNotifications() > 1) {
-			DialogManager info = new DialogManager("All you favorite wallpapers have been successfully moved", 2000);
+			DialogManager info = new DialogManager(i18nBundle.getString("messages.moved"), 2000);
 			info.openDialog();
 		}
 		
@@ -2492,9 +2492,9 @@ public class WallpaperDownloader {
         heigthResolution.setEnabled(false);
 
         // Download policy
-        downloadPolicyComboBox.addItem(new ComboItem("Any wallpaper and keep the original resolution", "0"));
-        downloadPolicyComboBox.addItem(new ComboItem("Any wallpaper and resize it (if bigger) to the resolution defined", "1"));
-        downloadPolicyComboBox.addItem(new ComboItem("Only wallpapers with the resolution set by the user", "2"));
+        downloadPolicyComboBox.addItem(new ComboItem(i18nBundle.getString("providers.download.policy.0"), "0"));
+        downloadPolicyComboBox.addItem(new ComboItem(i18nBundle.getString("providers.download.policy.1"), "1"));
+        downloadPolicyComboBox.addItem(new ComboItem(i18nBundle.getString("providers.download.policy.2"), "2"));
         downloadPolicyComboBox.setSelectedIndex(new Integer(prefm.getPreference("download-policy")));
         
 		// Wallhaven.cc
@@ -2505,7 +2505,7 @@ public class WallpaperDownloader {
 		} else {
 			searchTypeWallhavenComboBox.setEnabled(false);
 		}
-		searchTypeWallhavenComboBox.addItem(new ComboItem("Relevance", "0")); 
+		searchTypeWallhavenComboBox.addItem(new ComboItem(i18nBundle.getString("providers.wallhaven.policy.0"), "0")); //TODO:
 		searchTypeWallhavenComboBox.addItem(new ComboItem("Newest", "1")); 
 		searchTypeWallhavenComboBox.addItem(new ComboItem("Views", "2")); 
 		searchTypeWallhavenComboBox.addItem(new ComboItem("Favorites", "3")); 
