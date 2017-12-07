@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -51,8 +52,8 @@ public class ChooseWallpaperWindow extends JFrame {
 
 	// Constants
 	private static final long serialVersionUID = 8790655483965002934L;
-	
 	public static JLabel lblTotaleWallpapers;
+	private static ResourceBundle i18nBundle;
 
 	// Attributes
 	private JButton btnRemoveWallpaper;
@@ -70,9 +71,12 @@ public class ChooseWallpaperWindow extends JFrame {
 	 * Constructor
 	 */
 	public ChooseWallpaperWindow() {
+		// Resource bundle for i18n
+		i18nBundle = WDUtilities.getBundle();
+
 		// DISPOSE_ON_CLOSE for closing only this frame instead of the entire application
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setTitle("Choose wallpaper");
+		setTitle(i18nBundle.getString("choose.wallpaper.window.wallpapers.title"));
 		setBackground(new Color(255, 255, 255));
 		setBounds(100, 100, 774, 546);
 		getContentPane().setLayout(null);
@@ -84,7 +88,7 @@ public class ChooseWallpaperWindow extends JFrame {
 		int y = (screenSize.height - getHeight()) / 2;
 		setLocation(x, y);
 		
-		JLabel lblWallpapers = new JLabel("Wallpapers:");
+		JLabel lblWallpapers = new JLabel(i18nBundle.getString("choose.wallpaper.window.wallpapers"));
 		lblWallpapers.setBounds(12, 12, 151, 15);
 		getContentPane().add(lblWallpapers);
 		
@@ -106,7 +110,7 @@ public class ChooseWallpaperWindow extends JFrame {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/delete_24px_icon.png"));
 			btnRemoveWallpaper.setIcon(new ImageIcon(img));
-			btnRemoveWallpaper.setToolTipText("Delete selected wallpaper");
+			btnRemoveWallpaper.setToolTipText(i18nBundle.getString("wallpapers.delete"));
 			btnRemoveWallpaper.setBounds(713, 182, 34, 33);
 		} catch (IOException ex) {
 			btnRemoveWallpaper.setText("Delete");
@@ -120,7 +124,7 @@ public class ChooseWallpaperWindow extends JFrame {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/view_24px_icon.png"));
 			btnPreviewWallpaper.setIcon(new ImageIcon(img));
-			btnPreviewWallpaper.setToolTipText("Preview wallpaper");
+			btnPreviewWallpaper.setToolTipText(i18nBundle.getString("wallpapers.preview"));
 			btnPreviewWallpaper.setBounds(712, 222, 34, 33);
 		} catch (IOException ex) {
 			btnPreviewWallpaper.setText("Preview wallpaper");
@@ -133,7 +137,7 @@ public class ChooseWallpaperWindow extends JFrame {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/desktop_24px_icon.png"));
 			btnSetDskWallpaper.setIcon(new ImageIcon(img));
-			btnSetDskWallpaper.setToolTipText("Set selected wallpaper");
+			btnSetDskWallpaper.setToolTipText(i18nBundle.getString("wallpapers.set"));
 			btnSetDskWallpaper.setBounds(712, 262, 34, 33);
 		} catch (IOException ex) {
 			btnSetDskWallpaper.setText("Set wallpaper");
@@ -161,7 +165,7 @@ public class ChooseWallpaperWindow extends JFrame {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/left_arrow_24px_icon.png"));
 			btnBackWallpapers.setIcon(new ImageIcon(img));
-			btnBackWallpapers.setToolTipText("Back");
+			btnBackWallpapers.setToolTipText(i18nBundle.getString("choose.wallpaper.window.back"));
 			btnBackWallpapers.setBounds(282, 465, 34, 33);
 		} catch (IOException ex) {
 			btnBackWallpapers.setText("Back");
@@ -174,7 +178,7 @@ public class ChooseWallpaperWindow extends JFrame {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/right_arrow_24px_icon.png"));
 			btnForwardWallpapers.setIcon(new ImageIcon(img));
-			btnForwardWallpapers.setToolTipText("Forward");
+			btnForwardWallpapers.setToolTipText(i18nBundle.getString("choose.wallpaper.window.forward"));
 			btnForwardWallpapers.setBounds(442, 465, 34, 33);
 		} catch (IOException ex) {
 			btnForwardWallpapers.setText("Forward");

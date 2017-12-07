@@ -92,7 +92,6 @@ import java.text.Format;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 import javax.swing.JProgressBar;
@@ -260,8 +259,7 @@ public class WallpaperDownloader {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				// Resource bundle for i18n
-				Locale locale = Locale.getDefault();
-				i18nBundle = ResourceBundle.getBundle("I18n", locale);
+				i18nBundle = WDUtilities.getBundle();
 				
 				// Log configuration
 				WDConfigManager.configureLog();
@@ -2505,11 +2503,11 @@ public class WallpaperDownloader {
 		} else {
 			searchTypeWallhavenComboBox.setEnabled(false);
 		}
-		searchTypeWallhavenComboBox.addItem(new ComboItem(i18nBundle.getString("providers.wallhaven.policy.0"), "0")); //TODO:
-		searchTypeWallhavenComboBox.addItem(new ComboItem("Newest", "1")); 
-		searchTypeWallhavenComboBox.addItem(new ComboItem("Views", "2")); 
-		searchTypeWallhavenComboBox.addItem(new ComboItem("Favorites", "3")); 
-		searchTypeWallhavenComboBox.addItem(new ComboItem("Random", "4"));
+		searchTypeWallhavenComboBox.addItem(new ComboItem(i18nBundle.getString("providers.wallhaven.policy.0"), "0"));
+		searchTypeWallhavenComboBox.addItem(new ComboItem(i18nBundle.getString("providers.wallhaven.policy.1"), "1")); 
+		searchTypeWallhavenComboBox.addItem(new ComboItem(i18nBundle.getString("providers.wallhaven.policy.2"), "2")); 
+		searchTypeWallhavenComboBox.addItem(new ComboItem(i18nBundle.getString("providers.wallhaven.policy.3"), "3")); 
+		searchTypeWallhavenComboBox.addItem(new ComboItem(i18nBundle.getString("providers.wallhaven.policy.4"), "4"));
 		searchTypeWallhavenComboBox.setSelectedIndex(new Integer(prefm.getPreference("wallpaper-search-type")));
 		
 		// Devianart
@@ -2520,9 +2518,9 @@ public class WallpaperDownloader {
 		} else {
 			devianartSearchTypeComboBox.setEnabled(false);
 		}
-		devianartSearchTypeComboBox.addItem(new ComboItem("Newest", "0")); 
-		devianartSearchTypeComboBox.addItem(new ComboItem("What's hot", "1")); 
-		devianartSearchTypeComboBox.addItem(new ComboItem("Popular", "2")); 
+		devianartSearchTypeComboBox.addItem(new ComboItem(i18nBundle.getString("providers.devianart.policy.0"), "0")); 
+		devianartSearchTypeComboBox.addItem(new ComboItem(i18nBundle.getString("providers.devianart.policy.1"), "1")); 
+		devianartSearchTypeComboBox.addItem(new ComboItem(i18nBundle.getString("providers.devianart.policy.2"), "2")); 
 		devianartSearchTypeComboBox.setSelectedIndex(new Integer(prefm.getPreference("wallpaper-devianart-search-type")));
 
 		// Bing
@@ -2559,20 +2557,20 @@ public class WallpaperDownloader {
 		} else {
 			searchTypeDualMonitorComboBox.setEnabled(false);
 		}
-		searchTypeDualMonitorComboBox.addItem(new ComboItem("Date", "0")); 
-		searchTypeDualMonitorComboBox.addItem(new ComboItem("Rating", "1")); 
-		searchTypeDualMonitorComboBox.addItem(new ComboItem("Popularity", "2")); 
-		searchTypeDualMonitorComboBox.addItem(new ComboItem("Random", "3")); 
+		searchTypeDualMonitorComboBox.addItem(new ComboItem(i18nBundle.getString("providers.dual.monitor.policy.0"), "0")); 
+		searchTypeDualMonitorComboBox.addItem(new ComboItem(i18nBundle.getString("providers.dual.monitor.policy.1"), "1")); 
+		searchTypeDualMonitorComboBox.addItem(new ComboItem(i18nBundle.getString("providers.dual.monitor.policy.2"), "2")); 
+		searchTypeDualMonitorComboBox.addItem(new ComboItem(i18nBundle.getString("providers.dual.monitor.policy.3"), "3")); 
 		searchTypeDualMonitorComboBox.setSelectedIndex(new Integer(prefm.getPreference("provider-dualMonitorBackgrounds-search-type")));
 
 		// ---------------------------------------------------------------------
 		// Checking user settings
 		// ---------------------------------------------------------------------
-		timerComboBox.addItem(new ComboItem("1 min", "0"));
-		timerComboBox.addItem(new ComboItem("5 min", "1"));
-		timerComboBox.addItem(new ComboItem("10 min", "2"));
-		timerComboBox.addItem(new ComboItem("20 min", "3"));
-		timerComboBox.addItem(new ComboItem("30 min", "4"));
+		timerComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.downloading.time.0"), "0"));
+		timerComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.downloading.time.1"), "1"));
+		timerComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.downloading.time.2"), "2"));
+		timerComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.downloading.time.3"), "3"));
+		timerComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.downloading.time.4"), "4"));
 		timerComboBox.setSelectedIndex(new Integer(prefm.getPreference("application-timer")));
 
 		String moveFavoriteEnable = prefm.getPreference("move-favorite");
@@ -2596,9 +2594,9 @@ public class WallpaperDownloader {
 		}
 		
 		// Notifications
-		notificationsComboBox.addItem(new ComboItem("None", "0"));
-		notificationsComboBox.addItem(new ComboItem("Only important", "1"));
-		notificationsComboBox.addItem(new ComboItem("All", "2"));
+		notificationsComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.notifications.0"), "0"));
+		notificationsComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.notifications.1"), "1"));
+		notificationsComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.notifications.2"), "2"));
 		notificationsComboBox.setSelectedIndex(new Integer(prefm.getPreference("application-notifications")));
 
 		// Start minimized feature
@@ -2612,16 +2610,16 @@ public class WallpaperDownloader {
 		}
 		
 		// Time to minimize
-		timeToMinimizeComboBox.addItem(new ComboItem("1s", "1"));
-		timeToMinimizeComboBox.addItem(new ComboItem("2s", "2"));
-		timeToMinimizeComboBox.addItem(new ComboItem("3s", "3"));
-		timeToMinimizeComboBox.addItem(new ComboItem("4s", "4"));
-		timeToMinimizeComboBox.addItem(new ComboItem("5s", "5"));
-		timeToMinimizeComboBox.addItem(new ComboItem("6s", "6"));
-		timeToMinimizeComboBox.addItem(new ComboItem("7s", "7"));
-		timeToMinimizeComboBox.addItem(new ComboItem("8s", "8"));
-		timeToMinimizeComboBox.addItem(new ComboItem("9s", "9"));
-		timeToMinimizeComboBox.addItem(new ComboItem("10s", "10"));
+		timeToMinimizeComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.time.minimize.0"), "1"));
+		timeToMinimizeComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.time.minimize.1"), "2"));
+		timeToMinimizeComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.time.minimize.2"), "3"));
+		timeToMinimizeComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.time.minimize.3"), "4"));
+		timeToMinimizeComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.time.minimize.4"), "5"));
+		timeToMinimizeComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.time.minimize.5"), "6"));
+		timeToMinimizeComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.time.minimize.6"), "7"));
+		timeToMinimizeComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.time.minimize.7"), "8"));
+		timeToMinimizeComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.time.minimize.8"), "9"));
+		timeToMinimizeComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.time.minimize.9"), "10"));
 		timeToMinimizeComboBox.setSelectedIndex((new Integer(prefm.getPreference("time-to-minimize")) - 1));
 
 		// System tray icon
@@ -2634,12 +2632,12 @@ public class WallpaperDownloader {
 
 		// Changer
 		if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
-			changerComboBox.addItem(new ComboItem("Off", "0"));
-			changerComboBox.addItem(new ComboItem("1 min", "1"));
-			changerComboBox.addItem(new ComboItem("5 min", "2"));
-			changerComboBox.addItem(new ComboItem("10 min", "3"));
-			changerComboBox.addItem(new ComboItem("30 min", "4"));
-			changerComboBox.addItem(new ComboItem("60 min", "5"));
+			changerComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.change.every.0"), "0"));
+			changerComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.change.every.1"), "1"));
+			changerComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.change.every.2"), "2"));
+			changerComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.change.every.3"), "3"));
+			changerComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.change.every.4"), "4"));
+			changerComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.change.every.5"), "5"));
 			changerComboBox.setSelectedIndex(new Integer(prefm.getPreference("application-changer")));
 			
 			listDirectoriesModel = new DefaultListModel<String>();

@@ -31,7 +31,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
+import java.util.ResourceBundle;
+
 import javax.swing.ImageIcon;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
@@ -742,5 +745,14 @@ public class WDUtilities {
 			}
 		}
 		return result;
+	}
+
+	/**
+	 * Gets the i18n bundle for displaying the messages
+	 * @return
+	 */
+	public static ResourceBundle getBundle() {
+		Locale locale = Locale.getDefault();
+		return ResourceBundle.getBundle("I18n", locale);
 	}
 }
