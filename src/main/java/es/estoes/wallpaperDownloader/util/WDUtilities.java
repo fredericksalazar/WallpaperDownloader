@@ -752,7 +752,8 @@ public class WDUtilities {
 	 * @return
 	 */
 	public static ResourceBundle getBundle() {
-		Locale locale = Locale.getDefault();
+		PreferencesManager prefm = PreferencesManager.getInstance();
+		Locale locale = new Locale(prefm.getPreference("application-i18n"));
 		return ResourceBundle.getBundle("I18n", locale);
 	}
 }

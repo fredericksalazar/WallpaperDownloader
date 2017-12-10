@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Locale;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -126,7 +127,7 @@ public class WDConfigManager {
         		 // By default, the application will download Favorites wallpapers
         		 prefm.setPreference("wallpaper-search-type", "3");
 
-        		 // Devianrt
+        		 // Devianart
         		 prefm.setPreference("provider-devianart", WDUtilities.APP_NO);
         		 // By default, the application will download Newest wallpapers
         		 prefm.setPreference("wallpaper-devianart-search-type", "0");
@@ -164,6 +165,10 @@ public class WDConfigManager {
         		 
         		 // Initializing notifications
         		 prefm.setPreference("application-notifications", "2");        		 
+
+        		 // Initializing i18n
+        		 Locale locale = Locale.getDefault();
+        		 prefm.setPreference("application-i18n", locale.getLanguage());        		 
 
         		 // Initializing start minimize feature
         		 prefm.setPreference("start-minimized", PreferencesManager.DEFAULT_VALUE);
@@ -310,6 +315,12 @@ public class WDConfigManager {
 	    		 prefm.setPreference("application-notifications", "2");        		 
 			 }
 
+    		 // Initializing i18n
+			 if (prefm.getPreference("application-i18n").equals(PreferencesManager.DEFAULT_VALUE)) {
+				 Locale locale = Locale.getDefault();
+	    		 prefm.setPreference("application-i18n", locale.getLanguage());        		 
+			 }
+
     		 // Start minimize feature
 			 if (prefm.getPreference("start-minimized").equals(PreferencesManager.DEFAULT_VALUE)) {
 	    		 prefm.setPreference("start-minimized", PreferencesManager.DEFAULT_VALUE);
@@ -424,5 +435,4 @@ public class WDConfigManager {
 			throw new WDConfigurationException("There was some error while setting log4j configuration. Error: " + e.getMessage());
 		}
 	}
-	
 }

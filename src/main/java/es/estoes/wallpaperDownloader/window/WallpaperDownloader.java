@@ -172,6 +172,7 @@ public class WallpaperDownloader {
 	private JButton btnRandomWallpaper;
 	private JLabel lblNotifications;
 	private JComboBox<ComboItem> notificationsComboBox;
+	private JComboBox<ComboItem> i18nComboBox;
 	private static JCheckBox startMinimizedCheckBox;
 	private JComboBox<ComboItem> timeToMinimizeComboBox;
 	private JCheckBox stIconCheckBox;
@@ -258,14 +259,15 @@ public class WallpaperDownloader {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				// Resource bundle for i18n
-				i18nBundle = WDUtilities.getBundle();
-				
 				// Log configuration
 				WDConfigManager.configureLog();
 
 				// Application configuration
 				WDConfigManager.checkConfig();
+
+				// Resource bundle for i18n
+				i18nBundle = WDUtilities.getBundle();
+
 				window = new WallpaperDownloader();
 				
 				// 3.- System Look & Feel
@@ -677,7 +679,7 @@ public class WallpaperDownloader {
 		appSettingsPanel.add(lblTimer);
 		
 		timerComboBox = new JComboBox<ComboItem>();
-		timerComboBox.setBounds(453, 6, 96, 23);
+		timerComboBox.setBounds(435, 6, 96, 23);
 		appSettingsPanel.add(timerComboBox);
 		JLabel lblDownloadDirectorySize = new JLabel(i18nBundle.getString("application.settings.maximun.size"));
 		lblDownloadDirectorySize.setBounds(12, 34, 304, 19);
@@ -736,12 +738,20 @@ public class WallpaperDownloader {
 		appSettingsPanel.add(settingsSeparator2);
 		
 		lblNotifications = new JLabel(i18nBundle.getString("application.settings.notifications"));
-		lblNotifications.setBounds(12, 143, 304, 19);
+		lblNotifications.setBounds(12, 143, 126, 19);
 		appSettingsPanel.add(lblNotifications);
 		
 		notificationsComboBox = new JComboBox<ComboItem>();
-		notificationsComboBox.setBounds(317, 140, 134, 23);
+		notificationsComboBox.setBounds(143, 140, 134, 23);
 		appSettingsPanel.add(notificationsComboBox);
+
+		JLabel lblI18n = new JLabel(i18nBundle.getString("application.settings.i18n"));
+		lblI18n.setBounds(320, 143, 104, 19);
+		appSettingsPanel.add(lblI18n);
+
+		i18nComboBox = new JComboBox<ComboItem>();
+		i18nComboBox.setBounds(435, 140, 134, 23);
+		appSettingsPanel.add(i18nComboBox);
 
 		startMinimizedCheckBox = new JCheckBox(i18nBundle.getString("application.settings.start.minimized"));
 		startMinimizedCheckBox.setBounds(12, 173, 179, 23);
@@ -783,6 +793,7 @@ public class WallpaperDownloader {
 			lblSystemTrayHelp.setToolTipText(i18nBundle.getString("application.settings.system.tray.icon.help"));
 			lblSystemTrayHelp.setBounds(574, 173, 30, 23);
 			appSettingsPanel.add(lblSystemTrayHelp);
+			
 		} catch (IOException ex) {
 			lblSystemTrayHelp = new JLabel(i18nBundle.getString("application.settings.system.tray.icon.help"));
 			lblSystemTrayHelp.setBounds(566, 173, 30, 23);
@@ -2598,6 +2609,13 @@ public class WallpaperDownloader {
 		notificationsComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.notifications.1"), "1"));
 		notificationsComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.notifications.2"), "2"));
 		notificationsComboBox.setSelectedIndex(new Integer(prefm.getPreference("application-notifications")));
+
+		// i18n
+		i18nComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.i18n.0"), "en"));
+		i18nComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.i18n.1"), "es"));
+		ComboItem comboItem = new ComboItem("Español", "es");
+		// TODO: This part is not working
+		i18nComboBox.setSelectedItem(comboItem);
 
 		// Start minimized feature
 		String startMinimizedEnable = prefm.getPreference("start-minimized");
