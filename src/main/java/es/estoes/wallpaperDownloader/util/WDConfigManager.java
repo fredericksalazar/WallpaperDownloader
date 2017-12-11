@@ -168,7 +168,19 @@ public class WDConfigManager {
 
         		 // Initializing i18n
         		 Locale locale = Locale.getDefault();
-        		 prefm.setPreference("application-i18n", locale.getLanguage());        		 
+        		 String language = "0";
+        		 switch (locale.getLanguage()) {
+        		 case "en":
+        			 language = "0";
+        			 break;
+        		 case "es":
+        			 language = "1";
+        			 break;
+        		 default:
+        			 language = "0";
+        			 break;
+        		 }
+        		 prefm.setPreference("application-i18n", language);        		 
 
         		 // Initializing start minimize feature
         		 prefm.setPreference("start-minimized", PreferencesManager.DEFAULT_VALUE);
@@ -317,8 +329,20 @@ public class WDConfigManager {
 
     		 // Initializing i18n
 			 if (prefm.getPreference("application-i18n").equals(PreferencesManager.DEFAULT_VALUE)) {
-				 Locale locale = Locale.getDefault();
-	    		 prefm.setPreference("application-i18n", locale.getLanguage());        		 
+        		 Locale locale = Locale.getDefault();
+        		 String language = "0";
+        		 switch (locale.getLanguage()) {
+        		 case "en":
+        			 language = "0";
+        			 break;
+        		 case "es":
+        			 language = "1";
+        			 break;
+        		 default:
+        			 language = "0";
+        			 break;
+        		 }
+        		 prefm.setPreference("application-i18n", language);        		 
 			 }
 
     		 // Start minimize feature

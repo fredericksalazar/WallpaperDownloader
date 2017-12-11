@@ -264,7 +264,7 @@ public class WallpaperDownloader {
 
 				// Application configuration
 				WDConfigManager.checkConfig();
-
+				
 				// Resource bundle for i18n
 				i18nBundle = WDUtilities.getBundle();
 
@@ -1683,6 +1683,19 @@ public class WallpaperDownloader {
 		});
 
 		/**
+		 * i18nComboBox Action Listener.
+		 */
+		// Clicking event
+		i18nComboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				prefm.setPreference("application-i18n", new Integer(i18nComboBox.getSelectedIndex()).toString());
+				frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+				// TODO:
+				WallpaperDownloader.main(null);
+			}
+		});
+
+		/**
 		 * changerComboBox Action Listener.
 		 */
 		// Clicking event
@@ -2611,11 +2624,9 @@ public class WallpaperDownloader {
 		notificationsComboBox.setSelectedIndex(new Integer(prefm.getPreference("application-notifications")));
 
 		// i18n
-		i18nComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.i18n.0"), "en"));
-		i18nComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.i18n.1"), "es"));
-		ComboItem comboItem = new ComboItem("Español", "es");
-		// TODO: This part is not working
-		i18nComboBox.setSelectedItem(comboItem);
+		i18nComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.i18n.0"), "0"));
+		i18nComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.i18n.1"), "1"));
+		i18nComboBox.setSelectedIndex(new Integer(prefm.getPreference("application-i18n")));
 
 		// Start minimized feature
 		String startMinimizedEnable = prefm.getPreference("start-minimized");

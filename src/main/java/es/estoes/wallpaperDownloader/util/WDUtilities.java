@@ -753,7 +753,20 @@ public class WDUtilities {
 	 */
 	public static ResourceBundle getBundle() {
 		PreferencesManager prefm = PreferencesManager.getInstance();
-		Locale locale = new Locale(prefm.getPreference("application-i18n"));
+		String language = "en";
+		switch (prefm.getPreference("application-i18n")) {
+		case "0":
+			language = "en";
+			break;
+		case "1":
+			language = "es";
+			break;
+		default:
+			language = "en";
+			break;
+		}		
+		Locale.setDefault(Locale.forLanguageTag(language));
+		Locale locale = new Locale(language);
 		return ResourceBundle.getBundle("I18n", locale);
 	}
 }
