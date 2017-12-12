@@ -107,21 +107,21 @@ public class WallpaperDownloader {
 
 	// Constants
 	protected static final Logger LOG = Logger.getLogger(WallpaperDownloader.class);
-	protected static WallpaperDownloader window;
 	private static final PropertiesManager pm = PropertiesManager.getInstance();
-	private static ResourceBundle i18nBundle;
 	
 	// Attributes
+	protected static WallpaperDownloader window;
+	private static JFrame frame;
+	private static ResourceBundle i18nBundle;
+	public static boolean fromSystemTray;
 	// diskSpacePB will be an attribute representing disk space occupied within the downloads directory
 	// It is static because it will be able to be accessed from any point within the application's code
-	public static boolean fromSystemTray;
 	public static JProgressBar diskSpacePB = new JProgressBar();
 	public static JLabel lblSpaceWarning;
 	public static JScrollPane scroll;
 	public static JList<ImageIcon> lastWallpapersList;
 	private static Harvester harvester;
 	private ChangerDaemon changer;
-	private JFrame frame;
 	private JTextField searchKeywords;
 	private JCheckBox wallhavenCheckbox;
 	private JCheckBox devianartCheckbox;
@@ -197,14 +197,6 @@ public class WallpaperDownloader {
 	private JLabel lblSystemTrayHelp;
 	
 	// Getters & Setters
-	public JFrame getFrame() {
-		return frame;
-	}
-
-	public void setFrame(JFrame frame) {
-		this.frame = frame;
-	}
-	
 	public Harvester getHarvester() {
 		return WallpaperDownloader.harvester;
 	}
@@ -265,107 +257,7 @@ public class WallpaperDownloader {
 				// Application configuration
 				WDConfigManager.checkConfig();
 				
-				// Resource bundle for i18n
-				i18nBundle = WDUtilities.getBundle();
-
 				window = new WallpaperDownloader();
-				
-				// 3.- System Look & Feel
-                try {
-                	String systemLookAndFeel = UIManager.getSystemLookAndFeelClassName();
-                	if (systemLookAndFeel.equals("javax.swing.plaf.metal.MetalLookAndFeel") || WDUtilities.isSnapPackage()) {
-                		UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");                		
-                	} else {
-                		UIManager.setLookAndFeel(systemLookAndFeel);                		
-                	}
-                } catch (ClassNotFoundException exception) {
-                    exception.printStackTrace();
-                } catch (InstantiationException exception) {
-                    exception.printStackTrace();
-                } catch (IllegalAccessException exception) {
-                    exception.printStackTrace();
-                } catch (UnsupportedLookAndFeelException exception) {
-                    exception.printStackTrace();
-                }
-
-                SwingUtilities.updateComponentTreeUI(window.frame);
-				
-				// 4,. Configuring main frame
-				window.frame.setBackground(new Color(255, 255, 255));
-				window.frame.setExtendedState(Frame.NORMAL);
-				window.frame.setVisible(true);
-				window.frame.setTitle(pm.getProperty("app.name") + " V" + pm.getProperty("app.version"));
-				
-				// Command comes from system tray
-				fromSystemTray = false;
-				
-				// Minimize the application if start minimized feature is enable
-				if (startMinimizedCheckBox.isSelected()) {
-					try {
-						// Sleeps during 3 seconds in order to avoid problems in GNOME 3 minimization
-						if (WDUtilities.getWallpaperChanger() instanceof LinuxWallpaperChanger) {
-							if (((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment().equals(WDUtilities.DE_GNOME3)
-								|| ((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment().equals(WDUtilities.DE_KDE)) {
-								PreferencesManager prefm = PreferencesManager.getInstance(); 
-								TimeUnit.SECONDS.sleep(new Long(prefm.getPreference("time-to-minimize")));								
-							}
-						}
-					} catch (InterruptedException exception) {
-						if (LOG.isInfoEnabled()) {
-							LOG.error("Error sleeping for 3 seconds. Message: " + exception.getMessage());
-						}
-					}
-					minimizeApplication();
-				}
-				
-				// Adding a listener for knowing when the main window changes its state
-				window.frame.addWindowStateListener(new WindowStateListener() {
-					@Override
-					public void windowStateChanged(WindowEvent windowEvent) {
-						final PreferencesManager prefm = PreferencesManager.getInstance();
-						String systemTrayIconEnable = prefm.getPreference("system-tray-icon");
-						if (!isOldSystemTray() && systemTrayIconEnable.equals(WDUtilities.APP_YES)) {
-							// Check if commands comes from system tray
-							if (fromSystemTray) {
-								fromSystemTray = false;
-							} else {
-								// If command doesn't come from system tray, then it is necessary to capture the
-								// minimize order
-								if (window.frame.getExtendedState() == Frame.NORMAL){
-									// The user has minimized the window
-									try {
-										TimeUnit.MILLISECONDS.sleep(100);
-									} catch (InterruptedException exception) {
-										if (LOG.isInfoEnabled()) {
-											LOG.error("Error going to sleep: " + exception.getMessage());
-										}
-									}								
-									minimizeApplication();
-								} else {
-									window.frame.setExtendedState(Frame.NORMAL);
-								}
-							}
-						}
-					}					
-				});
-				
-				// Adding a listener to know when the main window loses or gains focus
-				window.frame.addWindowFocusListener(new WindowFocusListener() {
-					@Override
-					public void windowGainedFocus(WindowEvent arg0) {
-						// Nothing to do here
-					}
-
-					@Override
-					public void windowLostFocus(WindowEvent arg0) {
-						final PreferencesManager prefm = PreferencesManager.getInstance();
-						String systemTrayIconEnable = prefm.getPreference("system-tray-icon");
-						if (!isOldSystemTray() && systemTrayIconEnable.equals(WDUtilities.APP_YES)) {
-							window.frame.setExtendedState(Frame.NORMAL);							
-						}
-					}
-				});
-
 			}
 		});
 	}
@@ -374,19 +266,120 @@ public class WallpaperDownloader {
 	 * Create the application.
 	 */
 	public WallpaperDownloader() {
-		initialize();
+		// Resource bundle for i18n
+		i18nBundle = WDUtilities.getBundle();
+
+		// Creating the main frame
+		frame = new JFrame();
+		
+		// Setting the system look & feel for the main frame
+        try {
+        	String systemLookAndFeel = UIManager.getSystemLookAndFeelClassName();
+        	if (systemLookAndFeel.equals("javax.swing.plaf.metal.MetalLookAndFeel") || WDUtilities.isSnapPackage()) {
+        		UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");                		
+        	} else {
+        		UIManager.setLookAndFeel(systemLookAndFeel);                		
+        	}
+        } catch (ClassNotFoundException exception) {
+            exception.printStackTrace();
+        } catch (InstantiationException exception) {
+            exception.printStackTrace();
+        } catch (IllegalAccessException exception) {
+            exception.printStackTrace();
+        } catch (UnsupportedLookAndFeelException exception) {
+            exception.printStackTrace();
+        }
+        SwingUtilities.updateComponentTreeUI(frame);
+		
+        // Initializing the main frame
+        initialize(frame);
+		
+		// Configuring main frame after initialization
+		frame.setBackground(new Color(255, 255, 255));
+		frame.setExtendedState(Frame.NORMAL);
+		frame.setVisible(true);
+		frame.setTitle(pm.getProperty("app.name") + " V" + pm.getProperty("app.version"));
+
+		// Minimizing the application if start minimized feature is enable
+		if (startMinimizedCheckBox.isSelected()) {
+			try {
+				// Sleeps during 3 seconds in order to avoid problems in GNOME 3 minimization
+				if (WDUtilities.getWallpaperChanger() instanceof LinuxWallpaperChanger) {
+					if (((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment().equals(WDUtilities.DE_GNOME3)
+						|| ((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment().equals(WDUtilities.DE_KDE)) {
+						PreferencesManager prefm = PreferencesManager.getInstance(); 
+						TimeUnit.SECONDS.sleep(new Long(prefm.getPreference("time-to-minimize")));								
+					}
+				}
+			} catch (InterruptedException exception) {
+				if (LOG.isInfoEnabled()) {
+					LOG.error("Error sleeping for 3 seconds. Message: " + exception.getMessage());
+				}
+			}
+			minimizeApplication();
+		}
+
+		// Setting some listeners for the main frame
+		// Command comes from system tray
+		fromSystemTray = false;
+		
+		// Adding a listener for knowing when the main window changes its state
+		frame.addWindowStateListener(new WindowStateListener() {
+			@Override
+			public void windowStateChanged(WindowEvent windowEvent) {
+				final PreferencesManager prefm = PreferencesManager.getInstance();
+				String systemTrayIconEnable = prefm.getPreference("system-tray-icon");
+				if (!isOldSystemTray() && systemTrayIconEnable.equals(WDUtilities.APP_YES)) {
+					// Check if commands comes from system tray
+					if (fromSystemTray) {
+						fromSystemTray = false;
+					} else {
+						// If command doesn't come from system tray, then it is necessary to capture the
+						// minimize order
+						if (frame.getExtendedState() == Frame.NORMAL){
+							// The user has minimized the window
+							try {
+								TimeUnit.MILLISECONDS.sleep(100);
+							} catch (InterruptedException exception) {
+								if (LOG.isInfoEnabled()) {
+									LOG.error("Error going to sleep: " + exception.getMessage());
+								}
+							}								
+							minimizeApplication();
+						} else {
+							frame.setExtendedState(Frame.NORMAL);
+						}
+					}
+				}
+			}					
+		});
+		
+		// Adding a listener to know when the main window loses or gains focus
+		frame.addWindowFocusListener(new WindowFocusListener() {
+			@Override
+			public void windowGainedFocus(WindowEvent arg0) {
+				// Nothing to do here
+			}
+
+			@Override
+			public void windowLostFocus(WindowEvent arg0) {
+				final PreferencesManager prefm = PreferencesManager.getInstance();
+				String systemTrayIconEnable = prefm.getPreference("system-tray-icon");
+				if (!isOldSystemTray() && systemTrayIconEnable.equals(WDUtilities.APP_YES)) {
+					frame.setExtendedState(Frame.NORMAL);							
+				}
+			}
+		});
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	@SuppressWarnings("serial")
-	private void initialize() {
+	private void initialize(JFrame frame) {
 		// Configuring tooltips
 		ToolTipManager.sharedInstance().setInitialDelay(100);
 		
-		// Configuring frames
-		frame = new JFrame();
 		frame.setBounds(100, 100, 694, 445);
 		// If the system tray is old, then windows must be bigger in order to paint Minimize button
 		if (isOldSystemTray()) {
@@ -406,7 +399,7 @@ public class WallpaperDownloader {
 		int x = (screenSize.width - frame.getWidth()) / 2;
 		int y = (screenSize.height - frame.getHeight()) / 2;
 		frame.setLocation(x, y);
-		
+
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBorder(null);
 		GridBagConstraints gbc_tabbedPane = new GridBagConstraints();
@@ -1689,9 +1682,11 @@ public class WallpaperDownloader {
 		i18nComboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				prefm.setPreference("application-i18n", new Integer(i18nComboBox.getSelectedIndex()).toString());
-				frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
-				// TODO:
-				WallpaperDownloader.main(null);
+				pauseDownloadingProcess();
+				frame.dispose();
+				frame.setVisible(false);
+				window = null;
+				window = new WallpaperDownloader();
 			}
 		});
 
@@ -2086,7 +2081,7 @@ public class WallpaperDownloader {
         if (!SystemTray.isSupported() || !WDUtilities.isMinimizable() || systemTrayIconEnable.equals(WDUtilities.APP_NO)) {
             LOG.error("SystemTray is not supported. Frame is traditionally minimized");
             // Frame is traditionally minimized
-            window.frame.setExtendedState(Frame.ICONIFIED);
+            frame.setExtendedState(Frame.ICONIFIED);
             return;
         } else {
         	if (isOldSystemTray()) {
@@ -2101,10 +2096,10 @@ public class WallpaperDownloader {
                 java.awt.MenuItem maximizeItem = new java.awt.MenuItem(i18nBundle.getString("system.tray.maximize"));
                 maximizeItem.addActionListener(new ActionListener() {
                 	public void actionPerformed(ActionEvent evt) {
-                    	int state = window.frame.getExtendedState();  
+                    	int state = frame.getExtendedState();  
                     	state = state & ~Frame.ICONIFIED;  
-                    	window.frame.setExtendedState(state);  
-                    	window.frame.setVisible(true);
+                    	frame.setExtendedState(state);  
+                    	frame.setVisible(true);
                     	
                     	// Removing system tray icon
                     	tray.remove(trayIcon);
@@ -2227,10 +2222,10 @@ public class WallpaperDownloader {
 
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                    	int state = window.frame.getExtendedState();  
+                    	int state = frame.getExtendedState();  
                     	state = state & ~Frame.ICONIFIED;  
-                    	window.frame.setExtendedState(state);  
-                    	window.frame.setVisible(true);
+                    	frame.setExtendedState(state);  
+                    	frame.setVisible(true);
                     	
                     	// Removing system tray icon
                     	tray.remove(trayIcon);
@@ -2246,13 +2241,13 @@ public class WallpaperDownloader {
                 }
                 
                 // Hiding window
-                window.frame.setVisible(false);        		
+                frame.setVisible(false);        		
         	} else {
     			// GTK3 integration is going to be used for Plasma 5 and Gmone Shell
         		// Changing state
-        		window.frame.setExtendedState(Frame.ICONIFIED);
+        		frame.setExtendedState(Frame.ICONIFIED);
     			// Hiding window
-    			window.frame.setVisible(false);
+    			frame.setVisible(false);
     			Display.setAppName("WallpaperDownloader");
     			Display display = new Display();
     			Shell shell = new Shell(display);
@@ -2277,8 +2272,8 @@ public class WallpaperDownloader {
     	                	shell.dispose();
     	                	display.dispose();
 
-    	                	// window.frame.setExtendedState(Frame.NORMAL) will be set in the WindowsListener
-    	                	window.frame.setVisible(true);
+    	                	// frame.setExtendedState(Frame.NORMAL) will be set in the WindowsListener
+    	                	frame.setVisible(true);
     		            }
     				});
     				
@@ -2296,8 +2291,8 @@ public class WallpaperDownloader {
     	                	shell.dispose();
     	                	display.dispose();
     	                	
-    	                	// window.frame.setExtendedState(Frame.NORMAL) will be set in the WindowsListener
-    	                	window.frame.setVisible(true);
+    	                	// frame.setExtendedState(Frame.NORMAL) will be set in the WindowsListener
+    	                	frame.setVisible(true);
     		            }
     				});
 
@@ -2385,8 +2380,8 @@ public class WallpaperDownloader {
     	                	display.dispose();
     	                	
     	                	fromSystemTray = true;
-    	                	window.frame.setExtendedState(Frame.NORMAL); 
-    	                	window.frame.setVisible(true);
+    	                	frame.setExtendedState(Frame.NORMAL); 
+    	                	frame.setVisible(true);
 
             				WallpaperManagerWindow wmw = new WallpaperManagerWindow();
             				wmw.setVisible(true);
@@ -2407,8 +2402,8 @@ public class WallpaperDownloader {
     	                	display.dispose();
     	                	
     	                	fromSystemTray = true;
-    	                	window.frame.setExtendedState(Frame.NORMAL);
-    	                	window.frame.setVisible(true);
+    	                	frame.setExtendedState(Frame.NORMAL);
+    	                	frame.setVisible(true);
 
             				ChooseWallpaperWindow cww = new ChooseWallpaperWindow();
             				cww.setVisible(true);
