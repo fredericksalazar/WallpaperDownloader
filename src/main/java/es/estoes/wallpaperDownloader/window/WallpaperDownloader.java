@@ -90,6 +90,7 @@ import org.eclipse.swt.widgets.Tray;
 import javax.swing.JComboBox;
 import java.text.Format;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -885,7 +886,24 @@ public class WallpaperDownloader {
 					String directoryToRemove = listDirectoriesModel.getElementAt(listDirectoriesToWatch.getSelectedIndex());
 					listDirectoriesModel.remove(listDirectoriesToWatch.getSelectedIndex());
 					String changerFoldersProperty = prefm.getPreference("application-changer-folder");
-					String modifiedChangerFoldersProperty = changerFoldersProperty.replace(";" + directoryToRemove, "");
+					String[] changerFolders = changerFoldersProperty.split(";");
+					ArrayList<String> changerFoldersList = new ArrayList<String>(Arrays.asList(changerFolders));
+					Iterator<String> iterator = changerFoldersList.iterator();
+					while (iterator.hasNext()) {
+						String directory = iterator.next();
+						if (directory.equals(directoryToRemove)) {
+							iterator.remove();
+						}
+					}
+					String modifiedChangerFoldersProperty = "";
+					iterator = changerFoldersList.iterator();
+					while (iterator.hasNext()) {
+						String directory = iterator.next();
+						modifiedChangerFoldersProperty = modifiedChangerFoldersProperty + directory;
+						if (iterator.hasNext()) {
+							modifiedChangerFoldersProperty = modifiedChangerFoldersProperty + ";";
+						}
+					}
 					prefm.setPreference("application-changer-folder", modifiedChangerFoldersProperty);
 					if (listDirectoriesModel.size() <= 1) {
 						appSettingsPanel.remove(btnRemoveDirectory);
