@@ -497,15 +497,18 @@ public class WDUtilities {
 		if (to > wallpapersLength) {
 			to = wallpapersLength;
 		}
-		ImageIcon[] wallpaperIcons = new ImageIcon[numWallpapers];
-		for (int i = from; i < to; i++) {
-			ImageIcon originalIcon = new ImageIcon(wallpapers[wallpapersLength - (i + 1)].getAbsolutePath());
-			Image scaledImg = WDUtilities.getScaledImage(originalIcon.getImage(), 127, 100);
-			ImageIcon resizedIcon = new ImageIcon(scaledImg);
-			// Setting a description (absolute path). Doing this. it will be possible to know this path later
-			resizedIcon.setDescription(wallpapers[wallpapersLength - (i + 1)].getAbsolutePath());
-			wallpaperIcons[j] = resizedIcon;
-			j ++;
+		ImageIcon[] wallpaperIcons = new ImageIcon[0];
+		if (wallpapers.length > 0) {
+			wallpaperIcons = new ImageIcon[numWallpapers];
+			for (int i = from; i < to; i++) {
+				ImageIcon originalIcon = new ImageIcon(wallpapers[wallpapersLength - (i + 1)].getAbsolutePath());
+				Image scaledImg = WDUtilities.getScaledImage(originalIcon.getImage(), 127, 100);
+				ImageIcon resizedIcon = new ImageIcon(scaledImg);
+				// Setting a description (absolute path). Doing this. it will be possible to know this path later
+				resizedIcon.setDescription(wallpapers[wallpapersLength - (i + 1)].getAbsolutePath());
+				wallpaperIcons[j] = resizedIcon;
+				j ++;
+			}
 		}
 		return wallpaperIcons;
 	}
