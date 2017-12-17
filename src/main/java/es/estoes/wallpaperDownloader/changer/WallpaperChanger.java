@@ -72,7 +72,9 @@ public abstract class WallpaperChanger {
 		String[] changerFolders = changerFoldersProperty.split(";");
 		for (int i = 0; i < changerFolders.length; i ++) {
 			File randomWallpaper = WDUtilities.pickRandomImage(changerFolders[i]);
-			randomWallpapers.add(randomWallpaper);
+			if (randomWallpaper != null) {
+				randomWallpapers.add(randomWallpaper);				
+			}
 		}
 		if (randomWallpapers.size() > 0) {
 			Random generator = new Random();

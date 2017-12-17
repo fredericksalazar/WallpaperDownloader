@@ -534,7 +534,7 @@ public class WDUtilities {
 	/**
 	 * It picks a random image from a directory.
 	 * @param directoryPath directory path to get all the images
-	 * @return
+	 * @return File if there is a wallpaper, null otherwise
 	 */
 	public static File pickRandomImage(String directoryPath) {
 
