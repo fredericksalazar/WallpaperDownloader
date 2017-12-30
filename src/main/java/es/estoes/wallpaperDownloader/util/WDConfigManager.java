@@ -16,6 +16,7 @@
 
 package es.estoes.wallpaperDownloader.util;
 
+import java.awt.SystemTray;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -186,7 +187,11 @@ public class WDConfigManager {
         		 prefm.setPreference("start-minimized", PreferencesManager.DEFAULT_VALUE);
 
         		 // System tray icon
-        		 prefm.setPreference("system-tray-icon", WDUtilities.APP_YES);
+        		 if (SystemTray.isSupported()) {
+        			 prefm.setPreference("system-tray-icon", WDUtilities.APP_YES);        			 
+        		 } else {
+        			 prefm.setPreference("system-tray-icon", WDUtilities.APP_NO);
+        		 }
 
         		 // Initializing time to minimize feature
         		 prefm.setPreference("time-to-minimize", "3");

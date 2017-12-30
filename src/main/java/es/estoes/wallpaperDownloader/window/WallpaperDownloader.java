@@ -304,7 +304,7 @@ public class WallpaperDownloader {
 		// Minimizing the application if start minimized feature is enable
 		if (startMinimizedCheckBox.isSelected()) {
 			try {
-				// Sleeps during 3 seconds in order to avoid problems in GNOME 3 minimization
+				// Sleeps during X seconds in order to avoid problems in GNOME 3 minimization
 				if (WDUtilities.getWallpaperChanger() instanceof LinuxWallpaperChanger) {
 					if (((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment().equals(WDUtilities.DE_GNOME3)
 						|| ((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment().equals(WDUtilities.DE_KDE)) {
@@ -330,7 +330,9 @@ public class WallpaperDownloader {
 			public void windowStateChanged(WindowEvent windowEvent) {
 				final PreferencesManager prefm = PreferencesManager.getInstance();
 				String systemTrayIconEnable = prefm.getPreference("system-tray-icon");
-				if (!isOldSystemTray() && systemTrayIconEnable.equals(WDUtilities.APP_YES)) {
+				if (SystemTray.isSupported() && 
+					!isOldSystemTray() && 
+					systemTrayIconEnable.equals(WDUtilities.APP_YES)) {
 					// Check if commands comes from system tray
 					if (fromSystemTray) {
 						fromSystemTray = false;
@@ -366,7 +368,9 @@ public class WallpaperDownloader {
 			public void windowLostFocus(WindowEvent arg0) {
 				final PreferencesManager prefm = PreferencesManager.getInstance();
 				String systemTrayIconEnable = prefm.getPreference("system-tray-icon");
-				if (!isOldSystemTray() && systemTrayIconEnable.equals(WDUtilities.APP_YES)) {
+				if (SystemTray.isSupported() && 
+					!isOldSystemTray() && 
+					systemTrayIconEnable.equals(WDUtilities.APP_YES)) {
 					frame.setExtendedState(Frame.NORMAL);							
 				}
 			}
@@ -775,23 +779,27 @@ public class WallpaperDownloader {
 		}
 		appSettingsPanel.add(btnChangeSize);
 		
-		stIconCheckBox = new JCheckBox(i18nBundle.getString("application.settings.system.tray.icon"));
-		stIconCheckBox.setBounds(435, 173, 144, 23);
-		appSettingsPanel.add(stIconCheckBox);
-		
-		lblSystemTrayHelp = new JLabel((Icon) null);
-		try {
-			Image img = ImageIO.read(getClass().getResource("/images/icons/help_24px_icon.png"));
-			ImageIcon icon = new ImageIcon(img);
-			lblSystemTrayHelp = new JLabel(icon);
-			lblSystemTrayHelp.setToolTipText(i18nBundle.getString("application.settings.system.tray.icon.help"));
-			lblSystemTrayHelp.setBounds(574, 173, 30, 23);
-			appSettingsPanel.add(lblSystemTrayHelp);
+		// Only if system tray is supported, user will be able to minimize the application into the
+		// system tray
+		if (SystemTray.isSupported()) {
+			stIconCheckBox = new JCheckBox(i18nBundle.getString("application.settings.system.tray.icon"));
+			stIconCheckBox.setBounds(435, 173, 144, 23);
+			appSettingsPanel.add(stIconCheckBox);
 			
-		} catch (IOException ex) {
-			lblSystemTrayHelp = new JLabel(i18nBundle.getString("application.settings.system.tray.icon.help"));
-			lblSystemTrayHelp.setBounds(566, 173, 30, 23);
-			appSettingsPanel.add(lblSystemTrayHelp);
+			lblSystemTrayHelp = new JLabel((Icon) null);
+			try {
+				Image img = ImageIO.read(getClass().getResource("/images/icons/help_24px_icon.png"));
+				ImageIcon icon = new ImageIcon(img);
+				lblSystemTrayHelp = new JLabel(icon);
+				lblSystemTrayHelp.setToolTipText(i18nBundle.getString("application.settings.system.tray.icon.help"));
+				lblSystemTrayHelp.setBounds(574, 173, 30, 23);
+				appSettingsPanel.add(lblSystemTrayHelp);
+				
+			} catch (IOException ex) {
+				lblSystemTrayHelp = new JLabel(i18nBundle.getString("application.settings.system.tray.icon.help"));
+				lblSystemTrayHelp.setBounds(566, 173, 30, 23);
+				appSettingsPanel.add(lblSystemTrayHelp);
+			}
 		}
 		
 		btnApplySize = new JButton();
@@ -1653,19 +1661,21 @@ public class WallpaperDownloader {
 			}
 		});
 
-		/**
-		 * stIconCheckBox Action Listener.
-		 */
-		// Clicking event
-		stIconCheckBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
-				if (stIconCheckBox.isSelected()) {
-					prefm.setPreference("system-tray-icon", WDUtilities.APP_YES);
-				} else {
-					prefm.setPreference("system-tray-icon", WDUtilities.APP_NO);
+		if (SystemTray.isSupported()) {
+			/**
+			 * stIconCheckBox Action Listener.
+			 */
+			// Clicking event
+			stIconCheckBox.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent evt) {
+					if (stIconCheckBox.isSelected()) {
+						prefm.setPreference("system-tray-icon", WDUtilities.APP_YES);
+					} else {
+						prefm.setPreference("system-tray-icon", WDUtilities.APP_NO);
+					}
 				}
-			}
-		});
+			});
+		}
 
 		/**
 		 * moveFavoriteCheckBox Action Listener.
@@ -2665,11 +2675,13 @@ public class WallpaperDownloader {
 		timeToMinimizeComboBox.setSelectedIndex((new Integer(prefm.getPreference("time-to-minimize")) - 1));
 
 		// System tray icon
-		String systemTrayIconEnable = prefm.getPreference("system-tray-icon");
-		if (systemTrayIconEnable.equals(WDUtilities.APP_YES)) {
-			stIconCheckBox.setSelected(true);
-		} else {
-			stIconCheckBox.setSelected(false);
+		if (SystemTray.isSupported()) {
+			String systemTrayIconEnable = prefm.getPreference("system-tray-icon");
+			if (systemTrayIconEnable.equals(WDUtilities.APP_YES)) {
+				stIconCheckBox.setSelected(true);
+			} else {
+				stIconCheckBox.setSelected(false);
+			}
 		}
 
 		// Changer
