@@ -16,6 +16,7 @@
 
 package es.estoes.wallpaperDownloader.util;
 
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -25,6 +26,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -771,5 +773,39 @@ public class WDUtilities {
 		Locale.setDefault(Locale.forLanguageTag(language));
 		Locale locale = new Locale(language);
 		return ResourceBundle.getBundle("I18n", locale);
+	}
+
+	/**
+	 * Opens a link in a browser depending on the OS.
+	 * @param link link to be opened
+	 */
+	public static void openLinkOnBrowser(String link) {
+		switch (WDUtilities.getOperatingSystem()) {
+		case WDUtilities.OS_LINUX:
+			Process process;
+		      try {
+		    	  if (WDUtilities.isSnapPackage()) {
+			          process = Runtime.getRuntime().exec("/usr/local/bin/xdg-open " + link);
+		    	  } else {
+			          process = Runtime.getRuntime().exec("xdg-open " + link);
+		    	  }
+		          process.waitFor();
+		          process.destroy();
+		      } catch (Exception exception) {
+		    	  if (LOG.isInfoEnabled()) {
+		    		LOG.error("Browser couldn't be opened. Error: " + exception.getMessage());  
+		    	  }
+		      }						
+		      break;
+		default:
+		    if (Desktop.isDesktopSupported()) {
+	        try {
+	          Desktop.getDesktop().browse(new URI(link));
+	        } catch (Exception exception) { 
+	        	LOG.error(exception.getMessage()); 
+	        }
+	     }
+			break;
+		}		
 	}
 }

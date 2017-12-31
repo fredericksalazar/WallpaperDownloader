@@ -30,6 +30,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.ToolTipManager;
 import javax.swing.border.Border;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
@@ -74,7 +76,7 @@ import java.awt.event.WindowStateListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.NumberFormat;
 import javax.swing.JLabel;
@@ -164,6 +166,7 @@ public class WallpaperDownloader {
 	private JSeparator aboutSeparator2;
 	private JTextField icons;
 	private JButton btnIcons;
+	private JPanel helpPanel;
 	private JComboBox<ComboItem> changerComboBox;
 	private JButton btnChangeMoveDirectory;
 	private JFormattedTextField moveDirectory;
@@ -1209,8 +1212,7 @@ public class WallpaperDownloader {
 		StyleConstants.setForeground(keyWord, Color.BLUE);
 		StyleConstants.setBold(keyWord, true);
 
-		//  Adding text
-
+		// Changelog
 		try
 		{
 			// Version 3.0
@@ -1244,7 +1246,41 @@ public class WallpaperDownloader {
 		}
 		// Text to the beginning
 		changelogTextPane.setCaretPosition(0);
-										
+
+		// Help (tab)
+		helpPanel = new JPanel();
+		helpPanel.setBorder(null);
+		tabbedPane.addTab(i18nBundle.getString("help.title"), null, helpPanel, null);
+		helpPanel.setLayout(null);
+		
+		JScrollPane helpScrollPane = new JScrollPane();
+		helpScrollPane.setBounds(12, 12, 657, 359);
+		helpPanel.add(helpScrollPane);
+		
+		JTextPane helpTextPane = new JTextPane();
+		helpTextPane.setCaretPosition(0);
+
+		// Set content as HTML
+		helpTextPane.setContentType("text/html");
+		helpTextPane.setText(i18nBundle.getString("help.tips"));
+		helpTextPane.setEditable(false);//so its not editable
+		helpTextPane.setOpaque(false);//so we dont see whit background
+
+		helpTextPane.addHyperlinkListener(new HyperlinkListener() {
+            public void hyperlinkUpdate(HyperlinkEvent hle) {
+                if (HyperlinkEvent.EventType.ACTIVATED.equals(hle.getEventType())) {
+                	try {
+						WDUtilities.openLinkOnBrowser(hle.getURL().toURI().toString());
+					} catch (URISyntaxException exception) {
+						if (LOG.isInfoEnabled()) {
+							LOG.error("Error opening a link. Message: " + exception.getMessage());
+						}
+					}
+                }
+            }
+        });
+
+		helpScrollPane.setViewportView(helpTextPane);
 		// Minimize button will only be available on OS with an
 		// old system tray
 		btnMinimize = new JButton(i18nBundle.getString("global.minimize"));
@@ -1858,34 +1894,7 @@ public class WallpaperDownloader {
 		  */
 	      btnRepository.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					switch (WDUtilities.getOperatingSystem()) {
-					case WDUtilities.OS_LINUX:
-						Process process;
-					      try {
-					    	  if (WDUtilities.isSnapPackage()) {
-						          process = Runtime.getRuntime().exec("/usr/local/bin/xdg-open " + pm.getProperty("repository.code"));
-					    	  } else {
-						          process = Runtime.getRuntime().exec("xdg-open " + pm.getProperty("repository.code"));
-					    	  }
-					          process.waitFor();
-					          process.destroy();
-					      } catch (Exception exception) {
-					    	  if (LOG.isInfoEnabled()) {
-					    		LOG.error("Browser couldn't be opened. Error: " + exception.getMessage());  
-					    	  }
-					      }						
-					      break;
-					default:
-					    if (Desktop.isDesktopSupported()) {
-				        try {
-				          Desktop.getDesktop().browse(new URI(pm.getProperty("repository.code")));
-				        } catch (Exception exception) { 
-				        	LOG.error(exception.getMessage()); 
-				        }
-				     }
-						break;
-					}
-					
+					WDUtilities.openLinkOnBrowser(pm.getProperty("repository.code"));
 				}
 	      });
 
@@ -1894,34 +1903,7 @@ public class WallpaperDownloader {
 		  */
 	      btnIcons.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					switch (WDUtilities.getOperatingSystem()) {
-					case WDUtilities.OS_LINUX:
-						Process process;
-					      try {
-					    	  if (WDUtilities.isSnapPackage()) {
-						          process = Runtime.getRuntime().exec("/usr/local/bin/xdg-open " + pm.getProperty("repository.icons"));
-					    	  } else {
-						          process = Runtime.getRuntime().exec("xdg-open " + pm.getProperty("repository.icons"));
-					    	  }
-					          process.waitFor();
-					          process.destroy();
-					      } catch (Exception exception) {
-					    	  if (LOG.isInfoEnabled()) {
-					    		LOG.error("Browser couldn't be opened. Error: " + exception.getMessage());  
-					    	  }
-					      }						
-					      break;
-					default:
-					    if (Desktop.isDesktopSupported()) {
-				        try {
-				          Desktop.getDesktop().browse(new URI(pm.getProperty("repository.icons")));
-				        } catch (Exception exception) { 
-				        	LOG.error(exception.getMessage()); 
-				        }
-				     }
-						break;
-					}
-					
+					WDUtilities.openLinkOnBrowser(pm.getProperty("repository.icons"));
 				}
 	      });
 		      
