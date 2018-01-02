@@ -1758,17 +1758,17 @@ public class WallpaperDownloader {
 		 * changerComboBox Action Listener.
 		 */
 		// Clicking event
-		changerComboBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
-				if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
+		if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
+			changerComboBox.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent evt) {
 					prefm.setPreference("application-changer", new Integer(changerComboBox.getSelectedIndex()).toString());
+					
+					//Stoping and starting changer process
+					changer.stop();
+					changer.start();
 				}
-				
-				//Stoping and starting changer process
-				changer.stop();
-				changer.start();
-			}
-		});
+			});
+		}
 		
 		/**
 		 * btnOpenDownloadsDirectory Action Listener.
@@ -2005,16 +2005,17 @@ public class WallpaperDownloader {
 				}
 			});
 			
-		      /**
-		       * btnRandomWallpaper Action Listener.
-		       */
-		      // Clicking event
-			btnRandomWallpaper.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					WDUtilities.getWallpaperChanger().setRandomWallpaper();
-				}
-			});
-			
+  	        /**
+		     * btnRandomWallpaper Action Listener.
+		     */
+		    // Clicking event
+			if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
+				btnRandomWallpaper.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						WDUtilities.getWallpaperChanger().setRandomWallpaper();
+					}
+				});
+			}
 	}
 
 	/**
