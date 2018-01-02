@@ -2799,7 +2799,11 @@ public class WallpaperDownloader {
 		if (WDUtilities.getOperatingSystem().equals(WDUtilities.OS_WINDOWS) || 
         		WDUtilities.getOperatingSystem().equals(WDUtilities.OS_WINDOWS_7) ||	
         		WDUtilities.getOperatingSystem().equals(WDUtilities.OS_WINDOWS_10) ||	
-        		(WDUtilities.getWallpaperChanger() instanceof LinuxWallpaperChanger && !((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment().equals(WDUtilities.DE_GNOME3) && !((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment().equals(WDUtilities.DE_KDE))) {
+        		(WDUtilities.getWallpaperChanger() instanceof LinuxWallpaperChanger 
+        				&& !((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment().equals(WDUtilities.DE_GNOME3) 
+        				&& !((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment().equals(WDUtilities.DE_KDE) 
+        				&& !((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment().equals(WDUtilities.DE_CINNAMON))
+        		) {
 
 			oldSystemTray = true;
 		}

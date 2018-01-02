@@ -69,6 +69,8 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 				if (currentDesktop.contains(WDUtilities.DE_GNOME) || 
 					currentDesktop.contains(WDUtilities.DE_GNOME.toLowerCase())) {
 					this.setDesktopEnvironment(WDUtilities.DE_GNOME3);
+				} else if (currentDesktop.contains(WDUtilities.DE_CINNAMON)) {
+					this.setDesktopEnvironment(WDUtilities.DE_CINNAMON);
 				} else {
 					this.setDesktopEnvironment(WDUtilities.DE_UNKNOWN);					
 				}
@@ -96,6 +98,9 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 			break;
 		case WDUtilities.DE_XFCE:
 			this.setXfceWallpaper(wallpaperPath);
+			break;
+		case WDUtilities.DE_CINNAMON:
+			this.setCinnamonWallpaper(wallpaperPath);
 			break;
 		default:
 			break;
@@ -278,6 +283,46 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
       }	
 	}
 
+	/**
+	 * Sets wallpaper for Unity and Gnome 3 desktop.
+	 * @param wallpaperPath
+	 */
+	private void setCinnamonWallpaper(String wallpaperPath) {
+      Process process;
+      try {
+          process = Runtime.getRuntime().exec("gsettings set org.cinnamon.desktop.background picture-uri file://" + wallpaperPath);
+
+    	  BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+    	  BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+
+    	  // Read the output from the command
+    	  String processOutput = null;
+    	  while ((processOutput = stdInput.readLine()) != null) {
+        	  if (LOG.isInfoEnabled()) {
+        		  LOG.info(processOutput);
+        	  }
+    	  }
+			
+    	  // Read any errors from the attempted command
+    	  while ((processOutput = stdError.readLine()) != null) {
+        	  if (LOG.isInfoEnabled()) {
+        		  LOG.error(processOutput);
+        	  }
+    	  }
+
+    	  if (LOG.isInfoEnabled()) {
+    		LOG.info("Wallpaper set in Cinnamon: " + wallpaperPath);  
+    	  }
+
+          process.waitFor();
+          process.destroy();
+      } catch (Exception exception) {
+    	  if (LOG.isInfoEnabled()) {
+    		LOG.error("Wallpaper couldn't be set in Cinnamon. Error: " + exception.getMessage());  
+    	  }
+      }	
+	}
+
 	@Override
 	public boolean isWallpaperChangeable() {
 		boolean result;
@@ -310,6 +355,9 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 			} else {
 				result = true;				
 			}
+			break;
+		case WDUtilities.DE_CINNAMON:
+			result = true;
 			break;
 		default:
 			result = false;

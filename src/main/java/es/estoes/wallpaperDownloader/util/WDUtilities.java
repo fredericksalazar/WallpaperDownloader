@@ -94,6 +94,7 @@ public class WDUtilities {
 	public static final String DE_XFCE = "XFCE";
 	public static final String DE_UNKNOWN = "UNKNOWN";
 	public static final String DE_GNOME3 = "GNOME3";
+	public static final String DE_CINNAMON = "Cinnamon";
 	public static final String DOWNLOADS_DIRECTORY = "downloads_directory";
 	public static final String CHANGER_DIRECTORY = "changer_directory";
 	public static final String MOVE_DIRECTORY = "move_directory";
@@ -629,6 +630,9 @@ public class WDUtilities {
 				result = Boolean.TRUE;
 				break;
 			case WDUtilities.DE_GNOME3:
+				result = Boolean.TRUE;
+				break;
+			case WDUtilities.DE_CINNAMON:
 				result = Boolean.TRUE;
 				break;
 			default:
