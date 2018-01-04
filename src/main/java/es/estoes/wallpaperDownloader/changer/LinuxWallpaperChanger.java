@@ -284,7 +284,7 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 	}
 
 	/**
-	 * Sets wallpaper for Unity and Gnome 3 desktop.
+	 * Sets wallpaper for Unity, Gnome 3 and Budgie desktop.
 	 * @param wallpaperPath
 	 */
 	private void setCinnamonWallpaper(String wallpaperPath) {
