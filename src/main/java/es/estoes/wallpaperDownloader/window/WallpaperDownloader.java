@@ -277,21 +277,29 @@ public class WallpaperDownloader {
 		frame = new JFrame();
 		
 		// Setting the system look & feel for the main frame
-        try {
-        	String systemLookAndFeel = UIManager.getSystemLookAndFeelClassName();
+		String systemLookAndFeel = UIManager.getSystemLookAndFeelClassName();
+		try {
+        	
         	if (systemLookAndFeel.equals("javax.swing.plaf.metal.MetalLookAndFeel") || WDUtilities.isSnapPackage()) {
         		UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");                		
         	} else {
         		UIManager.setLookAndFeel(systemLookAndFeel);                		
         	}
-        } catch (ClassNotFoundException exception) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException exception) {
             exception.printStackTrace();
-        } catch (InstantiationException exception) {
-            exception.printStackTrace();
-        } catch (IllegalAccessException exception) {
-            exception.printStackTrace();
-        } catch (UnsupportedLookAndFeelException exception) {
-            exception.printStackTrace();
+            if (LOG.isInfoEnabled()) {
+            	LOG.error("Error in system look and feel definition: Message: " + exception.getMessage());
+            }
+            try {
+				UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+					| UnsupportedLookAndFeelException exception2) {
+				exception2.printStackTrace();
+	            if (LOG.isInfoEnabled()) {
+	            	LOG.error("Error in traditional system look and feel definition: Message: " + exception.getMessage());
+	            }
+			}
         }
         SwingUtilities.updateComponentTreeUI(frame);
 		
