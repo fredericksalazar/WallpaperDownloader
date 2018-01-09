@@ -279,28 +279,34 @@ public class WallpaperDownloader {
 		// Setting the system look & feel for the main frame
 		String systemLookAndFeel = UIManager.getSystemLookAndFeelClassName();
 		try {
-        	
-        	if (systemLookAndFeel.equals("javax.swing.plaf.metal.MetalLookAndFeel") || WDUtilities.isSnapPackage()) {
-        		UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");                		
-        	} else {
-        		UIManager.setLookAndFeel(systemLookAndFeel);                		
-        	}
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-				| UnsupportedLookAndFeelException exception) {
-            exception.printStackTrace();
-            if (LOG.isInfoEnabled()) {
-            	LOG.error("Error in system look and feel definition: Message: " + exception.getMessage());
-            }
-            try {
-				UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-					| UnsupportedLookAndFeelException exception2) {
-				exception2.printStackTrace();
-	            if (LOG.isInfoEnabled()) {
-	            	LOG.error("Error in traditional system look and feel definition: Message: " + exception.getMessage());
-	            }
-			}
-        }
+			UIManager.setLookAndFeel(systemLookAndFeel);
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}                		
+//		try {
+//        	if (systemLookAndFeel.equals("javax.swing.plaf.metal.MetalLookAndFeel") || WDUtilities.isSnapPackage()) {
+//        		UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");                		
+//        	} else {
+//        		UIManager.setLookAndFeel(systemLookAndFeel);                		
+//        	}
+//        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+//				| UnsupportedLookAndFeelException exception) {
+//            exception.printStackTrace();
+//            if (LOG.isInfoEnabled()) {
+//            	LOG.error("Error in system look and feel definition: Message: " + exception.getMessage());
+//            }
+//            try {
+//				UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+//			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+//					| UnsupportedLookAndFeelException exception2) {
+//				exception2.printStackTrace();
+//	            if (LOG.isInfoEnabled()) {
+//	            	LOG.error("Error in traditional system look and feel definition: Message: " + exception.getMessage());
+//	            }
+//			}
+//        }
         SwingUtilities.updateComponentTreeUI(frame);
 		
         // Initializing the main frame
