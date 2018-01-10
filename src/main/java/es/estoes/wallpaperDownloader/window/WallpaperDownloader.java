@@ -277,14 +277,15 @@ public class WallpaperDownloader {
 		frame = new JFrame();
 		
 		// Setting the system look & feel for the main frame
-		String systemLookAndFeel = UIManager.getSystemLookAndFeelClassName();
-		try {
-			UIManager.setLookAndFeel(systemLookAndFeel);
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-				| UnsupportedLookAndFeelException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}                		
+//		String systemLookAndFeel = UIManager.getSystemLookAndFeelClassName();
+//		try {
+//			UIManager.setLookAndFeel(systemLookAndFeel);
+//		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+//				| UnsupportedLookAndFeelException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}                		
+//
 //		try {
 //        	if (systemLookAndFeel.equals("javax.swing.plaf.metal.MetalLookAndFeel") || WDUtilities.isSnapPackage()) {
 //        		UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");                		
@@ -307,7 +308,7 @@ public class WallpaperDownloader {
 //	            }
 //			}
 //        }
-        SwingUtilities.updateComponentTreeUI(frame);
+//        SwingUtilities.updateComponentTreeUI(frame);
 		
         // Initializing the main frame
         initialize(frame);
