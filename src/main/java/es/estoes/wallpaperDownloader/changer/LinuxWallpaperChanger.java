@@ -65,6 +65,9 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 			case WDUtilities.DE_XFCE:
 				this.setDesktopEnvironment(WDUtilities.DE_XFCE);
 				break;
+			case WDUtilities.DE_PANTHEON:
+				this.setDesktopEnvironment(WDUtilities.DE_PANTHEON);
+				break;
 			default:
 				if (currentDesktop.contains(WDUtilities.DE_GNOME) || 
 					currentDesktop.contains(WDUtilities.DE_GNOME.toLowerCase())) {
@@ -101,6 +104,9 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 			break;
 		case WDUtilities.DE_CINNAMON:
 			this.setCinnamonWallpaper(wallpaperPath);
+			break;
+		case WDUtilities.DE_PANTHEON:
+			this.setUnityGnome3Wallpaper(wallpaperPath);
 			break;
 		default:
 			break;
@@ -357,6 +363,9 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 			}
 			break;
 		case WDUtilities.DE_CINNAMON:
+			result = true;
+			break;
+		case WDUtilities.DE_PANTHEON:
 			result = true;
 			break;
 		default:

@@ -2809,7 +2809,8 @@ public class WallpaperDownloader {
         		(WDUtilities.getWallpaperChanger() instanceof LinuxWallpaperChanger 
         				&& !((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment().equals(WDUtilities.DE_GNOME3) 
         				&& !((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment().equals(WDUtilities.DE_KDE) 
-        				&& !((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment().equals(WDUtilities.DE_CINNAMON))
+        				&& !((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment().equals(WDUtilities.DE_CINNAMON)
+						&& !((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment().equals(WDUtilities.DE_PANTHEON))
         		) {
 
 			oldSystemTray = true;
