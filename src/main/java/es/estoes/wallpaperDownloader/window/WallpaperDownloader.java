@@ -829,11 +829,11 @@ public class WallpaperDownloader {
 			settingsSeparator4.setBounds(12, 199, 631, 2);
 			appSettingsPanel.add(settingsSeparator4);		
 			JLabel lblChanger = new JLabel(i18nBundle.getString("application.settings.change.every"));
-			lblChanger.setBounds(12, 208, 304, 19);
+			lblChanger.setBounds(12, 208, 179, 19);
 			appSettingsPanel.add(lblChanger);
 			
 			changerComboBox = new JComboBox<ComboItem>();
-			changerComboBox.setBounds(317, 210, 94, 19);
+			changerComboBox.setBounds(192, 210, 94, 19);
 			appSettingsPanel.add(changerComboBox);
 
 			JLabel lblChangerDirectory = new JLabel(i18nBundle.getString("application.settings.change.directory"));
@@ -877,6 +877,10 @@ public class WallpaperDownloader {
 			listDirectoriesToWatch.setVisibleRowCount(-1);
 			
 			listDirectoriesScrollPane.setViewportView(listDirectoriesToWatch);
+			
+			JCheckBox multiMonitorCheckBox = new JCheckBox(i18nBundle.getString("application.settings.change.multimonitor"));
+			multiMonitorCheckBox.setBounds(316, 208, 281, 23);
+			appSettingsPanel.add(multiMonitorCheckBox);
 												
 			/**
 			 * btnAddDirectory Action Listener.

@@ -208,7 +208,10 @@ public class WDConfigManager {
         		 
         		 // Initializing changer directory
         		 prefm.setPreference("application-changer-folder", absoluteDownloadsPath.toString());
-        		 
+
+        		 // Initializing changer multi monitor support
+        		 prefm.setPreference("application-changer-multimonitor", "0");
+
         		 // Initializing maximum download directory size
         		 // By default, it will be 40 MBytes
         		 prefm.setPreference("application-max-download-folder-size", "40");
@@ -369,6 +372,11 @@ public class WDConfigManager {
 			 if (prefm.getPreference("application-changer").equals(PreferencesManager.DEFAULT_VALUE)) {
 				 // Changer timer was not defined within configuration file
         		 prefm.setPreference("application-changer", "0");
+			 }
+
+    		 // Changer multi monitor support
+			 if (prefm.getPreference("application-changer-multimonitor").equals(PreferencesManager.DEFAULT_VALUE)) {
+				 prefm.setPreference("application-changer-multimonitor", "0");				 
 			 }
 
 			 // Changer directory
