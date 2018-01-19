@@ -168,6 +168,7 @@ public class WallpaperDownloader {
 	private JButton btnIcons;
 	private JPanel helpPanel;
 	private JComboBox<ComboItem> changerComboBox;
+	private JCheckBox multiMonitorCheckBox;
 	private JButton btnChangeMoveDirectory;
 	private JFormattedTextField moveDirectory;
 	private JLabel lblMoveHelp;
@@ -878,9 +879,30 @@ public class WallpaperDownloader {
 			
 			listDirectoriesScrollPane.setViewportView(listDirectoriesToWatch);
 			
-			JCheckBox multiMonitorCheckBox = new JCheckBox(i18nBundle.getString("application.settings.change.multimonitor"));
-			multiMonitorCheckBox.setBounds(316, 208, 281, 23);
-			appSettingsPanel.add(multiMonitorCheckBox);
+			if (WDUtilities.isGnomeish()) {
+				multiMonitorCheckBox = new JCheckBox(i18nBundle.getString("application.settings.change.multimonitor"));
+				multiMonitorCheckBox.setBounds(316, 208, 281, 23);
+				appSettingsPanel.add(multiMonitorCheckBox);
+				
+				/**
+				 * multiMonitorCheckBox Action Listener.
+				 */
+				// Clicking event
+				multiMonitorCheckBox.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent evt) {
+						PreferencesManager prefm = PreferencesManager.getInstance();
+						
+						if (multiMonitorCheckBox.isSelected()) {
+							prefm.setPreference("application-changer-multimonitor", WDUtilities.APP_YES);
+							WDUtilities.changeMultiMonitorModeGnomish("spanned");
+						} else {
+							prefm.setPreference("application-changer-multimonitor", WDUtilities.APP_NO);
+							WDUtilities.changeMultiMonitorModeGnomish("stretched");
+						}
+					}
+				});
+				
+			}
 												
 			/**
 			 * btnAddDirectory Action Listener.
@@ -2687,6 +2709,16 @@ public class WallpaperDownloader {
 			changerComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.change.every.4"), "4"));
 			changerComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.change.every.5"), "5"));
 			changerComboBox.setSelectedIndex(new Integer(prefm.getPreference("application-changer")));
+			
+			// Multi monitor support
+			if (WDUtilities.isGnomeish()) {
+				String multiMonitorSupport = prefm.getPreference("application-changer-multimonitor");
+				if (multiMonitorSupport.equals(WDUtilities.APP_YES)) {
+					multiMonitorCheckBox.setSelected(true);
+				} else {
+					multiMonitorCheckBox.setSelected(false);
+				}
+			}
 			
 			listDirectoriesModel = new DefaultListModel<String>();
 			String changerFoldersProperty = prefm.getPreference("application-changer-folder");

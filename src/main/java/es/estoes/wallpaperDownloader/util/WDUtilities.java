@@ -23,9 +23,11 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -816,4 +818,92 @@ public class WDUtilities {
 			break;
 		}		
 	}
+
+	/**
+	 * Checks if the desktop environment is GNOME or derivative.
+	 * @return boolean
+	 */
+	public static boolean isGnomeish() {
+		boolean result = Boolean.FALSE;
+		if (WDUtilities.getOperatingSystem().equals(WDUtilities.OS_LINUX)) {
+			LinuxWallpaperChanger wallpaperChanger = (LinuxWallpaperChanger)WDUtilities.getWallpaperChanger();
+			switch (wallpaperChanger.getDesktopEnvironment()) {
+			case WDUtilities.DE_UNITY:
+				result = Boolean.TRUE;
+				break;
+			case WDUtilities.DE_MATE:
+				result = Boolean.TRUE;
+				break;
+			case WDUtilities.DE_GNOME:
+				result = Boolean.TRUE;
+				break;
+			case WDUtilities.DE_GNOME3:
+				result = Boolean.TRUE;
+				break;
+			case WDUtilities.DE_CINNAMON:
+				result = Boolean.TRUE;
+				break;
+			case WDUtilities.DE_PANTHEON:
+				result = Boolean.TRUE;
+				break;
+			default:
+				break;
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Changes multi monitor mode for desktop environments such as GNOME or derivatives.
+	 * @param mode
+	 */
+	public static void changeMultiMonitorModeGnomish(String mode) {
+      Process process;
+      try {
+			LinuxWallpaperChanger wallpaperChanger = (LinuxWallpaperChanger)WDUtilities.getWallpaperChanger();
+			String command = "gsettings set org.gnome.desktop.background picture-options \"" + mode + "\"";
+			switch (wallpaperChanger.getDesktopEnvironment()) {
+			case WDUtilities.DE_MATE:
+				break;
+			case WDUtilities.DE_CINNAMON:
+				break;
+			case WDUtilities.DE_PANTHEON:
+				break;
+			default:
+				break;
+			}
+    	  
+          process = Runtime.getRuntime().exec(command);
+
+    	  BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+    	  BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+
+    	  // Read the output from the command
+    	  String processOutput = null;
+    	  while ((processOutput = stdInput.readLine()) != null) {
+        	  if (LOG.isInfoEnabled()) {
+        		  LOG.info(processOutput);
+        	  }
+    	  }
+			
+    	  // Read any errors from the attempted command
+    	  while ((processOutput = stdError.readLine()) != null) {
+        	  if (LOG.isInfoEnabled()) {
+        		  LOG.error(processOutput);
+        	  }
+    	  }
+
+    	  if (LOG.isInfoEnabled()) {
+    		LOG.info("Multi monitor mode changed");  
+    	  }
+
+          process.waitFor();
+          process.destroy();
+      } catch (Exception exception) {
+    	  if (LOG.isInfoEnabled()) {
+    		LOG.error("Multi monitor mode couldn't be changed. Error: " + exception.getMessage());  
+    	  }
+      }	
+	}
+
 }
