@@ -864,10 +864,10 @@ public class WDUtilities {
 			String command = "gsettings set org.gnome.desktop.background picture-options \"" + mode + "\"";
 			switch (wallpaperChanger.getDesktopEnvironment()) {
 			case WDUtilities.DE_MATE:
+				command = "gsettings set org.mate.background picture-options \"" + mode + "\"";
 				break;
 			case WDUtilities.DE_CINNAMON:
-				break;
-			case WDUtilities.DE_PANTHEON:
+				command = "gsettings set org.cinnamon.desktop.background picture-options \"" + mode + "\"";
 				break;
 			default:
 				break;
