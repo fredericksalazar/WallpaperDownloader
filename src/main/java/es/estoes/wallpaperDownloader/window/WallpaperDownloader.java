@@ -1313,7 +1313,11 @@ public class WallpaperDownloader {
             }
         });
 
+		// Text to the beginning
+		helpTextPane.setCaretPosition(0);
+
 		helpScrollPane.setViewportView(helpTextPane);
+		
 		// Minimize button will only be available on OS with an
 		// old system tray
 		btnMinimize = new JButton(i18nBundle.getString("global.minimize"));
