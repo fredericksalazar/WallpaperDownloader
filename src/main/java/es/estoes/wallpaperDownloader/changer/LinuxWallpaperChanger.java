@@ -18,6 +18,7 @@ package es.estoes.wallpaperDownloader.changer;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ResourceBundle;
 
 import es.estoes.wallpaperDownloader.util.WDUtilities;
 import es.estoes.wallpaperDownloader.window.DialogManager;
@@ -29,6 +30,7 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 
 	// Attributes
 	private String desktopEnvironment;
+	private ResourceBundle i18nBundle;
 
 	// Getters & Setters
 	public String getDesktopEnvironment() {
@@ -45,6 +47,9 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 	 */
 	public LinuxWallpaperChanger () {
 		super();
+		// Resource bundle for i18n
+		i18nBundle = WDUtilities.getBundle();
+		
 		if (LOG.isInfoEnabled()) {
 			LOG.info("Checking XDG_CURRENT_DESKTOP environment variable. Value = " + System.getenv("XDG_CURRENT_DESKTOP"));
 		}
@@ -264,7 +269,7 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
         		  LOG.error("Wallpaper couldn't be changed. Widgets are probably locked");
         	  }
         	  // Information
-			  DialogManager info = new DialogManager("Wallpaper couldn't be changed. Widgets must be unlocked", 2500);
+			  DialogManager info = new DialogManager(i18nBundle.getString("dialog.manager.kde.widgets.locked"), 2500);
 			  info.openDialog();
     	  } else {
         	  if ((processOutput = stdError.readLine()) != null) {
