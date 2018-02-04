@@ -17,6 +17,7 @@
 package es.estoes.wallpaperDownloader.window;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -32,6 +33,7 @@ import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class PreviewWallpaperWindow extends JFrame {
 
@@ -40,6 +42,7 @@ public class PreviewWallpaperWindow extends JFrame {
 	 * Constants.
 	 */
 	private static final long serialVersionUID = 3193070568124083581L;
+	private static ResourceBundle i18nBundle;
 	
 	/**
 	 * Attributes.
@@ -66,12 +69,16 @@ public class PreviewWallpaperWindow extends JFrame {
 	 * @param wallpaperSelectedAbsolutePath 
 	 */
 	public PreviewWallpaperWindow(String wallpaperSelectedAbsolutePath, Object wallpaperManagerWindow) {
+		// Resource bundle for i18n
+		i18nBundle = WDUtilities.getBundle();
+		
 		// Setting wallpaperToRemove
 		this.setWallpaperToPreview(wallpaperSelectedAbsolutePath);
 		
 		// DISPOSE_ON_CLOSE for closing only this frame instead of the entire application
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setTitle("Wallpaper Preview");
+		setTitle(i18nBundle.getString("preview.wallpaper.title"));
+		setBackground(new Color(255, 255, 255));
 		setBounds(100, 100, 1024, 768);
 		getContentPane().setLayout(null);
 		
@@ -99,7 +106,7 @@ public class PreviewWallpaperWindow extends JFrame {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/delete_24px_icon.png"));
 			btnRemoveWallpaper.setIcon(new ImageIcon(img));
-			btnRemoveWallpaper.setToolTipText("Delete selected wallpaper");
+			btnRemoveWallpaper.setToolTipText(i18nBundle.getString("wallpapers.delete"));
 			btnRemoveWallpaper.setBounds(12, 698, 34, 33);
 		} catch (IOException ex) {
 			btnRemoveWallpaper.setText("Delete");
@@ -131,7 +138,7 @@ public class PreviewWallpaperWindow extends JFrame {
 			try {
 				Image img = ImageIO.read(getClass().getResource("/images/icons/no_favorite_24px_icon.png"));
 				btnSetNoFavoriteWallpaper.setIcon(new ImageIcon(img));
-				btnSetNoFavoriteWallpaper.setToolTipText("Set selected wallpaper as no favorite");
+				btnSetNoFavoriteWallpaper.setToolTipText(i18nBundle.getString("wallpapers.no.favorite"));
 				btnSetNoFavoriteWallpaper.setBounds(51, 698, 34, 33);
 			} catch (IOException ex) {
 				btnSetNoFavoriteWallpaper.setText("Set as no favorite");
@@ -158,7 +165,7 @@ public class PreviewWallpaperWindow extends JFrame {
 			try {
 				Image img = ImageIO.read(getClass().getResource("/images/icons/favourite_24px_icon.png"));
 				btnSetFavoriteWallpaper.setIcon(new ImageIcon(img));
-				btnSetFavoriteWallpaper.setToolTipText("Set selected wallpaper as favorite");
+				btnSetFavoriteWallpaper.setToolTipText(i18nBundle.getString("wallpapers.favorite"));
 				btnSetFavoriteWallpaper.setBounds(51, 698, 34, 33);
 			} catch (IOException ex) {
 				btnSetFavoriteWallpaper.setText("Set as favaourite");
@@ -185,7 +192,7 @@ public class PreviewWallpaperWindow extends JFrame {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/desktop_24px_icon.png"));
 			btnSetWallpaper.setIcon(new ImageIcon(img));
-			btnSetWallpaper.setToolTipText("Set selected wallpaper");
+			btnSetWallpaper.setToolTipText(i18nBundle.getString("wallpapers.set"));
 			btnSetWallpaper.setBounds(90, 698, 34, 33);
 		} catch (IOException ex) {
 			btnSetWallpaper.setText("Set wallpaper");

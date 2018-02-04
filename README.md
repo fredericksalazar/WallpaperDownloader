@@ -5,10 +5,11 @@
 This is the Wiki related to Wallpaper Downloader Project. It gathers all the important information attached to this software project.
 
 ## Quick summary ##
-This is a JAVA software project developed for downloading wallpapers from different sources. It is a crossed-platform standalone application.
+This is a JAVA software project developed for downloading, managing and changing your favorite wallpapers from different sources in Internet via GUI. It is a crossed-platform standalone application: it 
+runs in Linux (GNOME Shell, KDE Plasma 5.8 (and higher), Unity, MATE, XFCE, Cinnamon, Pantheon and Budgie DE supported), Microsoft Windows (7,8 and 10) and macOS.
 
 ## Current Version ##
-2.9
+3.0
 
 ## Installation ##
 You can install wallpaperdownloader using different ways.
@@ -29,9 +30,11 @@ yaourt -S wallpaperdownloader
 stored it and execute it using *java -Dsun.java2d.xrender=f -Xmx256m -Xms128m -jar wallpaperdownloader.jar*)
 
 #### Linux with Snap package tool installed ####
-This application is packaged using [snapcraft tool](http://snapcraft.io/) and it is published in Canonical's snap [store](https://uappexplorer.com/app/wallpaperdownloader.egarcia).
+This application is packaged using [snapcraft tool](http://snapcraft.io/) and it is published in Canonical's snap [store](https://snapcraft.io/wallpaperdownloader). If you are using Ubuntu you can 
+install it directly from the Software Center.
 
-Assuming you have snapd install on your distribution (snapd is available for many distros right now such as Ubuntu, Archlinux, Fedora, OpenSUSE...), open a terminal and type:
+If you are not using Ubuntu and assuming you have snapd install on your distribution (snapd is available for many distros right now such as Ubuntu, Archlinux, Fedora, OpenSUSE...), open a terminal and 
+type:
 
     sudo snap install wallpaperdownloader
 
@@ -41,7 +44,8 @@ application to open some links in your browser.
     sudo apt install snapd-xdg-open
 
 **Caveats**
-Snap package fully supports **GNOME Shell**, **Unity** and **MATE** desktop environments. If you are using **KDE Plasma 5 (version 5.8 or greater)** or **XFCE** and your distro of choice is **Ubuntu**, then installation via official PPA is recommended.
+Snap package fully supports **GNOME Shell**, **Unity**, **MATE**, **Budgie** and **Pantheon** desktop environments. If you are using **KDE Plasma 5 (version 5.8 or greater)** or **XFCE** 
+and your distro of choice is **Ubuntu**, then installation via official PPA is recommended.
 
 #### Ubuntu and derivatives via PPA ####
 There is an official **PPA repository** for installing WallpaperDownloader in Ubuntu (16.04 and greater) and derivates natively. It is the preferred method for enabling all the features of the application and it is recommended for **KDE Plasma 5** and **XFCE** users. First, open a terminal and type:
@@ -77,6 +81,43 @@ Install the snap package (please, check the name of the snap package built):
 
     sudo snap install <wallpaperdownloader*.snap>
 
+## Features (V 3.0) ##
+
+New Features:
+
+- New look and feel. System look and feel will be inherited (from the operating system) if it is available or Nimbus if not.
+
+- New icon and system tray icon. Thanks to Jaime Álvarez Fernández!.
+
+- Close buttons have been removed.
+
+- Apply button has been removed. Now, all the changes in the GUI will be directly saved and applied.
+
+- System tray icon enable/disable functionality implemented.
+
+- Buttons to edit and save some fields have been implemented.
+
+- Minimize button has been removed for KDE and GNOME desktop environments.
+
+- New help tab implemented.
+
+- Cinnamon desktop environment support implemented.
+
+- Budgie desktop environment support implemented.
+
+- Pantheon desktop environment support implemented.
+
+Bugs fixed:
+
+- Scrolls and jlists have been polished.
+
+- Snap detection has been improved and some problems related to the daemon which checks Internet connectivity in the snap package have been fixed.
+
+- Fixed http URL for flaticon website.
+
+- Fixed a bug when user removes certain directories for the changer daemon.
+
+- Fixed a bug in changer daemon when selecting a random wallpaper in directories where there are no images.
 
 ## Features (V 2.9) ##
 
@@ -97,6 +138,8 @@ Bugs fixed:
 - Search type in DevianArt provider now works correctly.
 
 - Wallpapers from Bing provider are now retrieved correctly when the original resolution doesn't match the one defined by the user.
+
+- WallpaperDownloader can be minimized again in Windows systems.
 
 ## Features (V 2.8) ##
 

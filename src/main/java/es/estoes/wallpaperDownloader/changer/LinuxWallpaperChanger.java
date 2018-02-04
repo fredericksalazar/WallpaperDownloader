@@ -18,6 +18,7 @@ package es.estoes.wallpaperDownloader.changer;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ResourceBundle;
 
 import es.estoes.wallpaperDownloader.util.WDUtilities;
 import es.estoes.wallpaperDownloader.window.DialogManager;
@@ -29,6 +30,7 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 
 	// Attributes
 	private String desktopEnvironment;
+	private ResourceBundle i18nBundle;
 
 	// Getters & Setters
 	public String getDesktopEnvironment() {
@@ -45,6 +47,9 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 	 */
 	public LinuxWallpaperChanger () {
 		super();
+		// Resource bundle for i18n
+		i18nBundle = WDUtilities.getBundle();
+		
 		if (LOG.isInfoEnabled()) {
 			LOG.info("Checking XDG_CURRENT_DESKTOP environment variable. Value = " + System.getenv("XDG_CURRENT_DESKTOP"));
 		}
@@ -65,10 +70,15 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 			case WDUtilities.DE_XFCE:
 				this.setDesktopEnvironment(WDUtilities.DE_XFCE);
 				break;
+			case WDUtilities.DE_PANTHEON:
+				this.setDesktopEnvironment(WDUtilities.DE_PANTHEON);
+				break;
 			default:
 				if (currentDesktop.contains(WDUtilities.DE_GNOME) || 
 					currentDesktop.contains(WDUtilities.DE_GNOME.toLowerCase())) {
 					this.setDesktopEnvironment(WDUtilities.DE_GNOME3);
+				} else if (currentDesktop.contains(WDUtilities.DE_CINNAMON)) {
+					this.setDesktopEnvironment(WDUtilities.DE_CINNAMON);
 				} else {
 					this.setDesktopEnvironment(WDUtilities.DE_UNKNOWN);					
 				}
@@ -96,6 +106,12 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 			break;
 		case WDUtilities.DE_XFCE:
 			this.setXfceWallpaper(wallpaperPath);
+			break;
+		case WDUtilities.DE_CINNAMON:
+			this.setCinnamonWallpaper(wallpaperPath);
+			break;
+		case WDUtilities.DE_PANTHEON:
+			this.setUnityGnome3Wallpaper(wallpaperPath);
 			break;
 		default:
 			break;
@@ -253,7 +269,7 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
         		  LOG.error("Wallpaper couldn't be changed. Widgets are probably locked");
         	  }
         	  // Information
-			  DialogManager info = new DialogManager("Wallpaper couldn't be changed. Widgets must be unlocked", 2500);
+			  DialogManager info = new DialogManager(i18nBundle.getString("dialog.manager.kde.widgets.locked"), 2500);
 			  info.openDialog();
     	  } else {
         	  if ((processOutput = stdError.readLine()) != null) {
@@ -274,6 +290,46 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
       } catch (Exception exception) {
     	  if (LOG.isInfoEnabled()) {
     		LOG.error("Wallpaper couldn't be set in KDE. Error: " + exception.getMessage());  
+    	  }
+      }	
+	}
+
+	/**
+	 * Sets wallpaper for Unity, Gnome 3 and Budgie desktop.
+	 * @param wallpaperPath
+	 */
+	private void setCinnamonWallpaper(String wallpaperPath) {
+      Process process;
+      try {
+          process = Runtime.getRuntime().exec("gsettings set org.cinnamon.desktop.background picture-uri file://" + wallpaperPath);
+
+    	  BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+    	  BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+
+    	  // Read the output from the command
+    	  String processOutput = null;
+    	  while ((processOutput = stdInput.readLine()) != null) {
+        	  if (LOG.isInfoEnabled()) {
+        		  LOG.info(processOutput);
+        	  }
+    	  }
+			
+    	  // Read any errors from the attempted command
+    	  while ((processOutput = stdError.readLine()) != null) {
+        	  if (LOG.isInfoEnabled()) {
+        		  LOG.error(processOutput);
+        	  }
+    	  }
+
+    	  if (LOG.isInfoEnabled()) {
+    		LOG.info("Wallpaper set in Cinnamon: " + wallpaperPath);  
+    	  }
+
+          process.waitFor();
+          process.destroy();
+      } catch (Exception exception) {
+    	  if (LOG.isInfoEnabled()) {
+    		LOG.error("Wallpaper couldn't be set in Cinnamon. Error: " + exception.getMessage());  
     	  }
       }	
 	}
@@ -310,6 +366,12 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 			} else {
 				result = true;				
 			}
+			break;
+		case WDUtilities.DE_CINNAMON:
+			result = true;
+			break;
+		case WDUtilities.DE_PANTHEON:
+			result = true;
 			break;
 		default:
 			result = false;

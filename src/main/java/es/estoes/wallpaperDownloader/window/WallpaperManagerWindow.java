@@ -16,6 +16,7 @@
 
 package es.estoes.wallpaperDownloader.window;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -30,6 +31,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -40,6 +42,7 @@ import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import javax.swing.border.EmptyBorder;
 
 import es.estoes.wallpaperDownloader.changer.LinuxWallpaperChanger;
 import es.estoes.wallpaperDownloader.util.WDUtilities;
@@ -49,9 +52,8 @@ public class WallpaperManagerWindow extends JFrame {
 
 	// Constants
 	private static final long serialVersionUID = 8790655483965002934L;
-	
+	private static ResourceBundle i18nBundle;
 	public static JLabel lblTotalFavoriteWallpapers;
-	
 	public static JLabel lblTotalNoFavoriteWallpapers;
 
 	// Attributes
@@ -63,7 +65,6 @@ public class WallpaperManagerWindow extends JFrame {
 	private JButton btnSetFavoriteWallpaper;
 	private JButton btnPreviewFavoriteWallpaper;
 	private JButton btnSetDskFavoriteWallpaper;
-	private JButton btnClose;
 	private JScrollPane noFavoriteScrollPanel;
 	private JList<Object> noFavoriteWallpapersList;
 	private JScrollPane favoriteScrollPanel;
@@ -82,9 +83,13 @@ public class WallpaperManagerWindow extends JFrame {
 	 * Constructor
 	 */
 	public WallpaperManagerWindow() {
+		// Resource bundle for i18n
+		i18nBundle = WDUtilities.getBundle();
+		
 		// DISPOSE_ON_CLOSE for closing only this frame instead of the entire application
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setTitle("Wallpapers Manager");
+		setTitle(i18nBundle.getString("wallpaper.manager.title"));
+		setBackground(new Color(255, 255, 255));
 		setBounds(100, 100, 774, 621);
 		getContentPane().setLayout(null);
 		
@@ -95,7 +100,7 @@ public class WallpaperManagerWindow extends JFrame {
 		int y = (screenSize.height - getHeight()) / 2;
 		setLocation(x, y);
 		
-		JLabel lblFavoriteWallpapers = new JLabel("Favorite Wallpapers");
+		JLabel lblFavoriteWallpapers = new JLabel(i18nBundle.getString("wallpaper.manager.favorite"));
 		lblFavoriteWallpapers.setBounds(12, 12, 151, 15);
 		getContentPane().add(lblFavoriteWallpapers);
 		
@@ -105,21 +110,26 @@ public class WallpaperManagerWindow extends JFrame {
 		
 		favoriteScrollPanel = new JScrollPane();
 		favoriteScrollPanel.setBounds(12, 33, 688, 212);
+		favoriteScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+		favoriteScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		getContentPane().add(favoriteScrollPanel);
 		
 		favoriteWallpapersList = new JList<Object>();
 		favoriteScrollPanel.setViewportView(favoriteWallpapersList);
 		
-		JLabel lblNoFavorite = new JLabel("No Favorite Wallpapers");
+		JLabel lblNoFavorite = new JLabel(i18nBundle.getString("wallpaper.manager.no.favorite"));
 		lblNoFavorite.setBounds(12, 310, 178, 15);
 		getContentPane().add(lblNoFavorite);
 		
 		noFavoriteScrollPanel = new JScrollPane();
 		noFavoriteScrollPanel.setBounds(12, 337, 688, 212);
+		noFavoriteScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+		noFavoriteScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		getContentPane().add(noFavoriteScrollPanel);
 		
 		noFavoriteWallpapersList = new JList<Object>();
 		noFavoriteWallpapersList.setBounds(12, 337, 688, 212);
+
 		getContentPane().add(noFavoriteWallpapersList);
 		
 		btnRemoveNoFavoriteWallpaper = new JButton();
@@ -127,7 +137,7 @@ public class WallpaperManagerWindow extends JFrame {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/delete_24px_icon.png"));
 			btnRemoveNoFavoriteWallpaper.setIcon(new ImageIcon(img));
-			btnRemoveNoFavoriteWallpaper.setToolTipText("Delete selected wallpaper");
+			btnRemoveNoFavoriteWallpaper.setToolTipText(i18nBundle.getString("wallpapers.delete"));
 			btnRemoveNoFavoriteWallpaper.setBounds(712, 369, 34, 33);
 		} catch (IOException ex) {
 			btnRemoveNoFavoriteWallpaper.setText("Delete");
@@ -140,7 +150,7 @@ public class WallpaperManagerWindow extends JFrame {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/favourite_24px_icon.png"));
 			btnSetFavoriteWallpaper.setIcon(new ImageIcon(img));
-			btnSetFavoriteWallpaper.setToolTipText("Set selected wallpaper as favorite");
+			btnSetFavoriteWallpaper.setToolTipText(i18nBundle.getString("wallpapers.favorite"));
 			btnSetFavoriteWallpaper.setBounds(712, 410, 34, 33);
 		} catch (IOException ex) {
 			btnSetFavoriteWallpaper.setText("Set as favaourite");
@@ -153,7 +163,7 @@ public class WallpaperManagerWindow extends JFrame {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/desktop_24px_icon.png"));
 			btnSetDskFavoriteWallpaper.setIcon(new ImageIcon(img));
-			btnSetDskFavoriteWallpaper.setToolTipText("Set selected wallpaper");
+			btnSetDskFavoriteWallpaper.setToolTipText(i18nBundle.getString("wallpapers.set"));
 			btnSetDskFavoriteWallpaper.setBounds(713, 182, 34, 33);
 		} catch (IOException ex) {
 			btnSetDskFavoriteWallpaper.setText("Set wallpaper");
@@ -170,7 +180,7 @@ public class WallpaperManagerWindow extends JFrame {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/view_24px_icon.png"));
 			btnPreviewFavoriteWallpaper.setIcon(new ImageIcon(img));
-			btnPreviewFavoriteWallpaper.setToolTipText("Preview wallpaper");
+			btnPreviewFavoriteWallpaper.setToolTipText(i18nBundle.getString("wallpapers.preview"));
 			btnPreviewFavoriteWallpaper.setBounds(712, 141, 34, 33);
 		} catch (IOException ex) {
 			btnPreviewFavoriteWallpaper.setText("Preview wallpaper");
@@ -183,7 +193,7 @@ public class WallpaperManagerWindow extends JFrame {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/delete_24px_icon.png"));
 			btnRemoveFavoriteWallpaper.setIcon(new ImageIcon(img));
-			btnRemoveFavoriteWallpaper.setToolTipText("Delete selected wallpaper");
+			btnRemoveFavoriteWallpaper.setToolTipText(i18nBundle.getString("wallpapers.delete"));
 			btnRemoveFavoriteWallpaper.setBounds(712, 60, 34, 33);
 		} catch (IOException ex) {
 			btnRemoveFavoriteWallpaper.setText("Delete");
@@ -196,7 +206,7 @@ public class WallpaperManagerWindow extends JFrame {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/no_favorite_24px_icon.png"));
 			btnSetNoFavoriteWallpaper.setIcon(new ImageIcon(img));
-			btnSetNoFavoriteWallpaper.setToolTipText("Set selected wallpaper as no favorite");
+			btnSetNoFavoriteWallpaper.setToolTipText(i18nBundle.getString("wallpapers.no.favorite"));
 			btnSetNoFavoriteWallpaper.setBounds(712, 101, 34, 33);
 		} catch (IOException ex) {
 			btnSetNoFavoriteWallpaper.setText("Set as no favorite");
@@ -210,7 +220,7 @@ public class WallpaperManagerWindow extends JFrame {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/view_24px_icon.png"));
 			btnPreviewNoFavoriteWallpaper.setIcon(new ImageIcon(img));
-			btnPreviewNoFavoriteWallpaper.setToolTipText("Preview wallpaper");
+			btnPreviewNoFavoriteWallpaper.setToolTipText(i18nBundle.getString("wallpapers.preview"));
 			btnPreviewNoFavoriteWallpaper.setBounds(712, 450, 34, 33);
 		} catch (IOException ex) {
 			btnPreviewNoFavoriteWallpaper.setText("Preview wallpaper");
@@ -223,7 +233,7 @@ public class WallpaperManagerWindow extends JFrame {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/desktop_24px_icon.png"));
 			btnSetDskNoFavoriteWallpaper.setIcon(new ImageIcon(img));
-			btnSetDskNoFavoriteWallpaper.setToolTipText("Set selected wallpaper");
+			btnSetDskNoFavoriteWallpaper.setToolTipText(i18nBundle.getString("wallpapers.set"));
 			btnSetDskNoFavoriteWallpaper.setBounds(712, 490, 34, 33);
 		} catch (IOException ex) {
 			btnSetDskNoFavoriteWallpaper.setText("Set wallpaper");
@@ -234,10 +244,6 @@ public class WallpaperManagerWindow extends JFrame {
 			getContentPane().add(btnSetDskNoFavoriteWallpaper);			
 
 		}
-		
-		btnClose = new JButton("Close");
-		btnClose.setBounds(630, 561, 116, 25);
-		getContentPane().add(btnClose);
 		
 		lblFirstFavoriteWallpaper = new JLabel("1");
 		lblFirstFavoriteWallpaper.setBounds(331, 255, 34, 15);
@@ -256,7 +262,7 @@ public class WallpaperManagerWindow extends JFrame {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/left_arrow_24px_icon.png"));
 			btnBackFavoriteWallpapers.setIcon(new ImageIcon(img));
-			btnBackFavoriteWallpapers.setToolTipText("Back");
+			btnBackFavoriteWallpapers.setToolTipText(i18nBundle.getString("choose.wallpaper.window.back"));
 			btnBackFavoriteWallpapers.setBounds(282, 250, 34, 33);
 		} catch (IOException ex) {
 			btnBackFavoriteWallpapers.setText("Back");
@@ -269,7 +275,7 @@ public class WallpaperManagerWindow extends JFrame {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/right_arrow_24px_icon.png"));
 			btnForwardFavoriteWallpapers.setIcon(new ImageIcon(img));
-			btnForwardFavoriteWallpapers.setToolTipText("Forward");
+			btnForwardFavoriteWallpapers.setToolTipText(i18nBundle.getString("choose.wallpaper.window.forward"));
 			btnForwardFavoriteWallpapers.setBounds(442, 250, 34, 33);
 		} catch (IOException ex) {
 			btnForwardFavoriteWallpapers.setText("Forward");
@@ -281,7 +287,7 @@ public class WallpaperManagerWindow extends JFrame {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/left_arrow_24px_icon.png"));
 			btnBackNoFavoriteWallpapers.setIcon(new ImageIcon(img));
-			btnBackNoFavoriteWallpapers.setToolTipText("Back");
+			btnBackNoFavoriteWallpapers.setToolTipText(i18nBundle.getString("choose.wallpaper.window.back"));
 			btnBackNoFavoriteWallpapers.setBounds(282, 553, 34, 33);
 		} catch (IOException ex) {
 			btnBackNoFavoriteWallpapers.setText("Back");
@@ -293,7 +299,7 @@ public class WallpaperManagerWindow extends JFrame {
 		try {
 			Image img = ImageIO.read(getClass().getResource("/images/icons/right_arrow_24px_icon.png"));
 			btnForwardNoFavoriteWallpapers.setIcon(new ImageIcon(img));
-			btnForwardNoFavoriteWallpapers.setToolTipText("Forward");
+			btnForwardNoFavoriteWallpapers.setToolTipText(i18nBundle.getString("choose.wallpaper.window.forward"));
 			btnForwardNoFavoriteWallpapers.setBounds(442, 553, 34, 33);
 		} catch (IOException ex) {
 			btnForwardNoFavoriteWallpapers.setText("Forward");
@@ -337,14 +343,6 @@ public class WallpaperManagerWindow extends JFrame {
 	}
 	
 	private void initializeListeners() {
-		/**
-		 * btnClose
-		 */
-		btnClose.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				dispose();
-			}
-		});
 		
 		/**
 		 * btnForwardFavoriteWallpapers
@@ -610,7 +608,12 @@ public class WallpaperManagerWindow extends JFrame {
 		favoriteWallpapersList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		// JList horizontal orientation
 		favoriteWallpapersList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-		// Only 1 row to display
+		favoriteWallpapersList.setFixedCellHeight(103);
+		favoriteWallpapersList.setFixedCellWidth(130);
+		favoriteWallpapersList.setBorder(new EmptyBorder(1, 15, 1, 15));
+		favoriteWallpapersList.setSelectionBackground(Color.cyan);
+		
+		// Only 2 rows to display
 		favoriteWallpapersList.setVisibleRowCount(2);
 		// Using a custom render to render every element within JList
 		favoriteWallpapersList.setCellRenderer(new WallpaperListRenderer(WallpaperListRenderer.WITH_TEXT));		
@@ -626,7 +629,12 @@ public class WallpaperManagerWindow extends JFrame {
 		noFavoriteWallpapersList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		// JList horizontal orientation
 		noFavoriteWallpapersList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-		// Only 1 row to display
+		noFavoriteWallpapersList.setFixedCellHeight(103);
+		noFavoriteWallpapersList.setFixedCellWidth(130);
+		noFavoriteWallpapersList.setBorder(new EmptyBorder(1, 15, 1, 15));
+		noFavoriteWallpapersList.setSelectionBackground(Color.cyan);
+
+		// Only 2 rows to display
 		noFavoriteWallpapersList.setVisibleRowCount(2);
 		// Using a custom render to render every element within JList
 		noFavoriteWallpapersList.setCellRenderer(new WallpaperListRenderer(WallpaperListRenderer.WITH_TEXT));		

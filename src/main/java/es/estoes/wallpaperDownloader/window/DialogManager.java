@@ -16,18 +16,23 @@
 
 package es.estoes.wallpaperDownloader.window;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.util.ResourceBundle;
+
 import javax.swing.AbstractAction;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
+import es.estoes.wallpaperDownloader.util.WDUtilities;
+
 public class DialogManager {
 
 	// Constants
-	private static final String TITLE = "Information";
+	private static ResourceBundle i18nBundle;
 	
 	// Attributes
 	private final JOptionPane optionPane;
@@ -44,13 +49,17 @@ public class DialogManager {
 	 */
 	public DialogManager(String message, int time) {
 		super();
+		// Resource bundle for i18n
+		i18nBundle = WDUtilities.getBundle();
+
 		this.message = message;
 		this.time = time;
 		optionPane = new JOptionPane(this.message, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
 		dialog = new JDialog();
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		Dimension screenSize = toolkit.getScreenSize();
-		dialog.setTitle(TITLE);
+		dialog.setTitle(i18nBundle.getString("dialog.manager.title"));
+		dialog.setBackground(new Color(255, 255, 255));
 		dialog.setModal(true);	
 		dialog.setContentPane(optionPane);	
 		dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
@@ -68,13 +77,16 @@ public class DialogManager {
 	 */
 	public DialogManager(String message) {
 		super();
+		// Resource bundle for i18n
+		i18nBundle = WDUtilities.getBundle();
+
 		this.message = message;
 		this.time = 0;
 		optionPane = new JOptionPane(this.message, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
 		dialog = new JDialog();
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		Dimension screenSize = toolkit.getScreenSize();
-		dialog.setTitle(TITLE);
+		dialog.setTitle(i18nBundle.getString("dialog.manager.title"));
 		dialog.setModal(true);	
 		dialog.setContentPane(optionPane);	
 		dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);

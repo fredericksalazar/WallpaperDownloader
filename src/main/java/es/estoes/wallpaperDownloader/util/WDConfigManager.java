@@ -16,6 +16,7 @@
 
 package es.estoes.wallpaperDownloader.util;
 
+import java.awt.SystemTray;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -23,6 +24,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Locale;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -100,6 +102,8 @@ public class WDConfigManager {
         		 // Initializing user configuration file
     			 // Downloads directory
         		 prefm.setPreference("application-downloads-folder", absoluteDownloadsPath.toString());
+        		 // First time downloads directory (this is done for detecting snap package)
+        		 prefm.setPreference("application-first-time-downloads-folder", absoluteDownloadsPath.toString());
         		 
         		 // Downloading process
         		 // It will be enabled by default
@@ -124,7 +128,7 @@ public class WDConfigManager {
         		 // By default, the application will download Favorites wallpapers
         		 prefm.setPreference("wallpaper-search-type", "3");
 
-        		 // Devianrt
+        		 // Devianart
         		 prefm.setPreference("provider-devianart", WDUtilities.APP_NO);
         		 // By default, the application will download Newest wallpapers
         		 prefm.setPreference("wallpaper-devianart-search-type", "0");
@@ -163,8 +167,31 @@ public class WDConfigManager {
         		 // Initializing notifications
         		 prefm.setPreference("application-notifications", "2");        		 
 
+        		 // Initializing i18n
+        		 Locale locale = Locale.getDefault();
+        		 String language = "0";
+        		 switch (locale.getLanguage()) {
+        		 case "en":
+        			 language = "0";
+        			 break;
+        		 case "es":
+        			 language = "1";
+        			 break;
+        		 default:
+        			 language = "0";
+        			 break;
+        		 }
+        		 prefm.setPreference("application-i18n", language);        		 
+
         		 // Initializing start minimize feature
         		 prefm.setPreference("start-minimized", PreferencesManager.DEFAULT_VALUE);
+
+        		 // System tray icon
+        		 if (SystemTray.isSupported()) {
+        			 prefm.setPreference("system-tray-icon", WDUtilities.APP_YES);        			 
+        		 } else {
+        			 prefm.setPreference("system-tray-icon", WDUtilities.APP_NO);
+        		 }
 
         		 // Initializing time to minimize feature
         		 prefm.setPreference("time-to-minimize", "3");
@@ -181,7 +208,10 @@ public class WDConfigManager {
         		 
         		 // Initializing changer directory
         		 prefm.setPreference("application-changer-folder", absoluteDownloadsPath.toString());
-        		 
+
+        		 // Initializing changer multi monitor support
+        		 prefm.setPreference("application-changer-multimonitor", "0");
+
         		 // Initializing maximum download directory size
         		 // By default, it will be 40 MBytes
         		 prefm.setPreference("application-max-download-folder-size", "40");
@@ -217,6 +247,11 @@ public class WDConfigManager {
         			 absoluteDownloadsPath = absoluteDownloadsPath.resolve(prefm.getPreference("application-downloads-folder"));
     			 }
     			 LOG.info("Downloads directory -> " + prefm.getPreference("application-downloads-folder"));
+    		 }
+
+    		 // First time downloads directory (this is done for detecting snap package)
+    		 if (prefm.getPreference("application-first-time-downloads-folder").equals(PreferencesManager.DEFAULT_VALUE)) {
+    			 prefm.setPreference("application-first-time-downloads-folder", absoluteDownloadsPath.toString());
     		 }
 
     		 // Resolution
@@ -300,6 +335,24 @@ public class WDConfigManager {
 	    		 prefm.setPreference("application-notifications", "2");        		 
 			 }
 
+    		 // Initializing i18n
+			 if (prefm.getPreference("application-i18n").equals(PreferencesManager.DEFAULT_VALUE)) {
+        		 Locale locale = Locale.getDefault();
+        		 String language = "0";
+        		 switch (locale.getLanguage()) {
+        		 case "en":
+        			 language = "0";
+        			 break;
+        		 case "es":
+        			 language = "1";
+        			 break;
+        		 default:
+        			 language = "0";
+        			 break;
+        		 }
+        		 prefm.setPreference("application-i18n", language);        		 
+			 }
+
     		 // Start minimize feature
 			 if (prefm.getPreference("start-minimized").equals(PreferencesManager.DEFAULT_VALUE)) {
 	    		 prefm.setPreference("start-minimized", PreferencesManager.DEFAULT_VALUE);
@@ -310,10 +363,20 @@ public class WDConfigManager {
 	    		 prefm.setPreference("time-to-minimize", "3");
 			 }
 
+    		 // System tray icon
+			 if (prefm.getPreference("system-tray-icon").equals(PreferencesManager.DEFAULT_VALUE)) {
+				 prefm.setPreference("system-tray-icon", WDUtilities.APP_YES);
+			 }
+
 			 // Changer timer
 			 if (prefm.getPreference("application-changer").equals(PreferencesManager.DEFAULT_VALUE)) {
 				 // Changer timer was not defined within configuration file
         		 prefm.setPreference("application-changer", "0");
+			 }
+
+    		 // Changer multi monitor support
+			 if (prefm.getPreference("application-changer-multimonitor").equals(PreferencesManager.DEFAULT_VALUE)) {
+				 prefm.setPreference("application-changer-multimonitor", "0");				 
 			 }
 
 			 // Changer directory
@@ -409,5 +472,4 @@ public class WDConfigManager {
 			throw new WDConfigurationException("There was some error while setting log4j configuration. Error: " + e.getMessage());
 		}
 	}
-	
 }

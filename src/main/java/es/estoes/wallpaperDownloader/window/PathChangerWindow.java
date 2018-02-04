@@ -16,6 +16,7 @@
 
 package es.estoes.wallpaperDownloader.window;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
@@ -32,14 +33,21 @@ import es.estoes.wallpaperDownloader.util.WDUtilities;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.Locale;
+import java.util.ResourceBundle;
+
 import javax.swing.JCheckBox;
 
 public class PathChangerWindow extends JFrame {
 
 	/**
-	 * 
+	 * Constants.
 	 */
+	private static ResourceBundle i18nBundle;
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Attributes.
+	 */
 	private JTextField newPath;
 	private JCheckBox oldFolderCheckbox;
 
@@ -48,17 +56,21 @@ public class PathChangerWindow extends JFrame {
 	 * @param mainWindow 
 	 */
 	public PathChangerWindow(final WallpaperDownloader mainWindow, String whatToChange) {
+		// Resource bundle for i18n
+		i18nBundle = WDUtilities.getBundle();
+		
 		// DISPOSE_ON_CLOSE for closing only this frame instead of the entire application
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBackground(new Color(255, 255, 255));
 		switch (whatToChange) {
 		case WDUtilities.DOWNLOADS_DIRECTORY:
-			setTitle("Change Downloads Directory Path");
+			setTitle(i18nBundle.getString("path.changer.downloads.directory.title"));
 			break;
 		case WDUtilities.CHANGER_DIRECTORY:
-			setTitle("Change Changer Directory Path");
+			setTitle(i18nBundle.getString("path.changer.changer.directory.title"));
 			break;
 		case WDUtilities.MOVE_DIRECTORY:
-			setTitle("Change Move Favorite Directory Path");
+			setTitle(i18nBundle.getString("path.changer.move.favorite.directory.title"));
 			break;
 		default:
 			break;
@@ -74,7 +86,7 @@ public class PathChangerWindow extends JFrame {
 		setLocation(x, y);
 		
 		newPath = new JTextField();
-		newPath.setBounds(12, 36, 298, 19);
+		newPath.setBounds(12, 33, 298, 31);
 		getContentPane().add(newPath);
 		newPath.setColumns(10);
 		switch (whatToChange) {
@@ -94,13 +106,13 @@ public class PathChangerWindow extends JFrame {
 		JLabel lblSelectDownloadsPath = null;
 		switch (whatToChange) {
 		case WDUtilities.DOWNLOADS_DIRECTORY:
-			lblSelectDownloadsPath = new JLabel("Please, select the new downloads directory");
+			lblSelectDownloadsPath = new JLabel(i18nBundle.getString("path.changer.downloads.directory.select"));
 			break;
 		case WDUtilities.CHANGER_DIRECTORY:
-			lblSelectDownloadsPath = new JLabel("Please, select the new changer directory");
+			lblSelectDownloadsPath = new JLabel(i18nBundle.getString("path.changer.changer.directory.select"));
 			break;
 		case WDUtilities.MOVE_DIRECTORY:
-			lblSelectDownloadsPath = new JLabel("Please, select the new directory to move favorite wallpapers");
+			lblSelectDownloadsPath = new JLabel(i18nBundle.getString("path.changer.move.favorite.directory.select"));
 			break;
 		default:
 			break;
@@ -108,13 +120,13 @@ public class PathChangerWindow extends JFrame {
 		lblSelectDownloadsPath.setBounds(12, 12, 312, 15);
 		getContentPane().add(lblSelectDownloadsPath);
 				
-		JButton btnSelectPath = new JButton("Select");
+		JButton btnSelectPath = new JButton(i18nBundle.getString("path.changer.select"));
 		btnSelectPath.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Set Locale to English
 				JComponent.setDefaultLocale(Locale.ENGLISH);
 				final JFileChooser fileChooser = new JFileChooser();
-			    fileChooser.setDialogTitle("Choose a directory");
+			    fileChooser.setDialogTitle(i18nBundle.getString("path.changer.choose"));
 			    fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 			    // Disable the "All files" option.
 			    fileChooser.setAcceptAllFileFilterUsed(false);
@@ -126,10 +138,10 @@ public class PathChangerWindow extends JFrame {
 			    }
 			}
 		});
-		btnSelectPath.setBounds(317, 33, 117, 25);
+		btnSelectPath.setBounds(317, 35, 117, 25);
 		getContentPane().add(btnSelectPath);
 		
-		JButton btnApplyPathChange = new JButton("Apply");
+		JButton btnApplyPathChange = new JButton(i18nBundle.getString("path.changer.apply"));
 		btnApplyPathChange.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent arg0) {
@@ -162,7 +174,7 @@ public class PathChangerWindow extends JFrame {
 
 					// Information
 					if (WDUtilities.getLevelOfNotifications() > 0) {
-						DialogManager info = new DialogManager("Changer directory has been succesfully added: " + newPath.getText(), 2000);
+						DialogManager info = new DialogManager(i18nBundle.getString("path.changer.changer.directory.message") + newPath.getText(), 2000);
 						info.openDialog();
 					}
 					break;
@@ -173,7 +185,7 @@ public class PathChangerWindow extends JFrame {
 					mainWindow.getMoveDirectory().setText(newPath.getText());
 					// Information
 					if (WDUtilities.getLevelOfNotifications() > 0) {
-						DialogManager info1 = new DialogManager("Move favorite wallpapers directory has been succesfully changed to " + newPath.getText(), 2000);
+						DialogManager info1 = new DialogManager(i18nBundle.getString("path.changer.move.directory.message") + " " + newPath.getText(), 2000);
 						info1.openDialog();
 					}
 					break;
@@ -188,7 +200,7 @@ public class PathChangerWindow extends JFrame {
 		btnApplyPathChange.setBounds(361, 236, 73, 25);
 		getContentPane().add(btnApplyPathChange);
 		
-		JButton btnCancel = new JButton("Cancel");
+		JButton btnCancel = new JButton(i18nBundle.getString("path.changer.cancel"));
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				dispose();
@@ -198,7 +210,7 @@ public class PathChangerWindow extends JFrame {
 		getContentPane().add(btnCancel);
 		
 		if (whatToChange.equals(WDUtilities.DOWNLOADS_DIRECTORY)) {
-			oldFolderCheckbox = new JCheckBox("I want to delete completely the old downloads folder");
+			oldFolderCheckbox = new JCheckBox(i18nBundle.getString("path.changer.delete.directory"));
 			oldFolderCheckbox.setBounds(12, 76, 422, 23);
 			getContentPane().add(oldFolderCheckbox);
 		}

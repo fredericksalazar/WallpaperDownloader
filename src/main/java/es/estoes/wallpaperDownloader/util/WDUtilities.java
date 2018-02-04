@@ -16,22 +16,29 @@
 
 package es.estoes.wallpaperDownloader.util;
 
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
+import java.util.ResourceBundle;
+
 import javax.swing.ImageIcon;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
@@ -89,6 +96,8 @@ public class WDUtilities {
 	public static final String DE_XFCE = "XFCE";
 	public static final String DE_UNKNOWN = "UNKNOWN";
 	public static final String DE_GNOME3 = "GNOME3";
+	public static final String DE_CINNAMON = "Cinnamon";
+	public static final String DE_PANTHEON = "Pantheon";
 	public static final String DOWNLOADS_DIRECTORY = "downloads_directory";
 	public static final String CHANGER_DIRECTORY = "changer_directory";
 	public static final String MOVE_DIRECTORY = "move_directory";
@@ -494,15 +503,18 @@ public class WDUtilities {
 		if (to > wallpapersLength) {
 			to = wallpapersLength;
 		}
-		ImageIcon[] wallpaperIcons = new ImageIcon[numWallpapers];
-		for (int i = from; i < to; i++) {
-			ImageIcon originalIcon = new ImageIcon(wallpapers[wallpapersLength - (i + 1)].getAbsolutePath());
-			Image scaledImg = WDUtilities.getScaledImage(originalIcon.getImage(), 127, 100);
-			ImageIcon resizedIcon = new ImageIcon(scaledImg);
-			// Setting a description (absolute path). Doing this. it will be possible to know this path later
-			resizedIcon.setDescription(wallpapers[wallpapersLength - (i + 1)].getAbsolutePath());
-			wallpaperIcons[j] = resizedIcon;
-			j ++;
+		ImageIcon[] wallpaperIcons = new ImageIcon[0];
+		if (wallpapers.length > 0) {
+			wallpaperIcons = new ImageIcon[numWallpapers];
+			for (int i = from; i < to; i++) {
+				ImageIcon originalIcon = new ImageIcon(wallpapers[wallpapersLength - (i + 1)].getAbsolutePath());
+				Image scaledImg = WDUtilities.getScaledImage(originalIcon.getImage(), 127, 100);
+				ImageIcon resizedIcon = new ImageIcon(scaledImg);
+				// Setting a description (absolute path). Doing this. it will be possible to know this path later
+				resizedIcon.setDescription(wallpapers[wallpapersLength - (i + 1)].getAbsolutePath());
+				wallpaperIcons[j] = resizedIcon;
+				j ++;
+			}
 		}
 		return wallpaperIcons;
 	}
@@ -531,7 +543,7 @@ public class WDUtilities {
 	/**
 	 * It picks a random image from a directory.
 	 * @param directoryPath directory path to get all the images
-	 * @return
+	 * @return File if there is a wallpaper, null otherwise
 	 */
 	public static File pickRandomImage(String directoryPath) {
 
@@ -583,7 +595,7 @@ public class WDUtilities {
 	public static boolean isSnapPackage() {
 		boolean result = Boolean.FALSE;
 		PreferencesManager prefm = PreferencesManager.getInstance();
-		String downloadsDirectoryString = prefm.getPreference("application-downloads-folder");
+		String downloadsDirectoryString = prefm.getPreference("application-first-time-downloads-folder");
 		if (downloadsDirectoryString.contains(WDUtilities.SNAP_KEY)) {
 			result = Boolean.TRUE;
 		}
@@ -593,7 +605,7 @@ public class WDUtilities {
 
 	/**
 	 * Checks if the application can be minimized to system tray.
-	 * Plasma 5 and GNOME 3 don't support traditional system tray icon and behaviour
+	 * Plasma 5 and GNOME 3 don't support traditional system tray icon and behavior
 	 * @return boolean
 	 */
 	public static boolean isMinimizable() {
@@ -621,6 +633,12 @@ public class WDUtilities {
 				result = Boolean.TRUE;
 				break;
 			case WDUtilities.DE_GNOME3:
+				result = Boolean.TRUE;
+				break;
+			case WDUtilities.DE_CINNAMON:
+				result = Boolean.TRUE;
+				break;
+			case WDUtilities.DE_PANTHEON:
 				result = Boolean.TRUE;
 				break;
 			default:
@@ -743,4 +761,149 @@ public class WDUtilities {
 		}
 		return result;
 	}
+
+	/**
+	 * Gets the i18n bundle for displaying the messages
+	 * @return
+	 */
+	public static ResourceBundle getBundle() {
+		PreferencesManager prefm = PreferencesManager.getInstance();
+		String language = "en";
+		switch (prefm.getPreference("application-i18n")) {
+		case "0":
+			language = "en";
+			break;
+		case "1":
+			language = "es";
+			break;
+		default:
+			language = "en";
+			break;
+		}		
+		Locale.setDefault(Locale.forLanguageTag(language));
+		Locale locale = new Locale(language);
+		return ResourceBundle.getBundle("I18n", locale);
+	}
+
+	/**
+	 * Opens a link in a browser depending on the OS.
+	 * @param link link to be opened
+	 */
+	public static void openLinkOnBrowser(String link) {
+		switch (WDUtilities.getOperatingSystem()) {
+		case WDUtilities.OS_LINUX:
+			Process process;
+		      try {
+		    	  if (WDUtilities.isSnapPackage()) {
+			          process = Runtime.getRuntime().exec("/usr/local/bin/xdg-open " + link);
+		    	  } else {
+			          process = Runtime.getRuntime().exec("xdg-open " + link);
+		    	  }
+		          process.waitFor();
+		          process.destroy();
+		      } catch (Exception exception) {
+		    	  if (LOG.isInfoEnabled()) {
+		    		LOG.error("Browser couldn't be opened. Error: " + exception.getMessage());  
+		    	  }
+		      }						
+		      break;
+		default:
+		    if (Desktop.isDesktopSupported()) {
+	        try {
+	          Desktop.getDesktop().browse(new URI(link));
+	        } catch (Exception exception) { 
+	        	LOG.error(exception.getMessage()); 
+	        }
+	     }
+			break;
+		}		
+	}
+
+	/**
+	 * Checks if the desktop environment is GNOME or derivative.
+	 * @return boolean
+	 */
+	public static boolean isGnomeish() {
+		boolean result = Boolean.FALSE;
+		if (WDUtilities.getOperatingSystem().equals(WDUtilities.OS_LINUX)) {
+			LinuxWallpaperChanger wallpaperChanger = (LinuxWallpaperChanger)WDUtilities.getWallpaperChanger();
+			switch (wallpaperChanger.getDesktopEnvironment()) {
+			case WDUtilities.DE_UNITY:
+				result = Boolean.TRUE;
+				break;
+			case WDUtilities.DE_MATE:
+				result = Boolean.TRUE;
+				break;
+			case WDUtilities.DE_GNOME:
+				result = Boolean.TRUE;
+				break;
+			case WDUtilities.DE_GNOME3:
+				result = Boolean.TRUE;
+				break;
+			case WDUtilities.DE_CINNAMON:
+				result = Boolean.TRUE;
+				break;
+			case WDUtilities.DE_PANTHEON:
+				result = Boolean.TRUE;
+				break;
+			default:
+				break;
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Changes multi monitor mode for desktop environments such as GNOME or derivatives.
+	 * @param mode
+	 */
+	public static void changeMultiMonitorModeGnomish(String mode) {
+      Process process;
+      try {
+			LinuxWallpaperChanger wallpaperChanger = (LinuxWallpaperChanger)WDUtilities.getWallpaperChanger();
+			String command = "gsettings set org.gnome.desktop.background picture-options \"" + mode + "\"";
+			switch (wallpaperChanger.getDesktopEnvironment()) {
+			case WDUtilities.DE_MATE:
+				command = "gsettings set org.mate.background picture-options \"" + mode + "\"";
+				break;
+			case WDUtilities.DE_CINNAMON:
+				command = "gsettings set org.cinnamon.desktop.background picture-options \"" + mode + "\"";
+				break;
+			default:
+				break;
+			}
+    	  
+          process = Runtime.getRuntime().exec(command);
+
+    	  BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+    	  BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+
+    	  // Read the output from the command
+    	  String processOutput = null;
+    	  while ((processOutput = stdInput.readLine()) != null) {
+        	  if (LOG.isInfoEnabled()) {
+        		  LOG.info(processOutput);
+        	  }
+    	  }
+			
+    	  // Read any errors from the attempted command
+    	  while ((processOutput = stdError.readLine()) != null) {
+        	  if (LOG.isInfoEnabled()) {
+        		  LOG.error(processOutput);
+        	  }
+    	  }
+
+    	  if (LOG.isInfoEnabled()) {
+    		LOG.info("Multi monitor mode changed");  
+    	  }
+
+          process.waitFor();
+          process.destroy();
+      } catch (Exception exception) {
+    	  if (LOG.isInfoEnabled()) {
+    		LOG.error("Multi monitor mode couldn't be changed. Error: " + exception.getMessage());  
+    	  }
+      }	
+	}
+
 }
