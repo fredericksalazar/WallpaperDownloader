@@ -4,7 +4,7 @@
 	<groupId>es.estoes.wallpaperDownloader</groupId>
 	<artifactId>wallpaperDownloader</artifactId>
 	<packaging>jar</packaging>
-	<version>3.0</version>
+	<version>3.1</version>
 	<name>wallpaperDownloader</name>
 	<url>http://maven.apache.org</url>
 	<!-- Properties -->
