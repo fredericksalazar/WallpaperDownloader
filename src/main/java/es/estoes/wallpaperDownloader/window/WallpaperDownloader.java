@@ -278,30 +278,30 @@ public class WallpaperDownloader {
 		frame = new JFrame();
 		
 		// Setting the system look & feel for the main frame
-//		String systemLookAndFeel = UIManager.getSystemLookAndFeelClassName();
-//		try {
-//        	if (systemLookAndFeel.equals("javax.swing.plaf.metal.MetalLookAndFeel") || WDUtilities.isSnapPackage()) {
-//        		UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");                		
-//        	} else {
-//        		UIManager.setLookAndFeel(systemLookAndFeel);                		
-//        	}
-//        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-//				| UnsupportedLookAndFeelException exception) {
-//            exception.printStackTrace();
-//            if (LOG.isInfoEnabled()) {
-//            	LOG.error("Error in system look and feel definition: Message: " + exception.getMessage());
-//            }
-//            try {
-//				UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-//			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-//					| UnsupportedLookAndFeelException exception2) {
-//				exception2.printStackTrace();
-//	            if (LOG.isInfoEnabled()) {
-//	            	LOG.error("Error in traditional system look and feel definition: Message: " + exception.getMessage());
-//	            }
-//			}
-//        }
-//        SwingUtilities.updateComponentTreeUI(frame);
+		String systemLookAndFeel = UIManager.getSystemLookAndFeelClassName();
+		try {
+        	if (systemLookAndFeel.equals("javax.swing.plaf.metal.MetalLookAndFeel") || WDUtilities.isSnapPackage()) {
+        		UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");                		
+        	} else {
+        		UIManager.setLookAndFeel(systemLookAndFeel);                		
+        	}
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException exception) {
+            exception.printStackTrace();
+            if (LOG.isInfoEnabled()) {
+            	LOG.error("Error in system look and feel definition: Message: " + exception.getMessage());
+            }
+            try {
+				UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+					| UnsupportedLookAndFeelException exception2) {
+				exception2.printStackTrace();
+	            if (LOG.isInfoEnabled()) {
+	            	LOG.error("Error in traditional system look and feel definition: Message: " + exception.getMessage());
+	            }
+			}
+        }
+        SwingUtilities.updateComponentTreeUI(frame);
 		
         // Initializing the main frame
         initialize(frame);
@@ -1136,187 +1136,187 @@ public class WallpaperDownloader {
 
 		}
 
-//		// About (tab)
-//		aboutPanel = new JPanel();
-//		aboutPanel.setBorder(null);
-//		tabbedPane.addTab(i18nBundle.getString("about.title"), null, aboutPanel, null);
-//		aboutPanel.setLayout(null);
-//		
-//		JLabel lblVersion = new JLabel(i18nBundle.getString("about.version"));
-//		lblVersion.setBounds(12, 16, 70, 15);
-//		aboutPanel.add(lblVersion);
-//		
-//		version = new JTextField() {
-//			// JTextField without border
-//			@Override public void setBorder(Border border) {
-//				// No borders!
-//			}
-//		};
-//		version.setHorizontalAlignment(SwingConstants.CENTER);
-//		version.setEditable(false);
-//		version.setBounds(73, 15, 35, 19);
-//		version.setColumns(10);
-//		version.setOpaque(false);
-//		version.setBackground(new Color(0, 0, 0, 0));
-//		aboutPanel.add(version);
-//		
-//		aboutSeparator1 = new JSeparator();
-//		aboutSeparator1.setBounds(11, 43, 610, 2);
-//		aboutPanel.add(aboutSeparator1);
-//		
-//		lblDeveloper = new JLabel(i18nBundle.getString("about.developer"));
-//		lblDeveloper.setBounds(12, 57, 95, 15);
-//		aboutPanel.add(lblDeveloper);
-//		
-//		developer = new JTextField() {
-//			// JTextField without border
-//			@Override public void setBorder(Border border) {
-//				// No borders!
-//			}
-//		};
-//		developer.setEditable(false);
-//		developer.setBounds(145, 56, 405, 19);
-//		developer.setColumns(10);
-//		developer.setOpaque(false);
-//		developer.setBackground(new Color(0, 0, 0, 0));
-//		aboutPanel.add(developer);
-//		
-//		lblSourceCode = new JLabel(i18nBundle.getString("about.source.code"));
-//		lblSourceCode.setBounds(12, 338, 108, 15);
-//		aboutPanel.add(lblSourceCode);
-//		
-//		btnRepository = new JButton("New button");
-//		btnRepository.setBounds(134, 334, 483, 25);
-//		btnRepository.setText("<HTML><FONT color=\"#000099\"><U>" + pm.getProperty("repository.code") + "</U></FONT></HTML>");
-//		btnRepository.setHorizontalAlignment(SwingConstants.LEFT);
-//		btnRepository.setOpaque(false);
-//		btnRepository.setContentAreaFilled(false);
-//		btnRepository.setBorderPainted(false);
-//		aboutPanel.add(btnRepository);
-//		
-//		aboutSeparator2 = new JSeparator();
-//		aboutSeparator2.setBounds(12, 108, 610, 7);
-//		aboutPanel.add(aboutSeparator2);
-//		
-//		JLabel lblIcons = new JLabel(i18nBundle.getString("about.icons"));
-//		lblIcons.setBounds(12, 81, 95, 15);
-//		aboutPanel.add(lblIcons);
-//		
-//		icons = new JTextField() {
-//			public void setBorder(Border border) {
-//			}
-//		};
-//		icons.setHorizontalAlignment(SwingConstants.LEFT);
-//		icons.setText(" Jaime Álvarez; Dave Gandy");
-//		icons.setEditable(false);
-//		icons.setColumns(10);
-//		icons.setBounds(145, 79, 219, 19);
-//		icons.setOpaque(false);
-//		icons.setBackground(new Color(0, 0, 0, 0));
-//		aboutPanel.add(icons);
-//		
-//		btnIcons = new JButton("<HTML><FONT color=\"#000099\"><U>http://www.flaticon.com/</U></FONT></HTML>");
-//		btnIcons.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent arg0) {
-//			}
-//		});
-//		btnIcons.setHorizontalAlignment(SwingConstants.LEFT);
-//		btnIcons.setOpaque(false);
-//		btnIcons.setContentAreaFilled(false);
-//		btnIcons.setBorderPainted(false);
-//		btnIcons.setBounds(381, 76, 229, 25);
-//		aboutPanel.add(btnIcons);
-//		
-//		JLabel lblChangelog = new JLabel(i18nBundle.getString("about.changelog"));
-//		lblChangelog.setBounds(12, 117, 91, 20);
-//		aboutPanel.add(lblChangelog);
-//		
-//		JScrollPane changelogScrollPane = new JScrollPane();
-//		changelogScrollPane.setBounds(11, 144, 610, 183);
-//		aboutPanel.add(changelogScrollPane);
-//		
-//		JTextPane changelogTextPane = new JTextPane();
-//		changelogScrollPane.setViewportView(changelogTextPane);
-//		
-//		StyledDocument doc = changelogTextPane.getStyledDocument();
-//
-//		//  Define a keyword attribute
-//		SimpleAttributeSet keyWord = new SimpleAttributeSet();
-//		StyleConstants.setForeground(keyWord, Color.BLUE);
-//		StyleConstants.setBold(keyWord, true);
-//
-//		// Changelog
-//		try
-//		{
-//			// Version 3.0
-//		    doc.insertString(0, i18nBundle.getString("about.changelog.features.3.0.title"), keyWord );
-//		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.features.3.0.text"), null );
-//		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.3.0.title"), keyWord );
-//		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.3.0.text"), null );
-//			
-//			// Version 2.9
-//		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.features.2.9.title"), keyWord );
-//		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.features.2.9.text"), null );
-//		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.2.9.title"), keyWord );
-//		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.2.9.text"), null );
-//			
-//			// Version 2.8
-//		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.features.2.8.title"), keyWord );
-//		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.features.2.8.text"), null );
-//		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.2.8.title"), keyWord );
-//		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.2.8.text"), null );
-//
-//		    // Version 2.7
-//		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.features.2.7.title"), keyWord );
-//		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.features.2.7.text"), null );
-//		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.2.7.title"), keyWord );
-//		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.2.7.text"), null );
-//		}
-//		catch(Exception exception) { 
-//			if (LOG.isInfoEnabled()) {
-//				LOG.error("Error rendering jTextPane. Error: " + exception.getMessage());
-//			}
-//		}
-//		// Text to the beginning
-//		changelogTextPane.setCaretPosition(0);
-//
-//		// Help (tab)
-//		helpPanel = new JPanel();
-//		helpPanel.setBorder(null);
-//		tabbedPane.addTab(i18nBundle.getString("help.title"), null, helpPanel, null);
-//		helpPanel.setLayout(null);
-//		
-//		JScrollPane helpScrollPane = new JScrollPane();
-//		helpScrollPane.setBounds(12, 12, 657, 359);
-//		helpPanel.add(helpScrollPane);
-//		
-//		JTextPane helpTextPane = new JTextPane();
-//		helpTextPane.setCaretPosition(0);
-//
-//		// Set content as HTML
-//		helpTextPane.setContentType("text/html");
-//		helpTextPane.setText(i18nBundle.getString("help.tips"));
-//		helpTextPane.setEditable(false);//so its not editable
-//		helpTextPane.setOpaque(false);//so we dont see whit background
-//
-//		helpTextPane.addHyperlinkListener(new HyperlinkListener() {
-//            public void hyperlinkUpdate(HyperlinkEvent hle) {
-//                if (HyperlinkEvent.EventType.ACTIVATED.equals(hle.getEventType())) {
-//                	try {
-//						WDUtilities.openLinkOnBrowser(hle.getURL().toURI().toString());
-//					} catch (URISyntaxException exception) {
-//						if (LOG.isInfoEnabled()) {
-//							LOG.error("Error opening a link. Message: " + exception.getMessage());
-//						}
-//					}
-//                }
-//            }
-//        });
-//
-//		// Text to the beginning
-//		helpTextPane.setCaretPosition(0);
-//
-//		helpScrollPane.setViewportView(helpTextPane);
+		// About (tab)
+		aboutPanel = new JPanel();
+		aboutPanel.setBorder(null);
+		tabbedPane.addTab(i18nBundle.getString("about.title"), null, aboutPanel, null);
+		aboutPanel.setLayout(null);
+		
+		JLabel lblVersion = new JLabel(i18nBundle.getString("about.version"));
+		lblVersion.setBounds(12, 16, 70, 15);
+		aboutPanel.add(lblVersion);
+		
+		version = new JTextField() {
+			// JTextField without border
+			@Override public void setBorder(Border border) {
+				// No borders!
+			}
+		};
+		version.setHorizontalAlignment(SwingConstants.CENTER);
+		version.setEditable(false);
+		version.setBounds(73, 15, 35, 19);
+		version.setColumns(10);
+		version.setOpaque(false);
+		version.setBackground(new Color(0, 0, 0, 0));
+		aboutPanel.add(version);
+		
+		aboutSeparator1 = new JSeparator();
+		aboutSeparator1.setBounds(11, 43, 610, 2);
+		aboutPanel.add(aboutSeparator1);
+		
+		lblDeveloper = new JLabel(i18nBundle.getString("about.developer"));
+		lblDeveloper.setBounds(12, 57, 95, 15);
+		aboutPanel.add(lblDeveloper);
+		
+		developer = new JTextField() {
+			// JTextField without border
+			@Override public void setBorder(Border border) {
+				// No borders!
+			}
+		};
+		developer.setEditable(false);
+		developer.setBounds(145, 56, 405, 19);
+		developer.setColumns(10);
+		developer.setOpaque(false);
+		developer.setBackground(new Color(0, 0, 0, 0));
+		aboutPanel.add(developer);
+		
+		lblSourceCode = new JLabel(i18nBundle.getString("about.source.code"));
+		lblSourceCode.setBounds(12, 338, 108, 15);
+		aboutPanel.add(lblSourceCode);
+		
+		btnRepository = new JButton("New button");
+		btnRepository.setBounds(134, 334, 483, 25);
+		btnRepository.setText("<HTML><FONT color=\"#000099\"><U>" + pm.getProperty("repository.code") + "</U></FONT></HTML>");
+		btnRepository.setHorizontalAlignment(SwingConstants.LEFT);
+		btnRepository.setOpaque(false);
+		btnRepository.setContentAreaFilled(false);
+		btnRepository.setBorderPainted(false);
+		aboutPanel.add(btnRepository);
+		
+		aboutSeparator2 = new JSeparator();
+		aboutSeparator2.setBounds(12, 108, 610, 7);
+		aboutPanel.add(aboutSeparator2);
+		
+		JLabel lblIcons = new JLabel(i18nBundle.getString("about.icons"));
+		lblIcons.setBounds(12, 81, 95, 15);
+		aboutPanel.add(lblIcons);
+		
+		icons = new JTextField() {
+			public void setBorder(Border border) {
+			}
+		};
+		icons.setHorizontalAlignment(SwingConstants.LEFT);
+		icons.setText(" Jaime Álvarez; Dave Gandy");
+		icons.setEditable(false);
+		icons.setColumns(10);
+		icons.setBounds(145, 79, 219, 19);
+		icons.setOpaque(false);
+		icons.setBackground(new Color(0, 0, 0, 0));
+		aboutPanel.add(icons);
+		
+		btnIcons = new JButton("<HTML><FONT color=\"#000099\"><U>http://www.flaticon.com/</U></FONT></HTML>");
+		btnIcons.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		btnIcons.setHorizontalAlignment(SwingConstants.LEFT);
+		btnIcons.setOpaque(false);
+		btnIcons.setContentAreaFilled(false);
+		btnIcons.setBorderPainted(false);
+		btnIcons.setBounds(381, 76, 229, 25);
+		aboutPanel.add(btnIcons);
+		
+		JLabel lblChangelog = new JLabel(i18nBundle.getString("about.changelog"));
+		lblChangelog.setBounds(12, 117, 91, 20);
+		aboutPanel.add(lblChangelog);
+		
+		JScrollPane changelogScrollPane = new JScrollPane();
+		changelogScrollPane.setBounds(11, 144, 610, 183);
+		aboutPanel.add(changelogScrollPane);
+		
+		JTextPane changelogTextPane = new JTextPane();
+		changelogScrollPane.setViewportView(changelogTextPane);
+		
+		StyledDocument doc = changelogTextPane.getStyledDocument();
+
+		//  Define a keyword attribute
+		SimpleAttributeSet keyWord = new SimpleAttributeSet();
+		StyleConstants.setForeground(keyWord, Color.BLUE);
+		StyleConstants.setBold(keyWord, true);
+
+		// Changelog
+		try
+		{
+			// Version 3.0
+		    doc.insertString(0, i18nBundle.getString("about.changelog.features.3.0.title"), keyWord );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.features.3.0.text"), null );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.3.0.title"), keyWord );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.3.0.text"), null );
+			
+			// Version 2.9
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.features.2.9.title"), keyWord );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.features.2.9.text"), null );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.2.9.title"), keyWord );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.2.9.text"), null );
+			
+			// Version 2.8
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.features.2.8.title"), keyWord );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.features.2.8.text"), null );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.2.8.title"), keyWord );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.2.8.text"), null );
+
+		    // Version 2.7
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.features.2.7.title"), keyWord );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.features.2.7.text"), null );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.2.7.title"), keyWord );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.2.7.text"), null );
+		}
+		catch(Exception exception) { 
+			if (LOG.isInfoEnabled()) {
+				LOG.error("Error rendering jTextPane. Error: " + exception.getMessage());
+			}
+		}
+		// Text to the beginning
+		changelogTextPane.setCaretPosition(0);
+
+		// Help (tab)
+		helpPanel = new JPanel();
+		helpPanel.setBorder(null);
+		tabbedPane.addTab(i18nBundle.getString("help.title"), null, helpPanel, null);
+		helpPanel.setLayout(null);
+		
+		JScrollPane helpScrollPane = new JScrollPane();
+		helpScrollPane.setBounds(12, 12, 657, 359);
+		helpPanel.add(helpScrollPane);
+		
+		JTextPane helpTextPane = new JTextPane();
+		helpTextPane.setCaretPosition(0);
+
+		// Set content as HTML
+		helpTextPane.setContentType("text/html");
+		helpTextPane.setText(i18nBundle.getString("help.tips"));
+		helpTextPane.setEditable(false);//so its not editable
+		helpTextPane.setOpaque(false);//so we dont see whit background
+
+		helpTextPane.addHyperlinkListener(new HyperlinkListener() {
+            public void hyperlinkUpdate(HyperlinkEvent hle) {
+                if (HyperlinkEvent.EventType.ACTIVATED.equals(hle.getEventType())) {
+                	try {
+						WDUtilities.openLinkOnBrowser(hle.getURL().toURI().toString());
+					} catch (URISyntaxException exception) {
+						if (LOG.isInfoEnabled()) {
+							LOG.error("Error opening a link. Message: " + exception.getMessage());
+						}
+					}
+                }
+            }
+        });
+
+		// Text to the beginning
+		helpTextPane.setCaretPosition(0);
+
+		helpScrollPane.setViewportView(helpTextPane);
 		
 		// Minimize button will only be available on OS with an
 		// old system tray
