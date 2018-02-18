@@ -1187,7 +1187,7 @@ public class WallpaperDownloader {
 		
 		btnRepository = new JButton("New button");
 		btnRepository.setBounds(134, 334, 483, 25);
-		btnRepository.setText("<HTML><FONT color=\"#000099\"><U>" + pm.getProperty("repository.code") + "</U></FONT></HTML>");
+		//btnRepository.setText("<HTML><FONT color=\"#000099\"><U>" + pm.getProperty("repository.code") + "</U></FONT></HTML>");
 		btnRepository.setHorizontalAlignment(SwingConstants.LEFT);
 		btnRepository.setOpaque(false);
 		btnRepository.setContentAreaFilled(false);
@@ -1215,7 +1215,7 @@ public class WallpaperDownloader {
 		icons.setBackground(new Color(0, 0, 0, 0));
 		aboutPanel.add(icons);
 		
-		btnIcons = new JButton("<HTML><FONT color=\"#000099\"><U>http://www.flaticon.com/</U></FONT></HTML>");
+		//btnIcons = new JButton("<HTML><FONT color=\"#000099\"><U>http://www.flaticon.com/</U></FONT></HTML>");
 		btnIcons.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			}
