@@ -123,7 +123,7 @@ public class WallpaperDownloader {
 	public static JLabel lblSpaceWarning;
 	public static JScrollPane scroll;
 	public static JList<ImageIcon> lastWallpapersList;
-	private static Harvester harvester;
+	public static Harvester harvester;
 	private ChangerDaemon changer;
 	private JTextField searchKeywords;
 	private JCheckBox wallhavenCheckbox;
