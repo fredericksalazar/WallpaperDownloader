@@ -154,7 +154,13 @@ public class WallpaperFusionProvider extends Provider {
 									break;
 								case "2":
 									wallpaperURL = WF_DOWNLOAD_URL + wallpaperId + WDUtilities.URL_SLASH + "?W=" + Integer.valueOf(userResolution[0]) + "&H=" + Integer.valueOf(userResolution[1]);
-									isWallpaperSuccessfullyStored = storeRemoteFile(wallpaper, wallpaperURL);
+									String remoteImageResolution = getRemoteImageResolution(wallpaperURL);
+								    if (this.resolution.equals(remoteImageResolution)) {
+								    	// Wallpaper resolution fits the one set by the user
+										isWallpaperSuccessfullyStored = storeRemoteFile(wallpaper, wallpaperURL);
+								    } else {
+								    	isWallpaperSuccessfullyStored = false;
+								    }
 									break;
 								default:
 									break;
