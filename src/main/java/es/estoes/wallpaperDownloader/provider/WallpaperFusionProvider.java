@@ -24,6 +24,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.jsoup.nodes.Element;
 import es.estoes.wallpaperDownloader.exception.ProviderException;
+import es.estoes.wallpaperDownloader.harvest.Harvester;
 import es.estoes.wallpaperDownloader.util.PreferencesManager;
 import es.estoes.wallpaperDownloader.util.PropertiesManager;
 import es.estoes.wallpaperDownloader.util.WDUtilities;
@@ -116,63 +117,72 @@ public class WallpaperFusionProvider extends Provider {
 				if (!thumbnails.isEmpty()) {
 					// 3.- Getting a wallpaper which is not already stored in the filesystem
 					for (Element thumbnail : thumbnails) {
-						// First, it is necessary to retrieve href value inside a element which contains the link to 
-						// downloads page for this wallpaper
-						String wallpaperMainURLDownloadPage = thumbnail.attr("href");
-						// Retrieves the ID
-						// First, removes last slash
-						wallpaperMainURLDownloadPage = wallpaperMainURLDownloadPage.substring(0, (wallpaperMainURLDownloadPage.length() - 1));
-						// Gets the ID
-						String wallpaperId = wallpaperMainURLDownloadPage.substring(wallpaperMainURLDownloadPage.lastIndexOf(WDUtilities.URL_SLASH) + 1);
-						// Retrieves the source for the full image
-						String wallpaperURL = WF_DOWNLOAD_URL + wallpaperId + WDUtilities.URL_SLASH + "?W=" + WDUtilities.getWidthResolution() + "&H=" + WDUtilities.getHeightResolution();
-						String wallpaperName = WDUtilities.WD_PREFIX + WF_PREFIX + wallpaperId + WDUtilities.PERIOD + "jpg";
-						String wallpaperNameFavorite = WDUtilities.WD_FAVORITE_PREFIX + WF_PREFIX + wallpaperId + WDUtilities.PERIOD + "jpg";
-						// Storing the image. It is necessary to download the remote file
-						File wallpaper = new File(WDUtilities.getDownloadsPath() + File.separator + wallpaperName);
-						File wallpaperFavorite = new File(WDUtilities.getDownloadsPath() + File.separator + wallpaperNameFavorite);
-						if (!wallpaper.exists() && !wallpaperFavorite.exists() && !WDUtilities.isWallpaperBlacklisted(wallpaperName) && !WDUtilities.isWallpaperBlacklisted(wallpaperNameFavorite)) {
+						if (WallpaperDownloader.harvester.getStatus().equals(Harvester.STATUS_ENABLED)) {
+							// First, it is necessary to retrieve href value inside a element which contains the link to 
+							// downloads page for this wallpaper
+							String wallpaperMainURLDownloadPage = thumbnail.attr("href");
+							// Retrieves the ID
+							// First, removes last slash
+							wallpaperMainURLDownloadPage = wallpaperMainURLDownloadPage.substring(0, (wallpaperMainURLDownloadPage.length() - 1));
+							// Gets the ID
+							String wallpaperId = wallpaperMainURLDownloadPage.substring(wallpaperMainURLDownloadPage.lastIndexOf(WDUtilities.URL_SLASH) + 1);
+							// Retrieves the source for the full image
+							String wallpaperURL = WF_DOWNLOAD_URL + wallpaperId + WDUtilities.URL_SLASH + "?W=" + WDUtilities.getWidthResolution() + "&H=" + WDUtilities.getHeightResolution();
+							String wallpaperName = WDUtilities.WD_PREFIX + WF_PREFIX + wallpaperId + WDUtilities.PERIOD + "jpg";
+							String wallpaperNameFavorite = WDUtilities.WD_FAVORITE_PREFIX + WF_PREFIX + wallpaperId + WDUtilities.PERIOD + "jpg";
 							// Storing the image. It is necessary to download the remote file
-							boolean isWallpaperSuccessfullyStored = false;
-							String[] userResolution = this.resolution.split("x");
-							// Checking download policy
-							// 0 -> Download any wallpaper and keep the original resolution
-							// 1 -> Download any wallpaper and resize it (if it is bigger) to the resolution defined
-							// 2 -> Download only wallpapers with the resolution set by the user
-							switch (this.downloadPolicy) {
-							case "0":
-								wallpaperURL = WF_DOWNLOAD_URL + wallpaperId + WDUtilities.URL_SLASH + WF_ORIGINAL_PARAMETERS;
-								isWallpaperSuccessfullyStored = storeRemoteFile(wallpaper, wallpaperURL);
-								break;
-							case "1":
-								wallpaperURL = WF_DOWNLOAD_URL + wallpaperId + WDUtilities.URL_SLASH + WF_ORIGINAL_PARAMETERS;
-								isWallpaperSuccessfullyStored = storeAndResizeRemoteFile(wallpaper, wallpaperURL, 
-										Integer.valueOf(userResolution[0]), 
-										Integer.valueOf(userResolution[1]));
-								break;
-							case "2":
-								wallpaperURL = WF_DOWNLOAD_URL + wallpaperId + WDUtilities.URL_SLASH + "?W=" + Integer.valueOf(userResolution[0]) + "&H=" + Integer.valueOf(userResolution[1]);
-								isWallpaperSuccessfullyStored = storeRemoteFile(wallpaper, wallpaperURL);
-								break;
-							default:
-								break;
-							}
+							File wallpaper = new File(WDUtilities.getDownloadsPath() + File.separator + wallpaperName);
+							File wallpaperFavorite = new File(WDUtilities.getDownloadsPath() + File.separator + wallpaperNameFavorite);
+							if (!wallpaper.exists() && !wallpaperFavorite.exists() && !WDUtilities.isWallpaperBlacklisted(wallpaperName) && !WDUtilities.isWallpaperBlacklisted(wallpaperNameFavorite)) {
+								// Storing the image. It is necessary to download the remote file
+								boolean isWallpaperSuccessfullyStored = false;
+								String[] userResolution = this.resolution.split("x");
+								// Checking download policy
+								// 0 -> Download any wallpaper and keep the original resolution
+								// 1 -> Download any wallpaper and resize it (if it is bigger) to the resolution defined
+								// 2 -> Download only wallpapers with the resolution set by the user
+								switch (this.downloadPolicy) {
+								case "0":
+									wallpaperURL = WF_DOWNLOAD_URL + wallpaperId + WDUtilities.URL_SLASH + WF_ORIGINAL_PARAMETERS;
+									isWallpaperSuccessfullyStored = storeRemoteFile(wallpaper, wallpaperURL);
+									break;
+								case "1":
+									wallpaperURL = WF_DOWNLOAD_URL + wallpaperId + WDUtilities.URL_SLASH + WF_ORIGINAL_PARAMETERS;
+									isWallpaperSuccessfullyStored = storeAndResizeRemoteFile(wallpaper, wallpaperURL, 
+											Integer.valueOf(userResolution[0]), 
+											Integer.valueOf(userResolution[1]));
+									break;
+								case "2":
+									wallpaperURL = WF_DOWNLOAD_URL + wallpaperId + WDUtilities.URL_SLASH + "?W=" + Integer.valueOf(userResolution[0]) + "&H=" + Integer.valueOf(userResolution[1]);
+									isWallpaperSuccessfullyStored = storeRemoteFile(wallpaper, wallpaperURL);
+									break;
+								default:
+									break;
+								}
 
-							if (!isWallpaperSuccessfullyStored) {
-								if (LOG.isInfoEnabled()) {
-									LOG.info("Error trying to store wallpaper " + wallpaperURL + ". Skipping...");							
+								if (!isWallpaperSuccessfullyStored) {
+									if (LOG.isInfoEnabled()) {
+										LOG.info("Error trying to store wallpaper " + wallpaperURL + ". Skipping...");							
+									}
+								} else {
+									LOG.info("Wallpaper " + wallpaper.getName() + " successfully stored");
+									LOG.info("Refreshing space occupied progress bar...");
+									WallpaperDownloader.refreshProgressBar();
+									WallpaperDownloader.refreshJScrollPane();
+									wallpaperFound = Boolean.TRUE;
+									// Exit the process because one wallpaper was downloaded successfully
+									break;
 								}
 							} else {
-								LOG.info("Wallpaper " + wallpaper.getName() + " successfully stored");
-								LOG.info("Refreshing space occupied progress bar...");
-								WallpaperDownloader.refreshProgressBar();
-								WallpaperDownloader.refreshJScrollPane();
-								wallpaperFound = Boolean.TRUE;
-								// Exit the process because one wallpaper was downloaded successfully
-								break;
+								LOG.info("Wallpaper " + wallpaper.getName() + " is already stored or blacklisted. Skipping...");
 							}
 						} else {
-							LOG.info("Wallpaper " + wallpaper.getName() + " is already stored or blacklisted. Skipping...");
+							// Harvester is disabled so provider stops getting wallpapers
+							if (LOG.isInfoEnabled()) {
+								LOG.info("Harvesting process has been disabled. Stopping provider " + this.getClass().getName());
+							}
+							wallpaperFound = Boolean.TRUE;
+							break;							
 						}
 					}
 					if (!wallpaperFound) {
