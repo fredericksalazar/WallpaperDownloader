@@ -101,7 +101,24 @@ public class WDConfigManager {
 
         		 // Initializing user configuration file
     			 // Downloads directory
-        		 prefm.setPreference("application-downloads-folder", absoluteDownloadsPath.toString());
+    			 if (WDUtilities.isSnapPackage()) {
+    				 // If the application has been installed via snap package, then current link is used
+    				 // to point to the downloads directory because this reference won't change although
+    				 // the version of the application is changed
+    				 // /home/egarcia/snap/wallpaperdownloader/18/.wallpaperdownloader/downloads
+    				 String[] downloadsPathParts = absoluteDownloadsPath.toString().split(File.separator + WDUtilities.SNAP_KEY + File.separator + "wallpaperdownloader" + File.separator);
+    				 String absoluteDownloadsPathSnap = downloadsPathParts[0] + 
+    						 							File.separator + 
+    						 							WDUtilities.SNAP_KEY + 
+    						 							File.separator + 
+    						 							"wallpaperdownloader" + 
+    						 							File.separator +
+    						 							"current" + 
+    						 							downloadsPathParts[1].substring(downloadsPathParts[1].indexOf(File.separator), downloadsPathParts[1].length());
+            		 prefm.setPreference("application-downloads-folder", absoluteDownloadsPathSnap);
+    			 } else {
+    				 prefm.setPreference("application-downloads-folder", absoluteDownloadsPath.toString());	 
+    			 }
         		 // First time downloads directory (this is done for detecting snap package)
         		 prefm.setPreference("application-first-time-downloads-folder", absoluteDownloadsPath.toString());
         		 
@@ -207,7 +224,7 @@ public class WDConfigManager {
         		 prefm.setPreference("application-changer", "0");
         		 
         		 // Initializing changer directory
-        		 prefm.setPreference("application-changer-folder", absoluteDownloadsPath.toString());
+        		 prefm.setPreference("application-changer-folder", prefm.getPreference("application-downloads-folder"));
 
         		 // Initializing changer multi monitor support
         		 prefm.setPreference("application-changer-multimonitor", "0");
