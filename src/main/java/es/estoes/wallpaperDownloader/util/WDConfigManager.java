@@ -99,6 +99,9 @@ public class WDConfigManager {
     			 LOG.info("User configuration file doesn't exist. Creating...");
     			 FileUtils.touch(userConfigFile);
 
+        		 // First time downloads directory (this is done for detecting snap package)
+        		 prefm.setPreference("application-first-time-downloads-folder", absoluteDownloadsPath.toString());
+
         		 // Initializing user configuration file
     			 // Downloads directory
     			 if (WDUtilities.isSnapPackage()) {
@@ -119,8 +122,6 @@ public class WDConfigManager {
     			 } else {
     				 prefm.setPreference("application-downloads-folder", absoluteDownloadsPath.toString());	 
     			 }
-        		 // First time downloads directory (this is done for detecting snap package)
-        		 prefm.setPreference("application-first-time-downloads-folder", absoluteDownloadsPath.toString());
         		 
         		 // Downloading process
         		 // It will be enabled by default
