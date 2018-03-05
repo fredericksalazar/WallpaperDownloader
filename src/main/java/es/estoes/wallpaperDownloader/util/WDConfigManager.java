@@ -72,37 +72,17 @@ public class WDConfigManager {
 	     PreferencesManager prefm = PreferencesManager.getInstance();
 	     Path appPath = Paths.get(WDUtilities.getAppPath());
 	     Path absoluteDownloadsPath = null;
-    	 LOG.info("Checking downloads folder...");
+	     File downloadsDirectory = null;
+	     LOG.info("Checking downloads folder...");
     	 absoluteDownloadsPath = Paths.get(appPath.toString());
     	 try {
     		 File userConfigFile = new File(WDUtilities.getUserConfigurationFilePath());
 
     		 // Configuration file
     		 if (!userConfigFile.exists()) {
-        		 /**
-        		  *  Downloads directory
-        		  */
-        		 absoluteDownloadsPath = absoluteDownloadsPath.resolve(WDUtilities.DEFAULT_DOWNLOADS_DIRECTORY);
-        		 File downloadsDirectory = new File(absoluteDownloadsPath.toString());
-
-        		 if (!downloadsDirectory.exists()) {
-        			 LOG.info("Downloads folder doesn't exist. Creating...");
-        			 FileUtils.forceMkdir(downloadsDirectory);
-        		 }  		 
-        		 // Setting the downloads path 
-        		 WDUtilities.setDownloadsPath(absoluteDownloadsPath.toString());
-        		 LOG.info("Downloads directory -> " + absoluteDownloadsPath.toString());
- 
-           		 /**
-        		  * User's configuration file
-        		  */
-    			 LOG.info("User configuration file doesn't exist. Creating...");
-    			 FileUtils.touch(userConfigFile);
-
         		 // First time downloads directory (this is done for detecting snap package)
         		 prefm.setPreference("application-first-time-downloads-folder", absoluteDownloadsPath.toString());
 
-        		 // Initializing user configuration file
     			 // Downloads directory
     			 if (WDUtilities.isSnapPackage()) {
     				 // If the application has been installed via snap package, then current link is used
@@ -118,10 +98,27 @@ public class WDConfigManager {
     						 							File.separator +
     						 							"current" + 
     						 							downloadsPathParts[1].substring(downloadsPathParts[1].indexOf(File.separator), downloadsPathParts[1].length());
+    				 downloadsDirectory = new File(absoluteDownloadsPathSnap);
             		 prefm.setPreference("application-downloads-folder", absoluteDownloadsPathSnap);
     			 } else {
-    				 prefm.setPreference("application-downloads-folder", absoluteDownloadsPath.toString());	 
+        			 absoluteDownloadsPath = absoluteDownloadsPath.resolve(WDUtilities.DEFAULT_DOWNLOADS_DIRECTORY);
+        			 downloadsDirectory = new File(absoluteDownloadsPath.toString());
+        			 prefm.setPreference("application-downloads-folder", absoluteDownloadsPath.toString());	 
     			 }
+
+        		 if (!downloadsDirectory.exists()) {
+        			 LOG.info("Downloads folder doesn't exist. Creating...");
+        			 FileUtils.forceMkdir(downloadsDirectory);
+        		 }  		 
+        		 // Setting the downloads path 
+        		 WDUtilities.setDownloadsPath(absoluteDownloadsPath.toString());
+        		 LOG.info("Downloads directory -> " + absoluteDownloadsPath.toString());
+ 
+           		 /**
+        		  * User's configuration file
+        		  */
+    			 LOG.info("User configuration file doesn't exist. Creating...");
+    			 FileUtils.touch(userConfigFile);
         		 
         		 // Downloading process
         		 // It will be enabled by default
@@ -253,7 +250,7 @@ public class WDConfigManager {
     					 LOG.info("It has been detected that wallpaperdownloader application has been installed via snap package. Reconfiguring downloads directory just in case it is a new version and it is needed to move downloads directory to the new confinement space...");
     				 }
             		 absoluteDownloadsPath = absoluteDownloadsPath.resolve(WDUtilities.DEFAULT_DOWNLOADS_DIRECTORY);
-            		 File downloadsDirectory = new File(absoluteDownloadsPath.toString());
+            		 downloadsDirectory = new File(absoluteDownloadsPath.toString());
 
             		 if (downloadsDirectory.exists()) {
                 		 // Setting the downloads path 
