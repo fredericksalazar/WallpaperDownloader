@@ -114,8 +114,8 @@ public class WDConfigManager {
         			 FileUtils.forceMkdir(downloadsDirectory);
         		 }  		 
         		 // Setting the downloads path 
-        		 WDUtilities.setDownloadsPath(absoluteDownloadsPath.toString());
-        		 LOG.info("Downloads directory -> " + absoluteDownloadsPath.toString());
+        		 WDUtilities.setDownloadsPath(absoluteDownloadsPathString);
+        		 LOG.info("Downloads directory -> " + absoluteDownloadsPathString);
  
            		 /**
         		  * User's configuration file
