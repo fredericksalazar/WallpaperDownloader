@@ -67,30 +67,37 @@ public class WDConfigManager {
 	 */
 	public static void checkConfig() throws WDConfigurationException {
 		
-	     LOG.info("Checking configuration...");
-	     LOG.info("Checking application's folder");
+		if (LOG.isInfoEnabled()) {
+			 LOG.info("Checking configuration...");
+		     LOG.info("Checking application's directory");
+		}
 	     PreferencesManager prefm = PreferencesManager.getInstance();
 	     Path appPath = Paths.get(WDUtilities.getAppPath());
-	     Path absoluteDownloadsPath = null;
-	     File downloadsDirectory = null;
-	     LOG.info("Checking downloads folder...");
-    	 absoluteDownloadsPath = Paths.get(appPath.toString());
+	     Path absoluteDownloadsPath = Paths.get(appPath.toString());
     	 try {
     		 File userConfigFile = new File(WDUtilities.getUserConfigurationFilePath());
 
     		 // Configuration file
     		 if (!userConfigFile.exists()) {
+    			 if (LOG.isInfoEnabled()) {
+    				 LOG.info("There is no configuration file. Creating a new one. Please wait...");
+    			 }
         		 // First time downloads directory (this is done for detecting snap package)
         		 prefm.setPreference("application-first-time-downloads-folder", absoluteDownloadsPath.toString());
 
     			 // Downloads directory
+        		 if (LOG.isInfoEnabled()) {
+        		     LOG.info("Checking downloads directory...");
+        		 }
+        		 absoluteDownloadsPath = absoluteDownloadsPath.resolve(WDUtilities.DEFAULT_DOWNLOADS_DIRECTORY);
+        		 String absoluteDownloadsPathString = absoluteDownloadsPath.toString();
     			 if (WDUtilities.isSnapPackage()) {
     				 // If the application has been installed via snap package, then current link is used
     				 // to point to the downloads directory because this reference won't change although
     				 // the version of the application is changed
     				 // /home/egarcia/snap/wallpaperdownloader/18/.wallpaperdownloader/downloads
-    				 String[] downloadsPathParts = absoluteDownloadsPath.toString().split(File.separator + WDUtilities.SNAP_KEY + File.separator + "wallpaperdownloader" + File.separator);
-    				 String absoluteDownloadsPathSnap = downloadsPathParts[0] + 
+    				 String[] downloadsPathParts = absoluteDownloadsPathString.split(File.separator + WDUtilities.SNAP_KEY + File.separator + "wallpaperdownloader" + File.separator);
+    				 absoluteDownloadsPathString = downloadsPathParts[0] + 
     						 							File.separator + 
     						 							WDUtilities.SNAP_KEY + 
     						 							File.separator + 
@@ -98,14 +105,10 @@ public class WDConfigManager {
     						 							File.separator +
     						 							"current" + 
     						 							downloadsPathParts[1].substring(downloadsPathParts[1].indexOf(File.separator), downloadsPathParts[1].length());
-    				 downloadsDirectory = new File(absoluteDownloadsPathSnap);
-            		 prefm.setPreference("application-downloads-folder", absoluteDownloadsPathSnap);
-    			 } else {
-        			 absoluteDownloadsPath = absoluteDownloadsPath.resolve(WDUtilities.DEFAULT_DOWNLOADS_DIRECTORY);
-        			 downloadsDirectory = new File(absoluteDownloadsPath.toString());
-        			 prefm.setPreference("application-downloads-folder", absoluteDownloadsPath.toString());	 
+    				 
     			 }
-
+        		 prefm.setPreference("application-downloads-folder", absoluteDownloadsPathString);
+    			 File downloadsDirectory = new File(absoluteDownloadsPathString);
         		 if (!downloadsDirectory.exists()) {
         			 LOG.info("Downloads folder doesn't exist. Creating...");
         			 FileUtils.forceMkdir(downloadsDirectory);
@@ -250,7 +253,7 @@ public class WDConfigManager {
     					 LOG.info("It has been detected that wallpaperdownloader application has been installed via snap package. Reconfiguring downloads directory just in case it is a new version and it is needed to move downloads directory to the new confinement space...");
     				 }
             		 absoluteDownloadsPath = absoluteDownloadsPath.resolve(WDUtilities.DEFAULT_DOWNLOADS_DIRECTORY);
-            		 downloadsDirectory = new File(absoluteDownloadsPath.toString());
+            		 File downloadsDirectory = new File(absoluteDownloadsPath.toString());
 
             		 if (downloadsDirectory.exists()) {
                 		 // Setting the downloads path 
