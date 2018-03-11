@@ -24,6 +24,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Locale;
 
 import org.apache.commons.io.FileUtils;
@@ -460,7 +463,41 @@ public class WDConfigManager {
         			 }       			 
         		 }        		  
     		 }
-
+    		 
+    		 // Performing sanitation in directories set for changer
+    		 // (only for snap installations)
+    		 if (WDUtilities.isSnapPackage()) {
+    			 String changerFoldersProperty = prefm.getPreference("application-changer-folder");
+    			 String[] changerFolders = changerFoldersProperty.split(";");
+    			 ArrayList<String> changerFoldersList = new ArrayList<String>(Arrays.asList(changerFolders));
+    			 Iterator<String> iterator = changerFoldersList.iterator();
+    			 String modifiedChangerFoldersProperty = "";
+    			 while (iterator.hasNext()) {
+    				 String directory = iterator.next();
+    				 if (directory.contains(WDUtilities.SNAP_KEY)) {
+    					 // The directory is inside snap structure
+        				 if (!directory.contains("current")) {
+        					 // The directory is changed to current directory
+            				 String[] directoryParts = directory.split(File.separator + WDUtilities.SNAP_KEY + File.separator + "wallpaperdownloader" + File.separator);
+            				 directory = directoryParts[0] + 
+            						 							File.separator + 
+            						 							WDUtilities.SNAP_KEY + 
+            						 							File.separator + 
+            						 							"wallpaperdownloader" + 
+            						 							File.separator +
+            						 							"current" + 
+            						 							directoryParts[1].substring(directoryParts[1].indexOf(File.separator), directoryParts[1].length());
+            				 
+        				 }
+    				 }
+    				 modifiedChangerFoldersProperty = modifiedChangerFoldersProperty + directory;
+    				 if (iterator.hasNext()) {
+    					 modifiedChangerFoldersProperty = modifiedChangerFoldersProperty + ";";
+    				 }
+    				 
+    			 }
+    			 prefm.setPreference("application-changer-folder", modifiedChangerFoldersProperty);
+    		 }
     	 } catch (Exception e) {
     		 throw new WDConfigurationException("Error setting up the downloads folder. Error: " + e.getMessage());
     	 }    	 
