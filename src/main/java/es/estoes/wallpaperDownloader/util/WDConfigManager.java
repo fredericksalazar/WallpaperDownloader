@@ -73,7 +73,8 @@ public class WDConfigManager {
 		}
 	     PreferencesManager prefm = PreferencesManager.getInstance();
 	     Path appPath = Paths.get(WDUtilities.getAppPath());
-	     Path absoluteDownloadsPath = Paths.get(appPath.toString());
+	     Path absoluteDefaultDownloadsPath = Paths.get(appPath.toString());
+		 absoluteDefaultDownloadsPath = absoluteDefaultDownloadsPath.resolve(WDUtilities.DEFAULT_DOWNLOADS_DIRECTORY);
     	 try {
     		 File userConfigFile = new File(WDUtilities.getUserConfigurationFilePath());
 
@@ -83,19 +84,17 @@ public class WDConfigManager {
     				 LOG.info("There is no configuration file. Creating a new one. Please wait...");
     			 }
         		 // First time downloads directory (this is done for detecting snap package)
-        		 prefm.setPreference("application-first-time-downloads-folder", absoluteDownloadsPath.toString());
+        		 prefm.setPreference("application-first-time-downloads-folder", absoluteDefaultDownloadsPath.toString());
 
     			 // Downloads directory
         		 if (LOG.isInfoEnabled()) {
         		     LOG.info("Checking downloads directory...");
         		 }
-        		 absoluteDownloadsPath = absoluteDownloadsPath.resolve(WDUtilities.DEFAULT_DOWNLOADS_DIRECTORY);
-        		 String absoluteDownloadsPathString = absoluteDownloadsPath.toString();
+        		 String absoluteDownloadsPathString = absoluteDefaultDownloadsPath.toString();
     			 if (WDUtilities.isSnapPackage()) {
     				 // If the application has been installed via snap package, then current link is used
     				 // to point to the downloads directory because this reference won't change although
     				 // the version of the application is changed
-    				 // /home/egarcia/snap/wallpaperdownloader/18/.wallpaperdownloader/downloads
     				 String[] downloadsPathParts = absoluteDownloadsPathString.split(File.separator + WDUtilities.SNAP_KEY + File.separator + "wallpaperdownloader" + File.separator);
     				 absoluteDownloadsPathString = downloadsPathParts[0] + 
     						 							File.separator + 
@@ -245,31 +244,41 @@ public class WDConfigManager {
     			 // it, if user didn't move the downloads directory, it still will be the last one,
     			 // so permission errors will be thrown when the application tries to write a new
     			 // wallpaper.
+    			 String absoluteDownloadsPathString = prefm.getPreference("application-downloads-folder");
+
     			 if (WDUtilities.isSnapPackage()) {
     				 // It is assumed that wallpaperdownloader has been installed via snap
-    				 // Downloads directory is moved to the new directory just in case it is a new
-    				 // version
+    				 // Downloads directory is moved to the snap current directory if it is needed
     				 if (LOG.isInfoEnabled()) {
-    					 LOG.info("It has been detected that wallpaperdownloader application has been installed via snap package. Reconfiguring downloads directory just in case it is a new version and it is needed to move downloads directory to the new confinement space...");
+    					 LOG.info("It has been detected that wallpaperdownloader application has been installed via snap package. Reconfiguring downloads directory to current if it is needed...");
     				 }
-            		 absoluteDownloadsPath = absoluteDownloadsPath.resolve(WDUtilities.DEFAULT_DOWNLOADS_DIRECTORY);
-            		 File downloadsDirectory = new File(absoluteDownloadsPath.toString());
-
-            		 if (downloadsDirectory.exists()) {
-                		 // Setting the downloads path 
-                		 WDUtilities.setDownloadsPath(absoluteDownloadsPath.toString());
-                		 prefm.setPreference("application-downloads-folder", absoluteDownloadsPath.toString());
-            		 }  		 
-    			 } else {
-        			 WDUtilities.setDownloadsPath(prefm.getPreference("application-downloads-folder"));
-        			 absoluteDownloadsPath = absoluteDownloadsPath.resolve(prefm.getPreference("application-downloads-folder"));
+    				 if (absoluteDownloadsPathString.contains(WDUtilities.SNAP_KEY)) {
+    					 // The downloads directory is inside snap structure
+        				 if (!absoluteDownloadsPathString.contains("current")) {
+        					 // The downloads directory is changed to current directory
+            				 String[] downloadsPathParts = absoluteDownloadsPathString.split(File.separator + WDUtilities.SNAP_KEY + File.separator + "wallpaperdownloader" + File.separator);
+            				 absoluteDownloadsPathString = downloadsPathParts[0] + 
+            						 							File.separator + 
+            						 							WDUtilities.SNAP_KEY + 
+            						 							File.separator + 
+            						 							"wallpaperdownloader" + 
+            						 							File.separator +
+            						 							"current" + 
+            						 							downloadsPathParts[1].substring(downloadsPathParts[1].indexOf(File.separator), downloadsPathParts[1].length());
+        				 }
+    				 }
     			 }
-    			 LOG.info("Downloads directory -> " + prefm.getPreference("application-downloads-folder"));
+
+    			 // Finally, it sets the downloads directory
+    			 WDUtilities.setDownloadsPath(absoluteDownloadsPathString);
+    			 if (LOG.isInfoEnabled()) {
+        			 LOG.info("Downloads directory -> " + absoluteDownloadsPathString);
+    			 }
     		 }
 
     		 // First time downloads directory (this is done for detecting snap package)
     		 if (prefm.getPreference("application-first-time-downloads-folder").equals(PreferencesManager.DEFAULT_VALUE)) {
-    			 prefm.setPreference("application-first-time-downloads-folder", absoluteDownloadsPath.toString());
+    			 prefm.setPreference("application-first-time-downloads-folder", absoluteDefaultDownloadsPath.toString());
     		 }
 
     		 // Resolution
@@ -400,7 +409,7 @@ public class WDConfigManager {
 			 // Changer directory
 			 if (prefm.getPreference("application-changer-folder").equals(PreferencesManager.DEFAULT_VALUE)) {
 				 // Changer folder was not defined within configuration file
-				 prefm.setPreference("application-changer-folder", absoluteDownloadsPath.toString());
+				 prefm.setPreference("application-changer-folder", absoluteDefaultDownloadsPath.toString());
 			 }
 			 
 			 // Devianart provider
