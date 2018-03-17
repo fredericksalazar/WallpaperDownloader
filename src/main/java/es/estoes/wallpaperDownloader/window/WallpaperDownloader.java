@@ -2259,24 +2259,7 @@ public class WallpaperDownloader {
 
                 // Create a pop-up menu components -- END
 
-                trayIcon.setPopupMenu(popup);
-                
-                // Adding a new event. When the user clicks the left button the application window is restored again in the same
-                // state
-                MouseAdapter mouseAdapter = new MouseAdapter() {
-
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                    	int state = frame.getExtendedState();  
-                    	state = state & ~Frame.ICONIFIED;  
-                    	frame.setExtendedState(state);  
-                    	frame.setVisible(true);
-                    	
-                    	// Removing system tray icon
-                    	tray.remove(trayIcon);
-                    }
-                };
-                trayIcon.addMouseListener(mouseAdapter);
+                trayIcon.setPopupMenu(popup);                
                 trayIcon.setImageAutoSize(true);
                
                 try {
