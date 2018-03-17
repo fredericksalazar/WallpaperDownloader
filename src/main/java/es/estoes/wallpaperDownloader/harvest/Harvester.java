@@ -170,10 +170,9 @@ public class Harvester {
 		if (LOG.isInfoEnabled()) {
 			LOG.info("Starting harvesting process...");
 		}
-		
-		if (providers == null) {
-			initializeProviders();
-		}
+
+		// Initializing providers if it is neeeded
+		initializeProviders();
 		
 		if (providers.size() > 0) {
 			status = STATUS_ENABLED;

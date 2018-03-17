@@ -28,6 +28,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
+import javax.swing.Timer;
 import javax.swing.ToolTipManager;
 import javax.swing.border.Border;
 import javax.swing.event.HyperlinkEvent;
@@ -126,12 +127,12 @@ public class WallpaperDownloader {
 	public static Harvester harvester;
 	private ChangerDaemon changer;
 	private JTextField searchKeywords;
-	private JCheckBox wallhavenCheckbox;
-	private JCheckBox devianartCheckbox;
-	private JCheckBox bingCheckbox;
-	private JCheckBox socialWallpaperingCheckbox;
-	private JCheckBox socialWallpaperingIgnoreKeywordsCheckbox;
-	private JCheckBox wallpaperFusionCheckbox;
+	private static JCheckBox wallhavenCheckbox;
+	private static JCheckBox devianartCheckbox;
+	private static JCheckBox bingCheckbox;
+	private static JCheckBox socialWallpaperingCheckbox;
+	private static JCheckBox socialWallpaperingIgnoreKeywordsCheckbox;
+	private static JCheckBox wallpaperFusionCheckbox;
 	private JButton btnChangeResolution;
 	private JButton btnMinimize;
 	private JButton btnOpenDownloadsDirectory;
@@ -1248,8 +1249,14 @@ public class WallpaperDownloader {
 		// Changelog
 		try
 		{
-			// Version 3.0
-		    doc.insertString(0, i18nBundle.getString("about.changelog.features.3.0.title"), keyWord );
+			// Version 3.1
+		    doc.insertString(0, i18nBundle.getString("about.changelog.features.3.1.title"), keyWord );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.features.3.1.text"), null );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.3.1.title"), keyWord );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.3.1.text"), null );
+
+		    // Version 3.0
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.features.3.0.title"), keyWord );
 		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.features.3.0.text"), null );
 		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.3.0.title"), keyWord );
 		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.3.0.text"), null );
@@ -1370,11 +1377,7 @@ public class WallpaperDownloader {
 				}
 
 				// Restarting harvesting process if it is needed
-				harvester.stop();
-				harvester.start();
-				
-				// Repaint pause/resume buttons
-				pauseResumeRepaint();
+				restartDownloadingProcess();
 			}
 		});
 
@@ -1405,11 +1408,7 @@ public class WallpaperDownloader {
 				}
 
 				// Restarting harvesting process if it is needed
-				harvester.stop();
-				harvester.start();
-				
-				// Repaint pause/resume buttons
-				pauseResumeRepaint();
+				restartDownloadingProcess();
 			}
 		});
 
@@ -1438,11 +1437,7 @@ public class WallpaperDownloader {
 				}
 
 				// Restarting harvesting process if it is needed
-				harvester.stop();
-				harvester.start();
-				
-				// Repaint pause/resume buttons
-				pauseResumeRepaint();
+				restartDownloadingProcess();
 			}
 		});
 
@@ -1461,11 +1456,7 @@ public class WallpaperDownloader {
 				}
 
 				// Restarting harvesting process if it is needed
-				harvester.stop();
-				harvester.start();
-				
-				// Repaint pause/resume buttons
-				pauseResumeRepaint();
+				restartDownloadingProcess();
 			}
 		});
 
@@ -1482,9 +1473,7 @@ public class WallpaperDownloader {
 				}
 
 				// Restarting harvesting process if it is needed
-				harvester.stop();
-				harvester.start();
-
+				restartDownloadingProcess();
 			}
 		});
 
@@ -1501,11 +1490,7 @@ public class WallpaperDownloader {
 				}
 
 				// Restarting harvesting process if it is needed
-				harvester.stop();
-				harvester.start();
-				
-				// Repaint pause/resume buttons
-				pauseResumeRepaint();
+				restartDownloadingProcess();
 			}
 		});
 		
@@ -1524,13 +1509,7 @@ public class WallpaperDownloader {
 				}
 				
 				// Restarting harvesting process if it is needed
-				harvester.stop();
-				harvester.start();
-				
-				// Repaint pause/resume buttons
-				pauseResumeRepaint();
-
-			
+				restartDownloadingProcess();
 			}
 		});
 
@@ -2113,9 +2092,27 @@ public class WallpaperDownloader {
 	public static void restartDownloadingProcess() {
 		final PreferencesManager prefm = PreferencesManager.getInstance();
 		if (prefm.getPreference("downloading-process").equals(WDUtilities.APP_YES)) {
-			pauseDownloadingProcess();
-			resumeDownloadingProcess();
+			DialogManager info = new DialogManager(i18nBundle.getString("messages.harvesting.process.recalibrating"), 5000);
+			info.openDialog();
+			harvester.stop();
+			// The start of the harvester start be performed within a Swing Timer for avoiding to
+			// freeze the entire UI. The event will wait 5000 milliseconds in order to let the
+			// stopping process ends successfully and only will be done
+			// one time (setRepeats is false)
+			Timer timer = new Timer(5000, new ActionListener() {
+			    public void actionPerformed(ActionEvent evt) {
+			    	harvester.start();
+					// Repaint pause/resume buttons
+					pauseResumeRepaint();
+			    }    
+			});
+			timer.setRepeats(false);
+			timer.start();
+		} else {
+			// Repaint pause/resume buttons
+			pauseResumeRepaint();
 		}
+
 	}
 
 	/**
@@ -2858,9 +2855,10 @@ public class WallpaperDownloader {
 		return oldSystemTray;
 	}
 	
-	private void pauseResumeRepaint() {
+	private static void pauseResumeRepaint() {
 		PreferencesManager prefm = PreferencesManager.getInstance();		
-		if (harvester.getStatus() != Harvester.STATUS_DISABLED) {
+		if (harvester.getStatus() == Harvester.STATUS_ENABLED) {
+			// Harvesting process is enabled
 			// Checking downloading process
 			if (prefm.getPreference("downloading-process").equals(WDUtilities.APP_NO)) {
 				providersPanel.add(btnPlay);
@@ -2872,11 +2870,38 @@ public class WallpaperDownloader {
 				providersPanel.remove(lblRedSpot);
 			}
 		} else {
-			providersPanel.remove(btnPause);
-			providersPanel.remove(btnPlay);
-			providersPanel.add(lblRedSpot);
-			providersPanel.remove(lblGreenSpot);
+			// Harvesting process is disabled
+			if (areProvidersChecked()) {
+				// There are providers checked
+				providersPanel.remove(btnPause);
+				providersPanel.remove(lblGreenSpot);
+				providersPanel.add(btnPlay);
+				providersPanel.add(lblRedSpot);
+			} else {
+				// There aren't providers checked
+				providersPanel.remove(btnPause);
+				providersPanel.remove(btnPlay);
+				providersPanel.add(lblRedSpot);
+				providersPanel.remove(lblGreenSpot);
+			}
 		}
 		providersPanel.repaint();
+	}
+
+	/**
+	 * Checks if there are providers scheduled
+	 * @return
+	 */
+	private static boolean areProvidersChecked() {
+		boolean areProvidersChecked = false;
+		if (wallhavenCheckbox.isSelected() || 
+			devianartCheckbox.isSelected() || 
+			bingCheckbox.isSelected() || 
+			socialWallpaperingCheckbox.isSelected() || 
+			socialWallpaperingIgnoreKeywordsCheckbox.isSelected() || 
+			wallpaperFusionCheckbox.isSelected()) {
+			areProvidersChecked = true;
+		}
+		return areProvidersChecked;
 	}
 }
