@@ -2090,7 +2090,8 @@ public class WallpaperDownloader {
 	 */
 	public static void restartDownloadingProcess() {
 		final PreferencesManager prefm = PreferencesManager.getInstance();
-		if (prefm.getPreference("downloading-process").equals(WDUtilities.APP_YES)) {
+		if (prefm.getPreference("downloading-process").equals(WDUtilities.APP_YES) && 
+			areProvidersChecked() ) {
 			DialogManager info = new DialogManager(i18nBundle.getString("messages.harvesting.process.recalibrating"), 5000);
 			info.openDialog();
 			harvester.stop();
