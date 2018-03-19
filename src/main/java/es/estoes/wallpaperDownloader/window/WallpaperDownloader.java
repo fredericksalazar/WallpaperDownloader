@@ -130,7 +130,7 @@ public class WallpaperDownloader {
 	private static JCheckBox devianartCheckbox;
 	private static JCheckBox bingCheckbox;
 	private static JCheckBox socialWallpaperingCheckbox;
-	private static JCheckBox socialWallpaperingIgnoreKeywordsCheckbox;
+	private JCheckBox socialWallpaperingIgnoreKeywordsCheckbox;
 	private static JCheckBox wallpaperFusionCheckbox;
 	private JButton btnChangeResolution;
 	private JButton btnMinimize;
@@ -192,7 +192,7 @@ public class WallpaperDownloader {
 	private JButton btnRemoveDirectory;
 	private JPanel appSettingsPanel;
 	private JButton btnChooseWallpaper;
-	private JCheckBox dualMonitorCheckbox;
+	private static JCheckBox dualMonitorCheckbox;
 	private JLabel lblSearchTypeDualMonitor;
 	private JComboBox<ComboItem> searchTypeDualMonitorComboBox;
 	private JButton btnApplyResolution;
@@ -2090,12 +2090,23 @@ public class WallpaperDownloader {
 	 */
 	public static void restartDownloadingProcess() {
 		final PreferencesManager prefm = PreferencesManager.getInstance();
-		if (prefm.getPreference("downloading-process").equals(WDUtilities.APP_YES) && 
-			areProvidersChecked() ) {
-			DialogManager info = new DialogManager(i18nBundle.getString("messages.harvesting.process.recalibrating"), 5000);
-			info.openDialog();
+		if (prefm.getPreference("downloading-process").equals(WDUtilities.APP_YES)) {
+			// The recalibration dialog will be performed within a Swing Timer for avoiding to
+			// freeze the entire UI. The event will wait only 1 millisecond in order to display
+			// the message. The dialog is important in order to block the entire UI and avoid the
+			// user modifies anything else until the harvesting process is stopped and started
+			// again
+			// one time (setRepeats is false)
+			Timer dialogTimer = new Timer(1, new ActionListener() {
+			    public void actionPerformed(ActionEvent evt) {
+					DialogManager info = new DialogManager(i18nBundle.getString("messages.harvesting.process.recalibrating"), 5000);
+					info.openDialog();
+			    }    
+			});
+			dialogTimer.setRepeats(false);
+			dialogTimer.start();
 			harvester.stop();
-			// The start of the harvester start be performed within a Swing Timer for avoiding to
+			// The start of the harvester will be performed within a Swing Timer for avoiding to
 			// freeze the entire UI. The event will wait 5000 milliseconds in order to let the
 			// stopping process ends successfully and only will be done
 			// one time (setRepeats is false)
@@ -2881,7 +2892,7 @@ public class WallpaperDownloader {
 			devianartCheckbox.isSelected() || 
 			bingCheckbox.isSelected() || 
 			socialWallpaperingCheckbox.isSelected() || 
-			socialWallpaperingIgnoreKeywordsCheckbox.isSelected() || 
+			dualMonitorCheckbox.isSelected() || 
 			wallpaperFusionCheckbox.isSelected()) {
 			areProvidersChecked = true;
 		}
