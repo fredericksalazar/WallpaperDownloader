@@ -1575,8 +1575,10 @@ public class WallpaperDownloader {
 				providersPanel.remove(btnResetResolution);
 				providersPanel.add(btnChangeResolution);
 				providersPanel.repaint();
-				// Restarting downloading process
-				restartDownloadingProcess();
+				// Restarting downloading process if it is needed
+				if (areProvidersChecked()) {
+					restartDownloadingProcess();
+				}
 			}
 		});
 
@@ -1600,8 +1602,10 @@ public class WallpaperDownloader {
 		downloadPolicyComboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				prefm.setPreference("download-policy", new Integer(downloadPolicyComboBox.getSelectedIndex()).toString());
-				// Restarting downloading process
-				restartDownloadingProcess();
+				// Restarting downloading process if it is needed
+				if (areProvidersChecked()) {
+					restartDownloadingProcess();
+				}
 			}
 		});
 
@@ -1634,8 +1638,10 @@ public class WallpaperDownloader {
 				providersPanel.remove(btnApplyKeywords);
 				providersPanel.add(btnChangeKeywords);
 				providersPanel.repaint();
-				// Restarting downloading process
-				restartDownloadingProcess();
+				// Restarting downloading process if it is needed
+				if (areProvidersChecked()) {
+					restartDownloadingProcess();
+				}
 			}
 		});
 
@@ -1667,8 +1673,10 @@ public class WallpaperDownloader {
 				// Refreshing Disk Space Progress Bar
 				refreshProgressBar();
 				
-				// Restarting downloading process
-				restartDownloadingProcess();
+				// Restarting downloading process if it is needed
+				if (areProvidersChecked()) {
+					restartDownloadingProcess();
+				}
 			}
 		});
 
@@ -1679,8 +1687,10 @@ public class WallpaperDownloader {
 		timerComboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				prefm.setPreference("application-timer", new Integer(timerComboBox.getSelectedIndex()).toString());
-				// Restarting downloading process
-				restartDownloadingProcess();
+				// Restarting downloading process if it is needed
+				if (areProvidersChecked()) {
+					restartDownloadingProcess();
+				}
 			}
 		});
 
@@ -2849,6 +2859,9 @@ public class WallpaperDownloader {
 		return oldSystemTray;
 	}
 	
+	/**
+	 * Pauses and resumes the harvesting process and repaints the display if it is needed.
+	 */
 	private static void pauseResumeRepaint() {
 		PreferencesManager prefm = PreferencesManager.getInstance();		
 		if (harvester.getStatus() == Harvester.STATUS_ENABLED) {
@@ -2883,7 +2896,7 @@ public class WallpaperDownloader {
 	}
 
 	/**
-	 * Checks if there are providers scheduled
+	 * Checks if there are providers scheduled.
 	 * @return
 	 */
 	private static boolean areProvidersChecked() {
