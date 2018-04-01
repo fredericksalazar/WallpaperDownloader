@@ -201,6 +201,8 @@ public class WallpaperDownloader {
 	private JButton btnApplyKeywords;
 	private JLabel lblSystemTrayHelp;
 	private JPanel changerPanel;
+	private JSeparator settingsSeparator4;
+	private JSeparator settingsSeparator5;
 	
 	// Getters & Setters
 	public Harvester getHarvester() {
@@ -713,7 +715,7 @@ public class WallpaperDownloader {
 			ImageIcon icon = new ImageIcon(img);
 			lblMoveHelp = new JLabel(icon);
 			lblMoveHelp.setToolTipText(i18nBundle.getString("application.settings.move.help"));
-			lblMoveHelp.setBounds(244, 72, 30, 23);
+			lblMoveHelp.setBounds(251, 72, 30, 23);
 			appSettingsPanel.add(lblMoveHelp);
 		} catch (IOException ex) {
 			JLabel lblMoveHelp = new JLabel(i18nBundle.getString("application.settings.move.help"));
@@ -756,11 +758,11 @@ public class WallpaperDownloader {
 		appSettingsPanel.add(notificationsComboBox);
 
 		JLabel lblI18n = new JLabel(i18nBundle.getString("application.settings.i18n"));
-		lblI18n.setBounds(320, 143, 104, 19);
+		lblI18n.setBounds(12, 267, 104, 19);
 		appSettingsPanel.add(lblI18n);
 
 		i18nComboBox = new JComboBox<ComboItem>();
-		i18nComboBox.setBounds(435, 140, 134, 23);
+		i18nComboBox.setBounds(144, 265, 134, 23);
 		appSettingsPanel.add(i18nComboBox);
 
 		startMinimizedCheckBox = new JCheckBox(i18nBundle.getString("application.settings.start.minimized"));
@@ -772,11 +774,11 @@ public class WallpaperDownloader {
 		appSettingsPanel.add(settingsSeparator3);
 		
 		JLabel lblTimeToMinimize = new JLabel(i18nBundle.getString("application.settings.time.minimize"));
-		lblTimeToMinimize.setBounds(194, 175, 126, 19);
+		lblTimeToMinimize.setBounds(12, 201, 126, 19);
 		appSettingsPanel.add(lblTimeToMinimize);
 		
 		timeToMinimizeComboBox = new JComboBox<ComboItem>();
-		timeToMinimizeComboBox.setBounds(317, 173, 95, 24);
+		timeToMinimizeComboBox.setBounds(144, 199, 134, 24);
 		appSettingsPanel.add(timeToMinimizeComboBox);
 		
 		btnChangeSize = new JButton();
@@ -791,11 +793,19 @@ public class WallpaperDownloader {
 		}
 		appSettingsPanel.add(btnChangeSize);
 		
+		settingsSeparator4 = new JSeparator();
+		settingsSeparator4.setBounds(12, 228, 631, 2);
+		appSettingsPanel.add(settingsSeparator4);
+		
+		settingsSeparator5 = new JSeparator();
+		settingsSeparator5.setBounds(12, 260, 631, 2);
+		appSettingsPanel.add(settingsSeparator5);
+		
 		// Only if system tray is supported, user will be able to minimize the application into the
 		// system tray
 		if (SystemTray.isSupported()) {
 			stIconCheckBox = new JCheckBox(i18nBundle.getString("application.settings.system.tray.icon"));
-			stIconCheckBox.setBounds(435, 173, 144, 23);
+			stIconCheckBox.setBounds(13, 234, 225, 26);
 			appSettingsPanel.add(stIconCheckBox);
 			
 			lblSystemTrayHelp = new JLabel((Icon) null);
@@ -804,7 +814,7 @@ public class WallpaperDownloader {
 				ImageIcon icon = new ImageIcon(img);
 				lblSystemTrayHelp = new JLabel(icon);
 				lblSystemTrayHelp.setToolTipText(i18nBundle.getString("application.settings.system.tray.icon.help"));
-				lblSystemTrayHelp.setBounds(574, 173, 30, 23);
+				lblSystemTrayHelp.setBounds(252, 234, 30, 23);
 				appSettingsPanel.add(lblSystemTrayHelp);
 				
 			} catch (IOException ex) {
@@ -834,9 +844,6 @@ public class WallpaperDownloader {
 			tabbedPane.addTab(i18nBundle.getString("changer.title"), null, changerPanel, null);
 			changerPanel.setLayout(null);
 
-			JSeparator settingsSeparator4 = new JSeparator();
-			settingsSeparator4.setBounds(12, 312, 631, 2);
-			changerPanel.add(settingsSeparator4);		
 			JLabel lblChanger = new JLabel(i18nBundle.getString("changer.change.every"));
 			lblChanger.setBounds(12, 4, 179, 19);
 			changerPanel.add(lblChanger);
@@ -850,6 +857,10 @@ public class WallpaperDownloader {
 			changerPanel.add(lblChangerDirectory);
 
 			if (WDUtilities.isGnomeish()) {
+				JSeparator changerSeparator1 = new JSeparator();
+				changerSeparator1.setBounds(12, 312, 631, 2);
+				changerPanel.add(changerSeparator1);		
+
 				multiMonitorCheckBox = new JCheckBox(i18nBundle.getString("changer.change.multimonitor"));
 				multiMonitorCheckBox.setBounds(11, 315, 281, 23);
 				changerPanel.add(multiMonitorCheckBox);
