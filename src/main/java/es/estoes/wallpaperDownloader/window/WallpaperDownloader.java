@@ -200,6 +200,7 @@ public class WallpaperDownloader {
 	private JButton btnChangeKeywords;
 	private JButton btnApplyKeywords;
 	private JLabel lblSystemTrayHelp;
+	private JPanel changerPanel;
 	
 	// Getters & Setters
 	public Harvester getHarvester() {
@@ -823,66 +824,35 @@ public class WallpaperDownloader {
 			btnApplySize.setText(i18nBundle.getString("providers.save.changes"));
 			btnApplySize.setBounds(376, 26, 131, 25);
 		}
+
+		// Only for DE which allows to change
 		// Only those desktop environment programmed to be changeable will display this option
 		if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
+			// Automatic changer (tab)
+			changerPanel = new JPanel();
+			changerPanel.setBorder(null);
+			tabbedPane.addTab(i18nBundle.getString("changer.title"), null, changerPanel, null);
+			changerPanel.setLayout(null);
 
 			JSeparator settingsSeparator4 = new JSeparator();
-			settingsSeparator4.setBounds(12, 199, 631, 2);
-			appSettingsPanel.add(settingsSeparator4);		
-			JLabel lblChanger = new JLabel(i18nBundle.getString("application.settings.change.every"));
-			lblChanger.setBounds(12, 208, 179, 19);
-			appSettingsPanel.add(lblChanger);
+			settingsSeparator4.setBounds(12, 312, 631, 2);
+			changerPanel.add(settingsSeparator4);		
+			JLabel lblChanger = new JLabel(i18nBundle.getString("changer.change.every"));
+			lblChanger.setBounds(12, 4, 179, 19);
+			changerPanel.add(lblChanger);
 			
 			changerComboBox = new JComboBox<ComboItem>();
-			changerComboBox.setBounds(192, 210, 94, 19);
-			appSettingsPanel.add(changerComboBox);
+			changerComboBox.setBounds(192, 6, 94, 19);
+			changerPanel.add(changerComboBox);
 
-			JLabel lblChangerDirectory = new JLabel(i18nBundle.getString("application.settings.change.directory"));
-			lblChangerDirectory.setBounds(12, 237, 134, 19);
-			appSettingsPanel.add(lblChangerDirectory);
-			
-			
-			btnAddDirectory = new JButton();
-			try {
-				Image img = ImageIO.read(getClass().getResource("/images/icons/add_16px_icon.png"));
-				btnAddDirectory.setIcon(new ImageIcon(img));
-				btnAddDirectory.setToolTipText(i18nBundle.getString("application.settings.change.add.directory"));
-				btnAddDirectory.setBounds(561, 266, 34, 33);
-			} catch (IOException ex) {
-				btnAddDirectory.setToolTipText(i18nBundle.getString("application.settings.change.add.directory"));
-				btnAddDirectory.setBounds(561, 274, 34, 33);
-			}		
-			
-			btnRemoveDirectory = new JButton();
-			try {
-				Image img = ImageIO.read(getClass().getResource("/images/icons/remove_16px_icon.png"));
-				btnRemoveDirectory.setIcon(new ImageIcon(img));
-				btnRemoveDirectory.setToolTipText(i18nBundle.getString("application.settings.change.remove.directory"));
-				btnRemoveDirectory.setBounds(561, 311, 34, 33);
-			} catch (IOException ex) {
-				btnRemoveDirectory.setToolTipText(i18nBundle.getString("application.settings.change.remove.directory"));
-				btnRemoveDirectory.setBounds(561, 319, 34, 33);
-			}		
-			
-			JScrollPane listDirectoriesScrollPane = new JScrollPane();
-			listDirectoriesScrollPane.setBounds(143, 244, 406, 121);
-			appSettingsPanel.add(listDirectoriesScrollPane);
-			
-			listDirectoriesToWatch = new JList<String>();
-			listDirectoriesScrollPane.setColumnHeaderView(listDirectoriesToWatch);
-			listDirectoriesToWatch.setBackground(UIManager.getColor("Button.background"));
-			listDirectoriesToWatch.setToolTipText(i18nBundle.getString("application.settings.change.directory.help"));
-			//
-			listDirectoriesToWatch.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-			listDirectoriesToWatch.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-			listDirectoriesToWatch.setVisibleRowCount(-1);
-			
-			listDirectoriesScrollPane.setViewportView(listDirectoriesToWatch);
-			
+			JLabel lblChangerDirectory = new JLabel(i18nBundle.getString("changer.change.directory"));
+			lblChangerDirectory.setBounds(12, 35, 537, 19);
+			changerPanel.add(lblChangerDirectory);
+
 			if (WDUtilities.isGnomeish()) {
-				multiMonitorCheckBox = new JCheckBox(i18nBundle.getString("application.settings.change.multimonitor"));
-				multiMonitorCheckBox.setBounds(316, 208, 281, 23);
-				appSettingsPanel.add(multiMonitorCheckBox);
+				multiMonitorCheckBox = new JCheckBox(i18nBundle.getString("changer.change.multimonitor"));
+				multiMonitorCheckBox.setBounds(11, 315, 281, 23);
+				changerPanel.add(multiMonitorCheckBox);
 				
 				/**
 				 * multiMonitorCheckBox Action Listener.
@@ -903,6 +873,43 @@ public class WallpaperDownloader {
 				});
 				
 			}
+
+			btnAddDirectory = new JButton();
+			try {
+				Image img = ImageIO.read(getClass().getResource("/images/icons/add_16px_icon.png"));
+				btnAddDirectory.setIcon(new ImageIcon(img));
+				btnAddDirectory.setToolTipText(i18nBundle.getString("changer.change.add.directory"));
+				btnAddDirectory.setBounds(561, 136, 34, 33);
+			} catch (IOException ex) {
+				btnAddDirectory.setToolTipText(i18nBundle.getString("changer.change.add.directory"));
+				btnAddDirectory.setBounds(561, 274, 34, 33);
+			}		
+			changerPanel.add(btnAddDirectory);
+			btnRemoveDirectory = new JButton();
+			try {
+				Image img = ImageIO.read(getClass().getResource("/images/icons/remove_16px_icon.png"));
+				btnRemoveDirectory.setIcon(new ImageIcon(img));
+				btnRemoveDirectory.setToolTipText(i18nBundle.getString("changer.change.remove.directory"));
+				btnRemoveDirectory.setBounds(561, 181, 34, 33);
+			} catch (IOException ex) {
+				btnRemoveDirectory.setToolTipText(i18nBundle.getString("changer.change.remove.directory"));
+				btnRemoveDirectory.setBounds(561, 319, 34, 33);
+			}		
+			changerPanel.add(btnRemoveDirectory);
+			JScrollPane listDirectoriesScrollPane = new JScrollPane();
+			listDirectoriesScrollPane.setBounds(143, 55, 406, 250);
+			changerPanel.add(listDirectoriesScrollPane);
+			
+			listDirectoriesToWatch = new JList<String>();
+			listDirectoriesScrollPane.setColumnHeaderView(listDirectoriesToWatch);
+			listDirectoriesToWatch.setBackground(UIManager.getColor("Button.background"));
+			listDirectoriesToWatch.setToolTipText(i18nBundle.getString("changer.change.directory.help"));
+			//
+			listDirectoriesToWatch.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+			listDirectoriesToWatch.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+			listDirectoriesToWatch.setVisibleRowCount(-1);
+			
+			listDirectoriesScrollPane.setViewportView(listDirectoriesToWatch);
 												
 			/**
 			 * btnAddDirectory Action Listener.
@@ -950,12 +957,11 @@ public class WallpaperDownloader {
 					}
 					prefm.setPreference("application-changer-folder", modifiedChangerFoldersProperty);
 					if (listDirectoriesModel.size() <= 1) {
-						appSettingsPanel.remove(btnRemoveDirectory);
-						appSettingsPanel.repaint();
+						changerPanel.remove(btnRemoveDirectory);
+						changerPanel.repaint();
 					}
 				}
 			});
-
 		}
 
 		// Downloads Directory (tab)
@@ -2707,12 +2713,12 @@ public class WallpaperDownloader {
 
 		// Changer
 		if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
-			changerComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.change.every.0"), "0"));
-			changerComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.change.every.1"), "1"));
-			changerComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.change.every.2"), "2"));
-			changerComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.change.every.3"), "3"));
-			changerComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.change.every.4"), "4"));
-			changerComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.change.every.5"), "5"));
+			changerComboBox.addItem(new ComboItem(i18nBundle.getString("changer.change.every.0"), "0"));
+			changerComboBox.addItem(new ComboItem(i18nBundle.getString("changer.change.every.1"), "1"));
+			changerComboBox.addItem(new ComboItem(i18nBundle.getString("changer.change.every.2"), "2"));
+			changerComboBox.addItem(new ComboItem(i18nBundle.getString("changer.change.every.3"), "3"));
+			changerComboBox.addItem(new ComboItem(i18nBundle.getString("changer.change.every.4"), "4"));
+			changerComboBox.addItem(new ComboItem(i18nBundle.getString("changer.change.every.5"), "5"));
 			changerComboBox.setSelectedIndex(new Integer(prefm.getPreference("application-changer")));
 			
 			// Multi monitor support
@@ -2732,10 +2738,11 @@ public class WallpaperDownloader {
 				listDirectoriesModel.addElement(changerFolders[i]);
 			}
 			listDirectoriesToWatch.setModel(listDirectoriesModel);
-			appSettingsPanel.add(btnAddDirectory);
-			if (listDirectoriesModel.size() > 1) {
-				appSettingsPanel.add(btnRemoveDirectory);
-			}
+			// TODO: Remove the comment
+//			changerPanel.add(btnAddDirectory);
+//			if (listDirectoriesModel.size() > 1) {
+//				changerPanel.add(btnRemoveDirectory);
+//			}
 		}
 
 		// Directory size
