@@ -463,7 +463,44 @@ public class WDConfigManager {
         			 }       			 
         		 }        		  
     		 }
-    		 
+
+    		 // Copying wallpaperdownloader.desktop file to default app path if it doesn't exist
+    		 destFile = new File(WDUtilities.getAppPath() + WDUtilities.URL_SLASH + WDUtilities.WD_DESKTOP_FILE);
+    		 if (!destFile.exists()) {
+        		 try {
+        			 InputStream inputStream = null;
+        			if (WDUtilities.isSnapPackage()) {
+         		        inputStream = WDConfigManager.class.getResourceAsStream(WDUtilities.DESKTOP_LOCATION + WDUtilities.WD_SNAP_DESKTOP_FILE);
+        			} else {
+         		        inputStream = WDConfigManager.class.getResourceAsStream(WDUtilities.DESKTOP_LOCATION + WDUtilities.WD_DESKTOP_FILE);
+        			}
+     		        OutputStream outputStream = FileUtils.openOutputStream(destFile);
+     		        IOUtils.copy(inputStream, outputStream);
+     		        inputStream.close();
+     		        outputStream.close();
+        		 } catch (Exception exception) {
+        			 if (LOG.isInfoEnabled()) {
+        				 LOG.error("wallpaperdownloader.desktop file couldn't be extracted. Error: " + exception.getMessage());
+        			 }       			 
+        		 }        		  
+    		 }
+
+    		 // Copying wallpaperdownloader.svg file to default app path if it doesn't exist
+    		 destFile = new File(WDUtilities.getAppPath() + WDUtilities.URL_SLASH + WDUtilities.WD_ICON_FILE);
+    		 if (!destFile.exists()) {
+        		 try {
+        			InputStream inputStream = WDConfigManager.class.getResourceAsStream(WDUtilities.ICON_LOCATION + WDUtilities.WD_ICON_FILE);;
+     		        OutputStream outputStream = FileUtils.openOutputStream(destFile);
+     		        IOUtils.copy(inputStream, outputStream);
+     		        inputStream.close();
+     		        outputStream.close();
+        		 } catch (Exception exception) {
+        			 if (LOG.isInfoEnabled()) {
+        				 LOG.error("wallpaperdownloader.svg file couldn't be extracted. Error: " + exception.getMessage());
+        			 }       			 
+        		 }        		  
+    		 }
+
     		 // Performing sanitation in directories set for changer
     		 // (only for snap installations)
     		 if (WDUtilities.isSnapPackage()) {

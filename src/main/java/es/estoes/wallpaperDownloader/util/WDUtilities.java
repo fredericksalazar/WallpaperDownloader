@@ -106,6 +106,11 @@ public class WDUtilities {
 	public static final String IMG_JPG_SUFFIX = "jpg";
 	public static final String IMG_JEPG_SUFFIX = "jpeg";
 	public static final String IMG_PNG_SUFFIX = "png";
+	public static final String WD_DESKTOP_FILE = "wallpaperdownloader.desktop";
+	public static final String WD_SNAP_DESKTOP_FILE = "snap.wallpaperdownloader.desktop";
+	public static final String DESKTOP_LOCATION = "/desktop/";
+	public static final String WD_ICON_FILE = "wallpaperdownloader.svg";
+	public static final String ICON_LOCATION = "/images/desktop/";
 
 	// Attributes
 	private static String appPath;
@@ -904,6 +909,21 @@ public class WDUtilities {
     		LOG.error("Multi monitor mode couldn't be changed. Error: " + exception.getMessage());  
     	  }
       }	
+	}
+
+	/**
+	 * Gets the path where the autostart file should be located within Linux systems.
+	 * @return autostart file path
+	 */
+	public static String getAutostartFilePath() {
+		String path = Paths.get(System.getProperty("user.home")).toString();
+		if (WDUtilities.isSnapPackage()) {
+			String[] pathParts = path.split(File.separator + WDUtilities.SNAP_KEY + File.separator);
+			path = pathParts[0] + File.separator + ".config" + File.separator + "autostart" + File.separator;
+		} else {
+			path = path + File.separator + ".config" + File.separator + "autostart" + File.separator;
+		}
+		return path;
 	}
 
 }

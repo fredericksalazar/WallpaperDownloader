@@ -203,6 +203,7 @@ public class WallpaperDownloader {
 	private JPanel changerPanel;
 	private JSeparator settingsSeparator4;
 	private JSeparator settingsSeparator5;
+	private JCheckBox initOnBootCheckBox;
 	
 	// Getters & Setters
 	public Harvester getHarvester() {
@@ -835,10 +836,17 @@ public class WallpaperDownloader {
 			btnApplySize.setBounds(376, 26, 131, 25);
 		}
 
-		// Only for DE which allows to change
-		// Only those desktop environment programmed to be changeable will display this option
+		JSeparator settingsSeparator6 = new JSeparator();
+		settingsSeparator6.setBounds(12, 293, 631, 2);
+		appSettingsPanel.add(settingsSeparator6);
+		
+		initOnBootCheckBox = new JCheckBox(i18nBundle.getString("application.settings.starts.on.boot"));
+		initOnBootCheckBox.setBounds(12, 298, 631, 23);
+		appSettingsPanel.add(initOnBootCheckBox);
+
+		// Automatic changer (tab)
+		// Only visible for DE which allows automated changer
 		if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
-			// Automatic changer (tab)
 			changerPanel = new JPanel();
 			changerPanel.setBorder(null);
 			tabbedPane.addTab(i18nBundle.getString("changer.title"), null, changerPanel, null);
@@ -895,7 +903,7 @@ public class WallpaperDownloader {
 				btnAddDirectory.setToolTipText(i18nBundle.getString("changer.change.add.directory"));
 				btnAddDirectory.setBounds(561, 274, 34, 33);
 			}		
-			changerPanel.add(btnAddDirectory);
+
 			btnRemoveDirectory = new JButton();
 			try {
 				Image img = ImageIO.read(getClass().getResource("/images/icons/remove_16px_icon.png"));
@@ -906,7 +914,7 @@ public class WallpaperDownloader {
 				btnRemoveDirectory.setToolTipText(i18nBundle.getString("changer.change.remove.directory"));
 				btnRemoveDirectory.setBounds(561, 319, 34, 33);
 			}		
-			changerPanel.add(btnRemoveDirectory);
+
 			JScrollPane listDirectoriesScrollPane = new JScrollPane();
 			listDirectoriesScrollPane.setBounds(143, 55, 406, 250);
 			changerPanel.add(listDirectoriesScrollPane);
@@ -2721,7 +2729,24 @@ public class WallpaperDownloader {
 				stIconCheckBox.setSelected(false);
 			}
 		}
-
+		
+		// Starts on boot
+		if (WDUtilities.getOperatingSystem().equals(WDUtilities.OS_WINDOWS) || 
+			WDUtilities.getOperatingSystem().equals(WDUtilities.OS_WINDOWS_7) || 
+			WDUtilities.getOperatingSystem().equals(WDUtilities.OS_WINDOWS_10)) {
+			// Windows users won't be able to start the application when the system is booted checking
+			// the GUI option
+			initOnBootCheckBox.setEnabled(false);
+		} else {
+			String autostartFilePath = WDUtilities.getAutostartFilePath();
+			File autostartFile = new File(autostartFilePath + WDUtilities.WD_DESKTOP_FILE);
+			if (autostartFile.exists()) {
+				initOnBootCheckBox.setSelected(true);
+			} else {
+				initOnBootCheckBox.setSelected(false);
+			}
+		}
+		
 		// Changer
 		if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
 			changerComboBox.addItem(new ComboItem(i18nBundle.getString("changer.change.every.0"), "0"));
@@ -2749,11 +2774,10 @@ public class WallpaperDownloader {
 				listDirectoriesModel.addElement(changerFolders[i]);
 			}
 			listDirectoriesToWatch.setModel(listDirectoriesModel);
-			// TODO: Remove the comment
-//			changerPanel.add(btnAddDirectory);
-//			if (listDirectoriesModel.size() > 1) {
-//				changerPanel.add(btnRemoveDirectory);
-//			}
+			changerPanel.add(btnAddDirectory);
+			if (listDirectoriesModel.size() > 1) {
+				changerPanel.add(btnRemoveDirectory);
+			}
 		}
 
 		// Directory size

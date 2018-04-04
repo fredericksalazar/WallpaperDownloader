@@ -1,0 +1,22 @@
+[Desktop Entry]
+Categories=Utility;
+Comment[es]=Gestiona y descarga automáticamente fondos de pantalla desde Internet
+Comment=Download and manage wallpapers automatically from the Internet
+Exec=/usr/bin/wallpaperdownloader.sh
+GenericName[en_US]=Wallpaper Downloader
+GenericName=Wallpaper Downloader
+Icon=${HOME}/.wallpaperdownloader/wallpaperdownloader.svg
+Keywords=wallpaper;gallery;internet;download;changer;picture;desktop;image
+MimeType=
+Name[en_US]=WallpaperDownloader
+Name=WallpaperDownloader
+Path=
+StartupNotify=true
+Terminal=false
+TerminalOptions=
+Type=Application
+Version=3.1
+X-DBUS-ServiceName=
+X-DBUS-StartupType=
+X-KDE-SubstituteUID=false
+X-KDE-Username=

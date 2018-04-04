@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=3.1
+Name=WallpaperDownloader
+GenericName=Wallpaper Downloader
+Comment[es]=Gestiona y descarga automáticamente fondos de pantalla desde Internet
+Comment=Download, manage and change your wallpapers automatically from the Internet
+Keywords=wallpaper;gallery;internet;download;changer;picture;desktop;image
+Exec=wallpaperdownloader
+Icon=${HOME}/snap/wallpaperdownloader/current/.wallpaperdownloader/wallpaperdownloader.svg
+Terminal=false
+Type=Application
+Categories=Utility;
