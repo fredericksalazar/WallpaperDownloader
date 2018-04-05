@@ -80,6 +80,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.NumberFormat;
 import javax.swing.JLabel;
+
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
@@ -2066,6 +2068,48 @@ public class WallpaperDownloader {
 					}
 				});
 			}
+
+			/**
+			 * initOnBootCheckBox Action Listener.
+			 */
+			// Clicking event
+			initOnBootCheckBox.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent evt) {
+					// TODO:
+					if (initOnBootCheckBox.isSelected()) {
+						// It is necessary to copy wallpaperdownloader.desktop file to ~/.config/autostart
+						File srcFile = new File(WDUtilities.getAppPath() + File.separator + WDUtilities.WD_DESKTOP_FILE);
+						File destFile = new File(WDUtilities.getAutostartFilePath() + File.separator + WDUtilities.WD_DESKTOP_FILE);
+						try {
+							FileUtils.copyFile(srcFile, destFile);
+							DialogManager info = new DialogManager(i18nBundle.getString("messages.autostart.ok"), 2000);
+							info.openDialog();
+						} catch (IOException exception) {
+							initOnBootCheckBox.setSelected(false);
+							if (LOG.isInfoEnabled()) {
+								LOG.error("wallpaperdownloader.sh couldn't be copied. Error: " + exception.getMessage());
+							}
+							DialogManager info = new DialogManager(i18nBundle.getString("messages.autostart.ko"), 2000);
+							info.openDialog();
+						}
+					} else {
+						// It is necessary to remove wallpaperdownloader.desktop file from ~/.config/autostart
+						File destFile = new File(WDUtilities.getAutostartFilePath() + File.separator + WDUtilities.WD_DESKTOP_FILE);
+						try {
+							FileUtils.forceDelete(destFile);
+							DialogManager info = new DialogManager(i18nBundle.getString("messages.autostart.removed.ok"), 2000);
+							info.openDialog();
+						} catch (IOException exception) {
+							initOnBootCheckBox.setSelected(true);
+							if (LOG.isInfoEnabled()) {
+								LOG.error("wallpaperdownloader.sh couldn't be copied. Error: " + exception.getMessage());
+							}
+							DialogManager info = new DialogManager(i18nBundle.getString("messages.autostart.ko"), 2000);
+							info.openDialog();
+						}
+					}
+				}
+			});
 	}
 
 	/**
