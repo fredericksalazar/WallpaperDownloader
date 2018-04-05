@@ -456,6 +456,7 @@ public class WDConfigManager {
      		        OutputStream outputStream = FileUtils.openOutputStream(destFile);
      		        IOUtils.copy(inputStream, outputStream);
      		        inputStream.close();
+     		        outputStream.flush();
      		        outputStream.close();
         		 } catch (Exception exception) {
         			 if (LOG.isInfoEnabled()) {
@@ -477,6 +478,7 @@ public class WDConfigManager {
      		        OutputStream outputStream = FileUtils.openOutputStream(destFile);
      		        IOUtils.copy(inputStream, outputStream);
      		        inputStream.close();
+     		        outputStream.flush();
      		        outputStream.close();
         		 } catch (Exception exception) {
         			 if (LOG.isInfoEnabled()) {
@@ -493,6 +495,7 @@ public class WDConfigManager {
      		        OutputStream outputStream = FileUtils.openOutputStream(destFile);
      		        IOUtils.copy(inputStream, outputStream);
      		        inputStream.close();
+     		        outputStream.flush();
      		        outputStream.close();
         		 } catch (Exception exception) {
         			 if (LOG.isInfoEnabled()) {
