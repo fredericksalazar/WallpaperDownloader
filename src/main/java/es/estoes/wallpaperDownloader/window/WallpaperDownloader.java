@@ -561,7 +561,7 @@ public class WallpaperDownloader {
 		
 		widthResolution = new JFormattedTextField((Format) null);
 		widthResolution.setColumns(4);
-		widthResolution.setBounds(100, 42, 53, 27);
+		widthResolution.setBounds(100, 41, 53, 28);
 		providersPanel.add(widthResolution);
 		
 		lblX = new JLabel("x");
@@ -570,7 +570,7 @@ public class WallpaperDownloader {
 		
 		heigthResolution = new JFormattedTextField((Format) null);
 		heigthResolution.setColumns(4);
-		heigthResolution.setBounds(159, 42, 53, 27);
+		heigthResolution.setBounds(159, 41, 53, 28);
 		providersPanel.add(heigthResolution);
 		
 		btnChangeResolution = new JButton();
@@ -700,7 +700,7 @@ public class WallpaperDownloader {
 		
 		downloadDirectorySize = new JFormattedTextField(integerFormat);
 		downloadDirectorySize.setColumns(4);
-		downloadDirectorySize.setBounds(313, 30, 56, 27);
+		downloadDirectorySize.setBounds(313, 28, 56, 28);
 		appSettingsPanel.add(downloadDirectorySize);
 		
 		JSeparator settingsSeparator1 = new JSeparator();
