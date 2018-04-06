@@ -22,6 +22,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -484,7 +487,15 @@ public class WDConfigManager {
         			 if (LOG.isInfoEnabled()) {
         				 LOG.error("wallpaperdownloader.desktop file couldn't be extracted. Error: " + exception.getMessage());
         			 }       			 
-        		 }        		  
+        		 }
+        		 
+        		 // Adding icon path to wallpaperdownloader.desktop file
+        		 Path wdDesktopPath = Paths.get(WDUtilities.getAppPath() + WDUtilities.URL_SLASH + WDUtilities.WD_DESKTOP_FILE);
+        		 Charset charset = StandardCharsets.UTF_8;
+
+        		 String content = new String(Files.readAllBytes(wdDesktopPath), charset);
+        		 content = content.replaceAll("PATH", WDUtilities.getAppPath());
+        		 Files.write(wdDesktopPath, content.getBytes(charset));
     		 }
 
     		 // Copying wallpaperdownloader.svg file to default app path if it doesn't exist
