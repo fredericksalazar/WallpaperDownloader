@@ -494,7 +494,7 @@ public class WDConfigManager {
         		 Charset charset = StandardCharsets.UTF_8;
 
         		 String content = new String(Files.readAllBytes(wdDesktopPath), charset);
-        		 content = content.replaceAll("PATH", WDUtilities.getAppPath());
+        		 content = content.replaceAll("PATH", WDUtilities.sanitazeSnapDirectory(WDUtilities.getAppPath()));
         		 Files.write(wdDesktopPath, content.getBytes(charset));
     		 }
 
@@ -524,23 +524,7 @@ public class WDConfigManager {
     			 Iterator<String> iterator = changerFoldersList.iterator();
     			 String modifiedChangerFoldersProperty = "";
     			 while (iterator.hasNext()) {
-    				 String directory = iterator.next();
-    				 if (directory.contains(WDUtilities.SNAP_KEY)) {
-    					 // The directory is inside snap structure
-        				 if (!directory.contains("current")) {
-        					 // The directory is changed to current directory
-            				 String[] directoryParts = directory.split(File.separator + WDUtilities.SNAP_KEY + File.separator + "wallpaperdownloader" + File.separator);
-            				 directory = directoryParts[0] + 
-            						 							File.separator + 
-            						 							WDUtilities.SNAP_KEY + 
-            						 							File.separator + 
-            						 							"wallpaperdownloader" + 
-            						 							File.separator +
-            						 							"current" + 
-            						 							directoryParts[1].substring(directoryParts[1].indexOf(File.separator), directoryParts[1].length());
-            				 
-        				 }
-    				 }
+    				 String directory = WDUtilities.sanitazeSnapDirectory(iterator.next());
     				 modifiedChangerFoldersProperty = modifiedChangerFoldersProperty + directory;
     				 if (iterator.hasNext()) {
     					 modifiedChangerFoldersProperty = modifiedChangerFoldersProperty + ";";

@@ -926,4 +926,30 @@ public class WDUtilities {
 		return path;
 	}
 
+	/**
+	 * Sanitazes a directory if it is within snap structure.
+	 * Snap version will be changed to current directory
+	 * @param directory
+	 * @return sanitazed directory
+	 */
+	public static String sanitazeSnapDirectory(String directory) {
+		 if (directory.contains(WDUtilities.SNAP_KEY)) {
+			 // The directory is inside snap structure
+			 if (!directory.contains("current")) {
+				 // The directory is changed to current directory
+				 String[] directoryParts = directory.split(File.separator + WDUtilities.SNAP_KEY + File.separator + "wallpaperdownloader" + File.separator);
+				 directory = directoryParts[0] + 
+						 							File.separator + 
+						 							WDUtilities.SNAP_KEY + 
+						 							File.separator + 
+						 							"wallpaperdownloader" + 
+						 							File.separator +
+						 							"current" + 
+						 							directoryParts[1].substring(directoryParts[1].indexOf(File.separator), directoryParts[1].length());
+				 
+			 }
+		 }		
+		 return directory;
+	}
+
 }
