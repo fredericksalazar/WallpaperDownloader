@@ -931,11 +931,14 @@ public class WDUtilities {
 	 * @return sanitazed directory
 	 */
 	public static String sanitazeSnapDirectory(String directory) {
+		LOG.info("DIRECTORY: " + directory);
 		 if (directory.contains(WDUtilities.SNAP_KEY)) {
 			 // The directory is inside snap structure
 			 if (!directory.contains("current")) {
 				 // The directory is changed to current directory
 				 String[] directoryParts = directory.split(File.separator + WDUtilities.SNAP_KEY + File.separator + "wallpaperdownloader" + File.separator);
+					LOG.info("DIRECTORY PART 0: " + directoryParts[0]);
+					LOG.info("DIRECTORY PART 1: " + directoryParts[1]);
 				 directory = directoryParts[0] + 
 						 							File.separator + 
 						 							WDUtilities.SNAP_KEY + 
