@@ -945,11 +945,13 @@ public class WDUtilities {
 						 							File.separator + 
 						 							"wallpaperdownloader" + 
 						 							File.separator +
-						 							"current" + 
-						 							directoryParts[1].substring(directoryParts[1].indexOf(File.separator), directoryParts[1].length());
-				 
+						 							"current";
+				 if (directoryParts[1].contains(File.separator)) {
+					 directory = directory + directoryParts[1].substring(directoryParts[1].indexOf(File.separator), directoryParts[1].length());
+				 }
 			 }
 		 }		
+			LOG.info("DIRECTORY SANITAZED: " + directory);
 		 return directory;
 	}
 
