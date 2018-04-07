@@ -918,11 +918,9 @@ public class WDUtilities {
 	public static String getAutostartFilePath() {
 		String path = Paths.get(System.getProperty("user.home")).toString();
 		if (WDUtilities.isSnapPackage()) {
-			String[] pathParts = path.split(File.separator + WDUtilities.SNAP_KEY + File.separator);
-			path = pathParts[0] + File.separator + ".config" + File.separator + "autostart" + File.separator;
-		} else {
-			path = path + File.separator + ".config" + File.separator + "autostart" + File.separator;
+			path = WDUtilities.sanitazeSnapDirectory(path);
 		}
+		path = path + File.separator + ".config" + File.separator + "autostart" + File.separator;
 		return path;
 	}
 

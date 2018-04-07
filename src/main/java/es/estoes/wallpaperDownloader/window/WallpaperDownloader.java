@@ -1035,11 +1035,8 @@ public class WallpaperDownloader {
 			btnChangeDownloadsDirectory.setText("Change Downloads Directory");
 			btnChangeDownloadsDirectory.setBounds(12, 186, 259, 25);
 		}	
-
-		
 		miscPanel.add(btnChangeDownloadsDirectory);
 		
-		//JProgressBar diskSpacePB = new JProgressBar();
 		diskSpacePB.setBounds(174, 101, 405, 18);
 		miscPanel.add(diskSpacePB);
 		
@@ -2075,7 +2072,6 @@ public class WallpaperDownloader {
 			// Clicking event
 			initOnBootCheckBox.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent evt) {
-					// TODO:
 					if (initOnBootCheckBox.isSelected()) {
 						// It is necessary to copy wallpaperdownloader.desktop file to ~/.config/autostart
 						File srcFile = new File(WDUtilities.getAppPath() + File.separator + WDUtilities.WD_DESKTOP_FILE);
