@@ -2773,9 +2773,11 @@ public class WallpaperDownloader {
 		// Starts on boot
 		if (WDUtilities.getOperatingSystem().equals(WDUtilities.OS_WINDOWS) || 
 			WDUtilities.getOperatingSystem().equals(WDUtilities.OS_WINDOWS_7) || 
-			WDUtilities.getOperatingSystem().equals(WDUtilities.OS_WINDOWS_10)) {
+			WDUtilities.getOperatingSystem().equals(WDUtilities.OS_WINDOWS_10) || 
+			WDUtilities.isSnapPackage()) {
 			// Windows users won't be able to start the application when the system is booted checking
 			// the GUI option
+			// This option is not supported within snap package either
 			initOnBootCheckBox.setEnabled(false);
 		} else {
 			String autostartFilePath = WDUtilities.getAutostartFilePath();
