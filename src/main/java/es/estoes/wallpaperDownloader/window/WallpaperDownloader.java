@@ -1011,6 +1011,9 @@ public class WallpaperDownloader {
 			btnOpenDownloadsDirectory.setText("Open");
 			btnOpenDownloadsDirectory.setBounds(589, 11, 72, 25);
 		}		
+		if (WDUtilities.isSnapPackage()) {
+			btnOpenDownloadsDirectory.setEnabled(false);
+		}
 		miscPanel.add(btnOpenDownloadsDirectory);
 		
 		btnClipboard = new JButton();
