@@ -2236,23 +2236,25 @@ public class WallpaperDownloader {
                     	tray.remove(trayIcon);
                 	}
                 });
-                // Open downloads directory
-                java.awt.MenuItem browseItem = new java.awt.MenuItem(i18nBundle.getString("system.tray.open"));
-                browseItem.addActionListener(new ActionListener() {
-                	public void actionPerformed(ActionEvent evt) {
-                		File downloadsDirectory = new File(WDUtilities.getDownloadsPath());
-                		Desktop desktop = Desktop.getDesktop();
-                		try {
-    						desktop.open(downloadsDirectory);
-    					} catch (IOException e) {
-    						// There was some error trying to open the downloads Directory
-    						LOG.error("Error trying to open the Downloads directory. Error: " + e.getMessage());
-    					}
-                	}
-                });
-
                 popup.add(maximizeItem);
-                popup.add(browseItem);
+                
+                // Open downloads directory
+                if (!WDUtilities.isSnapPackage()) {
+                    java.awt.MenuItem browseItem = new java.awt.MenuItem(i18nBundle.getString("system.tray.open"));
+                    browseItem.addActionListener(new ActionListener() {
+                    	public void actionPerformed(ActionEvent evt) {
+                    		File downloadsDirectory = new File(WDUtilities.getDownloadsPath());
+                    		Desktop desktop = Desktop.getDesktop();
+                    		try {
+        						desktop.open(downloadsDirectory);
+        					} catch (IOException e) {
+        						// There was some error trying to open the downloads Directory
+        						LOG.error("Error trying to open the Downloads directory. Error: " + e.getMessage());
+        					}
+                    	}
+                    });
+                    popup.add(browseItem);
+                }
 
         		// Pause / Resume
                 java.awt.MenuItem resumeItem = new java.awt.MenuItem(i18nBundle.getString("system.tray.resume"));
@@ -2411,20 +2413,22 @@ public class WallpaperDownloader {
     				});
 
     				// Open downloaded wallpapers
-    				MenuItem open = new MenuItem (menu, SWT.PUSH);
-    				open.setText (i18nBundle.getString("system.tray.open"));
-    				open.addListener (SWT.Selection, new Listener () {          
-    		            public void handleEvent (Event e) {
-                    		File downloadsDirectory = new File(WDUtilities.getDownloadsPath());
-                    		Desktop desktop = Desktop.getDesktop();
-                    		try {
-        						desktop.open(downloadsDirectory);
-        					} catch (IOException exception) {
-        						// There was some error trying to open the downloads Directory
-        						LOG.error("Error trying to open the Downloads directory. Error: " + exception.getMessage());
-        					}
-    		            }
-    				});
+    				if (!WDUtilities.isSnapPackage()) {
+        				MenuItem open = new MenuItem (menu, SWT.PUSH);
+        				open.setText (i18nBundle.getString("system.tray.open"));
+        				open.addListener (SWT.Selection, new Listener () {          
+        		            public void handleEvent (Event e) {
+                        		File downloadsDirectory = new File(WDUtilities.getDownloadsPath());
+                        		Desktop desktop = Desktop.getDesktop();
+                        		try {
+            						desktop.open(downloadsDirectory);
+            					} catch (IOException exception) {
+            						// There was some error trying to open the downloads Directory
+            						LOG.error("Error trying to open the Downloads directory. Error: " + exception.getMessage());
+            					}
+        		            }
+        				});
+    				}
     				
     				// Resume/Pause downloading process
     				MenuItem resume = new MenuItem (menu, SWT.PUSH);
