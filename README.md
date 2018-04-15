@@ -85,11 +85,19 @@ Install the snap package (please, check the name of the snap package built):
 
 New Features:
 
-- kjlkj.
+- New process of re-adjustment "on the fly" when the user changes parameters in the providers tab.
+
+- Restructuring the 'Application Settings' tab.
+
+- New tab 'Changer' with all the settings for the automated changer.
+
+- New option to start the application automatically once the operating system has booted (this option is only available for Linux users who have installed the application natively and not through the snap package)
 
 Bugs fixed:
 
-- iuoiu.
+- The WallpaperFusion provider now correctly discriminates downloaded wallpapers when the user has selected the policy 'Only wallpapers with the resolution set by the user'.
+
+- Now, when the user unchecks a provider or pauses the download process, the harvester stops the process immediately.
 
 ## Features (V 3.0) ##
 
