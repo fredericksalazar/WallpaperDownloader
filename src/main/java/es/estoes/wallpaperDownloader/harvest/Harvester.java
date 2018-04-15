@@ -1,5 +1,5 @@
 /**
- * Copyright 2016-2017 Eloy García Almadén <eloy.garcia.pca@gmail.com>
+ * Copyright 2016-2018 Eloy García Almadén <eloy.garcia.pca@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -170,10 +170,9 @@ public class Harvester {
 		if (LOG.isInfoEnabled()) {
 			LOG.info("Starting harvesting process...");
 		}
-		
-		if (providers == null) {
-			initializeProviders();
-		}
+
+		// Initializing providers if it is neeeded
+		initializeProviders();
 		
 		if (providers.size() > 0) {
 			status = STATUS_ENABLED;

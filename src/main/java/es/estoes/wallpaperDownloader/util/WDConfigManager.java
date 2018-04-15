@@ -1,5 +1,5 @@
 /**
- * Copyright 2016-2017 Eloy García Almadén <eloy.garcia.pca@gmail.com>
+ * Copyright 2016-2018 Eloy García Almadén <eloy.garcia.pca@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,8 +22,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Locale;
 
 import org.apache.commons.io.FileUtils;
@@ -67,43 +73,60 @@ public class WDConfigManager {
 	 */
 	public static void checkConfig() throws WDConfigurationException {
 		
-	     LOG.info("Checking configuration...");
-	     LOG.info("Checking application's folder");
+		if (LOG.isInfoEnabled()) {
+			 LOG.info("Checking configuration...");
+		     LOG.info("Checking application's directory");
+		}
 	     PreferencesManager prefm = PreferencesManager.getInstance();
 	     Path appPath = Paths.get(WDUtilities.getAppPath());
-	     Path absoluteDownloadsPath = null;
-    	 LOG.info("Checking downloads folder...");
-    	 absoluteDownloadsPath = Paths.get(appPath.toString());
+	     Path absoluteDefaultDownloadsPath = Paths.get(appPath.toString());
+		 absoluteDefaultDownloadsPath = absoluteDefaultDownloadsPath.resolve(WDUtilities.DEFAULT_DOWNLOADS_DIRECTORY);
     	 try {
     		 File userConfigFile = new File(WDUtilities.getUserConfigurationFilePath());
 
     		 // Configuration file
     		 if (!userConfigFile.exists()) {
-        		 /**
-        		  *  Downloads directory
-        		  */
-        		 absoluteDownloadsPath = absoluteDownloadsPath.resolve(WDUtilities.DEFAULT_DOWNLOADS_DIRECTORY);
-        		 File downloadsDirectory = new File(absoluteDownloadsPath.toString());
+    			 if (LOG.isInfoEnabled()) {
+    				 LOG.info("There is no configuration file. Creating a new one. Please wait...");
+    			 }
+        		 // First time downloads directory (this is done for detecting snap package)
+        		 prefm.setPreference("application-first-time-downloads-folder", absoluteDefaultDownloadsPath.toString());
 
+    			 // Downloads directory
+        		 if (LOG.isInfoEnabled()) {
+        		     LOG.info("Checking downloads directory...");
+        		 }
+        		 String absoluteDownloadsPathString = absoluteDefaultDownloadsPath.toString();
+    			 if (WDUtilities.isSnapPackage()) {
+    				 // If the application has been installed via snap package, then current link is used
+    				 // to point to the downloads directory because this reference won't change although
+    				 // the version of the application is changed
+    				 String[] downloadsPathParts = absoluteDownloadsPathString.split(File.separator + WDUtilities.SNAP_KEY + File.separator + "wallpaperdownloader" + File.separator);
+    				 absoluteDownloadsPathString = downloadsPathParts[0] + 
+    						 							File.separator + 
+    						 							WDUtilities.SNAP_KEY + 
+    						 							File.separator + 
+    						 							"wallpaperdownloader" + 
+    						 							File.separator +
+    						 							"current" + 
+    						 							downloadsPathParts[1].substring(downloadsPathParts[1].indexOf(File.separator), downloadsPathParts[1].length());
+    				 
+    			 }
+        		 prefm.setPreference("application-downloads-folder", absoluteDownloadsPathString);
+    			 File downloadsDirectory = new File(absoluteDownloadsPathString);
         		 if (!downloadsDirectory.exists()) {
         			 LOG.info("Downloads folder doesn't exist. Creating...");
         			 FileUtils.forceMkdir(downloadsDirectory);
         		 }  		 
         		 // Setting the downloads path 
-        		 WDUtilities.setDownloadsPath(absoluteDownloadsPath.toString());
-        		 LOG.info("Downloads directory -> " + absoluteDownloadsPath.toString());
+        		 WDUtilities.setDownloadsPath(absoluteDownloadsPathString);
+        		 LOG.info("Downloads directory -> " + absoluteDownloadsPathString);
  
            		 /**
         		  * User's configuration file
         		  */
     			 LOG.info("User configuration file doesn't exist. Creating...");
     			 FileUtils.touch(userConfigFile);
-
-        		 // Initializing user configuration file
-    			 // Downloads directory
-        		 prefm.setPreference("application-downloads-folder", absoluteDownloadsPath.toString());
-        		 // First time downloads directory (this is done for detecting snap package)
-        		 prefm.setPreference("application-first-time-downloads-folder", absoluteDownloadsPath.toString());
         		 
         		 // Downloading process
         		 // It will be enabled by default
@@ -207,7 +230,7 @@ public class WDConfigManager {
         		 prefm.setPreference("application-changer", "0");
         		 
         		 // Initializing changer directory
-        		 prefm.setPreference("application-changer-folder", absoluteDownloadsPath.toString());
+        		 prefm.setPreference("application-changer-folder", prefm.getPreference("application-downloads-folder"));
 
         		 // Initializing changer multi monitor support
         		 prefm.setPreference("application-changer-multimonitor", "0");
@@ -227,31 +250,41 @@ public class WDConfigManager {
     			 // it, if user didn't move the downloads directory, it still will be the last one,
     			 // so permission errors will be thrown when the application tries to write a new
     			 // wallpaper.
+    			 String absoluteDownloadsPathString = prefm.getPreference("application-downloads-folder");
+
     			 if (WDUtilities.isSnapPackage()) {
     				 // It is assumed that wallpaperdownloader has been installed via snap
-    				 // Downloads directory is moved to the new directory just in case it is a new
-    				 // version
+    				 // Downloads directory is moved to the snap current directory if it is needed
     				 if (LOG.isInfoEnabled()) {
-    					 LOG.info("It has been detected that wallpaperdownloader application has been installed via snap package. Reconfiguring downloads directory just in case it is a new version and it is needed to move downloads directory to the new confinement space...");
+    					 LOG.info("It has been detected that wallpaperdownloader application has been installed via snap package. Reconfiguring downloads directory to current if it is needed...");
     				 }
-            		 absoluteDownloadsPath = absoluteDownloadsPath.resolve(WDUtilities.DEFAULT_DOWNLOADS_DIRECTORY);
-            		 File downloadsDirectory = new File(absoluteDownloadsPath.toString());
-
-            		 if (downloadsDirectory.exists()) {
-                		 // Setting the downloads path 
-                		 WDUtilities.setDownloadsPath(absoluteDownloadsPath.toString());
-                		 prefm.setPreference("application-downloads-folder", absoluteDownloadsPath.toString());
-            		 }  		 
-    			 } else {
-        			 WDUtilities.setDownloadsPath(prefm.getPreference("application-downloads-folder"));
-        			 absoluteDownloadsPath = absoluteDownloadsPath.resolve(prefm.getPreference("application-downloads-folder"));
+    				 if (absoluteDownloadsPathString.contains(WDUtilities.SNAP_KEY)) {
+    					 // The downloads directory is inside snap structure
+        				 if (!absoluteDownloadsPathString.contains("current")) {
+        					 // The downloads directory is changed to current directory
+            				 String[] downloadsPathParts = absoluteDownloadsPathString.split(File.separator + WDUtilities.SNAP_KEY + File.separator + "wallpaperdownloader" + File.separator);
+            				 absoluteDownloadsPathString = downloadsPathParts[0] + 
+            						 							File.separator + 
+            						 							WDUtilities.SNAP_KEY + 
+            						 							File.separator + 
+            						 							"wallpaperdownloader" + 
+            						 							File.separator +
+            						 							"current" + 
+            						 							downloadsPathParts[1].substring(downloadsPathParts[1].indexOf(File.separator), downloadsPathParts[1].length());
+        				 }
+    				 }
     			 }
-    			 LOG.info("Downloads directory -> " + prefm.getPreference("application-downloads-folder"));
+
+    			 // Finally, it sets the downloads directory
+    			 WDUtilities.setDownloadsPath(absoluteDownloadsPathString);
+    			 if (LOG.isInfoEnabled()) {
+        			 LOG.info("Downloads directory -> " + absoluteDownloadsPathString);
+    			 }
     		 }
 
     		 // First time downloads directory (this is done for detecting snap package)
     		 if (prefm.getPreference("application-first-time-downloads-folder").equals(PreferencesManager.DEFAULT_VALUE)) {
-    			 prefm.setPreference("application-first-time-downloads-folder", absoluteDownloadsPath.toString());
+    			 prefm.setPreference("application-first-time-downloads-folder", absoluteDefaultDownloadsPath.toString());
     		 }
 
     		 // Resolution
@@ -382,7 +415,7 @@ public class WDConfigManager {
 			 // Changer directory
 			 if (prefm.getPreference("application-changer-folder").equals(PreferencesManager.DEFAULT_VALUE)) {
 				 // Changer folder was not defined within configuration file
-				 prefm.setPreference("application-changer-folder", absoluteDownloadsPath.toString());
+				 prefm.setPreference("application-changer-folder", absoluteDefaultDownloadsPath.toString());
 			 }
 			 
 			 // Devianart provider
@@ -426,6 +459,7 @@ public class WDConfigManager {
      		        OutputStream outputStream = FileUtils.openOutputStream(destFile);
      		        IOUtils.copy(inputStream, outputStream);
      		        inputStream.close();
+     		        outputStream.flush();
      		        outputStream.close();
         		 } catch (Exception exception) {
         			 if (LOG.isInfoEnabled()) {
@@ -434,6 +468,71 @@ public class WDConfigManager {
         		 }        		  
     		 }
 
+    		 // Copying wallpaperdownloader.desktop file to default app path if it doesn't exist
+    		 destFile = new File(WDUtilities.getAppPath() + WDUtilities.URL_SLASH + WDUtilities.WD_DESKTOP_FILE);
+    		 if (!destFile.exists()) {
+        		 try {
+        			 InputStream inputStream = null;
+        			if (WDUtilities.isSnapPackage()) {
+         		        inputStream = WDConfigManager.class.getResourceAsStream(WDUtilities.DESKTOP_LOCATION + WDUtilities.WD_SNAP_DESKTOP_FILE);
+        			} else {
+         		        inputStream = WDConfigManager.class.getResourceAsStream(WDUtilities.DESKTOP_LOCATION + WDUtilities.WD_DESKTOP_FILE);
+        			}
+     		        OutputStream outputStream = FileUtils.openOutputStream(destFile);
+     		        IOUtils.copy(inputStream, outputStream);
+     		        inputStream.close();
+     		        outputStream.flush();
+     		        outputStream.close();
+        		 } catch (Exception exception) {
+        			 if (LOG.isInfoEnabled()) {
+        				 LOG.error("wallpaperdownloader.desktop file couldn't be extracted. Error: " + exception.getMessage());
+        			 }       			 
+        		 }
+        		 
+        		 // Adding icon path to wallpaperdownloader.desktop file
+        		 Path wdDesktopPath = Paths.get(WDUtilities.getAppPath() + WDUtilities.URL_SLASH + WDUtilities.WD_DESKTOP_FILE);
+        		 Charset charset = StandardCharsets.UTF_8;
+
+        		 String content = new String(Files.readAllBytes(wdDesktopPath), charset);
+        		 content = content.replaceAll("PATH", WDUtilities.sanitazeSnapDirectory(WDUtilities.getAppPath()));
+        		 Files.write(wdDesktopPath, content.getBytes(charset));
+    		 }
+
+    		 // Copying wallpaperdownloader.svg file to default app path if it doesn't exist
+    		 destFile = new File(WDUtilities.getAppPath() + WDUtilities.URL_SLASH + WDUtilities.WD_ICON_FILE);
+    		 if (!destFile.exists()) {
+        		 try {
+        			InputStream inputStream = WDConfigManager.class.getResourceAsStream(WDUtilities.ICON_LOCATION + WDUtilities.WD_ICON_FILE);;
+     		        OutputStream outputStream = FileUtils.openOutputStream(destFile);
+     		        IOUtils.copy(inputStream, outputStream);
+     		        inputStream.close();
+     		        outputStream.flush();
+     		        outputStream.close();
+        		 } catch (Exception exception) {
+        			 if (LOG.isInfoEnabled()) {
+        				 LOG.error("wallpaperdownloader.svg file couldn't be extracted. Error: " + exception.getMessage());
+        			 }       			 
+        		 }        		  
+    		 }
+
+    		 // Performing sanitation in directories set for changer
+    		 // (only for snap installations)
+    		 if (WDUtilities.isSnapPackage()) {
+    			 String changerFoldersProperty = prefm.getPreference("application-changer-folder");
+    			 String[] changerFolders = changerFoldersProperty.split(";");
+    			 ArrayList<String> changerFoldersList = new ArrayList<String>(Arrays.asList(changerFolders));
+    			 Iterator<String> iterator = changerFoldersList.iterator();
+    			 String modifiedChangerFoldersProperty = "";
+    			 while (iterator.hasNext()) {
+    				 String directory = WDUtilities.sanitazeSnapDirectory(iterator.next());
+    				 modifiedChangerFoldersProperty = modifiedChangerFoldersProperty + directory;
+    				 if (iterator.hasNext()) {
+    					 modifiedChangerFoldersProperty = modifiedChangerFoldersProperty + ";";
+    				 }
+    				 
+    			 }
+    			 prefm.setPreference("application-changer-folder", modifiedChangerFoldersProperty);
+    		 }
     	 } catch (Exception e) {
     		 throw new WDConfigurationException("Error setting up the downloads folder. Error: " + e.getMessage());
     	 }    	 

@@ -1,5 +1,5 @@
 /**
- * Copyright 2016-2017 Eloy García Almadén <eloy.garcia.pca@gmail.com>
+ * Copyright 2016-2018 Eloy García Almadén <eloy.garcia.pca@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -106,6 +106,11 @@ public class WDUtilities {
 	public static final String IMG_JPG_SUFFIX = "jpg";
 	public static final String IMG_JEPG_SUFFIX = "jpeg";
 	public static final String IMG_PNG_SUFFIX = "png";
+	public static final String WD_DESKTOP_FILE = "wallpaperdownloader.desktop";
+	public static final String WD_SNAP_DESKTOP_FILE = "snap.wallpaperdownloader.desktop";
+	public static final String DESKTOP_LOCATION = "/desktop/";
+	public static final String WD_ICON_FILE = "wallpaperdownloader.svg";
+	public static final String ICON_LOCATION = "/images/desktop/";
 
 	// Attributes
 	private static String appPath;
@@ -904,6 +909,46 @@ public class WDUtilities {
     		LOG.error("Multi monitor mode couldn't be changed. Error: " + exception.getMessage());  
     	  }
       }	
+	}
+
+	/**
+	 * Gets the path where the autostart file should be located within Linux systems.
+	 * @return autostart file path
+	 */
+	public static String getAutostartFilePath() {
+		String path = Paths.get(System.getProperty("user.home")).toString();
+		if (WDUtilities.isSnapPackage()) {
+			path = WDUtilities.sanitazeSnapDirectory(path);
+		}
+		path = path + File.separator + ".config" + File.separator + "autostart" + File.separator;
+		return path;
+	}
+
+	/**
+	 * Sanitazes a directory if it is within snap structure.
+	 * Snap version will be changed to current directory
+	 * @param directory
+	 * @return sanitazed directory
+	 */
+	public static String sanitazeSnapDirectory(String directory) {
+		 if (directory.contains(WDUtilities.SNAP_KEY)) {
+			 // The directory is inside snap structure
+			 if (!directory.contains("current")) {
+				 // The directory is changed to current directory
+				 String[] directoryParts = directory.split(File.separator + WDUtilities.SNAP_KEY + File.separator + "wallpaperdownloader" + File.separator);
+				 directory = directoryParts[0] + 
+						 							File.separator + 
+						 							WDUtilities.SNAP_KEY + 
+						 							File.separator + 
+						 							"wallpaperdownloader" + 
+						 							File.separator +
+						 							"current";
+				 if (directoryParts[1].contains(File.separator)) {
+					 directory = directory + directoryParts[1].substring(directoryParts[1].indexOf(File.separator), directoryParts[1].length());
+				 }
+			 }
+		 }		
+		 return directory;
 	}
 
 }

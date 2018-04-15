@@ -1,5 +1,5 @@
 name: wallpaperdownloader
-version: "3.0"
+version: "3.1"
 summary: Download, manage and change your favorite wallpapers from the Internet
 description: WallpaperDownloader is a simple GUI Java based application for downloading, managing and changing wallpapers from the Internet
 grade: stable
@@ -9,7 +9,16 @@ apps:
   wallpaperdownloader:
     command: wallpaperdownloader.sh
     # network-observe plug will be needed to run ping command from the snap
-    plugs: [x11, unity7, network-bind, network-observe, home, gsettings]
+    plugs:
+     - x11
+     - desktop
+     - desktop-legacy
+     - wayland
+     - unity7
+     - network-bind
+     - network-observe
+     - home
+     - gsettings
 
 parts:
   # Pulls the code from the original source (master branch)

@@ -1,5 +1,5 @@
 /**
- * Copyright 2016-2017 Eloy García Almadén <eloy.garcia.pca@gmail.com>
+ * Copyright 2016-2018 Eloy García Almadén <eloy.garcia.pca@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
+import javax.swing.Timer;
 import javax.swing.ToolTipManager;
 import javax.swing.border.Border;
 import javax.swing.event.HyperlinkEvent;
@@ -67,7 +68,6 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowEvent;
@@ -80,6 +80,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.NumberFormat;
 import javax.swing.JLabel;
+
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
@@ -123,15 +125,15 @@ public class WallpaperDownloader {
 	public static JLabel lblSpaceWarning;
 	public static JScrollPane scroll;
 	public static JList<ImageIcon> lastWallpapersList;
-	private static Harvester harvester;
+	public static Harvester harvester;
 	private ChangerDaemon changer;
 	private JTextField searchKeywords;
-	private JCheckBox wallhavenCheckbox;
-	private JCheckBox devianartCheckbox;
-	private JCheckBox bingCheckbox;
-	private JCheckBox socialWallpaperingCheckbox;
+	private static JCheckBox wallhavenCheckbox;
+	private static JCheckBox devianartCheckbox;
+	private static JCheckBox bingCheckbox;
+	private static JCheckBox socialWallpaperingCheckbox;
 	private JCheckBox socialWallpaperingIgnoreKeywordsCheckbox;
-	private JCheckBox wallpaperFusionCheckbox;
+	private static JCheckBox wallpaperFusionCheckbox;
 	private JButton btnChangeResolution;
 	private JButton btnMinimize;
 	private JButton btnOpenDownloadsDirectory;
@@ -192,7 +194,7 @@ public class WallpaperDownloader {
 	private JButton btnRemoveDirectory;
 	private JPanel appSettingsPanel;
 	private JButton btnChooseWallpaper;
-	private JCheckBox dualMonitorCheckbox;
+	private static JCheckBox dualMonitorCheckbox;
 	private JLabel lblSearchTypeDualMonitor;
 	private JComboBox<ComboItem> searchTypeDualMonitorComboBox;
 	private JButton btnApplyResolution;
@@ -200,6 +202,10 @@ public class WallpaperDownloader {
 	private JButton btnChangeKeywords;
 	private JButton btnApplyKeywords;
 	private JLabel lblSystemTrayHelp;
+	private JPanel changerPanel;
+	private JSeparator settingsSeparator4;
+	private JSeparator settingsSeparator5;
+	private JCheckBox initOnBootCheckBox;
 	
 	// Getters & Setters
 	public Harvester getHarvester() {
@@ -557,7 +563,7 @@ public class WallpaperDownloader {
 		
 		widthResolution = new JFormattedTextField((Format) null);
 		widthResolution.setColumns(4);
-		widthResolution.setBounds(100, 42, 53, 27);
+		widthResolution.setBounds(100, 41, 53, 28);
 		providersPanel.add(widthResolution);
 		
 		lblX = new JLabel("x");
@@ -566,7 +572,7 @@ public class WallpaperDownloader {
 		
 		heigthResolution = new JFormattedTextField((Format) null);
 		heigthResolution.setColumns(4);
-		heigthResolution.setBounds(159, 42, 53, 27);
+		heigthResolution.setBounds(159, 41, 53, 28);
 		providersPanel.add(heigthResolution);
 		
 		btnChangeResolution = new JButton();
@@ -696,7 +702,7 @@ public class WallpaperDownloader {
 		
 		downloadDirectorySize = new JFormattedTextField(integerFormat);
 		downloadDirectorySize.setColumns(4);
-		downloadDirectorySize.setBounds(313, 30, 56, 27);
+		downloadDirectorySize.setBounds(313, 28, 56, 28);
 		appSettingsPanel.add(downloadDirectorySize);
 		
 		JSeparator settingsSeparator1 = new JSeparator();
@@ -712,7 +718,7 @@ public class WallpaperDownloader {
 			ImageIcon icon = new ImageIcon(img);
 			lblMoveHelp = new JLabel(icon);
 			lblMoveHelp.setToolTipText(i18nBundle.getString("application.settings.move.help"));
-			lblMoveHelp.setBounds(244, 72, 30, 23);
+			lblMoveHelp.setBounds(251, 72, 30, 23);
 			appSettingsPanel.add(lblMoveHelp);
 		} catch (IOException ex) {
 			JLabel lblMoveHelp = new JLabel(i18nBundle.getString("application.settings.move.help"));
@@ -755,11 +761,11 @@ public class WallpaperDownloader {
 		appSettingsPanel.add(notificationsComboBox);
 
 		JLabel lblI18n = new JLabel(i18nBundle.getString("application.settings.i18n"));
-		lblI18n.setBounds(320, 143, 104, 19);
+		lblI18n.setBounds(12, 267, 104, 19);
 		appSettingsPanel.add(lblI18n);
 
 		i18nComboBox = new JComboBox<ComboItem>();
-		i18nComboBox.setBounds(435, 140, 134, 23);
+		i18nComboBox.setBounds(144, 265, 134, 23);
 		appSettingsPanel.add(i18nComboBox);
 
 		startMinimizedCheckBox = new JCheckBox(i18nBundle.getString("application.settings.start.minimized"));
@@ -771,11 +777,11 @@ public class WallpaperDownloader {
 		appSettingsPanel.add(settingsSeparator3);
 		
 		JLabel lblTimeToMinimize = new JLabel(i18nBundle.getString("application.settings.time.minimize"));
-		lblTimeToMinimize.setBounds(194, 175, 126, 19);
+		lblTimeToMinimize.setBounds(12, 201, 126, 19);
 		appSettingsPanel.add(lblTimeToMinimize);
 		
 		timeToMinimizeComboBox = new JComboBox<ComboItem>();
-		timeToMinimizeComboBox.setBounds(317, 173, 95, 24);
+		timeToMinimizeComboBox.setBounds(144, 199, 134, 24);
 		appSettingsPanel.add(timeToMinimizeComboBox);
 		
 		btnChangeSize = new JButton();
@@ -790,11 +796,19 @@ public class WallpaperDownloader {
 		}
 		appSettingsPanel.add(btnChangeSize);
 		
+		settingsSeparator4 = new JSeparator();
+		settingsSeparator4.setBounds(12, 228, 631, 2);
+		appSettingsPanel.add(settingsSeparator4);
+		
+		settingsSeparator5 = new JSeparator();
+		settingsSeparator5.setBounds(12, 260, 631, 2);
+		appSettingsPanel.add(settingsSeparator5);
+		
 		// Only if system tray is supported, user will be able to minimize the application into the
 		// system tray
 		if (SystemTray.isSupported()) {
 			stIconCheckBox = new JCheckBox(i18nBundle.getString("application.settings.system.tray.icon"));
-			stIconCheckBox.setBounds(435, 173, 144, 23);
+			stIconCheckBox.setBounds(13, 234, 225, 26);
 			appSettingsPanel.add(stIconCheckBox);
 			
 			lblSystemTrayHelp = new JLabel((Icon) null);
@@ -803,7 +817,7 @@ public class WallpaperDownloader {
 				ImageIcon icon = new ImageIcon(img);
 				lblSystemTrayHelp = new JLabel(icon);
 				lblSystemTrayHelp.setToolTipText(i18nBundle.getString("application.settings.system.tray.icon.help"));
-				lblSystemTrayHelp.setBounds(574, 173, 30, 23);
+				lblSystemTrayHelp.setBounds(252, 234, 30, 23);
 				appSettingsPanel.add(lblSystemTrayHelp);
 				
 			} catch (IOException ex) {
@@ -823,66 +837,43 @@ public class WallpaperDownloader {
 			btnApplySize.setText(i18nBundle.getString("providers.save.changes"));
 			btnApplySize.setBounds(376, 26, 131, 25);
 		}
-		// Only those desktop environment programmed to be changeable will display this option
-		if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
 
-			JSeparator settingsSeparator4 = new JSeparator();
-			settingsSeparator4.setBounds(12, 199, 631, 2);
-			appSettingsPanel.add(settingsSeparator4);		
-			JLabel lblChanger = new JLabel(i18nBundle.getString("application.settings.change.every"));
-			lblChanger.setBounds(12, 208, 179, 19);
-			appSettingsPanel.add(lblChanger);
+		JSeparator settingsSeparator6 = new JSeparator();
+		settingsSeparator6.setBounds(12, 293, 631, 2);
+		appSettingsPanel.add(settingsSeparator6);
+		
+		initOnBootCheckBox = new JCheckBox(i18nBundle.getString("application.settings.starts.on.boot"));
+		initOnBootCheckBox.setBounds(12, 298, 631, 23);
+		appSettingsPanel.add(initOnBootCheckBox);
+
+		// Automatic changer (tab)
+		// Only visible for DE which allows automated changer
+		if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
+			changerPanel = new JPanel();
+			changerPanel.setBorder(null);
+			tabbedPane.addTab(i18nBundle.getString("changer.title"), null, changerPanel, null);
+			changerPanel.setLayout(null);
+
+			JLabel lblChanger = new JLabel(i18nBundle.getString("changer.change.every"));
+			lblChanger.setBounds(12, 4, 179, 19);
+			changerPanel.add(lblChanger);
 			
 			changerComboBox = new JComboBox<ComboItem>();
-			changerComboBox.setBounds(192, 210, 94, 19);
-			appSettingsPanel.add(changerComboBox);
+			changerComboBox.setBounds(192, 6, 94, 19);
+			changerPanel.add(changerComboBox);
 
-			JLabel lblChangerDirectory = new JLabel(i18nBundle.getString("application.settings.change.directory"));
-			lblChangerDirectory.setBounds(12, 237, 134, 19);
-			appSettingsPanel.add(lblChangerDirectory);
-			
-			
-			btnAddDirectory = new JButton();
-			try {
-				Image img = ImageIO.read(getClass().getResource("/images/icons/add_16px_icon.png"));
-				btnAddDirectory.setIcon(new ImageIcon(img));
-				btnAddDirectory.setToolTipText(i18nBundle.getString("application.settings.change.add.directory"));
-				btnAddDirectory.setBounds(561, 266, 34, 33);
-			} catch (IOException ex) {
-				btnAddDirectory.setToolTipText(i18nBundle.getString("application.settings.change.add.directory"));
-				btnAddDirectory.setBounds(561, 274, 34, 33);
-			}		
-			
-			btnRemoveDirectory = new JButton();
-			try {
-				Image img = ImageIO.read(getClass().getResource("/images/icons/remove_16px_icon.png"));
-				btnRemoveDirectory.setIcon(new ImageIcon(img));
-				btnRemoveDirectory.setToolTipText(i18nBundle.getString("application.settings.change.remove.directory"));
-				btnRemoveDirectory.setBounds(561, 311, 34, 33);
-			} catch (IOException ex) {
-				btnRemoveDirectory.setToolTipText(i18nBundle.getString("application.settings.change.remove.directory"));
-				btnRemoveDirectory.setBounds(561, 319, 34, 33);
-			}		
-			
-			JScrollPane listDirectoriesScrollPane = new JScrollPane();
-			listDirectoriesScrollPane.setBounds(143, 244, 406, 121);
-			appSettingsPanel.add(listDirectoriesScrollPane);
-			
-			listDirectoriesToWatch = new JList<String>();
-			listDirectoriesScrollPane.setColumnHeaderView(listDirectoriesToWatch);
-			listDirectoriesToWatch.setBackground(UIManager.getColor("Button.background"));
-			listDirectoriesToWatch.setToolTipText(i18nBundle.getString("application.settings.change.directory.help"));
-			//
-			listDirectoriesToWatch.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-			listDirectoriesToWatch.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-			listDirectoriesToWatch.setVisibleRowCount(-1);
-			
-			listDirectoriesScrollPane.setViewportView(listDirectoriesToWatch);
-			
+			JLabel lblChangerDirectory = new JLabel(i18nBundle.getString("changer.change.directory"));
+			lblChangerDirectory.setBounds(12, 35, 537, 19);
+			changerPanel.add(lblChangerDirectory);
+
 			if (WDUtilities.isGnomeish()) {
-				multiMonitorCheckBox = new JCheckBox(i18nBundle.getString("application.settings.change.multimonitor"));
-				multiMonitorCheckBox.setBounds(316, 208, 281, 23);
-				appSettingsPanel.add(multiMonitorCheckBox);
+				JSeparator changerSeparator1 = new JSeparator();
+				changerSeparator1.setBounds(12, 312, 631, 2);
+				changerPanel.add(changerSeparator1);		
+
+				multiMonitorCheckBox = new JCheckBox(i18nBundle.getString("changer.change.multimonitor"));
+				multiMonitorCheckBox.setBounds(11, 315, 281, 23);
+				changerPanel.add(multiMonitorCheckBox);
 				
 				/**
 				 * multiMonitorCheckBox Action Listener.
@@ -903,6 +894,43 @@ public class WallpaperDownloader {
 				});
 				
 			}
+
+			btnAddDirectory = new JButton();
+			try {
+				Image img = ImageIO.read(getClass().getResource("/images/icons/add_16px_icon.png"));
+				btnAddDirectory.setIcon(new ImageIcon(img));
+				btnAddDirectory.setToolTipText(i18nBundle.getString("changer.change.add.directory"));
+				btnAddDirectory.setBounds(561, 136, 34, 33);
+			} catch (IOException ex) {
+				btnAddDirectory.setToolTipText(i18nBundle.getString("changer.change.add.directory"));
+				btnAddDirectory.setBounds(561, 274, 34, 33);
+			}		
+
+			btnRemoveDirectory = new JButton();
+			try {
+				Image img = ImageIO.read(getClass().getResource("/images/icons/remove_16px_icon.png"));
+				btnRemoveDirectory.setIcon(new ImageIcon(img));
+				btnRemoveDirectory.setToolTipText(i18nBundle.getString("changer.change.remove.directory"));
+				btnRemoveDirectory.setBounds(561, 181, 34, 33);
+			} catch (IOException ex) {
+				btnRemoveDirectory.setToolTipText(i18nBundle.getString("changer.change.remove.directory"));
+				btnRemoveDirectory.setBounds(561, 319, 34, 33);
+			}		
+
+			JScrollPane listDirectoriesScrollPane = new JScrollPane();
+			listDirectoriesScrollPane.setBounds(143, 55, 406, 250);
+			changerPanel.add(listDirectoriesScrollPane);
+			
+			listDirectoriesToWatch = new JList<String>();
+			listDirectoriesScrollPane.setColumnHeaderView(listDirectoriesToWatch);
+			listDirectoriesToWatch.setBackground(UIManager.getColor("Button.background"));
+			listDirectoriesToWatch.setToolTipText(i18nBundle.getString("changer.change.directory.help"));
+			//
+			listDirectoriesToWatch.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+			listDirectoriesToWatch.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+			listDirectoriesToWatch.setVisibleRowCount(-1);
+			
+			listDirectoriesScrollPane.setViewportView(listDirectoriesToWatch);
 												
 			/**
 			 * btnAddDirectory Action Listener.
@@ -950,12 +978,11 @@ public class WallpaperDownloader {
 					}
 					prefm.setPreference("application-changer-folder", modifiedChangerFoldersProperty);
 					if (listDirectoriesModel.size() <= 1) {
-						appSettingsPanel.remove(btnRemoveDirectory);
-						appSettingsPanel.repaint();
+						changerPanel.remove(btnRemoveDirectory);
+						changerPanel.repaint();
 					}
 				}
 			});
-
 		}
 
 		// Downloads Directory (tab)
@@ -984,6 +1011,9 @@ public class WallpaperDownloader {
 			btnOpenDownloadsDirectory.setText("Open");
 			btnOpenDownloadsDirectory.setBounds(589, 11, 72, 25);
 		}		
+		if (WDUtilities.isSnapPackage()) {
+			btnOpenDownloadsDirectory.setEnabled(false);
+		}
 		miscPanel.add(btnOpenDownloadsDirectory);
 		
 		btnClipboard = new JButton();
@@ -1008,11 +1038,8 @@ public class WallpaperDownloader {
 			btnChangeDownloadsDirectory.setText("Change Downloads Directory");
 			btnChangeDownloadsDirectory.setBounds(12, 186, 259, 25);
 		}	
-
-		
 		miscPanel.add(btnChangeDownloadsDirectory);
 		
-		//JProgressBar diskSpacePB = new JProgressBar();
 		diskSpacePB.setBounds(174, 101, 405, 18);
 		miscPanel.add(diskSpacePB);
 		
@@ -1248,8 +1275,14 @@ public class WallpaperDownloader {
 		// Changelog
 		try
 		{
-			// Version 3.0
-		    doc.insertString(0, i18nBundle.getString("about.changelog.features.3.0.title"), keyWord );
+			// Version 3.1
+		    doc.insertString(0, i18nBundle.getString("about.changelog.features.3.1.title"), keyWord );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.features.3.1.text"), null );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.3.1.title"), keyWord );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.3.1.text"), null );
+
+		    // Version 3.0
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.features.3.0.title"), keyWord );
 		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.features.3.0.text"), null );
 		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.3.0.title"), keyWord );
 		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.3.0.text"), null );
@@ -1370,11 +1403,7 @@ public class WallpaperDownloader {
 				}
 
 				// Restarting harvesting process if it is needed
-				harvester.stop();
-				harvester.start();
-				
-				// Repaint pause/resume buttons
-				pauseResumeRepaint();
+				restartDownloadingProcess();
 			}
 		});
 
@@ -1405,11 +1434,7 @@ public class WallpaperDownloader {
 				}
 
 				// Restarting harvesting process if it is needed
-				harvester.stop();
-				harvester.start();
-				
-				// Repaint pause/resume buttons
-				pauseResumeRepaint();
+				restartDownloadingProcess();
 			}
 		});
 
@@ -1438,11 +1463,7 @@ public class WallpaperDownloader {
 				}
 
 				// Restarting harvesting process if it is needed
-				harvester.stop();
-				harvester.start();
-				
-				// Repaint pause/resume buttons
-				pauseResumeRepaint();
+				restartDownloadingProcess();
 			}
 		});
 
@@ -1461,11 +1482,7 @@ public class WallpaperDownloader {
 				}
 
 				// Restarting harvesting process if it is needed
-				harvester.stop();
-				harvester.start();
-				
-				// Repaint pause/resume buttons
-				pauseResumeRepaint();
+				restartDownloadingProcess();
 			}
 		});
 
@@ -1482,9 +1499,7 @@ public class WallpaperDownloader {
 				}
 
 				// Restarting harvesting process if it is needed
-				harvester.stop();
-				harvester.start();
-
+				restartDownloadingProcess();
 			}
 		});
 
@@ -1501,11 +1516,7 @@ public class WallpaperDownloader {
 				}
 
 				// Restarting harvesting process if it is needed
-				harvester.stop();
-				harvester.start();
-				
-				// Repaint pause/resume buttons
-				pauseResumeRepaint();
+				restartDownloadingProcess();
 			}
 		});
 		
@@ -1524,13 +1535,7 @@ public class WallpaperDownloader {
 				}
 				
 				// Restarting harvesting process if it is needed
-				harvester.stop();
-				harvester.start();
-				
-				// Repaint pause/resume buttons
-				pauseResumeRepaint();
-
-			
+				restartDownloadingProcess();
 			}
 		});
 
@@ -1597,8 +1602,10 @@ public class WallpaperDownloader {
 				providersPanel.remove(btnResetResolution);
 				providersPanel.add(btnChangeResolution);
 				providersPanel.repaint();
-				// Restarting downloading process
-				restartDownloadingProcess();
+				// Restarting downloading process if it is needed
+				if (areProvidersChecked()) {
+					restartDownloadingProcess();
+				}
 			}
 		});
 
@@ -1622,8 +1629,10 @@ public class WallpaperDownloader {
 		downloadPolicyComboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				prefm.setPreference("download-policy", new Integer(downloadPolicyComboBox.getSelectedIndex()).toString());
-				// Restarting downloading process
-				restartDownloadingProcess();
+				// Restarting downloading process if it is needed
+				if (areProvidersChecked()) {
+					restartDownloadingProcess();
+				}
 			}
 		});
 
@@ -1656,8 +1665,10 @@ public class WallpaperDownloader {
 				providersPanel.remove(btnApplyKeywords);
 				providersPanel.add(btnChangeKeywords);
 				providersPanel.repaint();
-				// Restarting downloading process
-				restartDownloadingProcess();
+				// Restarting downloading process if it is needed
+				if (areProvidersChecked()) {
+					restartDownloadingProcess();
+				}
 			}
 		});
 
@@ -1689,8 +1700,10 @@ public class WallpaperDownloader {
 				// Refreshing Disk Space Progress Bar
 				refreshProgressBar();
 				
-				// Restarting downloading process
-				restartDownloadingProcess();
+				// Restarting downloading process if it is needed
+				if (areProvidersChecked()) {
+					restartDownloadingProcess();
+				}
 			}
 		});
 
@@ -1701,8 +1714,10 @@ public class WallpaperDownloader {
 		timerComboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				prefm.setPreference("application-timer", new Integer(timerComboBox.getSelectedIndex()).toString());
-				// Restarting downloading process
-				restartDownloadingProcess();
+				// Restarting downloading process if it is needed
+				if (areProvidersChecked()) {
+					restartDownloadingProcess();
+				}
 			}
 		});
 
@@ -2053,6 +2068,47 @@ public class WallpaperDownloader {
 					}
 				});
 			}
+
+			/**
+			 * initOnBootCheckBox Action Listener.
+			 */
+			// Clicking event
+			initOnBootCheckBox.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent evt) {
+					if (initOnBootCheckBox.isSelected()) {
+						// It is necessary to copy wallpaperdownloader.desktop file to ~/.config/autostart
+						File srcFile = new File(WDUtilities.getAppPath() + File.separator + WDUtilities.WD_DESKTOP_FILE);
+						File destFile = new File(WDUtilities.getAutostartFilePath() + File.separator + WDUtilities.WD_DESKTOP_FILE);
+						try {
+							FileUtils.copyFile(srcFile, destFile);
+							DialogManager info = new DialogManager(i18nBundle.getString("messages.autostart.ok"), 2000);
+							info.openDialog();
+						} catch (IOException exception) {
+							initOnBootCheckBox.setSelected(false);
+							if (LOG.isInfoEnabled()) {
+								LOG.error("wallpaperdownloader.sh couldn't be copied. Error: " + exception.getMessage());
+							}
+							DialogManager info = new DialogManager(i18nBundle.getString("messages.autostart.ko"), 2000);
+							info.openDialog();
+						}
+					} else {
+						// It is necessary to remove wallpaperdownloader.desktop file from ~/.config/autostart
+						File destFile = new File(WDUtilities.getAutostartFilePath() + File.separator + WDUtilities.WD_DESKTOP_FILE);
+						try {
+							FileUtils.forceDelete(destFile);
+							DialogManager info = new DialogManager(i18nBundle.getString("messages.autostart.removed.ok"), 2000);
+							info.openDialog();
+						} catch (IOException exception) {
+							initOnBootCheckBox.setSelected(true);
+							if (LOG.isInfoEnabled()) {
+								LOG.error("wallpaperdownloader.sh couldn't be copied. Error: " + exception.getMessage());
+							}
+							DialogManager info = new DialogManager(i18nBundle.getString("messages.autostart.ko"), 2000);
+							info.openDialog();
+						}
+					}
+				}
+			});
 	}
 
 	/**
@@ -2113,9 +2169,39 @@ public class WallpaperDownloader {
 	public static void restartDownloadingProcess() {
 		final PreferencesManager prefm = PreferencesManager.getInstance();
 		if (prefm.getPreference("downloading-process").equals(WDUtilities.APP_YES)) {
-			pauseDownloadingProcess();
-			resumeDownloadingProcess();
+			// The recalibration dialog will be performed within a Swing Timer for avoiding to
+			// freeze the entire UI. The event will wait only 1 millisecond in order to display
+			// the message. The dialog is important in order to block the entire UI and avoid the
+			// user modifies anything else until the harvesting process is stopped and started
+			// again
+			// one time (setRepeats is false)
+			Timer dialogTimer = new Timer(1, new ActionListener() {
+			    public void actionPerformed(ActionEvent evt) {
+					DialogManager info = new DialogManager(i18nBundle.getString("messages.harvesting.process.recalibrating"), 5000);
+					info.openDialog();
+			    }    
+			});
+			dialogTimer.setRepeats(false);
+			dialogTimer.start();
+			harvester.stop();
+			// The start of the harvester will be performed within a Swing Timer for avoiding to
+			// freeze the entire UI. The event will wait 5000 milliseconds in order to let the
+			// stopping process ends successfully and only will be done
+			// one time (setRepeats is false)
+			Timer timer = new Timer(5000, new ActionListener() {
+			    public void actionPerformed(ActionEvent evt) {
+			    	harvester.start();
+					// Repaint pause/resume buttons
+					pauseResumeRepaint();
+			    }    
+			});
+			timer.setRepeats(false);
+			timer.start();
+		} else {
+			// Repaint pause/resume buttons
+			pauseResumeRepaint();
 		}
+
 	}
 
 	/**
@@ -2153,23 +2239,25 @@ public class WallpaperDownloader {
                     	tray.remove(trayIcon);
                 	}
                 });
-                // Open downloads directory
-                java.awt.MenuItem browseItem = new java.awt.MenuItem(i18nBundle.getString("system.tray.open"));
-                browseItem.addActionListener(new ActionListener() {
-                	public void actionPerformed(ActionEvent evt) {
-                		File downloadsDirectory = new File(WDUtilities.getDownloadsPath());
-                		Desktop desktop = Desktop.getDesktop();
-                		try {
-    						desktop.open(downloadsDirectory);
-    					} catch (IOException e) {
-    						// There was some error trying to open the downloads Directory
-    						LOG.error("Error trying to open the Downloads directory. Error: " + e.getMessage());
-    					}
-                	}
-                });
-
                 popup.add(maximizeItem);
-                popup.add(browseItem);
+                
+                // Open downloads directory
+                if (!WDUtilities.isSnapPackage()) {
+                    java.awt.MenuItem browseItem = new java.awt.MenuItem(i18nBundle.getString("system.tray.open"));
+                    browseItem.addActionListener(new ActionListener() {
+                    	public void actionPerformed(ActionEvent evt) {
+                    		File downloadsDirectory = new File(WDUtilities.getDownloadsPath());
+                    		Desktop desktop = Desktop.getDesktop();
+                    		try {
+        						desktop.open(downloadsDirectory);
+        					} catch (IOException e) {
+        						// There was some error trying to open the downloads Directory
+        						LOG.error("Error trying to open the Downloads directory. Error: " + e.getMessage());
+        					}
+                    	}
+                    });
+                    popup.add(browseItem);
+                }
 
         		// Pause / Resume
                 java.awt.MenuItem resumeItem = new java.awt.MenuItem(i18nBundle.getString("system.tray.resume"));
@@ -2262,24 +2350,7 @@ public class WallpaperDownloader {
 
                 // Create a pop-up menu components -- END
 
-                trayIcon.setPopupMenu(popup);
-                
-                // Adding a new event. When the user clicks the left button the application window is restored again in the same
-                // state
-                MouseAdapter mouseAdapter = new MouseAdapter() {
-
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                    	int state = frame.getExtendedState();  
-                    	state = state & ~Frame.ICONIFIED;  
-                    	frame.setExtendedState(state);  
-                    	frame.setVisible(true);
-                    	
-                    	// Removing system tray icon
-                    	tray.remove(trayIcon);
-                    }
-                };
-                trayIcon.addMouseListener(mouseAdapter);
+                trayIcon.setPopupMenu(popup);                
                 trayIcon.setImageAutoSize(true);
                
                 try {
@@ -2345,20 +2416,22 @@ public class WallpaperDownloader {
     				});
 
     				// Open downloaded wallpapers
-    				MenuItem open = new MenuItem (menu, SWT.PUSH);
-    				open.setText (i18nBundle.getString("system.tray.open"));
-    				open.addListener (SWT.Selection, new Listener () {          
-    		            public void handleEvent (Event e) {
-                    		File downloadsDirectory = new File(WDUtilities.getDownloadsPath());
-                    		Desktop desktop = Desktop.getDesktop();
-                    		try {
-        						desktop.open(downloadsDirectory);
-        					} catch (IOException exception) {
-        						// There was some error trying to open the downloads Directory
-        						LOG.error("Error trying to open the Downloads directory. Error: " + exception.getMessage());
-        					}
-    		            }
-    				});
+    				if (!WDUtilities.isSnapPackage()) {
+        				MenuItem open = new MenuItem (menu, SWT.PUSH);
+        				open.setText (i18nBundle.getString("system.tray.open"));
+        				open.addListener (SWT.Selection, new Listener () {          
+        		            public void handleEvent (Event e) {
+                        		File downloadsDirectory = new File(WDUtilities.getDownloadsPath());
+                        		Desktop desktop = Desktop.getDesktop();
+                        		try {
+            						desktop.open(downloadsDirectory);
+            					} catch (IOException exception) {
+            						// There was some error trying to open the downloads Directory
+            						LOG.error("Error trying to open the Downloads directory. Error: " + exception.getMessage());
+            					}
+        		            }
+        				});
+    				}
     				
     				// Resume/Pause downloading process
     				MenuItem resume = new MenuItem (menu, SWT.PUSH);
@@ -2703,15 +2776,34 @@ public class WallpaperDownloader {
 				stIconCheckBox.setSelected(false);
 			}
 		}
-
+		
+		// Starts on boot
+		if (WDUtilities.getOperatingSystem().equals(WDUtilities.OS_WINDOWS) || 
+			WDUtilities.getOperatingSystem().equals(WDUtilities.OS_WINDOWS_7) || 
+			WDUtilities.getOperatingSystem().equals(WDUtilities.OS_WINDOWS_10) || 
+			WDUtilities.isSnapPackage()) {
+			// Windows users won't be able to start the application when the system is booted checking
+			// the GUI option
+			// This option is not supported within snap package either
+			initOnBootCheckBox.setEnabled(false);
+		} else {
+			String autostartFilePath = WDUtilities.getAutostartFilePath();
+			File autostartFile = new File(autostartFilePath + WDUtilities.WD_DESKTOP_FILE);
+			if (autostartFile.exists()) {
+				initOnBootCheckBox.setSelected(true);
+			} else {
+				initOnBootCheckBox.setSelected(false);
+			}
+		}
+		
 		// Changer
 		if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
-			changerComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.change.every.0"), "0"));
-			changerComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.change.every.1"), "1"));
-			changerComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.change.every.2"), "2"));
-			changerComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.change.every.3"), "3"));
-			changerComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.change.every.4"), "4"));
-			changerComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.change.every.5"), "5"));
+			changerComboBox.addItem(new ComboItem(i18nBundle.getString("changer.change.every.0"), "0"));
+			changerComboBox.addItem(new ComboItem(i18nBundle.getString("changer.change.every.1"), "1"));
+			changerComboBox.addItem(new ComboItem(i18nBundle.getString("changer.change.every.2"), "2"));
+			changerComboBox.addItem(new ComboItem(i18nBundle.getString("changer.change.every.3"), "3"));
+			changerComboBox.addItem(new ComboItem(i18nBundle.getString("changer.change.every.4"), "4"));
+			changerComboBox.addItem(new ComboItem(i18nBundle.getString("changer.change.every.5"), "5"));
 			changerComboBox.setSelectedIndex(new Integer(prefm.getPreference("application-changer")));
 			
 			// Multi monitor support
@@ -2731,9 +2823,9 @@ public class WallpaperDownloader {
 				listDirectoriesModel.addElement(changerFolders[i]);
 			}
 			listDirectoriesToWatch.setModel(listDirectoriesModel);
-			appSettingsPanel.add(btnAddDirectory);
+			changerPanel.add(btnAddDirectory);
 			if (listDirectoriesModel.size() > 1) {
-				appSettingsPanel.add(btnRemoveDirectory);
+				changerPanel.add(btnRemoveDirectory);
 			}
 		}
 
@@ -2858,9 +2950,13 @@ public class WallpaperDownloader {
 		return oldSystemTray;
 	}
 	
-	private void pauseResumeRepaint() {
+	/**
+	 * Pauses and resumes the harvesting process and repaints the display if it is needed.
+	 */
+	private static void pauseResumeRepaint() {
 		PreferencesManager prefm = PreferencesManager.getInstance();		
-		if (harvester.getStatus() != Harvester.STATUS_DISABLED) {
+		if (harvester.getStatus() == Harvester.STATUS_ENABLED) {
+			// Harvesting process is enabled
 			// Checking downloading process
 			if (prefm.getPreference("downloading-process").equals(WDUtilities.APP_NO)) {
 				providersPanel.add(btnPlay);
@@ -2872,11 +2968,38 @@ public class WallpaperDownloader {
 				providersPanel.remove(lblRedSpot);
 			}
 		} else {
-			providersPanel.remove(btnPause);
-			providersPanel.remove(btnPlay);
-			providersPanel.add(lblRedSpot);
-			providersPanel.remove(lblGreenSpot);
+			// Harvesting process is disabled
+			if (areProvidersChecked()) {
+				// There are providers checked
+				providersPanel.remove(btnPause);
+				providersPanel.remove(lblGreenSpot);
+				providersPanel.add(btnPlay);
+				providersPanel.add(lblRedSpot);
+			} else {
+				// There aren't providers checked
+				providersPanel.remove(btnPause);
+				providersPanel.remove(btnPlay);
+				providersPanel.add(lblRedSpot);
+				providersPanel.remove(lblGreenSpot);
+			}
 		}
 		providersPanel.repaint();
+	}
+
+	/**
+	 * Checks if there are providers scheduled.
+	 * @return
+	 */
+	private static boolean areProvidersChecked() {
+		boolean areProvidersChecked = false;
+		if (wallhavenCheckbox.isSelected() || 
+			devianartCheckbox.isSelected() || 
+			bingCheckbox.isSelected() || 
+			socialWallpaperingCheckbox.isSelected() || 
+			dualMonitorCheckbox.isSelected() || 
+			wallpaperFusionCheckbox.isSelected()) {
+			areProvidersChecked = true;
+		}
+		return areProvidersChecked;
 	}
 }
