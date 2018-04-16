@@ -761,11 +761,11 @@ public class WallpaperDownloader {
 		appSettingsPanel.add(notificationsComboBox);
 
 		JLabel lblI18n = new JLabel(i18nBundle.getString("application.settings.i18n"));
-		lblI18n.setBounds(12, 267, 104, 19);
+		lblI18n.setBounds(12, 235, 104, 19);
 		appSettingsPanel.add(lblI18n);
 
 		i18nComboBox = new JComboBox<ComboItem>();
-		i18nComboBox.setBounds(144, 265, 134, 23);
+		i18nComboBox.setBounds(144, 233, 134, 23);
 		appSettingsPanel.add(i18nComboBox);
 
 		startMinimizedCheckBox = new JCheckBox(i18nBundle.getString("application.settings.start.minimized"));
@@ -807,8 +807,12 @@ public class WallpaperDownloader {
 		// Only if system tray is supported, user will be able to minimize the application into the
 		// system tray
 		if (SystemTray.isSupported()) {
-			stIconCheckBox = new JCheckBox(i18nBundle.getString("application.settings.system.tray.icon"));
-			stIconCheckBox.setBounds(13, 234, 225, 26);
+			JSeparator settingsSeparator6 = new JSeparator();
+			settingsSeparator6.setBounds(12, 293, 631, 2);
+			appSettingsPanel.add(settingsSeparator6);
+
+		    stIconCheckBox = new JCheckBox(i18nBundle.getString("application.settings.system.tray.icon"));
+			stIconCheckBox.setBounds(13, 298, 225, 26);
 			appSettingsPanel.add(stIconCheckBox);
 			
 			lblSystemTrayHelp = new JLabel((Icon) null);
@@ -817,7 +821,7 @@ public class WallpaperDownloader {
 				ImageIcon icon = new ImageIcon(img);
 				lblSystemTrayHelp = new JLabel(icon);
 				lblSystemTrayHelp.setToolTipText(i18nBundle.getString("application.settings.system.tray.icon.help"));
-				lblSystemTrayHelp.setBounds(252, 234, 30, 23);
+				lblSystemTrayHelp.setBounds(252, 298, 30, 23);
 				appSettingsPanel.add(lblSystemTrayHelp);
 				
 			} catch (IOException ex) {
@@ -837,13 +841,9 @@ public class WallpaperDownloader {
 			btnApplySize.setText(i18nBundle.getString("providers.save.changes"));
 			btnApplySize.setBounds(376, 26, 131, 25);
 		}
-
-		JSeparator settingsSeparator6 = new JSeparator();
-		settingsSeparator6.setBounds(12, 293, 631, 2);
-		appSettingsPanel.add(settingsSeparator6);
 		
 		initOnBootCheckBox = new JCheckBox(i18nBundle.getString("application.settings.starts.on.boot"));
-		initOnBootCheckBox.setBounds(12, 298, 631, 23);
+		initOnBootCheckBox.setBounds(12, 265, 631, 23);
 		appSettingsPanel.add(initOnBootCheckBox);
 
 		// Automatic changer (tab)
