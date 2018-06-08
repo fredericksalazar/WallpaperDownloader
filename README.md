@@ -15,13 +15,19 @@ runs in Linux (GNOME Shell, KDE Plasma 5.8 (and higher), Unity, MATE, XFCE, Cinn
 You can install wallpaperdownloader using different ways.
 
 ### Arch Linux ###
-It is in [AUR](https://aur.archlinux.org/packages/wallpaperdownloader) repository. Just install it from there:
+It is in [AUR](https://aur.archlinux.org/packages/wallpaperdownloader) repository. Just install it from there using the [AUR helper](https://wiki.archlinux.org/index.php/AUR_helpers) you have 
+installed on your system ([Yaourt](https://aur.archlinux.org/packages/yaourt/) {Outdated}, [Trizen](https://aur.archlinux.org/packages/trizen/) or [Yay](https://aur.archlinux.org/packages/yay/) among 
+others), for example:
 
-```
-#!bash
+    yaourt -S wallpaperdownloader
 
-yaourt -S wallpaperdownloader
-```
+or
+
+    trizen -S wallpaperdownloader
+
+or 
+
+    yay -S wallpaperdownloader
 
 #### Linux, OSX, Windows with Java ####
 - Download and install [java](https://java.com/en/download/).
