@@ -79,6 +79,9 @@ public class LinuxWallpaperChanger extends WallpaperChanger {
 					this.setDesktopEnvironment(WDUtilities.DE_GNOME3);
 				} else if (currentDesktop.contains(WDUtilities.DE_CINNAMON)) {
 					this.setDesktopEnvironment(WDUtilities.DE_CINNAMON);
+				} else if (currentDesktop.contains(WDUtilities.DE_UNITY) || 
+						   currentDesktop.contains(WDUtilities.DE_UNITY.toLowerCase())) {
+					this.setDesktopEnvironment(WDUtilities.DE_UNITY);
 				} else {
 					this.setDesktopEnvironment(WDUtilities.DE_UNKNOWN);					
 				}
