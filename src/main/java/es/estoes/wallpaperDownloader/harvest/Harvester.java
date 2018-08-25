@@ -152,7 +152,7 @@ public class Harvester {
 	 */
 	public void stop () {
 		if (LOG.isInfoEnabled()) {
-			LOG.info("Stoping harvesting process...");
+			LOG.info("Stopping harvesting process...");
 		}
 		providers = null;
 		status = STATUS_DISABLED;

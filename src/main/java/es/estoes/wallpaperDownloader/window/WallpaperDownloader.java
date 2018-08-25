@@ -2277,10 +2277,10 @@ public class WallpaperDownloader {
                 resumeItem.addActionListener(new ActionListener() {
                 	public void actionPerformed(ActionEvent evt) {
                 		resumeDownloadingProcess();
-//                		popup.remove(resumeItem);
-//                		popup.insert(pauseItem, 2);
                 		
-                    	// Removing system tray icon
+                		// Refreshing system tray icon. It will be necessary to
+                		// remove icon and minimize the application again
+                		// Removing system tray icon
                     	tray.remove(trayIcon);
 
                     	minimizeApplication();
@@ -2290,9 +2290,9 @@ public class WallpaperDownloader {
                 pauseItem.addActionListener(new ActionListener() {
                 	public void actionPerformed(ActionEvent evt) {
                 		pauseDownloadingProcess();
-//                		popup.remove(pauseItem);
-//                		popup.insert(resumeItem, 2);
 
+                		// Refreshing system tray icon. It will be necessary to
+                		// remove icon and minimize the application again
                     	// Removing system tray icon
                     	tray.remove(trayIcon);
 
@@ -2300,18 +2300,14 @@ public class WallpaperDownloader {
                 	}
                 });
 
-//                if (harvester.getStatus() != Harvester.STATUS_DISABLED) {
+                if (harvester.getStatus() != Harvester.STATUS_DISABLED) {
         			// Checking downloading process
         			if (prefm.getPreference("downloading-process").equals(WDUtilities.APP_NO)) {
         				popup.add(resumeItem);
-//        				popup.insert(resumeItem, 2);
-//        	            popup.remove(pauseItem);
         			} else {
         				popup.add(pauseItem);
-//        	            popup.insert(pauseItem, 2);
-//        	            popup.remove(resumeItem);
         			}
-//        		}
+        		}
 
                 // Change wallpaper
                 if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
@@ -2471,8 +2467,6 @@ public class WallpaperDownloader {
     				resume.addListener (SWT.Selection, new Listener () {          
     		            public void handleEvent (Event e) {
                     		resumeDownloadingProcess();
-                    		resume.setEnabled(false);
-                    		pause.setEnabled(true);
                     		
     	                	// Removing system tray icon and all stuff related
     		            	item.dispose();
@@ -2492,8 +2486,6 @@ public class WallpaperDownloader {
 					pause.addListener (SWT.Selection, new Listener () {          
     		            public void handleEvent (Event e) {
                     		pauseDownloadingProcess();
-                    		pause.setEnabled(false);;
-                    		resume.setEnabled(true);
 
     	                	// Removing system tray icon and all stuff related
     		            	item.dispose();
