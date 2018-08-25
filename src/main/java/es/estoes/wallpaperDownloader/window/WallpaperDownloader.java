@@ -2227,7 +2227,6 @@ public class WallpaperDownloader {
         	if (isOldSystemTray()) {
     			// For OS and DE which have an old system tray, legacy mode will be used
                 final PopupMenu popup = new PopupMenu();
-                // TODO:
                 URL systemTrayIcon = null;
                 if (!prefm.getPreference("downloading-process").equals(WDUtilities.APP_NO)) {
                 	systemTrayIcon = WallpaperDownloader.class.getResource("/images/icons/wd_systemtray_icon_green.png");
@@ -2304,10 +2303,10 @@ public class WallpaperDownloader {
                 if (harvester.getStatus() != Harvester.STATUS_DISABLED) {
         			// Checking downloading process
         			if (prefm.getPreference("downloading-process").equals(WDUtilities.APP_NO)) {
-        	            popup.add(resumeItem);
+                		popup.insert(resumeItem, 2);
         	            popup.remove(pauseItem);
         			} else {
-        	            popup.add(pauseItem);
+        	            popup.insert(pauseItem, 2);
         	            popup.remove(resumeItem);
         			}
         		}
