@@ -1275,8 +1275,14 @@ public class WallpaperDownloader {
 		// Changelog
 		try
 		{
+			// Version 3.2
+		    doc.insertString(0, i18nBundle.getString("about.changelog.features.3.2.title"), keyWord );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.features.3.2.text"), null );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.3.2.title"), keyWord );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.3.2.text"), null );
+
 			// Version 3.1
-		    doc.insertString(0, i18nBundle.getString("about.changelog.features.3.1.title"), keyWord );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.features.3.1.title"), keyWord );
 		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.features.3.1.text"), null );
 		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.3.1.title"), keyWord );
 		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.3.1.text"), null );
@@ -2221,7 +2227,13 @@ public class WallpaperDownloader {
         	if (isOldSystemTray()) {
     			// For OS and DE which have an old system tray, legacy mode will be used
                 final PopupMenu popup = new PopupMenu();
-                URL systemTrayIcon = WallpaperDownloader.class.getResource("/images/icons/wd_systemtray_icon.png");
+                // TODO:
+                URL systemTrayIcon = null;
+                if (!prefm.getPreference("downloading-process").equals(WDUtilities.APP_NO)) {
+                	systemTrayIcon = WallpaperDownloader.class.getResource("/images/icons/wd_systemtray_icon_green.png");
+                } else {
+                	systemTrayIcon = WallpaperDownloader.class.getResource("/images/icons/wd_systemtray_icon_red.png");
+                }
                 final TrayIcon trayIcon = new TrayIcon(new ImageIcon(systemTrayIcon, "Wallpaper Downloader").getImage(), "Wallpaper Downloader");
                 final SystemTray tray = SystemTray.getSystemTray();
                
@@ -2268,6 +2280,11 @@ public class WallpaperDownloader {
                 		resumeDownloadingProcess();
                 		popup.remove(resumeItem);
                 		popup.insert(pauseItem, 2);
+                		
+                    	// Removing system tray icon
+                    	tray.remove(trayIcon);
+
+                    	minimizeApplication();
                 	}
                 });
 
@@ -2276,6 +2293,11 @@ public class WallpaperDownloader {
                 		pauseDownloadingProcess();
                 		popup.remove(pauseItem);
                 		popup.insert(resumeItem, 2);
+
+                    	// Removing system tray icon
+                    	tray.remove(trayIcon);
+
+                    	minimizeApplication();
                 	}
                 });
 
@@ -2283,8 +2305,10 @@ public class WallpaperDownloader {
         			// Checking downloading process
         			if (prefm.getPreference("downloading-process").equals(WDUtilities.APP_NO)) {
         	            popup.add(resumeItem);
+        	            popup.remove(pauseItem);
         			} else {
         	            popup.add(pauseItem);
+        	            popup.remove(resumeItem);
         			}
         		}
 
@@ -2370,7 +2394,12 @@ public class WallpaperDownloader {
     			Display.setAppName("WallpaperDownloader");
     			Display display = new Display();
     			Shell shell = new Shell(display);
-    			InputStream iconInputStream = WallpaperDownloader.class.getResourceAsStream("/images/icons/wd_systemtray_icon.png");
+    			InputStream iconInputStream = null;
+    			if (!prefm.getPreference("downloading-process").equals(WDUtilities.APP_NO)) {
+                	iconInputStream = WallpaperDownloader.class.getResourceAsStream("/images/icons/wd_systemtray_icon_green.png");
+                } else {
+                	iconInputStream = WallpaperDownloader.class.getResourceAsStream("/images/icons/wd_systemtray_icon_red.png");
+                }
     			org.eclipse.swt.graphics.Image icon = new org.eclipse.swt.graphics.Image(display, iconInputStream);
     			final Tray tray = display.getSystemTray();
     			if (tray == null) {
@@ -2443,6 +2472,18 @@ public class WallpaperDownloader {
                     		resumeDownloadingProcess();
                     		resume.setEnabled(false);
                     		pause.setEnabled(true);
+                    		
+    	                	// Removing system tray icon and all stuff related
+    		            	item.dispose();
+    		            	icon.dispose();
+    		            	menu.dispose();
+    	                	tray.dispose();
+    	                	shell.dispose();
+    	                	display.dispose();
+
+    	                	// Minimizing again the application to refresh the icon
+    	                	// in the system tray
+    	                	minimizeApplication();
     		            }
     				});
 
@@ -2452,17 +2493,31 @@ public class WallpaperDownloader {
                     		pauseDownloadingProcess();
                     		pause.setEnabled(false);;
                     		resume.setEnabled(true);
+
+    	                	// Removing system tray icon and all stuff related
+    		            	item.dispose();
+    		            	icon.dispose();
+    		            	menu.dispose();
+    	                	tray.dispose();
+    	                	shell.dispose();
+    	                	display.dispose();
+
+    	                	// Minimizing again the application to refresh the icon
+    	                	// in the system tray
+    	                	minimizeApplication();
     		            }
     				});
     				
-    				if (harvester.getStatus() != Harvester.STATUS_DISABLED) {
+//    				if (harvester.getStatus() != Harvester.STATUS_DISABLED) {
             			// Checking downloading process
             			if (prefm.getPreference("downloading-process").equals(WDUtilities.APP_NO)) {
             				pause.setEnabled(false);
+            				resume.setEnabled(true);
             			} else {
             				resume.setEnabled(false);
+            				pause.setEnabled(true);
             			}
-            		}
+//            		}
 
                     // Change wallpaper
                     if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
