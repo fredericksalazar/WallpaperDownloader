@@ -2277,8 +2277,8 @@ public class WallpaperDownloader {
                 resumeItem.addActionListener(new ActionListener() {
                 	public void actionPerformed(ActionEvent evt) {
                 		resumeDownloadingProcess();
-                		popup.remove(resumeItem);
-                		popup.insert(pauseItem, 2);
+//                		popup.remove(resumeItem);
+//                		popup.insert(pauseItem, 2);
                 		
                     	// Removing system tray icon
                     	tray.remove(trayIcon);
@@ -2290,8 +2290,8 @@ public class WallpaperDownloader {
                 pauseItem.addActionListener(new ActionListener() {
                 	public void actionPerformed(ActionEvent evt) {
                 		pauseDownloadingProcess();
-                		popup.remove(pauseItem);
-                		popup.insert(resumeItem, 2);
+//                		popup.remove(pauseItem);
+//                		popup.insert(resumeItem, 2);
 
                     	// Removing system tray icon
                     	tray.remove(trayIcon);
@@ -2300,16 +2300,18 @@ public class WallpaperDownloader {
                 	}
                 });
 
-                if (harvester.getStatus() != Harvester.STATUS_DISABLED) {
+//                if (harvester.getStatus() != Harvester.STATUS_DISABLED) {
         			// Checking downloading process
         			if (prefm.getPreference("downloading-process").equals(WDUtilities.APP_NO)) {
-                		popup.insert(resumeItem, 2);
-        	            popup.remove(pauseItem);
+        				popup.add(resumeItem);
+//        				popup.insert(resumeItem, 2);
+//        	            popup.remove(pauseItem);
         			} else {
-        	            popup.insert(pauseItem, 2);
-        	            popup.remove(resumeItem);
+        				popup.add(pauseItem);
+//        	            popup.insert(pauseItem, 2);
+//        	            popup.remove(resumeItem);
         			}
-        		}
+//        		}
 
                 // Change wallpaper
                 if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
