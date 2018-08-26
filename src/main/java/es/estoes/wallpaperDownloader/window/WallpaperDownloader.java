@@ -2308,14 +2308,12 @@ public class WallpaperDownloader {
                     	}
                     });
 
-                    if (harvester.getStatus() != Harvester.STATUS_DISABLED) {
-            			// Checking downloading process
-            			if (prefm.getPreference("downloading-process").equals(WDUtilities.APP_NO)) {
-            				popup.add(resumeItem);
-            			} else {
-            				popup.add(pauseItem);
-            			}
-            		}
+        			// Checking downloading process
+        			if (prefm.getPreference("downloading-process").equals(WDUtilities.APP_NO)) {
+        				popup.add(resumeItem);
+        			} else {
+        				popup.add(pauseItem);
+        			}
     			}
 
                 // Change wallpaper
