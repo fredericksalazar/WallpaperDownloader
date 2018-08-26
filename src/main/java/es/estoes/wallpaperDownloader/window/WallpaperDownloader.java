@@ -2228,11 +2228,17 @@ public class WallpaperDownloader {
     			// For OS and DE which have an old system tray, legacy mode will be used
                 final PopupMenu popup = new PopupMenu();
                 URL systemTrayIcon = null;
-                if (!prefm.getPreference("downloading-process").equals(WDUtilities.APP_NO)) {
-                	systemTrayIcon = WallpaperDownloader.class.getResource("/images/icons/wd_systemtray_icon_green.png");
-                } else {
-                	systemTrayIcon = WallpaperDownloader.class.getResource("/images/icons/wd_systemtray_icon_red.png");
-                }
+                // System tray icon
+    			if (areProvidersChecked()) {
+                    if (!prefm.getPreference("downloading-process").equals(WDUtilities.APP_NO)) {
+                    	systemTrayIcon = WallpaperDownloader.class.getResource("/images/icons/wd_systemtray_icon_green.png");
+                    } else {
+                    	systemTrayIcon = WallpaperDownloader.class.getResource("/images/icons/wd_systemtray_icon_red.png");
+                    }
+    			} else {
+                	systemTrayIcon = WallpaperDownloader.class.getResource("/images/icons/wd_systemtray_icon.png");
+    			}
+                
                 final TrayIcon trayIcon = new TrayIcon(new ImageIcon(systemTrayIcon, "Wallpaper Downloader").getImage(), "Wallpaper Downloader");
                 final SystemTray tray = SystemTray.getSystemTray();
                
@@ -2271,43 +2277,46 @@ public class WallpaperDownloader {
                 }
 
         		// Pause / Resume
-                java.awt.MenuItem resumeItem = new java.awt.MenuItem(i18nBundle.getString("system.tray.resume"));
-                java.awt.MenuItem pauseItem = new java.awt.MenuItem(i18nBundle.getString("system.tray.pause"));
+				// Resume/Pause downloading process
+    			if (areProvidersChecked()) {
+                    java.awt.MenuItem resumeItem = new java.awt.MenuItem(i18nBundle.getString("system.tray.resume"));
+                    java.awt.MenuItem pauseItem = new java.awt.MenuItem(i18nBundle.getString("system.tray.pause"));
 
-                resumeItem.addActionListener(new ActionListener() {
-                	public void actionPerformed(ActionEvent evt) {
-                		resumeDownloadingProcess();
-                		
-                		// Refreshing system tray icon. It will be necessary to
-                		// remove icon and minimize the application again
-                		// Removing system tray icon
-                    	tray.remove(trayIcon);
+                    resumeItem.addActionListener(new ActionListener() {
+                    	public void actionPerformed(ActionEvent evt) {
+                    		resumeDownloadingProcess();
+                    		
+                    		// Refreshing system tray icon. It will be necessary to
+                    		// remove icon and minimize the application again
+                    		// Removing system tray icon
+                        	tray.remove(trayIcon);
 
-                    	minimizeApplication();
-                	}
-                });
+                        	minimizeApplication();
+                    	}
+                    });
 
-                pauseItem.addActionListener(new ActionListener() {
-                	public void actionPerformed(ActionEvent evt) {
-                		pauseDownloadingProcess();
+                    pauseItem.addActionListener(new ActionListener() {
+                    	public void actionPerformed(ActionEvent evt) {
+                    		pauseDownloadingProcess();
 
-                		// Refreshing system tray icon. It will be necessary to
-                		// remove icon and minimize the application again
-                    	// Removing system tray icon
-                    	tray.remove(trayIcon);
+                    		// Refreshing system tray icon. It will be necessary to
+                    		// remove icon and minimize the application again
+                        	// Removing system tray icon
+                        	tray.remove(trayIcon);
 
-                    	minimizeApplication();
-                	}
-                });
+                        	minimizeApplication();
+                    	}
+                    });
 
-                if (harvester.getStatus() != Harvester.STATUS_DISABLED) {
-        			// Checking downloading process
-        			if (prefm.getPreference("downloading-process").equals(WDUtilities.APP_NO)) {
-        				popup.add(resumeItem);
-        			} else {
-        				popup.add(pauseItem);
-        			}
-        		}
+                    if (harvester.getStatus() != Harvester.STATUS_DISABLED) {
+            			// Checking downloading process
+            			if (prefm.getPreference("downloading-process").equals(WDUtilities.APP_NO)) {
+            				popup.add(resumeItem);
+            			} else {
+            				popup.add(pauseItem);
+            			}
+            		}
+    			}
 
                 // Change wallpaper
                 if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
@@ -2391,12 +2400,17 @@ public class WallpaperDownloader {
     			Display.setAppName("WallpaperDownloader");
     			Display display = new Display();
     			Shell shell = new Shell(display);
+    			// System tray icon
     			InputStream iconInputStream = null;
-    			if (!prefm.getPreference("downloading-process").equals(WDUtilities.APP_NO)) {
-                	iconInputStream = WallpaperDownloader.class.getResourceAsStream("/images/icons/wd_systemtray_icon_green.png");
-                } else {
-                	iconInputStream = WallpaperDownloader.class.getResourceAsStream("/images/icons/wd_systemtray_icon_red.png");
-                }
+    			if (areProvidersChecked()) {
+        			if (!prefm.getPreference("downloading-process").equals(WDUtilities.APP_NO)) {
+                    	iconInputStream = WallpaperDownloader.class.getResourceAsStream("/images/icons/wd_systemtray_icon_green.png");
+                    } else {
+                    	iconInputStream = WallpaperDownloader.class.getResourceAsStream("/images/icons/wd_systemtray_icon_red.png");
+                    }
+    			} else {
+    				iconInputStream = WallpaperDownloader.class.getResourceAsStream("/images/icons/wd_systemtray_icon.png");
+    			}
     			org.eclipse.swt.graphics.Image icon = new org.eclipse.swt.graphics.Image(display, iconInputStream);
     			final Tray tray = display.getSystemTray();
     			if (tray == null) {
@@ -2458,50 +2472,50 @@ public class WallpaperDownloader {
         		            }
         				});
     				}
-    				
+
     				// Resume/Pause downloading process
-    				MenuItem resume = new MenuItem (menu, SWT.PUSH);
-    				MenuItem pause = new MenuItem (menu, SWT.PUSH);
+        			if (areProvidersChecked()) {
+        				MenuItem resume = new MenuItem (menu, SWT.PUSH);
+        				MenuItem pause = new MenuItem (menu, SWT.PUSH);
 
-    				resume.setText (i18nBundle.getString("system.tray.resume"));
-    				resume.addListener (SWT.Selection, new Listener () {          
-    		            public void handleEvent (Event e) {
-                    		resumeDownloadingProcess();
-                    		
-    	                	// Removing system tray icon and all stuff related
-    		            	item.dispose();
-    		            	icon.dispose();
-    		            	menu.dispose();
-    	                	tray.dispose();
-    	                	shell.dispose();
-    	                	display.dispose();
+        				resume.setText (i18nBundle.getString("system.tray.resume"));
+        				resume.addListener (SWT.Selection, new Listener () {          
+        		            public void handleEvent (Event e) {
+                        		resumeDownloadingProcess();
+                        		
+        	                	// Removing system tray icon and all stuff related
+        		            	item.dispose();
+        		            	icon.dispose();
+        		            	menu.dispose();
+        	                	tray.dispose();
+        	                	shell.dispose();
+        	                	display.dispose();
 
-    	                	// Minimizing again the application to refresh the icon
-    	                	// in the system tray
-    	                	minimizeApplication();
-    		            }
-    				});
+        	                	// Minimizing again the application to refresh the icon
+        	                	// in the system tray
+        	                	minimizeApplication();
+        		            }
+        				});
 
-					pause.setText (i18nBundle.getString("system.tray.pause")); 
-					pause.addListener (SWT.Selection, new Listener () {          
-    		            public void handleEvent (Event e) {
-                    		pauseDownloadingProcess();
+    					pause.setText (i18nBundle.getString("system.tray.pause")); 
+    					pause.addListener (SWT.Selection, new Listener () {          
+        		            public void handleEvent (Event e) {
+                        		pauseDownloadingProcess();
 
-    	                	// Removing system tray icon and all stuff related
-    		            	item.dispose();
-    		            	icon.dispose();
-    		            	menu.dispose();
-    	                	tray.dispose();
-    	                	shell.dispose();
-    	                	display.dispose();
+        	                	// Removing system tray icon and all stuff related
+        		            	item.dispose();
+        		            	icon.dispose();
+        		            	menu.dispose();
+        	                	tray.dispose();
+        	                	shell.dispose();
+        	                	display.dispose();
 
-    	                	// Minimizing again the application to refresh the icon
-    	                	// in the system tray
-    	                	minimizeApplication();
-    		            }
-    				});
-    				
-//    				if (harvester.getStatus() != Harvester.STATUS_DISABLED) {
+        	                	// Minimizing again the application to refresh the icon
+        	                	// in the system tray
+        	                	minimizeApplication();
+        		            }
+        				});
+        				
             			// Checking downloading process
             			if (prefm.getPreference("downloading-process").equals(WDUtilities.APP_NO)) {
             				pause.setEnabled(false);
@@ -2510,7 +2524,7 @@ public class WallpaperDownloader {
             				resume.setEnabled(false);
             				pause.setEnabled(true);
             			}
-//            		}
+        			}
 
                     // Change wallpaper
                     if (WDUtilities.getWallpaperChanger().isWallpaperChangeable()) {
