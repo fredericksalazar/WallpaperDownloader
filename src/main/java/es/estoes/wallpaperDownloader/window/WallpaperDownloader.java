@@ -206,6 +206,7 @@ public class WallpaperDownloader {
 	private JSeparator settingsSeparator4;
 	private JSeparator settingsSeparator5;
 	private JCheckBox initOnBootCheckBox;
+	private JButton btnResetSettings;
 	
 	// Getters & Setters
 	public Harvester getHarvester() {
@@ -759,30 +760,6 @@ public class WallpaperDownloader {
 		notificationsComboBox = new JComboBox<ComboItem>();
 		notificationsComboBox.setBounds(143, 140, 134, 23);
 		appSettingsPanel.add(notificationsComboBox);
-
-		JLabel lblI18n = new JLabel(i18nBundle.getString("application.settings.i18n"));
-		lblI18n.setBounds(12, 235, 104, 19);
-		appSettingsPanel.add(lblI18n);
-
-		i18nComboBox = new JComboBox<ComboItem>();
-		i18nComboBox.setBounds(144, 233, 134, 23);
-		appSettingsPanel.add(i18nComboBox);
-
-		startMinimizedCheckBox = new JCheckBox(i18nBundle.getString("application.settings.start.minimized"));
-		startMinimizedCheckBox.setBounds(12, 173, 179, 23);
-		appSettingsPanel.add(startMinimizedCheckBox);
-		
-		JSeparator settingsSeparator3 = new JSeparator();
-		settingsSeparator3.setBounds(12, 168, 631, 2);
-		appSettingsPanel.add(settingsSeparator3);
-		
-		JLabel lblTimeToMinimize = new JLabel(i18nBundle.getString("application.settings.time.minimize"));
-		lblTimeToMinimize.setBounds(12, 201, 126, 19);
-		appSettingsPanel.add(lblTimeToMinimize);
-		
-		timeToMinimizeComboBox = new JComboBox<ComboItem>();
-		timeToMinimizeComboBox.setBounds(144, 199, 134, 24);
-		appSettingsPanel.add(timeToMinimizeComboBox);
 		
 		btnChangeSize = new JButton();
 		try {
@@ -795,15 +772,54 @@ public class WallpaperDownloader {
 			btnChangeSize.setBounds(376, 26, 131, 25);
 		}
 		appSettingsPanel.add(btnChangeSize);
+
+		btnApplySize = new JButton();
+		try {
+			Image img = ImageIO.read(getClass().getResource("/images/icons/accept_16px_icon.png"));
+			btnApplySize.setIcon(new ImageIcon(img));
+			btnApplySize.setToolTipText(i18nBundle.getString("providers.save.changes"));
+			btnApplySize.setBounds(376, 26, 34, 33);
+		} catch (IOException ex) {
+			btnApplySize.setText(i18nBundle.getString("providers.save.changes"));
+			btnApplySize.setBounds(376, 26, 131, 25);
+		}
+
+		JSeparator settingsSeparator3 = new JSeparator();
+		settingsSeparator3.setBounds(12, 168, 631, 2);
+		appSettingsPanel.add(settingsSeparator3);
+
+		startMinimizedCheckBox = new JCheckBox(i18nBundle.getString("application.settings.start.minimized"));
+		startMinimizedCheckBox.setBounds(12, 173, 179, 23);
+		appSettingsPanel.add(startMinimizedCheckBox);
+				
+		JLabel lblTimeToMinimize = new JLabel(i18nBundle.getString("application.settings.time.minimize"));
+		lblTimeToMinimize.setBounds(12, 201, 126, 19);
+		appSettingsPanel.add(lblTimeToMinimize);
 		
+		timeToMinimizeComboBox = new JComboBox<ComboItem>();
+		timeToMinimizeComboBox.setBounds(144, 199, 134, 24);
+		appSettingsPanel.add(timeToMinimizeComboBox);
+
 		settingsSeparator4 = new JSeparator();
 		settingsSeparator4.setBounds(12, 228, 631, 2);
 		appSettingsPanel.add(settingsSeparator4);
-		
+
+		JLabel lblI18n = new JLabel(i18nBundle.getString("application.settings.i18n"));
+		lblI18n.setBounds(12, 235, 104, 19);
+		appSettingsPanel.add(lblI18n);
+
+		i18nComboBox = new JComboBox<ComboItem>();
+		i18nComboBox.setBounds(144, 233, 134, 23);
+		appSettingsPanel.add(i18nComboBox);
+
 		settingsSeparator5 = new JSeparator();
 		settingsSeparator5.setBounds(12, 260, 631, 2);
 		appSettingsPanel.add(settingsSeparator5);
-		
+
+		initOnBootCheckBox = new JCheckBox(i18nBundle.getString("application.settings.starts.on.boot"));
+		initOnBootCheckBox.setBounds(12, 265, 631, 23);
+		appSettingsPanel.add(initOnBootCheckBox);
+
 		// Only if system tray is supported, user will be able to minimize the application into the
 		// system tray
 		if (SystemTray.isSupported()) {
@@ -829,22 +845,17 @@ public class WallpaperDownloader {
 				lblSystemTrayHelp.setBounds(566, 173, 30, 23);
 				appSettingsPanel.add(lblSystemTrayHelp);
 			}
+			
+			JSeparator settingsSeparator7 = new JSeparator();
+			settingsSeparator7.setBounds(12, 327, 631, 2);
+			appSettingsPanel.add(settingsSeparator7);
+
 		}
-		
-		btnApplySize = new JButton();
-		try {
-			Image img = ImageIO.read(getClass().getResource("/images/icons/accept_16px_icon.png"));
-			btnApplySize.setIcon(new ImageIcon(img));
-			btnApplySize.setToolTipText(i18nBundle.getString("providers.save.changes"));
-			btnApplySize.setBounds(376, 26, 34, 33);
-		} catch (IOException ex) {
-			btnApplySize.setText(i18nBundle.getString("providers.save.changes"));
-			btnApplySize.setBounds(376, 26, 131, 25);
-		}
-		
-		initOnBootCheckBox = new JCheckBox(i18nBundle.getString("application.settings.starts.on.boot"));
-		initOnBootCheckBox.setBounds(12, 265, 631, 23);
-		appSettingsPanel.add(initOnBootCheckBox);
+						
+		btnResetSettings = new JButton(i18nBundle.getString("application.settings.reset.settings"));
+		btnResetSettings.setBackground(Color.WHITE);
+		btnResetSettings.setBounds(12, 332, 189, 25);
+		appSettingsPanel.add(btnResetSettings);
 
 		// Automatic changer (tab)
 		// Only visible for DE which allows automated changer
@@ -1804,6 +1815,33 @@ public class WallpaperDownloader {
 		i18nComboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				prefm.setPreference("application-i18n", new Integer(i18nComboBox.getSelectedIndex()).toString());
+				pauseDownloadingProcess();
+				frame.dispose();
+				frame.setVisible(false);
+				window = null;
+				window = new WallpaperDownloader();
+			}
+		});
+
+		/**
+		 * btnResetSettings Action Listener.
+		 */
+		// Clicking event
+		btnResetSettings.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				// Removing config.txt 
+	    		File userConfigFile = new File(WDUtilities.getUserConfigurationFilePath());
+	    		try {
+					FileUtils.forceDelete(userConfigFile);
+		    		LOG.info("Reseting configuration file. Removing : " + userConfigFile);
+				} catch (IOException exception) {
+					LOG.error("Configuration file couldn't be removed. Error: " + exception.getMessage());
+				}
+	    		
+				// Reconfiguring the application
+				WDConfigManager.checkConfig();
+				
+				// Restarts the application
 				pauseDownloadingProcess();
 				frame.dispose();
 				frame.setVisible(false);
