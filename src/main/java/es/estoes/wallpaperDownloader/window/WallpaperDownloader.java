@@ -1829,6 +1829,10 @@ public class WallpaperDownloader {
 		// Clicking event
 		btnResetSettings.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
+				// Removig search keywords
+				searchKeywords.setText("");
+				prefm.setPreference("provider-wallhaven-keywords", "");
+				
 				// Removing config.txt 
 	    		File userConfigFile = new File(WDUtilities.getUserConfigurationFilePath());
 	    		try {
