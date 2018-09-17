@@ -1286,8 +1286,14 @@ public class WallpaperDownloader {
 		// Changelog
 		try
 		{
-			// Version 3.2
-		    doc.insertString(0, i18nBundle.getString("about.changelog.features.3.2.title"), keyWord );
+			// Version 3.3
+		    doc.insertString(0, i18nBundle.getString("about.changelog.features.3.3.title"), keyWord );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.features.3.3.text"), null );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.3.3.title"), keyWord );
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.3.3.text"), null );
+
+		    // Version 3.2
+		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.features.3.2.title"), keyWord );
 		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.features.3.2.text"), null );
 		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.3.2.title"), keyWord );
 		    doc.insertString(doc.getLength(), i18nBundle.getString("about.changelog.bugs.3.2.text"), null );
