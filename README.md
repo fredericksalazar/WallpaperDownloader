@@ -102,13 +102,17 @@ Bugs fixed:
 New Features:
 
 - All provider URLs have been changed to https except DualMonitorBackground that does not support it.
+
 - A small indicator has been added to the system tray icon so the user can know, at a glance, if the downloading process is enabled or not.
+
 - New reset settings button within 'Application Settings' tab.
 
 Bugs fixed:
 
 - Fixed certain errors in the system tray icon menu related to the pausing and resuming of the downloading process.
+
 - The 'Changer' tab is again enabled for Ubuntu 18.04 users who continue to use Unity as their Desktop Environment.
+
 - Ubuntu 18.04 users with Unity Desktop Environment can again minimize the application on the system tray.
 
 ## Features (V 3.1) ##
