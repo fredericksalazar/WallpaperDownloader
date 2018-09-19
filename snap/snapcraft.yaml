@@ -1,7 +1,8 @@
 name: wallpaperdownloader
-version: "3.2"
+version: "3.3"
 summary: Download, manage and change your favorite wallpapers from the Internet
 description: WallpaperDownloader is a simple GUI Java based application for downloading, managing and changing wallpapers from the Internet
+type: app
 grade: stable
 confinement: strict
 

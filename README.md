@@ -9,7 +9,7 @@ This is a JAVA software project developed for downloading, managing and changing
 runs in Linux (GNOME Shell, KDE Plasma 5.8 (and higher), Unity, MATE, XFCE, Cinnamon, Pantheon and Budgie DE supported), Microsoft Windows (7,8 and 10) and macOS.
 
 ## Current Version ##
-3.2
+3.3
 
 ## Installation ##
 You can install wallpaperdownloader using different ways.
@@ -87,6 +87,15 @@ Install the snap package (please, check the name of the snap package built):
 
     sudo snap install <wallpaperdownloader*.snap>
 
+
+## Features (V 3.3) ##
+New Features:
+
+- New texts in help for users who have installed the application via snap package and want to open the links of the application directly in the browser.
+
+Bugs fixed:
+
+- Wallpapers downloaded from DualMonitorBackgrounds provider are not blank anymore.
 
 ## Features (V 3.2) ##
 
