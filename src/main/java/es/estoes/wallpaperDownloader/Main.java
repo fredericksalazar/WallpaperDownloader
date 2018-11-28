@@ -16,12 +16,63 @@
 
 package es.estoes.wallpaperDownloader;
 
+import java.awt.EventQueue;
+
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
+import org.apache.log4j.Logger;
+
+import es.estoes.wallpaperDownloader.util.WDConfigManager;
+import es.estoes.wallpaperDownloader.util.WDUtilities;
 import es.estoes.wallpaperDownloader.window.WallpaperDownloader;
 
 public class Main 
 {
-    public static void main( String[] args )
-    {
-    	WallpaperDownloader.main(null);
-    }
+	protected static final Logger LOG = Logger.getLogger(Main.class);
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			
+			private WallpaperDownloader window;
+
+			public void run() {
+				
+				// Setting the system look & feel for the main frame
+				String systemLookAndFeel = UIManager.getSystemLookAndFeelClassName();
+				
+				try {
+		        	if (systemLookAndFeel.equals("javax.swing.plaf.metal.MetalLookAndFeel") || WDUtilities.isSnapPackage()) {
+		        		UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");                		
+		        	} else {
+		        		UIManager.setLookAndFeel(systemLookAndFeel);                		
+		        	}
+		        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+						| UnsupportedLookAndFeelException exception) {
+		            exception.printStackTrace();
+		            if (LOG.isInfoEnabled()) {
+		            	LOG.error("Error in system look and feel definition: Message: " + exception.getMessage());
+		            }
+		            try {
+						UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+					} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+							| UnsupportedLookAndFeelException exception2) {
+						exception2.printStackTrace();
+			            if (LOG.isInfoEnabled()) {
+			            	LOG.error("Error in traditional system look and feel definition: Message: " + exception.getMessage());
+			            }
+					}
+		        }
+				
+				WDConfigManager.configureLog();
+				WDConfigManager.checkConfig();				
+				WDUtilities.getDimensionScreen();
+				
+				window = new WallpaperDownloader();
+				
+			}
+		});
+	}
 }
