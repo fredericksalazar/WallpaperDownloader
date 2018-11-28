@@ -111,6 +111,7 @@ public class WallpaperDownloader {
 	// Constants
 	protected static final Logger LOG = Logger.getLogger(WallpaperDownloader.class);
 	private static final PropertiesManager pm = PropertiesManager.getInstance();
+	private static PreferencesManager prefm;
 	
 	// Attributes
 	protected static WallpaperDownloader window;
@@ -221,9 +222,10 @@ public class WallpaperDownloader {
 	private JSeparator settingsSeparator5;			
 	
 	private DefaultListModel<String> listDirectoriesModel;
+	
 		
 	
-	/**
+	/**as
 	 * Default Constructor
 	 */
 	
@@ -231,6 +233,7 @@ public class WallpaperDownloader {
 		
 		// Resource bundle for i18n
 		i18nBundle = WDUtilities.getBundle();
+		prefm = PreferencesManager.getInstance();	
 
 		// Creating the main frame
 		frame = new JFrame();			
@@ -261,7 +264,6 @@ public class WallpaperDownloader {
 				if (WDUtilities.getWallpaperChanger() instanceof LinuxWallpaperChanger) {
 					if (((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment().equals(WDUtilities.DE_GNOME3)
 						|| ((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment().equals(WDUtilities.DE_KDE)) {
-						PreferencesManager prefm = PreferencesManager.getInstance(); 
 						TimeUnit.SECONDS.sleep(new Long(prefm.getPreference("time-to-minimize")));								
 					}
 				}
@@ -281,31 +283,31 @@ public class WallpaperDownloader {
 		frame.addWindowStateListener(new WindowStateListener() {
 			@Override
 			public void windowStateChanged(WindowEvent windowEvent) {
-				final PreferencesManager prefm = PreferencesManager.getInstance();
-				String systemTrayIconEnable = prefm.getPreference("system-tray-icon");
-				if (SystemTray.isSupported() && 
-					!isOldSystemTray() && 
-					systemTrayIconEnable.equals(WDUtilities.APP_YES)) {
-					// Check if commands comes from system tray
-					if (fromSystemTray) {
-						fromSystemTray = false;
-					} else {
-						// If command doesn't come from system tray, then it is necessary to capture the
-						// minimize order
-						if (frame.getExtendedState() == Frame.NORMAL){
-							// The user has minimized the window
-							try {
-								TimeUnit.MILLISECONDS.sleep(100);
-							} catch (InterruptedException exception) {
-								if (LOG.isInfoEnabled()) {
-									LOG.error("Error going to sleep: " + exception.getMessage());
-								}
-							}								
-							minimizeApplication();
+				
+				if (SystemTray.isSupported() 
+					&& !isOldSystemTray() 
+					&& prefm.getPreference("system-tray-icon").equals(WDUtilities.APP_YES)) {
+					
+						// Check if commands comes from system tray
+						if (fromSystemTray) {
+							fromSystemTray = false;
 						} else {
-							frame.setExtendedState(Frame.NORMAL);
+							// If command doesn't come from system tray, then it is necessary to capture the
+							// minimize order
+							if (frame.getExtendedState() == Frame.NORMAL){
+								// The user has minimized the window
+								try {
+									TimeUnit.MILLISECONDS.sleep(100);
+								} catch (InterruptedException exception) {
+									if (LOG.isInfoEnabled()) {
+										LOG.error("Error going to sleep: " + exception.getMessage());
+									}
+								}								
+								minimizeApplication();
+							} else {
+								frame.setExtendedState(Frame.NORMAL);
+							}
 						}
-					}
 				}
 			}					
 		});
@@ -319,11 +321,10 @@ public class WallpaperDownloader {
 
 			@Override
 			public void windowLostFocus(WindowEvent arg0) {
-				final PreferencesManager prefm = PreferencesManager.getInstance();
-				String systemTrayIconEnable = prefm.getPreference("system-tray-icon");
+				
 				if (SystemTray.isSupported() && 
 					!isOldSystemTray() && 
-					systemTrayIconEnable.equals(WDUtilities.APP_YES)) {
+					prefm.getPreference("system-tray-icon").equals(WDUtilities.APP_YES)) {
 					frame.setExtendedState(Frame.NORMAL);							
 				}
 			}
@@ -379,9 +380,11 @@ public class WallpaperDownloader {
 		this.appSettingsPanel = appSettingsPanel;
 	}
 
+	
 	/**
 	 * Initialize the contents of the frame.
 	 */
+	
 	@SuppressWarnings("serial")
 	private void initialize(JFrame frame) {
 		
@@ -872,7 +875,6 @@ public class WallpaperDownloader {
 				// Clicking event
 				multiMonitorCheckBox.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent evt) {
-						PreferencesManager prefm = PreferencesManager.getInstance();
 						
 						if (multiMonitorCheckBox.isSelected()) {
 							prefm.setPreference("application-changer-multimonitor", WDUtilities.APP_YES);
@@ -945,7 +947,7 @@ public class WallpaperDownloader {
 			 */
 			btnRemoveDirectory.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					PreferencesManager prefm = PreferencesManager.getInstance();
+					
 					String directoryToRemove = listDirectoriesModel.getElementAt(listDirectoriesToWatch.getSelectedIndex());
 					listDirectoriesModel.remove(listDirectoriesToWatch.getSelectedIndex());
 					String changerFoldersProperty = prefm.getPreference("application-changer-folder");
@@ -1387,9 +1389,7 @@ public class WallpaperDownloader {
 	 * This method configures all the listeners.
 	 */
 	private void initializeListeners() {
-		
-		final PreferencesManager prefm = PreferencesManager.getInstance();
-		
+				
 		// Listeners
 		/**
 		 * wallhavenCheckbox Action Listener.
@@ -2181,7 +2181,6 @@ public class WallpaperDownloader {
 	 * Pauses downloading process.
 	 */
 	public static void pauseDownloadingProcess() {
-		final PreferencesManager prefm = PreferencesManager.getInstance();
 		
 		// Downloading process is paused
 		prefm.setPreference("downloading-process", WDUtilities.APP_NO);
@@ -2207,7 +2206,6 @@ public class WallpaperDownloader {
 	 * Resumes downloading process.
 	 */
 	public static void resumeDownloadingProcess() {
-		final PreferencesManager prefm = PreferencesManager.getInstance();
 		
 		// Downloading process is resumed
 		prefm.setPreference("downloading-process", WDUtilities.APP_YES);
@@ -2233,7 +2231,7 @@ public class WallpaperDownloader {
 	 * Restarts downloading process.
 	 */
 	public static void restartDownloadingProcess() {
-		final PreferencesManager prefm = PreferencesManager.getInstance();
+		
 		if (prefm.getPreference("downloading-process").equals(WDUtilities.APP_YES)) {
 			// The recalibration dialog will be performed within a Swing Timer for avoiding to
 			// freeze the entire UI. The event will wait only 1 millisecond in order to display
@@ -2274,11 +2272,12 @@ public class WallpaperDownloader {
 	 * Minimizes application.
 	 */
 	public static void minimizeApplication() {
-		final PreferencesManager prefm = PreferencesManager.getInstance();
+		
 		// The application is minimized within System Tray
         // Check the SystemTray is supported or user has selected no system tray icon
-		String systemTrayIconEnable = prefm.getPreference("system-tray-icon");
-        if (!SystemTray.isSupported() || !WDUtilities.isMinimizable() || systemTrayIconEnable.equals(WDUtilities.APP_NO)) {
+		//String systemTrayIconEnable = prefm.getPreference("system-tray-icon");
+		
+        if (!SystemTray.isSupported() || !WDUtilities.isMinimizable() || prefm.getPreference("system-tray-icon").equals(WDUtilities.APP_NO)) {
             LOG.error("SystemTray is not supported. Frame is traditionally minimized");
             // Frame is traditionally minimized
             frame.setExtendedState(Frame.ICONIFIED);
@@ -2388,8 +2387,8 @@ public class WallpaperDownloader {
                 }
 
                 // Move favorite wallpapers
-        		String moveFavoriteEnable = prefm.getPreference("move-favorite");
-        		if (moveFavoriteEnable.equals(WDUtilities.APP_YES)) {
+                
+        		if (prefm.getPreference("move-favorite").equals(WDUtilities.APP_YES)) {
         			java.awt.MenuItem moveItem = new java.awt.MenuItem(i18nBundle.getString("system.tray.move"));
     	            moveItem.addActionListener(new ActionListener() {
     	            	public void actionPerformed(ActionEvent evt) {
@@ -2596,8 +2595,8 @@ public class WallpaperDownloader {
                     }
 
                     // Move favorite wallpapers
-    				String moveFavoriteEnable = prefm.getPreference("move-favorite");
-            		if (moveFavoriteEnable.equals(WDUtilities.APP_YES)) {
+                    
+            		if (prefm.getPreference("move-favorite").equals(WDUtilities.APP_YES)) {
         				MenuItem move = new MenuItem (menu, SWT.PUSH);
     					move.setText (i18nBundle.getString("system.tray.move"));
         				move.addListener (SWT.Selection, new Listener () {          
@@ -2689,8 +2688,6 @@ public class WallpaperDownloader {
 	}
 	
 	private static void moveFavoriteWallpapers() {
-
-		final PreferencesManager prefm = PreferencesManager.getInstance();
 		
 		// Dialog for please wait. It has to be executed on a SwingWorker (another Thread) in 
 		// order to not block the entire execution of the application
@@ -2729,12 +2726,11 @@ public class WallpaperDownloader {
 	 */
 	private void initializeGUI() {
 
-		final PreferencesManager prefm = PreferencesManager.getInstance();
-
 		// ---------------------------------------------------------------------
 		// Checking providers
 		// ---------------------------------------------------------------------
 		// Search keywords
+		
 		if (!prefm.getPreference("provider-wallhaven-keywords").equals(PreferencesManager.DEFAULT_VALUE)) {
 			searchKeywords.setText(prefm.getPreference("provider-wallhaven-keywords"));			
 		} else {
@@ -2756,13 +2752,15 @@ public class WallpaperDownloader {
         downloadPolicyComboBox.setSelectedIndex(new Integer(prefm.getPreference("download-policy")));
         
 		// Wallhaven.cc
-		String wallhavenEnable = prefm.getPreference("provider-wallhaven");
-		if (wallhavenEnable.equals(WDUtilities.APP_YES)) {
+		//String wallhavenEnable = prefm.getPreference("provider-wallhaven");
+        
+		if (prefm.getPreference("provider-wallhaven").equals(WDUtilities.APP_YES)) {
 			wallhavenCheckbox.setSelected(true);
 			searchTypeWallhavenComboBox.setEnabled(true);
 		} else {
 			searchTypeWallhavenComboBox.setEnabled(false);
 		}
+		
 		searchTypeWallhavenComboBox.addItem(new ComboItem(i18nBundle.getString("providers.wallhaven.policy.0"), "0"));
 		searchTypeWallhavenComboBox.addItem(new ComboItem(i18nBundle.getString("providers.wallhaven.policy.1"), "1")); 
 		searchTypeWallhavenComboBox.addItem(new ComboItem(i18nBundle.getString("providers.wallhaven.policy.2"), "2")); 
@@ -2771,32 +2769,37 @@ public class WallpaperDownloader {
 		searchTypeWallhavenComboBox.setSelectedIndex(new Integer(prefm.getPreference("wallpaper-search-type")));
 		
 		// Devianart
-		String devianartEnable = prefm.getPreference("provider-devianart");
-		if (devianartEnable.equals(WDUtilities.APP_YES)) {
+		//String devianartEnable = prefm.getPreference("provider-devianart");
+		
+		if (prefm.getPreference("provider-devianart").equals(WDUtilities.APP_YES)) {
 			devianartCheckbox.setSelected(true);
 			devianartSearchTypeComboBox.setEnabled(true);
 		} else {
 			devianartSearchTypeComboBox.setEnabled(false);
 		}
+		
 		devianartSearchTypeComboBox.addItem(new ComboItem(i18nBundle.getString("providers.devianart.policy.0"), "0")); 
 		devianartSearchTypeComboBox.addItem(new ComboItem(i18nBundle.getString("providers.devianart.policy.1"), "1")); 
 		devianartSearchTypeComboBox.addItem(new ComboItem(i18nBundle.getString("providers.devianart.policy.2"), "2")); 
 		devianartSearchTypeComboBox.setSelectedIndex(new Integer(prefm.getPreference("wallpaper-devianart-search-type")));
 
 		// Bing
-		String bingEnable = prefm.getPreference("provider-bing");
-		if (bingEnable.equals(WDUtilities.APP_YES)) {
+		//String bingEnable = prefm.getPreference("provider-bing");
+		
+		if (prefm.getPreference("provider-bing").equals(WDUtilities.APP_YES)) {
 			bingCheckbox.setSelected(true);
 		}
 
 		// Social Wallpapering
-		String socialWallpaperingEnable = prefm.getPreference("provider-socialWallpapering");
-		if (socialWallpaperingEnable.equals(WDUtilities.APP_YES)) {
+		//String socialWallpaperingEnable = prefm.getPreference("provider-socialWallpapering");
+		
+		if (prefm.getPreference("provider-socialWallpapering").equals(WDUtilities.APP_YES)) {
 			socialWallpaperingCheckbox.setSelected(true);
 			socialWallpaperingIgnoreKeywordsCheckbox.setEnabled(true);
 		} else {
 			socialWallpaperingIgnoreKeywordsCheckbox.setEnabled(false);
 		}
+		
 		if (prefm.getPreference("provider-socialWallpapering-ignore-keywords").equals(WDUtilities.APP_YES)) {
 			socialWallpaperingIgnoreKeywordsCheckbox.setSelected(true);
 		} else {
@@ -2804,19 +2807,22 @@ public class WallpaperDownloader {
 		}
 		
 		// WallpaperFusion
-		String wallpaperFusionEnable = prefm.getPreference("provider-wallpaperFusion");
-		if (wallpaperFusionEnable.equals(WDUtilities.APP_YES)) {
+		//String wallpaperFusionEnable = prefm.getPreference("provider-wallpaperFusion");
+		
+		if (prefm.getPreference("provider-wallpaperFusion").equals(WDUtilities.APP_YES)) {
 			wallpaperFusionCheckbox.setSelected(true);
 		}
 
 		// DualMonitorBackground
-		String dualMonitorEnable = prefm.getPreference("provider-dualMonitorBackgrounds");
-		if (dualMonitorEnable.equals(WDUtilities.APP_YES)) {
+		//String dualMonitorEnable = prefm.getPreference("provider-dualMonitorBackgrounds");
+		
+		if (prefm.getPreference("provider-dualMonitorBackgrounds").equals(WDUtilities.APP_YES)) {
 			dualMonitorCheckbox.setSelected(true);
 			searchTypeDualMonitorComboBox.setEnabled(true);
 		} else {
 			searchTypeDualMonitorComboBox.setEnabled(false);
 		}
+		
 		searchTypeDualMonitorComboBox.addItem(new ComboItem(i18nBundle.getString("providers.dual.monitor.policy.0"), "0")); 
 		searchTypeDualMonitorComboBox.addItem(new ComboItem(i18nBundle.getString("providers.dual.monitor.policy.1"), "1")); 
 		searchTypeDualMonitorComboBox.addItem(new ComboItem(i18nBundle.getString("providers.dual.monitor.policy.2"), "2")); 
@@ -2833,8 +2839,9 @@ public class WallpaperDownloader {
 		timerComboBox.addItem(new ComboItem(i18nBundle.getString("application.settings.downloading.time.4"), "4"));
 		timerComboBox.setSelectedIndex(new Integer(prefm.getPreference("application-timer")));
 
-		String moveFavoriteEnable = prefm.getPreference("move-favorite");
-		if (moveFavoriteEnable.equals(WDUtilities.APP_YES)) {
+		//String moveFavoriteEnable = prefm.getPreference("move-favorite");
+		
+		if (prefm.getPreference("move-favorite").equals(WDUtilities.APP_YES)) {
 			moveFavoriteCheckBox.setSelected(true);
 			moveDirectory.setEnabled(true);
 			moveDirectory.setText(prefm.getPreference("move-favorite-folder"));
@@ -2865,8 +2872,9 @@ public class WallpaperDownloader {
 		i18nComboBox.setSelectedIndex(new Integer(prefm.getPreference("application-i18n")));
 
 		// Start minimized feature
-		String startMinimizedEnable = prefm.getPreference("start-minimized");
-		if (startMinimizedEnable.equals(WDUtilities.APP_YES)) {
+		//String startMinimizedEnable = prefm.getPreference("start-minimized");
+		
+		if (prefm.getPreference("start-minimized").equals(WDUtilities.APP_YES)) {
 			startMinimizedCheckBox.setSelected(true);
 			timeToMinimizeComboBox.setEnabled(true);
 		} else {
@@ -2888,9 +2896,8 @@ public class WallpaperDownloader {
 		timeToMinimizeComboBox.setSelectedIndex((new Integer(prefm.getPreference("time-to-minimize")) - 1));
 
 		// System tray icon
-		if (SystemTray.isSupported()) {
-			String systemTrayIconEnable = prefm.getPreference("system-tray-icon");
-			if (systemTrayIconEnable.equals(WDUtilities.APP_YES)) {
+		if (SystemTray.isSupported()) {			
+			if (prefm.getPreference("system-tray-icon").equals(WDUtilities.APP_YES)) {
 				stIconCheckBox.setSelected(true);
 			} else {
 				stIconCheckBox.setSelected(false);
@@ -2928,8 +2935,7 @@ public class WallpaperDownloader {
 			
 			// Multi monitor support
 			if (WDUtilities.isGnomeish()) {
-				String multiMonitorSupport = prefm.getPreference("application-changer-multimonitor");
-				if (multiMonitorSupport.equals(WDUtilities.APP_YES)) {
+				if (prefm.getPreference("application-changer-multimonitor").equals(WDUtilities.APP_YES)) {
 					multiMonitorCheckBox.setSelected(true);
 				} else {
 					multiMonitorCheckBox.setSelected(false);
@@ -3074,7 +3080,9 @@ public class WallpaperDownloader {
 	 * Pauses and resumes the harvesting process and repaints the display if it is needed.
 	 */
 	private static void pauseResumeRepaint() {
-		PreferencesManager prefm = PreferencesManager.getInstance();		
+		
+		prefm = PreferencesManager.getInstance();	
+		
 		if (harvester.getStatus() == Harvester.STATUS_ENABLED) {
 			// Harvesting process is enabled
 			// Checking downloading process
