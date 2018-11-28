@@ -16,7 +16,6 @@
 
 package es.estoes.wallpaperDownloader.window;
 
-import java.awt.EventQueue;
 import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -103,7 +102,6 @@ import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.JTextPane;
 import javax.swing.Icon;
 import java.awt.Font;
@@ -116,208 +114,145 @@ public class WallpaperDownloader {
 	
 	// Attributes
 	protected static WallpaperDownloader window;
+	public static Harvester harvester;
+	private ChangerDaemon changer;
+	
+	private NumberFormat integerFormat;
+	
+	
 	private static JFrame frame;
 	private static ResourceBundle i18nBundle;
 	public static boolean fromSystemTray;
+	
 	// diskSpacePB will be an attribute representing disk space occupied within the downloads directory
 	// It is static because it will be able to be accessed from any point within the application's code
+	
 	public static JProgressBar diskSpacePB = new JProgressBar();
+	
 	public static JLabel lblSpaceWarning;
+	private static JLabel lblGreenSpot;
+	private static JLabel lblRedSpot;
+	private JLabel lblX;
+	private JLabel lblDeveloper;
+	private JLabel lblSourceCode;
+	private JLabel lblMoveHelp;
+	private JLabel lblNotifications;
+	private JLabel lblSearchTypeDualMonitor;
+	private JLabel lblSystemTrayHelp;
+	
 	public static JScrollPane scroll;
+	
 	public static JList<ImageIcon> lastWallpapersList;
-	public static Harvester harvester;
-	private ChangerDaemon changer;
+	private JList<String> listDirectoriesToWatch;
+	
+	private JFormattedTextField heigthResolution;
+	private JFormattedTextField widthResolution;
+	private JFormattedTextField downloadDirectorySize;
+	private JFormattedTextField downloadsDirectory;
+	private JFormattedTextField moveDirectory;
+	
 	private JTextField searchKeywords;
+	private JTextField version;
+	private JTextField developer;
+	private JTextField icons;
+	
+	private static JCheckBox wallpaperFusionCheckbox;
 	private static JCheckBox wallhavenCheckbox;
 	private static JCheckBox devianartCheckbox;
 	private static JCheckBox bingCheckbox;
-	private static JCheckBox socialWallpaperingCheckbox;
-	private JCheckBox socialWallpaperingIgnoreKeywordsCheckbox;
-	private static JCheckBox wallpaperFusionCheckbox;
+	private static JCheckBox socialWallpaperingCheckbox;	
+	private static JCheckBox startMinimizedCheckBox;
+	private static JCheckBox dualMonitorCheckbox;
+	private JCheckBox socialWallpaperingIgnoreKeywordsCheckbox;	
+	private JCheckBox moveFavoriteCheckBox;
+	private JCheckBox multiMonitorCheckBox;
+	private JCheckBox stIconCheckBox;
+	private JCheckBox initOnBootCheckBox;
+	
 	private JButton btnChangeResolution;
 	private JButton btnMinimize;
 	private JButton btnOpenDownloadsDirectory;
 	private JButton btnClipboard;
-	private JComboBox<ComboItem> downloadPolicyComboBox;
-	private JComboBox<ComboItem> searchTypeWallhavenComboBox;
-	private JFormattedTextField widthResolution;
-	private JLabel lblX;
-	private JFormattedTextField heigthResolution;
-	private NumberFormat integerFormat;
-	private JComboBox<ComboItem> devianartSearchTypeComboBox;
-	private JComboBox<ComboItem> timerComboBox;
 	private JButton btnChangeSize;
 	private JButton btnApplySize;
-	private JFormattedTextField downloadDirectorySize;
-	private JPanel miscPanel;
-	private JPanel wallpapersPanel;
-	private JFormattedTextField downloadsDirectory;
 	private JButton btnChangeDownloadsDirectory;
 	private JButton btnManageWallpapers;
 	private JButton btnRemoveWallpaper;
 	private JButton btnSetFavoriteWallpaper;
 	private JButton btnSetWallpaper;
 	private JButton btnPreviewWallpaper;
-	private JPanel aboutPanel;
-	private JTextField version;
-	private JSeparator aboutSeparator1;
-	private JLabel lblDeveloper;
-	private JTextField developer;
-	private JLabel lblSourceCode;
 	private JButton btnRepository;
-	private JSeparator aboutSeparator2;
-	private JTextField icons;
 	private JButton btnIcons;
-	private JPanel helpPanel;
-	private JComboBox<ComboItem> changerComboBox;
-	private JCheckBox multiMonitorCheckBox;
 	private JButton btnChangeMoveDirectory;
-	private JFormattedTextField moveDirectory;
-	private JLabel lblMoveHelp;
-	private JCheckBox moveFavoriteCheckBox;
 	private JButton btnMoveWallpapers;
 	private JButton btnRandomWallpaper;
-	private JLabel lblNotifications;
-	private JComboBox<ComboItem> notificationsComboBox;
-	private JComboBox<ComboItem> i18nComboBox;
-	private static JCheckBox startMinimizedCheckBox;
-	private JComboBox<ComboItem> timeToMinimizeComboBox;
-	private JCheckBox stIconCheckBox;
-	private static JButton btnPause;
-	private static JButton btnPlay;
-	private static JPanel providersPanel;
-	private static JLabel lblGreenSpot;
-	private static JLabel lblRedSpot;
-	private JList<String> listDirectoriesToWatch;
-	private DefaultListModel<String> listDirectoriesModel;
-	private JButton btnAddDirectory;
-	private JButton btnRemoveDirectory;
-	private JPanel appSettingsPanel;
-	private JButton btnChooseWallpaper;
-	private static JCheckBox dualMonitorCheckbox;
-	private JLabel lblSearchTypeDualMonitor;
-	private JComboBox<ComboItem> searchTypeDualMonitorComboBox;
 	private JButton btnApplyResolution;
 	private JButton btnResetResolution;
 	private JButton btnChangeKeywords;
 	private JButton btnApplyKeywords;
-	private JLabel lblSystemTrayHelp;
-	private JPanel changerPanel;
-	private JSeparator settingsSeparator4;
-	private JSeparator settingsSeparator5;
-	private JCheckBox initOnBootCheckBox;
+	private JButton btnAddDirectory;
+	private JButton btnRemoveDirectory;
+	private JButton btnChooseWallpaper;
 	private JButton btnResetSettings;
+	private static JButton btnPause;
+	private static JButton btnPlay;
 	
-	// Getters & Setters
-	public Harvester getHarvester() {
-		return WallpaperDownloader.harvester;
-	}
-
-	public void setHarvester(Harvester harvester) {
-		WallpaperDownloader.harvester = harvester;
-	}
+	private JComboBox<ComboItem> downloadPolicyComboBox;
+	private JComboBox<ComboItem> searchTypeWallhavenComboBox;
+	private JComboBox<ComboItem> devianartSearchTypeComboBox;
+	private JComboBox<ComboItem> timerComboBox;
+	private JComboBox<ComboItem> changerComboBox;
+	private JComboBox<ComboItem> notificationsComboBox;
+	private JComboBox<ComboItem> i18nComboBox;
+	private JComboBox<ComboItem> timeToMinimizeComboBox;
+	private JComboBox<ComboItem> searchTypeDualMonitorComboBox;	
+		
+	private JPanel miscPanel;
+	private JPanel wallpapersPanel;	
+	private JPanel aboutPanel;
+	private JPanel helpPanel;
+	private JPanel appSettingsPanel;
+	private JPanel changerPanel;
+	private static JPanel providersPanel;	
 	
-	public JFormattedTextField getDownloadsDirectory() {
-		return downloadsDirectory;
-	}
-
-	public void setDownloadsDirectory(JFormattedTextField downloadsDirectory) {
-		this.downloadsDirectory = downloadsDirectory;
-	}
-
-	public JFormattedTextField getMoveDirectory() {
-		return moveDirectory;
-	}
-
-	public void setMoveDirectory(JFormattedTextField moveDirectory) {
-		this.moveDirectory = moveDirectory;
-	}
-
-	public DefaultListModel<String> getListDirectoriesModel() {
-		return listDirectoriesModel;
-	}
-
-	public void setListDirectoriesModel(DefaultListModel<String> listDirectoriesModel) {
-		this.listDirectoriesModel = listDirectoriesModel;
-	}
-
-	public JButton getBtnRemoveDirectory() {
-		return btnRemoveDirectory;
-	}
-
-	public void setBtnRemoveDirectory(JButton btnRemoveDirectory) {
-		this.btnRemoveDirectory = btnRemoveDirectory;
-	}
-
-	public JPanel getAppSettingsPanel() {
-		return appSettingsPanel;
-	}
-
-	public void setAppSettingsPanel(JPanel appSettingsPanel) {
-		this.appSettingsPanel = appSettingsPanel;
-	}
-
+	private JSeparator aboutSeparator1;
+	private JSeparator aboutSeparator2;
+	private JSeparator settingsSeparator4;
+	private JSeparator settingsSeparator5;			
+	
+	private DefaultListModel<String> listDirectoriesModel;
+		
+	
 	/**
-	 * Launch the application.
+	 * Default Constructor
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				// Log configuration
-				WDConfigManager.configureLog();
-
-				// Application configuration
-				WDConfigManager.checkConfig();
-				
-				window = new WallpaperDownloader();
-			}
-		});
-	}
-
-	/**
-	 * Create the application.
-	 */
+	
 	public WallpaperDownloader() {
+		
 		// Resource bundle for i18n
 		i18nBundle = WDUtilities.getBundle();
 
 		// Creating the main frame
-		frame = new JFrame();
+		frame = new JFrame();			
+		frame.setBackground(new Color(255, 255, 255));
+		frame.setExtendedState(Frame.NORMAL);
+		frame.setResizable(false);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setBounds(100, 100, 694, 445);
+		frame.setLocation((WDUtilities.getWidthResolution()- frame.getWidth()) / 2, 
+				          (WDUtilities.getHeightResolution() - frame.getHeight()) / 2);
+		frame.setTitle(pm.getProperty("app.name") + " V" + pm.getProperty("app.version"));
 		
-		// Setting the system look & feel for the main frame
-		String systemLookAndFeel = UIManager.getSystemLookAndFeelClassName();
-		try {
-        	if (systemLookAndFeel.equals("javax.swing.plaf.metal.MetalLookAndFeel") || WDUtilities.isSnapPackage()) {
-        		UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");                		
-        	} else {
-        		UIManager.setLookAndFeel(systemLookAndFeel);                		
-        	}
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-				| UnsupportedLookAndFeelException exception) {
-            exception.printStackTrace();
-            if (LOG.isInfoEnabled()) {
-            	LOG.error("Error in system look and feel definition: Message: " + exception.getMessage());
-            }
-            try {
-				UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-					| UnsupportedLookAndFeelException exception2) {
-				exception2.printStackTrace();
-	            if (LOG.isInfoEnabled()) {
-	            	LOG.error("Error in traditional system look and feel definition: Message: " + exception.getMessage());
-	            }
-			}
-        }
-        SwingUtilities.updateComponentTreeUI(frame);
+		
+		SwingUtilities.updateComponentTreeUI(frame);
+        
 		
         // Initializing the main frame
         initialize(frame);
+        frame.setVisible(true);
 		
 		// Configuring main frame after initialization
-		frame.setBackground(new Color(255, 255, 255));
-		frame.setExtendedState(Frame.NORMAL);
-		frame.setVisible(true);
-		frame.setTitle(pm.getProperty("app.name") + " V" + pm.getProperty("app.version"));
+		
 
 		// Minimizing the application if start minimized feature is enable
 		if (startMinimizedCheckBox.isSelected()) {
@@ -394,21 +329,72 @@ public class WallpaperDownloader {
 			}
 		});
 	}
+	
+	// Getters & Setters
+	public Harvester getHarvester() {
+		return WallpaperDownloader.harvester;
+	}
+
+	public void setHarvester(Harvester harvester) {
+		WallpaperDownloader.harvester = harvester;
+	}
+	
+	public JFormattedTextField getDownloadsDirectory() {
+		return downloadsDirectory;
+	}
+
+	public void setDownloadsDirectory(JFormattedTextField downloadsDirectory) {
+		this.downloadsDirectory = downloadsDirectory;
+	}
+
+	public JFormattedTextField getMoveDirectory() {
+		return moveDirectory;
+	}
+
+	public void setMoveDirectory(JFormattedTextField moveDirectory) {
+		this.moveDirectory = moveDirectory;
+	}
+
+	public DefaultListModel<String> getListDirectoriesModel() {
+		return listDirectoriesModel;
+	}
+
+	public void setListDirectoriesModel(DefaultListModel<String> listDirectoriesModel) {
+		this.listDirectoriesModel = listDirectoriesModel;
+	}
+
+	public JButton getBtnRemoveDirectory() {
+		return btnRemoveDirectory;
+	}
+
+	public void setBtnRemoveDirectory(JButton btnRemoveDirectory) {
+		this.btnRemoveDirectory = btnRemoveDirectory;
+	}
+
+	public JPanel getAppSettingsPanel() {
+		return appSettingsPanel;
+	}
+
+	public void setAppSettingsPanel(JPanel appSettingsPanel) {
+		this.appSettingsPanel = appSettingsPanel;
+	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	@SuppressWarnings("serial")
 	private void initialize(JFrame frame) {
+		
 		// Configuring tooltips
 		ToolTipManager.sharedInstance().setInitialDelay(100);
 		
-		frame.setBounds(100, 100, 694, 445);
+		
 		// If the system tray is old, then windows must be bigger in order to paint Minimize button
 		if (isOldSystemTray()) {
 			frame.setBounds(100, 100, 694, 484);
 		}
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{116, 386, 73, 96, 0};
 		gridBagLayout.rowHeights = new int[]{338, 53, 25, 0, 0};
@@ -416,13 +402,7 @@ public class WallpaperDownloader {
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		frame.getContentPane().setLayout(gridBagLayout);
 		
-		// Centering window
-		Toolkit toolkit = Toolkit.getDefaultToolkit();
-		Dimension screenSize = toolkit.getScreenSize();
-		int x = (screenSize.width - frame.getWidth()) / 2;
-		int y = (screenSize.height - frame.getHeight()) / 2;
-		frame.setLocation(x, y);
-
+		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBorder(null);
 		GridBagConstraints gbc_tabbedPane = new GridBagConstraints();
@@ -1614,7 +1594,23 @@ public class WallpaperDownloader {
 				width = width.replace(",", "");
 				heigth = heigth.replace(".", "");
 				heigth = heigth.replace(",", "");
-
+				
+				/*
+				 * Si el valor ingresado es menor que 0 entonces ajusta el valor
+				 * por defecto de la pantalla
+				 * 
+				 */
+				
+				if(Integer.parseInt(width)<=0 ){
+					widthResolution.setText(String.valueOf(WDUtilities.getWidthResolution()));
+					width = String.valueOf(WDUtilities.getWidthResolution());
+				}
+				
+				if(Integer.parseInt(heigth)<=0 ){
+					heigthResolution.setText(String.valueOf(WDUtilities.getHeightResolution()));
+					heigth = String.valueOf(WDUtilities.getHeightResolution());
+				}
+				
 				if (!width.isEmpty() && !heigth.isEmpty()) {
 					prefm.setPreference("wallpaper-resolution", width + "x" + heigth);
 				}
@@ -1638,10 +1634,8 @@ public class WallpaperDownloader {
 		// Clicking event
 		btnResetResolution.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				String screenResolution = WDUtilities.getResolution();
-				String[] resolution = screenResolution.split("x");
-		        widthResolution.setValue(new Integer(resolution[0]));
-				heigthResolution.setValue(new Integer(resolution[1]));
+		        widthResolution.setValue(WDUtilities.getWidthResolution());
+				heigthResolution.setValue(WDUtilities.getHeightResolution());
 			}
 		});
 		
@@ -1710,22 +1704,36 @@ public class WallpaperDownloader {
 
 		/**
 		 * btnApplySize Action Listener.
+		 * 
 		 */
-		// Clicking event
+		
 		btnApplySize.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				prefm.setPreference("application-max-download-folder-size", downloadDirectorySize.getValue().toString());
-				downloadDirectorySize.setEnabled(false);
-				appSettingsPanel.remove(btnApplySize);
-				appSettingsPanel.add(btnChangeSize);
-				appSettingsPanel.repaint();
-
-				// Refreshing Disk Space Progress Bar
-				refreshProgressBar();
 				
-				// Restarting downloading process if it is needed
-				if (areProvidersChecked()) {
-					restartDownloadingProcess();
+				try {
+					int size = Integer.parseInt((prefm.getPreference("application-max-download-folder-size")));
+					int new_size = Integer.parseInt(downloadDirectorySize.getText());
+					
+					if(new_size <= 0){
+						new_size = size;
+						downloadDirectorySize.setText(String.valueOf(new_size));
+					}
+					
+					prefm.setPreference("application-max-download-folder-size", String.valueOf(new_size));
+					downloadDirectorySize.setEnabled(false);
+					appSettingsPanel.remove(btnApplySize);
+					appSettingsPanel.add(btnChangeSize);
+					appSettingsPanel.repaint();
+
+					// Refreshing Disk Space Progress Bar
+					refreshProgressBar();
+					
+					// Restarting downloading process if it is needed
+					if (areProvidersChecked()) {
+						restartDownloadingProcess();
+					}
+				} catch (NumberFormatException e) {
+					downloadDirectorySize.setValue(Integer.parseInt((prefm.getPreference("application-max-download-folder-size"))));
 				}
 			}
 		});
@@ -2018,20 +2026,24 @@ public class WallpaperDownloader {
 	       */
 	      btnPreviewWallpaper.addActionListener(new ActionListener() {
 	    	  public void actionPerformed(ActionEvent arg0) {
-  				// Get the selected wallpaper
-  				ImageIcon wallpaperSelected = lastWallpapersList.getSelectedValue();
-  				String wallpaperSelectedAbsolutePath = wallpaperSelected.getDescription();
-  				
-  				// Opens the preview window
-  				PreviewWallpaperWindow previewWindow = new PreviewWallpaperWindow(wallpaperSelectedAbsolutePath, null);
-  				previewWindow.setVisible(true);
-  				// There is a bug with KDE (version 5.9) and the preview window is not painted properly
-  				// It is necessary to reshape this window in order to paint all its components
-  				if (WDUtilities.getWallpaperChanger() instanceof LinuxWallpaperChanger) {
-  					if (((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment() == WDUtilities.DE_KDE) {
-  						previewWindow.setSize(1023, 767);  						
-  					}
-  				}
+  				try {
+					// Get the selected wallpaper
+					ImageIcon wallpaperSelected = lastWallpapersList.getSelectedValue();
+					String wallpaperSelectedAbsolutePath = wallpaperSelected.getDescription();
+					
+					// Opens the preview window
+					PreviewWallpaperWindow previewWindow = new PreviewWallpaperWindow(wallpaperSelectedAbsolutePath, null);
+					previewWindow.setVisible(true);
+					// There is a bug with KDE (version 5.9) and the preview window is not painted properly
+					// It is necessary to reshape this window in order to paint all its components
+					if (WDUtilities.getWallpaperChanger() instanceof LinuxWallpaperChanger) {
+						if (((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment() == WDUtilities.DE_KDE) {
+							previewWindow.setSize(1023, 767);  						
+						}
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
  	    	  }
 	      });
 
@@ -2938,7 +2950,7 @@ public class WallpaperDownloader {
 		}
 
 		// Directory size
-		downloadDirectorySize.setValue(new Integer(prefm.getPreference("application-max-download-folder-size")));
+		downloadDirectorySize.setValue(Integer.parseInt((prefm.getPreference("application-max-download-folder-size"))));
 		downloadDirectorySize.setEnabled(false);
 		
 		// ---------------------------------------------------------------------
