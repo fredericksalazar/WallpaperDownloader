@@ -118,6 +118,9 @@ public class WDUtilities {
 	private static String userConfigurationFilePath;
 	private static String operatingSystem;
 	private static WallpaperChanger wallpaperChanger;
+	
+	private static Dimension screenSize;
+	public static Double width, height;
 
 	// Getters & Setters
 	public static String getAppPath() {
@@ -190,8 +193,6 @@ public class WDUtilities {
 	 * @return
 	 */
 	public static int getWidthResolution() {
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		Double width = screenSize.getWidth();
 		return width.intValue();
 	}
 	
@@ -200,9 +201,23 @@ public class WDUtilities {
 	 * @return
 	 */
 	public static int getHeightResolution() {
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		Double height = screenSize.getHeight();
 		return height.intValue();
+	}
+	
+	/**
+	 * Autor: Frederick Salazar
+	 * Fecha: 26 nov 2018
+	 * descr: obtiene las propiedades de la pantalla
+	 */
+	
+	public static void getDimensionScreen(){
+		try{
+			screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			width = screenSize.getWidth();
+			height = screenSize.getHeight();
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
 	
 	/**
