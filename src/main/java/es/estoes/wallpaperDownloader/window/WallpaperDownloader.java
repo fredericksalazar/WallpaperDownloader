@@ -22,6 +22,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
@@ -32,6 +33,7 @@ import javax.swing.ToolTipManager;
 import javax.swing.border.Border;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
+import javax.swing.plaf.FileChooserUI;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
@@ -91,6 +93,8 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tray;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+
 import java.text.Format;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -680,6 +684,7 @@ public class WallpaperDownloader {
 		timerComboBox = new JComboBox<ComboItem>();
 		timerComboBox.setBounds(435, 6, 96, 23);
 		appSettingsPanel.add(timerComboBox);
+		
 		JLabel lblDownloadDirectorySize = new JLabel(i18nBundle.getString("application.settings.maximun.size"));
 		lblDownloadDirectorySize.setBounds(12, 34, 304, 19);
 		appSettingsPanel.add(lblDownloadDirectorySize);
@@ -2069,20 +2074,20 @@ public class WallpaperDownloader {
 			}
 	      });
 	      
+	      
 	      /**
 	       * btnChangeMoveDirectory Action Listener.
+	       * 
+	       * Modified: 	the process of change directory has been modified, the code optimization
+	       * 		   	is a new method simplified where the process is unified and controled with
+	       * 			the JFileChooser, dont use a PathCahngerWindow object.
 	       */
+	      
 	      btnChangeMoveDirectory.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					PathChangerWindow pathChangerWindow = new PathChangerWindow(window, WDUtilities.MOVE_DIRECTORY);
-					pathChangerWindow.setVisible(true);
-	  				// There is a bug with KDE (version 5.9) and the preview window is not painted properly
-	  				// It is necessary to reshape this window in order to paint all its components
-	  				if (WDUtilities.getWallpaperChanger() instanceof LinuxWallpaperChanger) {
-	  					if (((LinuxWallpaperChanger)WDUtilities.getWallpaperChanger()).getDesktopEnvironment() == WDUtilities.DE_KDE) {
-	  						pathChangerWindow.setSize(449, 299);  						
-	  					}
-	  				}
+				public void actionPerformed(ActionEvent arg0) {			
+					
+					changeFavortiesDirectory();
+					
 				}
 	      });
 	      
@@ -3129,5 +3134,48 @@ public class WallpaperDownloader {
 			areProvidersChecked = true;
 		}
 		return areProvidersChecked;
+	}
+	
+	/**
+	 * Autor: Frederick Salazar
+	 * Fecha: 28 nov 2018
+	 * Descr: this method is used when the user change de favorites wallpapers
+	 * 		  directory, this methos is the optimization of the old source
+	 */
+	private void changeFavortiesDirectory(){
+		
+		JFileChooser fileChooser;
+		String path = "";
+		
+		try{
+			fileChooser = new JFileChooser();
+		    fileChooser.setDialogTitle(i18nBundle.getString("path.changer.choose"));
+		    fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		    
+		    // Disable the "All files" option.
+		    fileChooser.setAcceptAllFileFilterUsed(false);
+		    // Show hiding files
+		    fileChooser.setFileHidingEnabled(false);
+		    fileChooser.showOpenDialog(null);
+		    
+		    path = fileChooser.getSelectedFile().getAbsolutePath();
+		    
+		    prefm.setPreference("move-favorite-folder", path);
+			// Refresh new path in main window
+			getMoveDirectory().setText(path);
+			
+			// Information
+			if (WDUtilities.getLevelOfNotifications() > 0) {
+				DialogManager info1 = new DialogManager(i18nBundle.getString("path.changer.move.directory.message") + " " + path, 2000);
+				info1.openDialog();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		finally{
+			fileChooser = null;
+			path = null;
+		}
+		
 	}
 }
