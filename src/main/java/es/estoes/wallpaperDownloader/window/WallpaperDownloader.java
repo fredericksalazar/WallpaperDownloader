@@ -17,6 +17,7 @@
 package es.estoes.wallpaperDownloader.window;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFormattedTextField;
@@ -49,6 +50,8 @@ import es.estoes.wallpaperDownloader.util.WallpaperListRenderer;
 import javax.swing.JTabbedPane;
 import javax.swing.JButton;
 import java.awt.Color;
+import java.awt.Component;
+
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import java.awt.AWTException;
@@ -56,6 +59,7 @@ import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.Graphics;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Image;
@@ -226,7 +230,9 @@ public class WallpaperDownloader {
 	private JSeparator settingsSeparator5;			
 	
 	private DefaultListModel<String> listDirectoriesModel;
-	
+	private static JLabel lblDisk_used;
+	private static JLabel lblMaxSize;
+	private static JLabel lblPercentage;
 		
 	
 	/**as
@@ -988,7 +994,7 @@ public class WallpaperDownloader {
 		miscPanel.setBorder(null);
 		tabbedPane.addTab(i18nBundle.getString("downloads.directory.title"), null, miscPanel, null);
 		miscPanel.setLayout(null);
-		
+				
 		JLabel lblDownloadsDirectory = new JLabel(i18nBundle.getString("downloads.directory.title"));
 		lblDownloadsDirectory.setBounds(12, 16, 160, 19);
 		miscPanel.add(lblDownloadsDirectory);
@@ -1038,11 +1044,26 @@ public class WallpaperDownloader {
 		}	
 		miscPanel.add(btnChangeDownloadsDirectory);
 		
-		diskSpacePB.setBounds(174, 101, 405, 18);
+
+		lblDisk_used = new JLabel();
+		lblDisk_used.setBounds(12, 100, 300, 20);
+		miscPanel.add(lblDisk_used);
+		
+		lblMaxSize = new JLabel();
+		lblMaxSize.setBounds(12, 130, 300, 20);
+		miscPanel.add(lblMaxSize);
+		
+		lblPercentage = new JLabel("",SwingConstants.CENTER);
+		lblPercentage.setBounds(170, 100, 500, 200);
+		//lblPercentage.setBorder(BorderFactory.createLineBorder(Color.red));
+		lblPercentage.setFont(new Font("Verdana",Font.PLAIN,130));
+		miscPanel.add(lblPercentage);
+				
+		diskSpacePB.setBounds(174, 350, 500, 18);
 		miscPanel.add(diskSpacePB);
 		
 		JLabel lblDiskSpace = new JLabel(i18nBundle.getString("downloads.directory.space"));
-		lblDiskSpace.setBounds(12, 100, 160, 19);
+		lblDiskSpace.setBounds(12, 350, 160, 19);
 		miscPanel.add(lblDiskSpace);
 		
 		try {
@@ -3004,6 +3025,7 @@ public class WallpaperDownloader {
 	 */
 	public static void refreshProgressBar() {
 		int percentage = WDUtilities.getPercentageSpaceOccupied(WDUtilities.getDownloadsPath());
+		int disk_used = (int) WDUtilities.getDirectorySpaceOccupied(WDUtilities.getDownloadsPath(), WDUtilities.UNIT_MB);
 		// If percentage is 90% or higher, the warning label and icon will be shown
 		if (percentage >= 90) {
 			lblSpaceWarning.setVisible(true);
@@ -3011,6 +3033,9 @@ public class WallpaperDownloader {
 			lblSpaceWarning.setVisible(false);
 		}
 		diskSpacePB.setValue(percentage);
+		lblDisk_used.setText(i18nBundle.getString("downloads.directory.diskUsed")+" : "+disk_used+" Mb");
+		lblMaxSize.setText(i18nBundle.getString("donwloads.directory.maxDisk")+" : "+prefm.getPreference("application-max-download-folder-size")+" Mb");
+		lblPercentage.setText(String.valueOf(percentage)+" % ");
 	}
 	
 	/**
@@ -3152,23 +3177,22 @@ public class WallpaperDownloader {
 		    fileChooser.setDialogTitle(i18nBundle.getString("path.changer.choose"));
 		    fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		    
-		    // Disable the "All files" option.
 		    fileChooser.setAcceptAllFileFilterUsed(false);
-		    // Show hiding files
 		    fileChooser.setFileHidingEnabled(false);
 		    fileChooser.showOpenDialog(null);
 		    
-		    path = fileChooser.getSelectedFile().getAbsolutePath();
-		    
-		    prefm.setPreference("move-favorite-folder", path);
-			// Refresh new path in main window
-			getMoveDirectory().setText(path);
-			
-			// Information
-			if (WDUtilities.getLevelOfNotifications() > 0) {
-				DialogManager info1 = new DialogManager(i18nBundle.getString("path.changer.move.directory.message") + " " + path, 2000);
-				info1.openDialog();
-			}
+		    if(fileChooser.getSelectedFile() != null){
+		    	path = fileChooser.getSelectedFile().getAbsolutePath();			    
+			    prefm.setPreference("move-favorite-folder", path);
+				getMoveDirectory().setText(path);
+				
+				// Information
+				if (WDUtilities.getLevelOfNotifications() > 0) {
+					DialogManager info1 = new DialogManager(i18nBundle.getString("path.changer.move.directory.message") + " " + path, 2000);
+					info1.openDialog();
+				}
+		    }
+		    	
 		}catch(Exception e){
 			e.printStackTrace();
 		}
