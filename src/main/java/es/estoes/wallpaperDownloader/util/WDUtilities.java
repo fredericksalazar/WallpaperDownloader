@@ -40,6 +40,8 @@ import java.util.Random;
 import java.util.ResourceBundle;
 
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.log4j.Logger;
@@ -62,6 +64,8 @@ public class WDUtilities {
 
 	// Constants
 	protected static final Logger LOG = Logger.getLogger(WDUtilities.class);
+	private static PropertiesManager pm = PropertiesManager.getInstance();
+	
 	public static final String APP_YES = "yes";
 	public static final String APP_NO = "no";
 	public static final String PROVIDER_SEPARATOR = ";";
@@ -82,8 +86,6 @@ public class WDUtilities {
 	public static final String SORTING_NO_SORTING = "no_sorting";
 	public static final String SORTING_MULTIPLE_DIR = "multiple_directories";
 	public static final String WD_ALL = "all";
-	public static final int STATUS_CODE_200 = 200;
-	public static final CharSequence SNAP_KEY = "snap";
 	public static final String OS_LINUX = "Linux";
 	public static final String OS_WINDOWS = "Windows";
 	public static final String OS_WINDOWS_7 = "Windows 7";
@@ -111,6 +113,10 @@ public class WDUtilities {
 	public static final String DESKTOP_LOCATION = "/desktop/";
 	public static final String WD_ICON_FILE = "wallpaperdownloader.svg";
 	public static final String ICON_LOCATION = "/images/desktop/";
+	
+	public static final int STATUS_CODE_200 = 200;
+	public static final CharSequence SNAP_KEY = "snap";
+	
 
 	// Attributes
 	private static String appPath;
@@ -121,6 +127,9 @@ public class WDUtilities {
 	
 	private static Dimension screenSize;
 	public static Double width, height;
+	
+	private static File directory;
+	private static long space;
 
 	// Getters & Setters
 	public static String getAppPath() {
@@ -149,7 +158,6 @@ public class WDUtilities {
 	}
 	
 	public static String getBlacklistDirectoryPath() {
-		PropertiesManager pm = PropertiesManager.getInstance();
 		Path blacklistPath = Paths.get(appPath.toString());
 		blacklistPath = blacklistPath.resolve(pm.getProperty("app.blacklist.path"));
 		return blacklistPath.toString();
@@ -309,6 +317,7 @@ public class WDUtilities {
 	 * @return int
 	 */
 	public static int getPercentageSpaceOccupied(String directoryPath) {
+		
 		PreferencesManager prefm = PreferencesManager.getInstance();
 		int downloadsDirectorySize = new Integer(prefm.getPreference("application-max-download-folder-size"));
 		long spaceLong = WDUtilities.getDirectorySpaceOccupied(directoryPath, WDUtilities.UNIT_KB);
@@ -328,16 +337,26 @@ public class WDUtilities {
 	 * @return
 	 */
 	public static long getDirectorySpaceOccupied(String directoryPath, String unit) {
-		long space = 0;
-		File directory = new File(directoryPath);
-		// Calculates the space in bytes
-		space = FileUtils.sizeOfDirectory(directory);
-		if (unit.equals(WDUtilities.UNIT_MB)) {
-			// Turning bytes into Megabytes
-			space = (space / 1024) / 1024;
-		} else if (unit.equals(WDUtilities.UNIT_KB)) {
-			// Turning bytes into Kilobytes
-			space = space / 1024;
+		space = 0;
+		try {
+			directory = new File(directoryPath);
+			// Calculates the space in bytes
+			space = FileUtils.sizeOfDirectory(directory);		
+			
+			if (unit.equals(WDUtilities.UNIT_MB)) {
+				// Turning bytes into Megabytes
+				space = (space / 1024) / 1024;
+			} else if (unit.equals(WDUtilities.UNIT_KB)) {
+				// Turning	 bytes into Kilobytes
+				space = Math.round(Math.ceil(space/1024.0));
+			}			
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally{
+			directory = null;
 		}
 		return space;
 	}
