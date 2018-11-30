@@ -23,6 +23,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import org.apache.log4j.Logger;
 
+import es.estoes.wallpaperDownloader.util.PreferencesManager;
+import es.estoes.wallpaperDownloader.util.PropertiesManager;
 import es.estoes.wallpaperDownloader.util.WDConfigManager;
 import es.estoes.wallpaperDownloader.util.WDUtilities;
 import es.estoes.wallpaperDownloader.window.WallpaperDownloader;
@@ -65,7 +67,7 @@ public class Main
 			            }
 					}
 		        }
-				
+										
 				WDConfigManager.configureLog();
 				WDConfigManager.checkConfig();				
 				WDUtilities.getDimensionScreen();
